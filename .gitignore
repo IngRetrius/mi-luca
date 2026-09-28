@@ -8,6 +8,7 @@ dist/
 build/
 coverage/
 *.tsbuildinfo
+next-env.d.ts
 
 # Variables de entorno y secretos (nunca se suben)
 .env
