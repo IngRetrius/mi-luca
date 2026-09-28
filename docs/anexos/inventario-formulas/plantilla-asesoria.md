@@ -1,0 +1,549 @@
+# Inventario de fórmulas: Plantilla_Asesoria_Financiera.xlsx
+
+Generado con `tools/excel-extractor/inventory.py`. Las filas contiguas con la misma estructura de fórmulas se muestran una sola vez con su rango (por ejemplo `R13-20`). Las fórmulas se muestran tal como aparecen en la primera celda del grupo; dentro de un grupo pueden cambiar las constantes numéricas (por ejemplo, el número de mes o de cuota). [editable] marca celdas crema; [por confirmar], celdas ámbar.
+
+## Inicio
+
+- **R2**: `C2` Asesoría Financiera Personal
+- **R3**: `C3` `=IF(Supuestos!$C$6="","Tu marca aquí (Supuestos)",Supuestos!$C$6)`
+- **R7**: `C7` Cliente · `D7` `=IF(Supuestos!$C$7="","",Supuestos!$C$7)`
+- **R8**: `C8` Fecha de corte · `D8` `=Supuestos!$C$12`
+- **R10**: `B10` Orden para llenar
+- **R11-23**: `B11` Paso · `C11` Hoja · `D11` Qué hacer
+- **R25**: `B25` Leyenda
+- **R26-30**: `C26` [editable] Dato editable · `D26` Celda para llenar o ajustar.
+- **R32**: `B32` Ejemplo de una fila del Presupuesto
+- **R33-34**: `C33` Categoría · `D33` Concepto · `E33` Valor por pago · `F33` Frecuencia · `G33` Tipo / ¿Esencial?
+- **R35**: `C35` Resultado: 130.000 x 52 semanas = 6.760.000 al año, 563.333 al mes.
+- **R37**: `B37` Notas
+- **R38-41**: `C38` Todas las cifras están en pesos de hoy (sin inflación).
+- **R43**: `B43` Paleta de la marca: Petróleo y Oro
+- **R44-47**: `C44` Petróleo · `D44` #0E3B43
+- **R48**: `B48` [editable] · `C48` Crema · `D48` #FFF8E6
+
+## Resumen
+
+- **R1-2**: `B1` Resumen financiero
+- **R4**: `B4` Cliente · `C4` `=IF(Supuestos!$C$7="","",Supuestos!$C$7)`
+- **R5**: `B5` Edad · `C5` `=Supuestos!$C$13`
+- **R6**: `B6` Tipo de cliente · `C6` `=IF(Supuestos!$C$10="","",Supuestos!$C$10)`
+- **R7**: `B7` Fecha de corte · `C7` `=Supuestos!$C$12`
+- **R8**: `B8` Asesor · `C8` `=IF(Supuestos!$C$6="","",Supuestos!$C$6)`
+- **R10**: `B10` Indicador · `C10` Valor · `D10` Estado · `E10` Comentario
+- **R11**: `B11` Ingreso anual · `C11` `=Ingresos!$T$14` · `D11` `=""` · `E11` Suma de ingresos en sus meses reales.
+- **R12**: `B12` Gasto anual (sin ahorro) · `C12` `=Presupuesto!$H$89` · `D12` `=""` · `E12` Incluye bolsillos y cuotas de deuda.
+- **R13**: `B13` Ahorro programado anual · `C13` `=Presupuesto!$H$94` · `D13` `=""` · `E13` Cooperativas, fondos, pensión voluntaria.
+- **R14**: `B14` Sobrante anual · `C14` `='Flujo anual'!$Q$22` · `D14` `=IF(C14<0,"Alerta","Bien")` · `E14` Después de gastos, bolsillos y ahorro programado.
+- **R15**: `B15` Tasa de ahorro total · `C15` `=IF(C11=0,"",(C13+C14)/C11)` · `D15` `=IF(C15="","",IF(C15>=0.2,"Bien",IF(C15>=0.1,"Atención","Alerta")))` · `E15` Referencia: sobre 20% es buena.
+- **R16**: `B16` Carga de deuda · `C16` `=Deudas!$C$24` · `D16` `=IF(C16="","",IF(C16<0.3,"Bien",IF(C16<0.4,"Atención","Alerta")))` · `E16` Cuotas / ingreso mensual. Referencia: bajo 30%.
+- **R17**: `B17` Deuda total · `C17` `=Deudas!$D$21` · `D17` `=""`
+- **R18**: `B18` ¿Hay deuda cara? · `C18` `=Deudas!$C$23` · `D18` `=IF(C18="Sí","Alerta","Bien")` · `E18` Con deuda cara no se invierte: el sobrante va a deudas.
+- **R19**: `B19` Salida de la deuda cara · `C19` `=Deudas!$C$25` · `D19` `=""` · `E19` Según la simulación de la hoja Deudas.
+- **R20**: `B20` Liquidez (meses de gasto esencial) · `C20` `=IF(Presupuesto!$I$95=0,"",Patrimonio!$C$33/Presupuesto!$I$95)` · `D20` `=IF(C20="","",IF(C20>=3,"Bien",IF(C20>=1,"Atención","Alerta")))`
+- **R21**: `B21` Meta vigente del fondo de emergencia · `C21` `='Fondo emergencia'!$C$21` · `D21` `=""`
+- **R22**: `B22` Avance del fondo frente a la meta completa · `C22` `='Fondo emergencia'!$C$25` · `D22` `=IF(C22>=0.999,"Bien",IF(C22>=0.5,"Atención","Alerta"))`
+- **R23**: `B23` Faltante de los meses sin ingreso · `C23` `='Flujo anual'!$T$20` · `D23` `=""` · `E23` Se cubre con su propio bolsillo.
+- **R24**: `B24` Aporte mensual a ese bolsillo · `C24` `='Flujo anual'!$T$23` · `D24` `=""` · `E24` En los meses con sobrante.
+- **R25**: `B25` Inversión anual · `C25` `='Flujo anual'!$Q$33` · `D25` `=""` · `E25` Incluye abonos de cuentas por cobrar destinados a inversión.
+- **R26**: `B26` Aporte único a inversión · `C26` `=Bolsillos!$C$27` · `D26` `=""` · `E26` Del excedente del saldo actual.
+- **R27**: `B27` Perfil de inversión · `C27` `=Inversión!$E$32` · `D27` `=""` · `E27` El menor entre disposición y capacidad.
+- **R28**: `B28` % en crecimiento · `C28` `=Inversión!$C$45` · `D28` `=""` · `E28` Rango orientativo según edad y perfil.
+- **R29**: `B29` Semanas estimadas al cumplir la edad de pensión · `C29` `=Pensión!$C$20` · `D29` `=""` · `E29` `=IF(Pensión!$C$22="","","Requeridas: "&ROUND(Pensión!$C$22,0))`
+- **R30**: `B30` ¿Cumple las semanas? · `C30` `=Pensión!$C$24` · `D30` `=IF(C30="Sí","Bien",IF(C30="No","Alerta",""))`
+- **R31**: `B31` Mesada neta estimada (escenario medio) · `C31` `=IF(OR(Pensión!$C$6="",Pensión!$C$13=""),"",Pensión!$D$63)` · `D31` `=""` · `E31` Solo Colpensiones. Confirmar con la administradora.
+- **R32**: `B32` ¿Brecha pensional? · `C32` `=Pensión!$C$78` · `D32` `=IF(C32="Sí","Alerta",IF(C32="No","Bien",""))` · `E32` Si deja de trabajar, escenario medio.
+- **R33**: `B33` Patrimonio neto · `C33` `=Patrimonio!$F$30` · `D33` `=""`
+- **R34**: `B34` Concentración en inmuebles y vehículos · `C34` `=Patrimonio!$C$39` · `D34` `=IF(C34<=0.8,"Bien","Atención")` · `E34` Referencia: más de 80% es poco líquido.
+- **R35**: `B35` Prueba de realidad · `C35` `=Supuestos!$C$41` · `D35` `=IF(C35="Confirmada","Bien",IF(C35="Pendiente","Atención","Alerta"))` · `E35` Mientras esté pendiente se invierte un % menor.
+- **R37**: `B37` Pendientes y alertas
+- **R38**: `B38` `=IF(Supuestos!$C$8="","Falta la fecha de nacimiento (Supuestos).","")`
+- **R39**: `B39` `=IF(Supuestos!$C$17="","Falta la tasa de cambio (Supuestos).","")`
+- **R40**: `B40` `=IF(Supuestos!$C$41="Pendiente","Prueba de realidad pendiente: se invierte un % menor del sobrante.",IF(Supuestos!$C$41="Revisar gastos","La prueba de realidad muestra gastos no registrados: revisar el presupuesto.",""))`
+- **R41**: `B41` `=IF(Presupuesto!$I$97>0,"Hay filas del presupuesto con valor pero sin frecuencia o tipo.","")`
+- **R42**: `B42` `='Flujo anual'!$B$36`
+- **R43**: `B43` `=IF(Bolsillos!$C$25<-0.5,"Los saldos iniciales de los bolsillos superan lo disponible.","")`
+- **R44**: `B44` `=IF(Inversión!$D$20="","Falta responder el perfil de inversión (hoja Inversión).","")`
+- **R45**: `B45` `=IF(Pensión!$C$6="","Faltan los datos de pensión (régimen y semanas).","")`
+- **R46**: `B46` `=IF(COUNTIF(Seguros!$F$6:$F$13,"")>0,"Falta marcar qué seguros tiene el cliente.","")`
+- **R47**: `B47` `=IF(Deudas!$C$26="Sí","Alguna deuda tarda más de 120 meses en pagarse (normal en hipotecarios; si no lo es, revisar).","")`
+- **R50**: `B50` Sensibilidad a la tasa de cambio (solo si hay ingresos en dólares)
+- **R51**: `B51` Ingreso anual en dólares · `C51` `=Ingresos!$T$25`
+- **R52**: `B52` Cada 100 pesos que baje la tasa, el ingreso mensual cambia en · `C52` `=-C51/12*100`
+- **R53**: `B53` Si la tasa de cambio fuera · `C53` Ingreso anual · `D53` Carga de deuda · `E53` Sobrante anual aproximado
+- **R54-59**: `B54` `=IF(N(Supuestos!$C$17)=0,"",Supuestos!$C$17*0.85)` · `C54` `=IF(B54="","",Ingresos!$T$14+C$51*(B54-Supuestos!$C$17))` · `D54` `=IF(OR(B54="",N(C54)=0),"",Deudas!$F$21/(C54/12))` · `E54` `=IF(B54="","",'Flujo anual'!$Q$22+C$51*(B54-Supuestos!$C$17))`
+- **R60**: `B60` `=IF(C51=0,"El cliente no tiene ingresos en dólares: esta tabla no aplica.","La fila en negrilla es la tasa actual. El sobrante es aproximado: supone que el cambio se reparte igual en el año.")`
+
+## Supuestos
+
+- **R1-2**: `B1` Supuestos y datos base
+- **R5**: `B5` Datos del cliente · `D5` Nota
+- **R6**: `B6` Marca o nombre del asesor · `C6` [editable] · `D6` Aparece en el Inicio y el Resumen.
+- **R7**: `B7` Nombre del cliente · `C7` [editable]
+- **R8-10**: `B8` Fecha de nacimiento · `C8` [editable] · `D8` Formato dd/mm/aaaa.
+- **R11**: `B11` Personas a cargo · `C11` [editable] 0 · `D11` Hijos u otras personas que dependen económicamente.
+- **R12**: `B12` Fecha de corte · `C12` `=TODAY()` · `D12` Por defecto, hoy. Se puede escribir una fecha fija.
+- **R13**: `B13` Edad · `C13` `=IF(C8="","",DATEDIF(C8,C12,"y"))`
+- **R14**: `B14` Año del flujo anual · `C14` `=YEAR(C12)+1` · `D14` Año que se proyecta mes a mes en la hoja Flujo anual.
+- **R16**: `B16` Parámetros
+- **R17**: `B17` Tasa de cambio COP por USD · `C17` [por confirmar] · `D17` Buscar la tasa oficial vigente.
+- **R18**: `B18` Salario mínimo del año · `C18` [editable] 1750905 · `D18` Colombia 2026. Verificar cada año.
+- **R19**: `B19` Meses de fondo de emergencia sugeridos · `C19` `=IFERROR(VLOOKUP(C10,Listas!$H$2:$I$7,2,FALSE()),3)` · `D19` Según el tipo de cliente.
+- **R20**: `B20` Meses de fondo a usar (opcional) · `C20` [editable] · `D20` Déjalo vacío para usar el sugerido.
+- **R21**: `B21` Meses de fondo efectivos · `C21` `=IF(C20="",C19,C20)`
+- **R22-28**: `B22` Umbral de deuda cara (tasa efectiva anual) · `C22` [editable] 0.2 · `D22` Ajustar según las tasas vigentes.
+- **R29**: `B29` Edad de retiro esperada · `C29` `=IF(C9="Hombre",62,57)` · `D29` Por defecto, la edad de pensión. Se puede cambiar.
+- **R30**: `B30` Reducción anual del % en crecimiento cerca del retiro · `C30` [editable] 0.02 · `D30` Se aplica en los 10 años anteriores al retiro.
+- **R31**: `B31` Piso del % en crecimiento · `C31` [editable] 0.1
+- **R32**: `B32` Colchón mínimo en la cuenta operativa · `C32` [editable] 0 · `D32` Dinero que no se reparte en bolsillos.
+- **R34**: `B34` Prueba de realidad
+- **R35**: `B35` Ahorro total hace N meses · `C35` [por confirmar] · `D35` Suma de cuentas, bolsillos e inversiones en esa fecha.
+- **R36**: `B36` N (meses) · `C36` [por confirmar]
+- **R37**: `B37` Ahorro total hoy · `C37` [por confirmar] · `D37` Sin contar ingresos extraordinarios (herencias, ventas).
+- **R38**: `B38` Ahorro real mensual · `C38` `=IF(OR(C35="",C36="",C37=""),"",(C37-C35)/C36)`
+- **R39**: `B39` Ahorro esperado mensual (sobrante + ahorro programado) · `C39` `=('Flujo anual'!$Q$22+Presupuesto!$H$94)/12`
+- **R40**: `B40` Diferencia · `C40` `=IF(C38="","",IF(C39=0,"",(C38-C39)/ABS(C39)))`
+- **R41**: `B41` Estado de la prueba · `C41` `=IF(C38="","Pendiente",IF(C40="","Pendiente",IF(C40>=-0.15,"Confirmada","Revisar gastos")))` · `D41` Confirmada si el ahorro real es al menos 85% del esperado.
+- **R42**: `B42` % del sobrante a inversión aplicado · `C42` `=IF(C41="Confirmada",C23,C24)`
+- **R44**: `B44` Cuentas por cobrar (dinero que le deben al cliente)
+- **R45**: `B45` Deudor · `C45` Saldo · `D45` Cuota mensual · `E45` Fecha del primer pago · `F45` N.º de cuotas · `G45` Último pago · `H45` % a inversión · `I45` Saldo pendiente hoy · `J45` Aux. inicio · `K45` Aux. fin
+- **R46-48**: `B46` [editable] · `C46` [editable] · `D46` [editable] · `E46` [editable] · `F46` `=IF(OR(N(C46)=0,N(D46)=0),"",ROUNDUP(C46/D46,0))` · `G46` `=IF(OR(F46="",E46=""),"",EDATE(E46,F46-1))` · `H46` [editable] 1 · `I46` `=IF(N(C46)=0,0,IF(OR(J46="",F46=""),C46,MAX(0,C46-D46*MAX(0,MIN(F46,YEAR($C$12)*12+MONTH($C$12)-J46+1)))))` · `J46` `=IF(E46="","",YEAR(E46)*12+MONTH(E46))` · `K46` `=IF(G46="","",YEAR(G46)*12+MONTH(G46))`
+- **R49**: `B49` Total pendiente por cobrar · `I49` `=SUM(I46:I48)`
+- **R50**: `B50` Los abonos no se cuentan como ingreso del presupuesto: se destinan a inversión (o a deuda 
+
+## Ingresos
+
+- **R1-2**: `B1` Ingresos
+- **R5**: `B5` Fuente · `C5` Tipo · `D5` Moneda · `E5` Valor mensual en su moneda · `F5` Valor mensual en pesos · `G5` Ene · `H5` Feb · `I5` Mar · `J5` Abr · `K5` May · `L5` Jun · `M5` Jul · `N5` Ago · `O5` Sep · `P5` Oct · `Q5` Nov · `R5` Dic · `S5` Meses · `T5` Total anual · `U5` Promedio mensual · `V5` Nota
+- **R6-13**: `B6` [editable] · `C6` [editable] · `D6` [editable] COP · `E6` [editable] · `F6` `=IF(N(E6)=0,0,IF(D6="USD",E6*N(Supuestos!$C$17),E6))` · `G6` [editable] 1 · `H6` [editable] 1 · `I6` [editable] 1 · `J6` [editable] 1 · `K6` [editable] 1 · `L6` [editable] 1 · `M6` [editable] 1 · `N6` [editable] 1 · `O6` [editable] 1 · `P6` [editable] 1 · `Q6` [editable] 1 · `R6` [editable] 1 · `S6` `=SUM(G6:R6)` · `T6` `=F6*S6` · `U6` `=T6/12` · `V6` [editable]
+- **R14**: `B14` Total por mes · `G14:R14` `=SUMPRODUCT($F$6:$F$13,G6:G13)` · `T14` `=SUM(T6:T13)` · `U14` `=T14/12`
+- **R15**: `G15` Totales por mes en miles de pesos. Ingresos en dólares: se convierten con la tasa de cambi
+- **R16**: `B16` Seguridad social
+- **R17**: `B17` ¿Se paga seguridad social este mes? (1 = sí) · `G17` [editable] 1 · `H17` [editable] 1 · `I17` [editable] 1 · `J17` [editable] 1 · `K17` [editable] 1 · `L17` [editable] 1 · `M17` [editable] 1 · `N17` [editable] 1 · `O17` [editable] 1 · `P17` [editable] 1 · `Q17` [editable] 1 · `R17` [editable] 1 · `S17` `=SUM(G17:R17)` · `V17` Si se cotiza mes vencido, el mes siguiente al primer mes sin contrato suele no tener pago.
+- **R19**: `B19` Totales por tipo de ingreso
+- **R20-23**: `B20` Laboral · `T20` `=SUMIFS($T$6:$T$13,$C$6:$C$13,B20)` · `U20` `=T20/12`
+- **R24**: `B24` Total · `T24` `=SUM(T20:T23)` · `U24` `=T24/12`
+- **R25**: `B25` De ese total, ingreso anual en dólares (USD) · `T25` `=SUMPRODUCT((D6:D13="USD")*E6:E13*S6:S13)`
+- **R27**: `B27` Calculadora de ingreso base (para ingresos variables)
+- **R28**: `B28` Ingreso de cada uno de los últimos 12 meses · `G28` Mes 1 · `H28` Mes 2 · `I28` Mes 3 · `J28` Mes 4 · `K28` Mes 5 · `L28` Mes 6 · `M28` Mes 7 · `N28` Mes 8 · `O28` Mes 9 · `P28` Mes 10 · `Q28` Mes 11 · `R28` Mes 12
+- **R29**: `B29` Valores (en su moneda) · `G29` [editable] · `H29` [editable] · `I29` [editable] · `J29` [editable] · `K29` [editable] · `L29` [editable] · `M29` [editable] · `N29` [editable] · `O29` [editable] · `P29` [editable] · `Q29` [editable] · `R29` [editable]
+- **R30**: `B30` Promedio de 12 meses · `E30` `=IF(COUNT(G29:R29)=0,"",AVERAGE(G29:R29))`
+- **R31**: `B31` Promedio de los 3 meses más bajos · `E31` `=IF(COUNT(G29:R29)<3,"",(SMALL(G29:R29,1)+SMALL(G29:R29,2)+SMALL(G29:R29,3))/3)`
+- **R32**: `B32` Ingreso base sugerido · `E32` `=IF(OR(E30="",E31=""),"",MIN(E30,E31))` · `G32` Escribe este valor como "Valor mensual en su moneda" de la fuente variable. Lo que llegue 
+
+## Presupuesto
+
+- **R1-2**: `B1` Presupuesto detallado
+- **R5**: `B5` Categoría · `C5` Concepto · `D5` Valor por pago · `E5` Frecuencia · `F5` Días que dura · `G5` Veces al año · `H5` Total anual · `I5` Promedio mensual · `J5` Tipo · `K5` Bolsillo · `L5` ¿Esencial? · `M5` Nota
+- **R6**: `B6` Deudas · `C6` Cuotas mínimas de deudas (hoja Deudas) · `D6` `=Deudas!$F$21` · `E6` Mensual · `G6` `=IF(E6="","",IF(E6="Por duración (días)",IF(N(F6)>0,365/F6,0),IF(E6="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E6,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H6` `=IF(OR(N(D6)=0,G6=""),0,D6*G6)` · `I6` `=H6/12` · `J6` Deuda · `L6` Sí · `M6` Automático: no editar.
+- **R7**: `B7` Seguros · `C7` Primas de seguros nuevos (hoja Seguros) · `D7` `=Seguros!$H$16` · `E7` Anual · `G7` `=IF(E7="","",IF(E7="Por duración (días)",IF(N(F7)>0,365/F7,0),IF(E7="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E7,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H7` `=IF(OR(N(D7)=0,G7=""),0,D7*G7)` · `I7` `=H7/12` · `J7` Bolsillo · `K7` Seguros · `L7` Sí · `M7` Automático: no editar.
+- **R8**: `B8` Metas · `C8` `=IF(Metas!$B$6="","(Meta sin usar)","Meta: "&Metas!$B$6)` · `D8` `=Metas!$K$6` · `E8` Mensual · `G8` `=IF(E8="","",IF(E8="Por duración (días)",IF(N(F8)>0,365/F8,0),IF(E8="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E8,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H8` `=IF(OR(N(D8)=0,G8=""),0,D8*G8)` · `I8` `=H8/12` · `J8` Bolsillo · `K8` `=IF(Metas!$C$6="","Metas",Metas!$C$6)` · `L8` No · `M8` Automático: no editar.
+- **R9**: `B9` Metas · `C9` `=IF(Metas!$B$7="","(Meta sin usar)","Meta: "&Metas!$B$7)` · `D9` `=Metas!$K$7` · `E9` Mensual · `G9` `=IF(E9="","",IF(E9="Por duración (días)",IF(N(F9)>0,365/F9,0),IF(E9="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E9,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H9` `=IF(OR(N(D9)=0,G9=""),0,D9*G9)` · `I9` `=H9/12` · `J9` Bolsillo · `K9` `=IF(Metas!$C$7="","Metas",Metas!$C$7)` · `L9` No · `M9` Automático: no editar.
+- **R10**: `B10` Metas · `C10` `=IF(Metas!$B$8="","(Meta sin usar)","Meta: "&Metas!$B$8)` · `D10` `=Metas!$K$8` · `E10` Mensual · `G10` `=IF(E10="","",IF(E10="Por duración (días)",IF(N(F10)>0,365/F10,0),IF(E10="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E10,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H10` `=IF(OR(N(D10)=0,G10=""),0,D10*G10)` · `I10` `=H10/12` · `J10` Bolsillo · `K10` `=IF(Metas!$C$8="","Metas",Metas!$C$8)` · `L10` No · `M10` Automático: no editar.
+- **R11**: `B11` Metas · `C11` `=IF(Metas!$B$9="","(Meta sin usar)","Meta: "&Metas!$B$9)` · `D11` `=Metas!$K$9` · `E11` Mensual · `G11` `=IF(E11="","",IF(E11="Por duración (días)",IF(N(F11)>0,365/F11,0),IF(E11="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E11,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H11` `=IF(OR(N(D11)=0,G11=""),0,D11*G11)` · `I11` `=H11/12` · `J11` Bolsillo · `K11` `=IF(Metas!$C$9="","Metas",Metas!$C$9)` · `L11` No · `M11` Automático: no editar.
+- **R12**: `B12` Metas · `C12` `=IF(Metas!$B$10="","(Meta sin usar)","Meta: "&Metas!$B$10)` · `D12` `=Metas!$K$10` · `E12` Mensual · `G12` `=IF(E12="","",IF(E12="Por duración (días)",IF(N(F12)>0,365/F12,0),IF(E12="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E12,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H12` `=IF(OR(N(D12)=0,G12=""),0,D12*G12)` · `I12` `=H12/12` · `J12` Bolsillo · `K12` `=IF(Metas!$C$10="","Metas",Metas!$C$10)` · `L12` No · `M12` Automático: no editar.
+- **R13**: `B13` [editable] Seguridad social · `C13` [editable] Salud, pensión y ARL (valor por mes de pago) · `D13` [editable] · `E13` [editable] Meses con seguridad social · `F13` [editable] · `G13` `=IF(E13="","",IF(E13="Por duración (días)",IF(N(F13)>0,365/F13,0),IF(E13="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E13,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H13` `=IF(OR(N(D13)=0,G13=""),0,D13*G13)` · `I13` `=H13/12` · `J13` [editable] Seg. social · `K13` [editable] · `L13` [editable] Sí · `M13` [editable] Los meses de pago se marcan en Ingresos.
+- **R14-19**: `B14` [editable] Vivienda · `C14` [editable] Arriendo o cuota de vivienda · `D14` [editable] · `E14` [editable] Mensual · `F14` [editable] · `G14` `=IF(E14="","",IF(E14="Por duración (días)",IF(N(F14)>0,365/F14,0),IF(E14="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E14,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H14` `=IF(OR(N(D14)=0,G14=""),0,D14*G14)` · `I14` `=H14/12` · `J14` [editable] Directo · `K14` [editable] · `L14` [editable] Sí · `M14` [editable]
+- **R20**: `B20` [editable] Impuestos y trámites · `C20` [editable] Predial · `D20` [editable] · `E20` [editable] Anual · `F20` [editable] · `G20` `=IF(E20="","",IF(E20="Por duración (días)",IF(N(F20)>0,365/F20,0),IF(E20="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E20,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H20` `=IF(OR(N(D20)=0,G20=""),0,D20*G20)` · `I20` `=H20/12` · `J20` [editable] Bolsillo · `K20` [editable] Impuestos y trámites · `L20` [editable] Sí · `M20` [editable]
+- **R21-26**: `B21` [editable] Alimentación · `C21` [editable] Mercado · `D21` [editable] · `E21` [editable] Semanal · `F21` [editable] · `G21` `=IF(E21="","",IF(E21="Por duración (días)",IF(N(F21)>0,365/F21,0),IF(E21="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E21,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H21` `=IF(OR(N(D21)=0,G21=""),0,D21*G21)` · `I21` `=H21/12` · `J21` [editable] Directo · `K21` [editable] · `L21` [editable] Sí · `M21` [editable]
+- **R27**: `B27` [editable] Transporte · `C27` [editable] SOAT · `D27` [editable] · `E27` [editable] Anual · `F27` [editable] · `G27` `=IF(E27="","",IF(E27="Por duración (días)",IF(N(F27)>0,365/F27,0),IF(E27="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E27,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H27` `=IF(OR(N(D27)=0,G27=""),0,D27*G27)` · `I27` `=H27/12` · `J27` [editable] Bolsillo · `K27` [editable] Vehículo · `L27` [editable] Sí · `M27` [editable]
+- **R28**: `B28` [editable] Transporte · `C28` [editable] Seguro del carro · `D28` [editable] · `E28` [editable] Anual · `F28` [editable] · `G28` `=IF(E28="","",IF(E28="Por duración (días)",IF(N(F28)>0,365/F28,0),IF(E28="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E28,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H28` `=IF(OR(N(D28)=0,G28=""),0,D28*G28)` · `I28` `=H28/12` · `J28` [editable] Bolsillo · `K28` [editable] Vehículo · `L28` [editable] Sí · `M28` [editable] Seguros que ya existen van aquí, no en la hoja Seguros.
+- **R29-30**: `B29` [editable] Transporte · `C29` [editable] Mantenimiento del carro · `D29` [editable] · `E29` [editable] Semestral · `F29` [editable] · `G29` `=IF(E29="","",IF(E29="Por duración (días)",IF(N(F29)>0,365/F29,0),IF(E29="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E29,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H29` `=IF(OR(N(D29)=0,G29=""),0,D29*G29)` · `I29` `=H29/12` · `J29` [editable] Bolsillo · `K29` [editable] Vehículo · `L29` [editable] No · `M29` [editable]
+- **R31-33**: `B31` [editable] Salud y bienestar · `C31` [editable] Medicina prepagada o plan complementario · `D31` [editable] · `E31` [editable] Mensual · `F31` [editable] · `G31` `=IF(E31="","",IF(E31="Por duración (días)",IF(N(F31)>0,365/F31,0),IF(E31="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E31,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H31` `=IF(OR(N(D31)=0,G31=""),0,D31*G31)` · `I31` `=H31/12` · `J31` [editable] Directo · `K31` [editable] · `L31` [editable] Sí · `M31` [editable]
+- **R34**: `B34` [editable] Salud y bienestar · `C34` [editable] Gimnasio · `D34` [editable] · `E34` [editable] Mensual · `F34` [editable] · `G34` `=IF(E34="","",IF(E34="Por duración (días)",IF(N(F34)>0,365/F34,0),IF(E34="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E34,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H34` `=IF(OR(N(D34)=0,G34=""),0,D34*G34)` · `I34` `=H34/12` · `J34` [editable] Directo · `K34` [editable] · `L34` [editable] No · `M34` [editable] Si se paga anual, cambia la frecuencia y el tipo a Bolsillo.
+- **R35**: `B35` [editable] Salud y bienestar · `C35` [editable] Suplementos · `D35` [editable] · `E35` [editable] Por duración (días) · `F35` [editable] · `G35` `=IF(E35="","",IF(E35="Por duración (días)",IF(N(F35)>0,365/F35,0),IF(E35="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E35,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H35` `=IF(OR(N(D35)=0,G35=""),0,D35*G35)` · `I35` `=H35/12` · `J35` [editable] Bolsillo · `K35` [editable] Salud y cuidado · `L35` [editable] No · `M35` [editable] Escribe los días que dura el frasco.
+- **R36**: `B36` [editable] Cuidado personal · `C36` [editable] Peluquería y uñas · `D36` [editable] · `E36` [editable] Mensual · `F36` [editable] · `G36` `=IF(E36="","",IF(E36="Por duración (días)",IF(N(F36)>0,365/F36,0),IF(E36="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E36,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H36` `=IF(OR(N(D36)=0,G36=""),0,D36*G36)` · `I36` `=H36/12` · `J36` [editable] Directo · `K36` [editable] · `L36` [editable] No · `M36` [editable]
+- **R37-38**: `B37` [editable] Cuidado personal · `C37` [editable] Skincare · `D37` [editable] · `E37` [editable] Cada 4 meses · `F37` [editable] · `G37` `=IF(E37="","",IF(E37="Por duración (días)",IF(N(F37)>0,365/F37,0),IF(E37="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E37,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H37` `=IF(OR(N(D37)=0,G37=""),0,D37*G37)` · `I37` `=H37/12` · `J37` [editable] Bolsillo · `K37` [editable] Salud y cuidado · `L37` [editable] No · `M37` [editable]
+- **R39**: `B39` [editable] Hijos y familia · `C39` [editable] Colegio o universidad (mensualidad) · `D39` [editable] · `E39` [editable] Mensual · `F39` [editable] · `G39` `=IF(E39="","",IF(E39="Por duración (días)",IF(N(F39)>0,365/F39,0),IF(E39="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E39,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H39` `=IF(OR(N(D39)=0,G39=""),0,D39*G39)` · `I39` `=H39/12` · `J39` [editable] Directo · `K39` [editable] · `L39` [editable] Sí · `M39` [editable]
+- **R40**: `B40` [editable] Hijos y familia · `C40` [editable] Matrículas y útiles · `D40` [editable] · `E40` [editable] Anual · `F40` [editable] · `G40` `=IF(E40="","",IF(E40="Por duración (días)",IF(N(F40)>0,365/F40,0),IF(E40="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E40,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H40` `=IF(OR(N(D40)=0,G40=""),0,D40*G40)` · `I40` `=H40/12` · `J40` [editable] Bolsillo · `K40` [editable] Educación · `L40` [editable] Sí · `M40` [editable]
+- **R41-44**: `B41` [editable] Hijos y familia · `C41` [editable] Gastos y mesadas de hijos · `D41` [editable] · `E41` [editable] Mensual · `F41` [editable] · `G41` `=IF(E41="","",IF(E41="Por duración (días)",IF(N(F41)>0,365/F41,0),IF(E41="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E41,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H41` `=IF(OR(N(D41)=0,G41=""),0,D41*G41)` · `I41` `=H41/12` · `J41` [editable] Directo · `K41` [editable] · `L41` [editable] Sí · `M41` [editable]
+- **R45**: `B45` [editable] Mascotas · `C45` [editable] Veterinario y vacunas · `D45` [editable] · `E45` [editable] Anual · `F45` [editable] · `G45` `=IF(E45="","",IF(E45="Por duración (días)",IF(N(F45)>0,365/F45,0),IF(E45="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E45,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H45` `=IF(OR(N(D45)=0,G45=""),0,D45*G45)` · `I45` `=H45/12` · `J45` [editable] Bolsillo · `K45` [editable] Hogar y mascotas · `L45` [editable] Sí · `M45` [editable]
+- **R46-47**: `B46` [editable] Servicios · `C46` [editable] Celular · `D46` [editable] · `E46` [editable] Mensual · `F46` [editable] · `G46` `=IF(E46="","",IF(E46="Por duración (días)",IF(N(F46)>0,365/F46,0),IF(E46="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E46,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H46` `=IF(OR(N(D46)=0,G46=""),0,D46*G46)` · `I46` `=H46/12` · `J46` [editable] Directo · `K46` [editable] · `L46` [editable] Sí · `M46` [editable]
+- **R48**: `B48` [editable] Viajes y ocio · `C48` [editable] Viaje nacional · `D48` [editable] · `E48` [editable] Anual · `F48` [editable] · `G48` `=IF(E48="","",IF(E48="Por duración (días)",IF(N(F48)>0,365/F48,0),IF(E48="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E48,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H48` `=IF(OR(N(D48)=0,G48=""),0,D48*G48)` · `I48` `=H48/12` · `J48` [editable] Bolsillo · `K48` [editable] Viajes · `L48` [editable] No · `M48` [editable] Viajes con cálculo detallado van en la hoja Metas.
+- **R49**: `B49` [editable] Viajes y ocio · `C49` [editable] Salidas y entretenimiento · `D49` [editable] · `E49` [editable] Mensual · `F49` [editable] · `G49` `=IF(E49="","",IF(E49="Por duración (días)",IF(N(F49)>0,365/F49,0),IF(E49="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E49,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H49` `=IF(OR(N(D49)=0,G49=""),0,D49*G49)` · `I49` `=H49/12` · `J49` [editable] Directo · `K49` [editable] · `L49` [editable] No · `M49` [editable]
+- **R50**: `B50` [editable] Temporada · `C50` [editable] Navidad, cumpleaños y celebraciones · `D50` [editable] · `E50` [editable] Anual · `F50` [editable] · `G50` `=IF(E50="","",IF(E50="Por duración (días)",IF(N(F50)>0,365/F50,0),IF(E50="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E50,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H50` `=IF(OR(N(D50)=0,G50=""),0,D50*G50)` · `I50` `=H50/12` · `J50` [editable] Bolsillo · `K50` [editable] Temporada · `L50` [editable] No · `M50` [editable]
+- **R51**: `B51` [editable] Impuestos y trámites · `C51` [editable] Impuesto de renta a pagar · `D51` [editable] · `E51` [editable] Anual · `F51` [editable] · `G51` `=IF(E51="","",IF(E51="Por duración (días)",IF(N(F51)>0,365/F51,0),IF(E51="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E51,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H51` `=IF(OR(N(D51)=0,G51=""),0,D51*G51)` · `I51` `=H51/12` · `J51` [editable] Bolsillo · `K51` [editable] Impuestos y trámites · `L51` [editable] Sí · `M51` [editable] Confirmar con el contador.
+- **R52**: `B52` [editable] Impuestos y trámites · `C52` [editable] Contador · `D52` [editable] · `E52` [editable] Anual · `F52` [editable] · `G52` `=IF(E52="","",IF(E52="Por duración (días)",IF(N(F52)>0,365/F52,0),IF(E52="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E52,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H52` `=IF(OR(N(D52)=0,G52=""),0,D52*G52)` · `I52` `=H52/12` · `J52` [editable] Bolsillo · `K52` [editable] Impuestos y trámites · `L52` [editable] Sí · `M52` [editable]
+- **R53**: `B53` [editable] Compras puntuales · `C53` [editable] Compras puntuales (tecnología, hogar) · `D53` [editable] · `E53` [editable] Anual · `F53` [editable] · `G53` `=IF(E53="","",IF(E53="Por duración (días)",IF(N(F53)>0,365/F53,0),IF(E53="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E53,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H53` `=IF(OR(N(D53)=0,G53=""),0,D53*G53)` · `I53` `=H53/12` · `J53` [editable] Bolsillo · `K53` [editable] Hogar y mascotas · `L53` [editable] No · `M53` [editable] Fondo anual para compras grandes.
+- **R54-55**: `B54` [editable] Ahorro · `C54` [editable] Ahorro en cooperativa o fondo · `D54` [editable] · `E54` [editable] Mensual · `F54` [editable] · `G54` `=IF(E54="","",IF(E54="Por duración (días)",IF(N(F54)>0,365/F54,0),IF(E54="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E54,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H54` `=IF(OR(N(D54)=0,G54=""),0,D54*G54)` · `I54` `=H54/12` · `J54` [editable] Ahorro · `K54` [editable] · `L54` [editable] No · `M54` [editable] Es ahorro, no gasto.
+- **R56-87**: `B56` [editable] · `C56` [editable] · `D56` [editable] · `E56` [editable] · `F56` [editable] · `G56` `=IF(E56="","",IF(E56="Por duración (días)",IF(N(F56)>0,365/F56,0),IF(E56="Meses con seguridad social",Ingresos!$S$17,IFERROR(VLOOKUP(E56,Listas!$C$2:$D$10,2,FALSE()),0))))` · `H56` `=IF(OR(N(D56)=0,G56=""),0,D56*G56)` · `I56` `=H56/12` · `J56` [editable] · `K56` [editable] · `L56` [editable] · `M56` [editable]
+- **R88**: `B88` Totales · `H88` Total anual · `I88` Promedio mensual
+- **R89**: `C89` Total gastos (sin ahorro) · `H89` `=SUMIFS($H$6:$H$87,$J$6:$J$87,"<>Ahorro")` · `I89` `=H89/12`
+- **R90**: `C90` Pagos directos · `H90` `=SUMIFS($H$6:$H$87,$J$6:$J$87,"Directo")` · `I90` `=H90/12`
+- **R91**: `C91` Aportes a bolsillos · `H91` `=SUMIFS($H$6:$H$87,$J$6:$J$87,"Bolsillo")` · `I91` `=H91/12`
+- **R92**: `C92` Seguridad social · `H92` `=SUMIFS($H$6:$H$87,$J$6:$J$87,"Seg. social")` · `I92` `=H92/12`
+- **R93**: `C93` Cuotas de deudas · `H93` `=SUMIFS($H$6:$H$87,$J$6:$J$87,"Deuda")` · `I93` `=H93/12`
+- **R94**: `C94` Ahorro programado · `H94` `=SUMIFS($H$6:$H$87,$J$6:$J$87,"Ahorro")` · `I94` `=H94/12`
+- **R95**: `C95` Gasto esencial · `H95` `=SUMIFS($H$6:$H$87,$L$6:$L$87,"Sí",$J$6:$J$87,"<>Ahorro")` · `I95` `=H95/12`
+- **R96**: `C96` Seguridad social por cada mes de pago · `I96` `=SUMIFS($D$6:$D$87,$J$6:$J$87,"Seg. social")`
+- **R97**: `C97` Filas con valor pero sin frecuencia o tipo · `I97` `=SUMPRODUCT((N(+$D$6:$D$87)>0)*(($E$6:$E$87="")+($J$6:$J$87="")>0))` · `M97` Debe ser 0 (Ver pendientes en Resumen).
+
+## Deudas
+
+- **R1-2**: `B1` Deudas
+- **R5**: `B5` Parámetros
+- **R6**: `B6` Método de pago · `C6` [editable] Avalancha · `D6` Avalancha: mayor tasa primero (ahorra más). Bola de nieve: menor saldo primero (motiva más
+- **R7**: `B7` Umbral de deuda cara · `C7` `=Supuestos!$C$22`
+- **R8**: `B8` Pago extra mensual (desde el sobrante) · `C8` `='Flujo anual'!$Q$34/12`
+- **R9**: `B9` Pago mensual total para deudas · `C9` `=F21+C8`
+- **R10**: `B10` Abono único inicial (desde el excedente) · `C10` `=Bolsillos!$C$26`
+- **R11**: `B11` Primer mes de la simulación · `C11` `=DATE(YEAR(Supuestos!$C$12),MONTH(Supuestos!$C$12)+1,1)`
+- **R12**: `B12` Deuda · `C12` Tipo · `D12` Saldo · `E12` Tasa EA · `F12` Cuota mínima mensual · `G12` ¿Acepta abonos extra? · `H12` Abonos extra desde · `I12` Tasa mensual · `J12` ¿Deuda cara? · `K12` Orden de pago · `L12` Meses para pagar · `M12` Fecha de salida · `N12` Intereses con el plan · `O12` Intereses solo con la cuota (aprox.) · `P12` Aux.
+- **R13-20**: `B13` [editable] · `C13` [editable] · `D13` [editable] · `E13` [editable] · `F13` [editable] · `G13` [editable] Sí · `H13` [editable] · `I13` `=IF(E13="","",(1+E13)^(1/12)-1)` · `J13` `=IF(N(D13)<=0,"",IF(N(E13)>=$C$7,"Sí","No"))` · `K13` `=IF(N(D13)<=0,"",IF($C$6="Bola de nieve",1+COUNTIFS($D$13:$D$20,">0",$D$13:$D$20,"<"&D13)+COUNTIFS($D$13:$D$20,D13,$P$13:$P$20,"<"&P13),1+COUNTIFS($D$13:$D$20,">0",$E$13:$E$20,">"&N(E13))+COUNTIFS($D$13:$D$20,">0",$E$13:$E$20,N(E13),$P$13:$P$20,"<"&P13)))` · `L13` `=IF(K13="","",INDEX($E$86:$E$93,K13))` · `M13` `=IF(OR(L13="",NOT(ISNUMBER(L13))),"",IF(L13=0,$C$11,EDATE($C$11,L13-1)))` · `N13` `=IF(K13="","",INDEX($F$86:$F$93,K13))` · `O13` `=IF(N(D13)<=0,"",IF(N(E13)=0,0,IFERROR(IF(N(F13)<=D13*I13,"No se paga",F13*NPER(I13,-F13,D13)-D13),"No se paga")))` · `P13` `=ROW()`
+- **R21**: `B21` Total · `D21` `=SUM(D13:D20)` · `F21` `=SUM(F13:F20)` · `N21:O21` `=SUM(N13:N20)`
+- **R22**: `B22` Saldo en deuda cara · `C22` `=SUMIFS(D13:D20,J13:J20,"Sí")` · `E22` Ahorro en intereses con el plan · `H22` `=IF(OR(COUNTIF(O13:O20,"No se paga")>0,COUNTIF(L13:L20,"Más de 120")>0),"Ver detalle",SUMIFS(O13:O20,K13:K20,">0")-N21)`
+- **R23**: `B23` ¿Hay deuda cara? · `C23` `=IF(C22>0,"Sí","No")` · `E23` "No acepta abonos" o "desde": créditos con cobertura FRECH, préstamos familiares sin inter
+- **R24**: `B24` Carga de deuda (cuotas / ingreso mensual) · `C24` `=IF(Ingresos!$U$14=0,"",F21/Ingresos!$U$14)` · `E24` Intereses solo con la cuota: cálculo aproximado si nunca se hicieran abonos extra.
+- **R25**: `B25` Fecha de salida de la deuda cara · `C25` `=IF(C22=0,"",IF(COUNTIFS(J13:J20,"Sí",L13:L20,"Más de 120")>0,"Más de 120 meses",_xlfn.MAXIFS(M13:M20,J13:J20,"Sí")))`
+- **R26**: `B26` ¿Alguna deuda tarda más de 120 meses? · `C26` `=IF(COUNTIF(L13:L20,"Más de 120")>0,"Sí","No")`
+- **R28**: `B28` Simulación mes a mes (orden de pago; el pago total se mantiene y lo liberado pasa a la sig
+- **R29**: `B29` Mes · `E29:DT29` `=EDATE($C$11,0)`
+- **R30**: `B30` Pago total disponible · `E30:DT30` `=$C$9`
+- **R31**: `B31` Disponible para abono extra · `E31:DT31` `=E30-(E35+E41+E47+E53+E59+E65+E71+E77)`
+- **R33**: `B33` `="Orden 1: "&D33` · `C33` `=IFERROR(MATCH(1,$K$13:$K$20,0),0)` · `D33` `=IF(C33=0,"(sin deuda)",INDEX($B$13:$B$20,C33))`
+- **R34**: `B34` Debe con interés · `C34` `=IF(C33=0,0,N(INDEX($I$13:$I$20,C33)))` · `E34:DT34` `=D37*(1+$C$34)`
+- **R35**: `B35` Pago mínimo aplicado · `C35` `=IF(C33=0,0,N(INDEX($F$13:$F$20,C33)))` · `E35:DT35` `=MIN($C$35,E34)`
+- **R36**: `B36` Abono extra · `C36` `=IF(C33=0,0,IF(INDEX($G$13:$G$20,C33)="No",0,1))` · `D36` `=IF(C33=0,"",IF(N(INDEX($H$13:$H$20,C33))=0,"",INDEX($H$13:$H$20,C33)))` · `E36:DT36` `=IF(AND($C$36=1,OR($D$36="",E$29>=$D$36)),MAX(0,MIN(E34-E35,E$31-(0))),0)`
+- **R37**: `B37` Saldo · `C37` inicial · `D37` `=IF($C$38=0,D38,MAX(0,D38-MAX(0,$C$10-(0))))` · `E37:DT37` `=E34-E35-E36`
+- **R38**: `C38` `=IF(AND(C36=1,OR(D36="",D36<=$C$11)),1,0)` · `D38` `=IF(C33=0,0,N(INDEX($D$13:$D$20,C33)))`
+- **R39**: `B39` `="Orden 2: "&D39` · `C39` `=IFERROR(MATCH(2,$K$13:$K$20,0),0)` · `D39` `=IF(C39=0,"(sin deuda)",INDEX($B$13:$B$20,C39))`
+- **R40**: `B40` Debe con interés · `C40` `=IF(C39=0,0,N(INDEX($I$13:$I$20,C39)))` · `E40:DT40` `=D43*(1+$C$40)`
+- **R41**: `B41` Pago mínimo aplicado · `C41` `=IF(C39=0,0,N(INDEX($F$13:$F$20,C39)))` · `E41:DT41` `=MIN($C$41,E40)`
+- **R42**: `B42` Abono extra · `C42` `=IF(C39=0,0,IF(INDEX($G$13:$G$20,C39)="No",0,1))` · `D42` `=IF(C39=0,"",IF(N(INDEX($H$13:$H$20,C39))=0,"",INDEX($H$13:$H$20,C39)))` · `E42:DT42` `=IF(AND($C$42=1,OR($D$42="",E$29>=$D$42)),MAX(0,MIN(E40-E41,E$31-(E36))),0)`
+- **R43**: `B43` Saldo · `C43` inicial · `D43` `=IF($C$44=0,D44,MAX(0,D44-MAX(0,$C$10-($D$38*$C$38))))` · `E43:DT43` `=E40-E41-E42`
+- **R44**: `C44` `=IF(AND(C42=1,OR(D42="",D42<=$C$11)),1,0)` · `D44` `=IF(C39=0,0,N(INDEX($D$13:$D$20,C39)))`
+- **R45**: `B45` `="Orden 3: "&D45` · `C45` `=IFERROR(MATCH(3,$K$13:$K$20,0),0)` · `D45` `=IF(C45=0,"(sin deuda)",INDEX($B$13:$B$20,C45))`
+- **R46**: `B46` Debe con interés · `C46` `=IF(C45=0,0,N(INDEX($I$13:$I$20,C45)))` · `E46:DT46` `=D49*(1+$C$46)`
+- **R47**: `B47` Pago mínimo aplicado · `C47` `=IF(C45=0,0,N(INDEX($F$13:$F$20,C45)))` · `E47:DT47` `=MIN($C$47,E46)`
+- **R48**: `B48` Abono extra · `C48` `=IF(C45=0,0,IF(INDEX($G$13:$G$20,C45)="No",0,1))` · `D48` `=IF(C45=0,"",IF(N(INDEX($H$13:$H$20,C45))=0,"",INDEX($H$13:$H$20,C45)))` · `E48:DT48` `=IF(AND($C$48=1,OR($D$48="",E$29>=$D$48)),MAX(0,MIN(E46-E47,E$31-(E36+E42))),0)`
+- **R49**: `B49` Saldo · `C49` inicial · `D49` `=IF($C$50=0,D50,MAX(0,D50-MAX(0,$C$10-($D$38*$C$38+$D$44*$C$44))))` · `E49:DT49` `=E46-E47-E48`
+- **R50**: `C50` `=IF(AND(C48=1,OR(D48="",D48<=$C$11)),1,0)` · `D50` `=IF(C45=0,0,N(INDEX($D$13:$D$20,C45)))`
+- **R51**: `B51` `="Orden 4: "&D51` · `C51` `=IFERROR(MATCH(4,$K$13:$K$20,0),0)` · `D51` `=IF(C51=0,"(sin deuda)",INDEX($B$13:$B$20,C51))`
+- **R52**: `B52` Debe con interés · `C52` `=IF(C51=0,0,N(INDEX($I$13:$I$20,C51)))` · `E52:DT52` `=D55*(1+$C$52)`
+- **R53**: `B53` Pago mínimo aplicado · `C53` `=IF(C51=0,0,N(INDEX($F$13:$F$20,C51)))` · `E53:DT53` `=MIN($C$53,E52)`
+- **R54**: `B54` Abono extra · `C54` `=IF(C51=0,0,IF(INDEX($G$13:$G$20,C51)="No",0,1))` · `D54` `=IF(C51=0,"",IF(N(INDEX($H$13:$H$20,C51))=0,"",INDEX($H$13:$H$20,C51)))` · `E54:DT54` `=IF(AND($C$54=1,OR($D$54="",E$29>=$D$54)),MAX(0,MIN(E52-E53,E$31-(E36+E42+E48))),0)`
+- **R55**: `B55` Saldo · `C55` inicial · `D55` `=IF($C$56=0,D56,MAX(0,D56-MAX(0,$C$10-($D$38*$C$38+$D$44*$C$44+$D$50*$C$50))))` · `E55:DT55` `=E52-E53-E54`
+- **R56**: `C56` `=IF(AND(C54=1,OR(D54="",D54<=$C$11)),1,0)` · `D56` `=IF(C51=0,0,N(INDEX($D$13:$D$20,C51)))`
+- **R57**: `B57` `="Orden 5: "&D57` · `C57` `=IFERROR(MATCH(5,$K$13:$K$20,0),0)` · `D57` `=IF(C57=0,"(sin deuda)",INDEX($B$13:$B$20,C57))`
+- **R58**: `B58` Debe con interés · `C58` `=IF(C57=0,0,N(INDEX($I$13:$I$20,C57)))` · `E58:DT58` `=D61*(1+$C$58)`
+- **R59**: `B59` Pago mínimo aplicado · `C59` `=IF(C57=0,0,N(INDEX($F$13:$F$20,C57)))` · `E59:DT59` `=MIN($C$59,E58)`
+- **R60**: `B60` Abono extra · `C60` `=IF(C57=0,0,IF(INDEX($G$13:$G$20,C57)="No",0,1))` · `D60` `=IF(C57=0,"",IF(N(INDEX($H$13:$H$20,C57))=0,"",INDEX($H$13:$H$20,C57)))` · `E60:DT60` `=IF(AND($C$60=1,OR($D$60="",E$29>=$D$60)),MAX(0,MIN(E58-E59,E$31-(E36+E42+E48+E54))),0)`
+- **R61**: `B61` Saldo · `C61` inicial · `D61` `=IF($C$62=0,D62,MAX(0,D62-MAX(0,$C$10-($D$38*$C$38+$D$44*$C$44+$D$50*$C$50+$D$56*$C$56))))` · `E61:DT61` `=E58-E59-E60`
+- **R62**: `C62` `=IF(AND(C60=1,OR(D60="",D60<=$C$11)),1,0)` · `D62` `=IF(C57=0,0,N(INDEX($D$13:$D$20,C57)))`
+- **R63**: `B63` `="Orden 6: "&D63` · `C63` `=IFERROR(MATCH(6,$K$13:$K$20,0),0)` · `D63` `=IF(C63=0,"(sin deuda)",INDEX($B$13:$B$20,C63))`
+- **R64**: `B64` Debe con interés · `C64` `=IF(C63=0,0,N(INDEX($I$13:$I$20,C63)))` · `E64:DT64` `=D67*(1+$C$64)`
+- **R65**: `B65` Pago mínimo aplicado · `C65` `=IF(C63=0,0,N(INDEX($F$13:$F$20,C63)))` · `E65:DT65` `=MIN($C$65,E64)`
+- **R66**: `B66` Abono extra · `C66` `=IF(C63=0,0,IF(INDEX($G$13:$G$20,C63)="No",0,1))` · `D66` `=IF(C63=0,"",IF(N(INDEX($H$13:$H$20,C63))=0,"",INDEX($H$13:$H$20,C63)))` · `E66:DT66` `=IF(AND($C$66=1,OR($D$66="",E$29>=$D$66)),MAX(0,MIN(E64-E65,E$31-(E36+E42+E48+E54+E60))),0)`
+- **R67**: `B67` Saldo · `C67` inicial · `D67` `=IF($C$68=0,D68,MAX(0,D68-MAX(0,$C$10-($D$38*$C$38+$D$44*$C$44+$D$50*$C$50+$D$56*$C$56+$D$62*$C$62))))` · `E67:DT67` `=E64-E65-E66`
+- **R68**: `C68` `=IF(AND(C66=1,OR(D66="",D66<=$C$11)),1,0)` · `D68` `=IF(C63=0,0,N(INDEX($D$13:$D$20,C63)))`
+- **R69**: `B69` `="Orden 7: "&D69` · `C69` `=IFERROR(MATCH(7,$K$13:$K$20,0),0)` · `D69` `=IF(C69=0,"(sin deuda)",INDEX($B$13:$B$20,C69))`
+- **R70**: `B70` Debe con interés · `C70` `=IF(C69=0,0,N(INDEX($I$13:$I$20,C69)))` · `E70:DT70` `=D73*(1+$C$70)`
+- **R71**: `B71` Pago mínimo aplicado · `C71` `=IF(C69=0,0,N(INDEX($F$13:$F$20,C69)))` · `E71:DT71` `=MIN($C$71,E70)`
+- **R72**: `B72` Abono extra · `C72` `=IF(C69=0,0,IF(INDEX($G$13:$G$20,C69)="No",0,1))` · `D72` `=IF(C69=0,"",IF(N(INDEX($H$13:$H$20,C69))=0,"",INDEX($H$13:$H$20,C69)))` · `E72:DT72` `=IF(AND($C$72=1,OR($D$72="",E$29>=$D$72)),MAX(0,MIN(E70-E71,E$31-(E36+E42+E48+E54+E60+E66))),0)`
+- **R73**: `B73` Saldo · `C73` inicial · `D73` `=IF($C$74=0,D74,MAX(0,D74-MAX(0,$C$10-($D$38*$C$38+$D$44*$C$44+$D$50*$C$50+$D$56*$C$56+$D$62*$C$62+$D$68*$C$68))))` · `E73:DT73` `=E70-E71-E72`
+- **R74**: `C74` `=IF(AND(C72=1,OR(D72="",D72<=$C$11)),1,0)` · `D74` `=IF(C69=0,0,N(INDEX($D$13:$D$20,C69)))`
+- **R75**: `B75` `="Orden 8: "&D75` · `C75` `=IFERROR(MATCH(8,$K$13:$K$20,0),0)` · `D75` `=IF(C75=0,"(sin deuda)",INDEX($B$13:$B$20,C75))`
+- **R76**: `B76` Debe con interés · `C76` `=IF(C75=0,0,N(INDEX($I$13:$I$20,C75)))` · `E76:DT76` `=D79*(1+$C$76)`
+- **R77**: `B77` Pago mínimo aplicado · `C77` `=IF(C75=0,0,N(INDEX($F$13:$F$20,C75)))` · `E77:DT77` `=MIN($C$77,E76)`
+- **R78**: `B78` Abono extra · `C78` `=IF(C75=0,0,IF(INDEX($G$13:$G$20,C75)="No",0,1))` · `D78` `=IF(C75=0,"",IF(N(INDEX($H$13:$H$20,C75))=0,"",INDEX($H$13:$H$20,C75)))` · `E78:DT78` `=IF(AND($C$78=1,OR($D$78="",E$29>=$D$78)),MAX(0,MIN(E76-E77,E$31-(E36+E42+E48+E54+E60+E66+E72))),0)`
+- **R79**: `B79` Saldo · `C79` inicial · `D79` `=IF($C$80=0,D80,MAX(0,D80-MAX(0,$C$10-($D$38*$C$38+$D$44*$C$44+$D$50*$C$50+$D$56*$C$56+$D$62*$C$62+$D$68*$C$68+$D$74*$C$74))))` · `E79:DT79` `=E76-E77-E78`
+- **R80**: `C80` `=IF(AND(C78=1,OR(D78="",D78<=$C$11)),1,0)` · `D80` `=IF(C75=0,0,N(INDEX($D$13:$D$20,C75)))`
+- **R84**: `B84` Resultado por orden de pago
+- **R85**: `B85` Orden · `C85` Deuda · `D85` Saldo inicial · `E85` Meses para pagar · `F85` Intereses
+- **R86**: `B86` 1 · `C86` `=D33` · `D86` `=D37` · `E86` `=IF(D86=0,0,IF(DT37>0.5,"Más de 120",COUNTIF(E37:DT37,">0.5")+1))` · `F86` `=IF(D86=0,0,SUM(E35:DT35)+SUM(E36:DT36)+DT37-D86)`
+- **R87**: `B87` 2 · `C87` `=D39` · `D87` `=D43` · `E87` `=IF(D87=0,0,IF(DT43>0.5,"Más de 120",COUNTIF(E43:DT43,">0.5")+1))` · `F87` `=IF(D87=0,0,SUM(E41:DT41)+SUM(E42:DT42)+DT43-D87)`
+- **R88**: `B88` 3 · `C88` `=D45` · `D88` `=D49` · `E88` `=IF(D88=0,0,IF(DT49>0.5,"Más de 120",COUNTIF(E49:DT49,">0.5")+1))` · `F88` `=IF(D88=0,0,SUM(E47:DT47)+SUM(E48:DT48)+DT49-D88)`
+- **R89**: `B89` 4 · `C89` `=D51` · `D89` `=D55` · `E89` `=IF(D89=0,0,IF(DT55>0.5,"Más de 120",COUNTIF(E55:DT55,">0.5")+1))` · `F89` `=IF(D89=0,0,SUM(E53:DT53)+SUM(E54:DT54)+DT55-D89)`
+- **R90**: `B90` 5 · `C90` `=D57` · `D90` `=D61` · `E90` `=IF(D90=0,0,IF(DT61>0.5,"Más de 120",COUNTIF(E61:DT61,">0.5")+1))` · `F90` `=IF(D90=0,0,SUM(E59:DT59)+SUM(E60:DT60)+DT61-D90)`
+- **R91**: `B91` 6 · `C91` `=D63` · `D91` `=D67` · `E91` `=IF(D91=0,0,IF(DT67>0.5,"Más de 120",COUNTIF(E67:DT67,">0.5")+1))` · `F91` `=IF(D91=0,0,SUM(E65:DT65)+SUM(E66:DT66)+DT67-D91)`
+- **R92**: `B92` 7 · `C92` `=D69` · `D92` `=D73` · `E92` `=IF(D92=0,0,IF(DT73>0.5,"Más de 120",COUNTIF(E73:DT73,">0.5")+1))` · `F92` `=IF(D92=0,0,SUM(E71:DT71)+SUM(E72:DT72)+DT73-D92)`
+- **R93**: `B93` 8 · `C93` `=D75` · `D93` `=D79` · `E93` `=IF(D93=0,0,IF(DT79>0.5,"Más de 120",COUNTIF(E79:DT79,">0.5")+1))` · `F93` `=IF(D93=0,0,SUM(E77:DT77)+SUM(E78:DT78)+DT79-D93)`
+- **R95**: `B95` Si una deuda muestra "Más de 120", el pago total no alcanza a cubrirla en 10 años (normal 
+
+## Flujo anual
+
+- **R1-2**: `B1` Flujo mes a mes
+- **R4**: `E4:P4` `=DATE(Supuestos!$C$14,1,1)`
+- **R5**: `B5` Concepto · `E5` Ene · `F5` Feb · `G5` Mar · `H5` Abr · `I5` May · `J5` Jun · `K5` Jul · `L5` Ago · `M5` Sep · `N5` Oct · `O5` Nov · `P5` Dic · `Q5` Total año
+- **R6**: `B6` ENTRADAS
+- **R7**: `B7` Ingresos laborales · `E7:P7` `=SUMPRODUCT((Ingresos!$C$6:$C$13="Laboral")*Ingresos!$F$6:$F$13*Ingresos!G$6:G$13)` · `Q7` `=SUM(E7:P7)`
+- **R8**: `B8` Rentas · `E8:P8` `=SUMPRODUCT((Ingresos!$C$6:$C$13="Renta")*Ingresos!$F$6:$F$13*Ingresos!G$6:G$13)` · `Q8` `=SUM(E8:P8)`
+- **R9**: `B9` Pensión · `E9:P9` `=SUMPRODUCT((Ingresos!$C$6:$C$13="Pensión")*Ingresos!$F$6:$F$13*Ingresos!G$6:G$13)` · `Q9` `=SUM(E9:P9)`
+- **R10**: `B10` Otros ingresos · `E10:P10` `=SUMPRODUCT((Ingresos!$C$6:$C$13="Otro")*Ingresos!$F$6:$F$13*Ingresos!G$6:G$13)` · `Q10` `=SUM(E10:P10)`
+- **R11**: `B11` Total entradas · `E11:P11` `=SUM(E7:E10)` · `Q11` `=SUM(E11:P11)`
+- **R12**: `B12` SALIDAS
+- **R13**: `B13` Seguridad social · `E13:P13` `=Presupuesto!$I$96*Ingresos!G$17` · `Q13` `=SUM(E13:P13)`
+- **R14**: `B14` Pagos directos · `E14:P14` `=Presupuesto!$I$90` · `Q14` `=SUM(E14:P14)`
+- **R15**: `B15` Aportes a bolsillos · `E15:P15` `=Presupuesto!$I$91` · `Q15` `=SUM(E15:P15)`
+- **R16**: `B16` Cuotas de deudas · `E16:P16` `=Presupuesto!$I$93` · `Q16` `=SUM(E16:P16)`
+- **R17**: `B17` Ahorro programado · `E17:P17` `=Presupuesto!$I$94` · `Q17` `=SUM(E17:P17)`
+- **R18**: `B18` Total salidas · `E18:P18` `=SUM(E13:E17)` · `Q18` `=SUM(E18:P18)`
+- **R19**: `B19` Balance del mes · `E19:P19` `=E11-E18` · `Q19` `=SUM(E19:P19)` · `S19` Meses sin ingreso (cálculo) · `T19` Valor
+- **R20**: `B20` Uso del bolsillo de meses sin ingreso · `E20:P20` `=MAX(0,-E19)*$T$27` · `Q20` `=SUM(E20:P20)` · `S20` Faltante total de los meses en rojo · `T20` `=-SUMIF(E19:P19,"<0")`
+- **R21**: `B21` Aporte al bolsillo de meses sin ingreso · `E21:P21` `=IF(E19>0,IF($T$24>=$T$23,$T$23,IF($T$21=0,0,$T$26*E19/$T$21)),0)` · `Q21` `=SUM(E21:P21)` · `S21` Suma de balances positivos · `T21` `=SUMIF(E19:P19,">0")`
+- **R22**: `B22` Sobrante del mes · `E22:P22` `=E19+E20-E21` · `Q22` `=SUM(E22:P22)` · `S22` Meses con balance positivo · `T22` `=COUNTIF(E19:P19,">0")`
+- **R23**: `B23` DESTINO DEL SOBRANTE · `S23` Aporte igual por mes positivo · `T23` `=IF(T22=0,0,T26/T22)`
+- **R24**: `B24` Abono extra a deudas · `E24:P24` `=IF(Deudas!$C$23="Sí",MAX(0,E22)*Supuestos!$C$25,0)` · `Q24` `=SUM(E24:P24)` · `S24` Menor balance positivo · `T24` `=IF(T22=0,0,_xlfn.MINIFS(E19:P19,E19:P19,">0"))`
+- **R25**: `B25` Inversión · `E25:P25` `=IF(Deudas!$C$23="Sí",0,MAX(0,E22)*Supuestos!$C$42)` · `Q25` `=SUM(E25:P25)` · `S25` Método de aporte · `T25` `=IF(T20=0,"No aplica",IF(T24>=T23,"Aporte igual","Aporte proporcional"))`
+- **R26**: `B26` Margen libre · `E26:P26` `=E22-E24-E25` · `Q26` `=SUM(E26:P26)` · `S26` Faltante que alcanza a cubrirse · `T26` `=MIN(T20,T21)`
+- **R27**: `B27` CUENTAS POR COBRAR · `S27` Cobertura del faltante · `T27` `=IF(T20=0,1,MIN(1,T21/T20))`
+- **R28**: `B28` Abonos recibidos · `E28:P28` `=IF(AND(ISNUMBER(Supuestos!$J$46),(Supuestos!$C$14*12+1)>=Supuestos!$J$46,(Supuestos!$C$14*12+1)<=Supuestos!$K$46),N(Supuestos!$D$46),0)+IF(AND(ISNUMBER(Supuestos!$J$47),(Supuestos!$C$14*12+1)>=Supuestos!$J$47,(Supuestos!$C$14*12+1)<=Supuestos!$K$47),N(Supuestos!$D$47),0)+IF(AND(ISNUMBER(Supuestos!$J$48),(Supuestos!$C$14*12+1)>=Supuestos!$J$48,(Supuestos!$C$14*12+1)<=Supuestos!$K$48),N(Supuestos!$D$48),0)` · `Q28` `=SUM(E28:P28)`
+- **R29**: `B29` Abonos a deudas · `E29:P29` `=IF(Deudas!$C$23="Sí",E28,0)` · `Q29` `=SUM(E29:P29)`
+- **R30**: `B30` Abonos a inversión · `E30:P30` `=IF(Deudas!$C$23="Sí",0,IF(AND(ISNUMBER(Supuestos!$J$46),(Supuestos!$C$14*12+1)>=Supuestos!$J$46,(Supuestos!$C$14*12+1)<=Supuestos!$K$46),N(Supuestos!$D$46)*N(Supuestos!$H$46),0)+IF(AND(ISNUMBER(Supuestos!$J$47),(Supuestos!$C$14*12+1)>=Supuestos!$J$47,(Supuestos!$C$14*12+1)<=Supuestos!$K$47),N(Supuestos!$D$47)*N(Supuestos!$H$47),0)+IF(AND(ISNUMBER(Supuestos!$J$48),(Supuestos!$C$14*12+1)>=Supuestos!$J$48,(Supuestos!$C$14*12+1)<=Supuestos!$K$48),N(Supuestos!$D$48)*N(Supuestos!$H$48),0))` · `Q30` `=SUM(E30:P30)`
+- **R31**: `B31` Abonos libres · `E31:P31` `=E28-E29-E30` · `Q31` `=SUM(E31:P31)`
+- **R32**: `B32` TOTALES
+- **R33**: `B33` Total a inversión · `E33:P33` `=E25+E30` · `Q33` `=SUM(E33:P33)`
+- **R34**: `B34` Total extra a deudas · `E34:P34` `=E24+E29` · `Q34` `=SUM(E34:P34)`
+- **R36**: `B36` `=IF(T20>T21+0.5,"Alerta: el año cierra en déficit. Los meses con sobrante no alcanzan a cubrir los meses en rojo.","")`
+- **R37-38**: `B37` El aporte al bolsillo se hace en los meses con balance positivo y se usa en los meses en r
+
+## Bolsillos
+
+- **R1-2**: `B1` Bolsillos
+- **R5**: `B5` Bolsillo · `C5` Qué guarda · `D5` Meta anual · `E5` Aporte mensual · `F5` Cuándo se usa · `G5` Saldo inicial sugerido · `H5` Nota
+- **R6**: `B6` Fondo de emergencia · `C6` Solo emergencias reales. · `D6` `='Fondo emergencia'!$C$21` · `E6` `=MAX(0,D6-G6)/12` · `F6` Solo emergencias · `G6` `=MIN(D6,$C$23)` · `H6` Aporte para completarlo en 12 meses si hoy no alcanza.
+- **R7**: `B7` Meses sin ingreso · `C7` Cubre los meses en rojo del flujo. · `D7` `='Flujo anual'!$T$20` · `E7` `='Flujo anual'!$T$23` · `F7` Meses sin ingreso · `G7` `=MIN(D7,MAX(0,$C$23-G6))` · `H7` Aporte en los meses con sobrante (ver Flujo anual).
+- **R8**: `B8` `=IF(Listas!$F$2="","",Listas!$F$2)` · `C8` [editable] · `D8` `=IF(B8="",0,SUMIFS(Presupuesto!$H$6:$H$87,Presupuesto!$K$6:$K$87,B8))` · `E8` `=IF(B8="",0,SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$K$6:$K$87,B8))` · `F8` [editable] · `G8` [editable] 0
+- **R9**: `B9` `=IF(Listas!$F$3="","",Listas!$F$3)` · `C9` [editable] · `D9` `=IF(B9="",0,SUMIFS(Presupuesto!$H$6:$H$87,Presupuesto!$K$6:$K$87,B9))` · `E9` `=IF(B9="",0,SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$K$6:$K$87,B9))` · `F9` [editable] · `G9` [editable] 0
+- **R10**: `B10` `=IF(Listas!$F$4="","",Listas!$F$4)` · `C10` [editable] · `D10` `=IF(B10="",0,SUMIFS(Presupuesto!$H$6:$H$87,Presupuesto!$K$6:$K$87,B10))` · `E10` `=IF(B10="",0,SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$K$6:$K$87,B10))` · `F10` [editable] · `G10` [editable] 0
+- **R11**: `B11` `=IF(Listas!$F$5="","",Listas!$F$5)` · `C11` [editable] · `D11` `=IF(B11="",0,SUMIFS(Presupuesto!$H$6:$H$87,Presupuesto!$K$6:$K$87,B11))` · `E11` `=IF(B11="",0,SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$K$6:$K$87,B11))` · `F11` [editable] · `G11` [editable] 0
+- **R12**: `B12` `=IF(Listas!$F$6="","",Listas!$F$6)` · `C12` [editable] · `D12` `=IF(B12="",0,SUMIFS(Presupuesto!$H$6:$H$87,Presupuesto!$K$6:$K$87,B12))` · `E12` `=IF(B12="",0,SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$K$6:$K$87,B12))` · `F12` [editable] · `G12` [editable] 0
+- **R13**: `B13` `=IF(Listas!$F$7="","",Listas!$F$7)` · `C13` [editable] · `D13` `=IF(B13="",0,SUMIFS(Presupuesto!$H$6:$H$87,Presupuesto!$K$6:$K$87,B13))` · `E13` `=IF(B13="",0,SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$K$6:$K$87,B13))` · `F13` [editable] · `G13` [editable] 0
+- **R14**: `B14` `=IF(Listas!$F$8="","",Listas!$F$8)` · `C14` [editable] · `D14` `=IF(B14="",0,SUMIFS(Presupuesto!$H$6:$H$87,Presupuesto!$K$6:$K$87,B14))` · `E14` `=IF(B14="",0,SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$K$6:$K$87,B14))` · `F14` [editable] · `G14` [editable] 0
+- **R15**: `B15` `=IF(Listas!$F$9="","",Listas!$F$9)` · `C15` [editable] · `D15` `=IF(B15="",0,SUMIFS(Presupuesto!$H$6:$H$87,Presupuesto!$K$6:$K$87,B15))` · `E15` `=IF(B15="",0,SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$K$6:$K$87,B15))` · `F15` [editable] · `G15` [editable] 0
+- **R16**: `B16` `=IF(Listas!$F$10="","",Listas!$F$10)` · `C16` [editable] · `D16` `=IF(B16="",0,SUMIFS(Presupuesto!$H$6:$H$87,Presupuesto!$K$6:$K$87,B16))` · `E16` `=IF(B16="",0,SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$K$6:$K$87,B16))` · `F16` [editable] · `G16` [editable] 0
+- **R17**: `B17` `=IF(Listas!$F$11="","",Listas!$F$11)` · `C17` [editable] · `D17` `=IF(B17="",0,SUMIFS(Presupuesto!$H$6:$H$87,Presupuesto!$K$6:$K$87,B17))` · `E17` `=IF(B17="",0,SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$K$6:$K$87,B17))` · `F17` [editable] · `G17` [editable] 0
+- **R18**: `B18` Total · `D18:E18` `=SUM(D6:D17)` · `G18` `=SUM(G6:G17)`
+- **R20**: `B20` Reparto del saldo actual
+- **R21**: `B21` Saldo líquido disponible (hoja Patrimonio) · `C21` `=Patrimonio!$C$33`
+- **R22**: `B22` Colchón en la cuenta operativa · `C22` `=Supuestos!$C$32`
+- **R23**: `B23` Disponible para repartir · `C23` `=MAX(0,C21-C22)`
+- **R24**: `B24` Asignado a bolsillos · `C24` `=G18`
+- **R25**: `B25` Excedente · `C25` `=C23-C24`
+- **R26**: `B26` Abono único a deuda cara · `C26` `=IF(Deudas!$C$23="Sí",MAX(0,C25)*Supuestos!$C$25,0)`
+- **R27**: `B27` Aporte único a inversión · `C27` `=IF(Deudas!$C$23="Sí",0,MAX(0,C25)*Supuestos!$C$26)`
+- **R28**: `B28` Queda sin asignar · `C28` `=C25-C26-C27`
+- **R29**: `B29` Bolsillos con aporte (verificar límite del banco) · `C29` `=COUNTIF(E6:E17,">0")`
+- **R30**: `B30` `=IF(C25<-0.5,"Alerta: los saldos iniciales superan lo disponible. Ajusta la columna G.","")`
+- **R31**: `B31` Orden del reparto: fondo de emergencia, meses sin ingreso y luego los saldos que escribas 
+
+## Fondo emergencia
+
+- **R1-2**: `B1` Fondo de emergencia
+- **R5**: `B5` Dato · `C5` Valor · `D5` Nota
+- **R6**: `B6` Gasto mensual promedio total · `C6` `=Presupuesto!$I$89`
+- **R7**: `B7` Gasto esencial mensual · `C7` `=Presupuesto!$I$95` · `D7` Lo marcado "Sí" en ¿Esencial? del Presupuesto.
+- **R8**: `B8` Ingreso laboral mensual promedio · `C8` `=Ingresos!$U$20`
+- **R9**: `B9` Rentas mensuales promedio · `C9` `=Ingresos!$U$21`
+- **R10**: `B10` Pensión mensual · `C10` `=Ingresos!$U$22`
+- **R11**: `B11` Otros ingresos mensuales · `C11` `=Ingresos!$U$23`
+- **R13**: `B13` Escenario · `C13` Ingreso que se mantiene · `D13` Faltante mensual · `E13` Meses que cubre la meta
+- **R14**: `B14` A. Pierde el ingreso laboral · `C14` `=C9+C10+C11` · `D14` `=MAX(0,$C$7-C14)` · `E14` `=IF(D14=0,"Cubierto por el ingreso",IF($C$21=0,0,$C$21/D14))`
+- **R15**: `B15` B. Pierde las rentas · `C15` `=C8+C10+C11` · `D15` `=MAX(0,$C$7-C15)` · `E15` `=IF(D15=0,"Cubierto por el ingreso",IF($C$21=0,0,$C$21/D15))`
+- **R16**: `B16` C. Pierde laboral y rentas (peor caso) · `C16` `=C10` · `D16` `=MAX(0,$C$7-C16)` · `E16` `=IF(D16=0,"Cubierto por el ingreso",IF($C$21=0,0,$C$21/D16))`
+- **R17**: `B17` Meses de cobertura · `C17` `=Supuestos!$C$21`
+- **R18**: `B18` Meta por el peor caso · `C18` `=C17*D16`
+- **R19**: `B19` Mínimo (1 mes de gasto esencial) · `C19` `=C7`
+- **R20**: `B20` Meta completa · `C20` `=MAX(C18,C19)`
+- **R21**: `B21` Meta vigente · `C21` `=IF(Deudas!$C$23="Sí",MIN(C20,C7),C20)` · `D21` Con deuda cara: 1 mes de lo esencial; luego se paga la deuda y se completa el fondo.
+- **R22**: `B22` Comparación: 6 meses de gasto total · `C22` `=6*C6`
+- **R23**: `B23` Capital que se libera frente a esa regla · `C23` `=C22-C20`
+- **R24**: `B24` Saldo asignado hoy (hoja Bolsillos) · `C24` `=Bolsillos!$G$6`
+- **R25**: `B25` Avance frente a la meta completa · `C25` `=IF(C20=0,1,C24/C20)`
+- **R27**: `B27` El fondo se guarda en una cuenta o bolsillo con liquidez inmediata, nunca en inversiones v
+
+## Metas
+
+- **R1-2**: `B1` Metas
+- **R5**: `B5` Meta · `C5` Bolsillo · `D5` Valor ingresado · `E5` ¿Usa calculadora de viaje? · `F5` Valor usado · `G5` Ya ahorrado · `H5` Se repite cada (años) · `I5` Fecha objetivo · `J5` Meses restantes · `K5` Aporte mensual · `L5` Nota
+- **R6-10**: `B6` [editable] · `C6` [editable] · `D6` [editable] · `E6` [editable] No · `F6` `=IF(E6="Sí",$E$30,N(D6))` · `G6` [editable] · `H6` [editable] · `I6` [editable] · `J6` `=IF(I6="","",IFERROR(MAX(1,DATEDIF(Supuestos!$C$12,I6,"m")),1))` · `K6` `=IF(B6="",0,IF(N(H6)>0,F6/(H6*12),IF(J6="",0,MAX(0,(F6-N(G6))/J6))))` · `L6` [editable]
+- **R11**: `B11` Total · `K11` `=SUM(K6:K10)`
+- **R12-13**: `B12` Meta que se repite (por ejemplo, un viaje cada 2 años): llena "Se repite cada" y deja la f
+- **R14**: `B14` Concepto · `C14` Valor unitario (USD) · `D14` Cantidad · `E14` Total USD · `F14` Nota
+- **R15-16**: `B15` Tiquete ida y vuelta con maleta · `C15` [editable] · `D15` [editable] 1 · `E15` `=N(C15)*N(D15)` · `F15` Buscar precios reales y actuales.
+- **R17**: `B17` Impuestos del alojamiento (%) · `C17` [editable] 0 · `E17` `=E16*C17`
+- **R18-19**: `B18` Comida por día · `C18` [editable] · `D18` [editable] 7 · `E18` `=N(C18)*N(D18)` · `F18` Cantidad = días.
+- **R20-22**: `B20` Atracciones · `C20` [editable] · `D20` [editable] 1 · `E20` `=N(C20)*N(D20)`
+- **R23**: `B23` Subtotal · `E23` `=SUM(E15:E22)`
+- **R24**: `B24` Colchón por tasa de cambio y comisiones (%) · `C24` [editable] 0.05 · `E24` `=E23*C24`
+- **R25**: `B25` Total en dólares · `E25` `=E23+E24`
+- **R26**: `B26` Tasa de cambio · `E26` `=Supuestos!$C$17`
+- **R27**: `B27` Total en pesos · `E27` `=E25*N(E26)`
+- **R28-29**: `B28` Trayecto nacional hasta el aeropuerto (pesos) · `E28` [editable] 0
+- **R30**: `B30` Total del viaje en pesos · `E30` `=E27+E28+E29`
+
+## Seguros
+
+- **R1-2**: `B1` Análisis de seguros
+- **R5**: `B5` Seguro · `C5` Qué cubre · `D5` Ojo: qué no cubre o qué revisar · `E5` Prioridad típica · `F5` ¿Lo tiene? · `G5` Beneficiarios · `H5` Prima anual cotizada · `I5` Costo mensual
+- **R6-13**: `B6` Hogar para inmuebles · `C6` Terremoto, incendio, inundación, daños y responsabilidad civil. · `D6` Revisar qué cubre la póliza de la copropiedad. · `E6` Alta si hay inmuebles · `F6` [editable] · `G6` [editable] · `H6` [editable] · `I6` `=IF(F6="Sí",0,N(H6)/12)`
+- **R14-15**: `B14` [editable] · `C14` [editable] · `D14` [editable] · `E14` [editable] · `F14` [editable] · `G14` [editable] · `H14` [editable] · `I14` `=IF(F14="Sí",0,N(H14)/12)`
+- **R16**: `B16` Total seguros nuevos · `H16` `=SUMIFS(H6:H15,F6:F15,"<>Sí")` · `I16` `=H16/12`
+- **R17**: `B17` El total pasa al Presupuesto (fila automática) y al bolsillo Seguros. Las pólizas marcadas
+- **R19**: `B19` Suma asegurada orientativa de vida
+- **R20**: `B20` Deudas pendientes · `C20` `=Deudas!$D$21`
+- **R21**: `B21` Gasto anual que se quiere cubrir · `C21` `=Presupuesto!$H$89`
+- **R22**: `B22` Años de apoyo a dependientes · `C22` `=IF(Supuestos!$C$11>0,10,0)`
+- **R23**: `B23` Patrimonio líquido e inversiones · `C23` `=Patrimonio!$C$33+Patrimonio!$C$34`
+- **R24**: `B24` Suma asegurada orientativa · `C24` `=MAX(0,C20+C21*C22-C23)` · `D24` Orientativa. Cotizar con 2 o 3 aseguradoras y comparar exclusiones.
+
+## Inversión
+
+- **R1-2**: `B1` Inversión por plazos, edad y perfil
+- **R4**: `B4` Inversiones actuales
+- **R5**: `B5` Inversión o plataforma · `C5` Tipo · `D5` Moneda · `E5` Saldo en su moneda · `F5` Valor en pesos · `G5` Nota
+- **R6-11**: `B6` [editable] · `C6` [editable] · `D6` [editable] COP · `E6` [editable] · `F6` `=IF(N(E6)=0,0,IF(D6="USD",E6*N(Supuestos!$C$17),E6))` · `G6` [editable]
+- **R12**: `B12` Total invertido · `F12` `=SUM(F6:F11)`
+- **R13**: `B13` En crecimiento · `F13` `=SUMIFS(F6:F11,C6:C11,"Crecimiento")`
+- **R14**: `B14` En estabilidad · `F14` `=SUMIFS(F6:F11,C6:C11,"Estabilidad")`
+- **R16**: `B16` Perfil de riesgo: disposición (lo que quiere asumir)
+- **R17**: `B17` Pregunta · `C17` Respuesta · `D17` Puntos · `E17` Resultado
+- **R18**: `B18` a. Si su inversión bajara 15% en un año, ¿qué haría? · `C18` [editable] · `D18` `=IFERROR(VLOOKUP(C18,Listas!$N$2:$O$4,2,FALSE()),"")`
+- **R19**: `B19` b. ¿Qué experiencia tiene invirtiendo? · `C19` [editable] · `D19` `=IFERROR(VLOOKUP(C19,Listas!$P$2:$Q$4,2,FALSE()),"")`
+- **R20**: `B20` Disposición · `D20` `=IF(OR(D18="",D19=""),"",IF(D18+D19<=3,1,IF(D18+D19<=5,2,3)))` · `E20` `=IF(D20="","Falta responder",CHOOSE(D20,"Conservador","Moderado","Tolerante"))`
+- **R21**: `B21` Plazo en que podría necesitar el dinero · `C21` [editable] · `E21` No suma puntos: si es menos de 3 años, todo va a estabilidad.
+- **R23**: `B23` Perfil de riesgo: capacidad (lo que puede asumir)
+- **R24**: `B24` Condición · `C24` ¿Se cumple? · `E24` Origen
+- **R25**: `B25` Ingresos variables o contrato inestable · `C25` `=IF(Supuestos!$C$10="Independiente variable","Sí","No")` · `E25` Automático según tipo de cliente; se puede cambiar.
+- **R26**: `B26` Personas a cargo sin seguro de vida · `C26` `=IF(AND(N(Supuestos!$C$11)>0,Seguros!$F$10<>"Sí"),"Sí","No")` · `E26` Automático; se puede cambiar.
+- **R27**: `B27` Brecha pensional (la mesada y las rentas no cubren lo básico) · `C27` `=IF(Pensión!$C$78="Sí","Sí","No")` · `E27` Automático (hoja Pensión).
+- **R28**: `B28` Fondo de emergencia incompleto · `C28` `=IF('Fondo emergencia'!$C$25<0.999,"Sí","No")` · `E28` Automático (hoja Fondo emergencia).
+- **R29**: `B29` Menos de 5 años para el retiro sin pensión asegurada · `C29` `=IF(AND(Supuestos!$C$13<>"",Supuestos!$C$29-N(Supuestos!$C$13)<5,Pensión!$C$24<>"Sí"),"Sí","No")` · `E29` Automático (hoja Pensión).
+- **R30**: `B30` Condiciones que se cumplen · `C30` `=COUNTIF(C25:C29,"Sí")`
+- **R31**: `B31` Capacidad · `D31` `=IF(Deudas!$C$23="Sí",0,IF(C30>=4,0,MAX(1,3-C30)))` · `E31` `=CHOOSE(D31+1,"No invertir todavía","Conservador","Moderado","Tolerante")`
+- **R32**: `B32` Perfil final (el menor entre disposición y capacidad) · `D32` `=IF(D20="","",MIN(D20,D31))` · `E32` `=IF(D32="","Falta responder",CHOOSE(D32+1,"No invertir todavía","Conservador","Moderado","Tolerante"))`
+- **R34**: `B34` Rango orientativo en crecimiento según edad y perfil
+- **R35-39**: `B35` Edad desde · `C35` Tramo · `D35` Conservador mín. · `E35` Conservador máx. · `F35` Moderado mín. · `G35` Moderado máx. · `H35` Tolerante mín. · `I35` Tolerante máx.
+- **R41**: `B41` Tramo de edad del cliente · `C41` `=IF(Supuestos!$C$13="","",MATCH(Supuestos!$C$13,$B$36:$B$39,1))` · `D41` `=IF(C41="","",INDEX($C$36:$C$39,C41))`
+- **R42**: `B42` Rango mínimo · `C42` `=IF(OR(C41="",D32="",N(D32)=0),0,INDEX($D$36:$I$39,C41,2*D32-1))`
+- **R43**: `B43` Rango máximo · `C43` `=IF(OR(C41="",D32="",N(D32)=0),0,INDEX($D$36:$I$39,C41,2*D32))`
+- **R44**: `B44` Posición dentro del rango (0% = mínimo, 100% = máximo) · `C44` [editable] 0.5 · `D44` Hacia el máximo si la pensión y las rentas cubren lo básico o el dinero es para herencia; 
+- **R45**: `B45` % en crecimiento · `C45` `=IF(OR(D32="",N(D32)=0,C21="Menos de 3 años"),0,C42+C44*(C43-C42))`
+- **R46**: `B46` % en estabilidad · `C46` `=1-C45`
+- **R47**: `B47` `=IF(C21="Menos de 3 años","El dinero se necesitaría en menos de 3 años: todo va a estabilidad.",IF(D32=0,"Primero estabilidad: pagar la deuda cara o fortalecer la capacidad antes de invertir en crecimiento.",IF(D32="","Responde las preguntas de disposición para calcular el perfil.","")))`
+- **R49**: `B49` Distribución
+- **R50**: `B50` Concepto · `C50` Total · `D50` Crecimiento · `E50` Estabilidad
+- **R51**: `B51` Inversión mensual promedio · `C51` `='Flujo anual'!$Q$33/12` · `D51` `=C51*$C$45` · `E51` `=C51*$C$46`
+- **R52**: `B52` Inversión anual · `C52` `='Flujo anual'!$Q$33` · `D52` `=C52*$C$45` · `E52` `=C52*$C$46`
+- **R53**: `B53` Aporte único desde el excedente · `C53` `=Bolsillos!$C$27` · `D53` `=C53*$C$45` · `E53` `=C53*$C$46`
+- **R54**: `B54` Saldo invertido hoy · `C54` `=F12` · `D54` `=F13` · `E54` `=F14`
+- **R55**: `B55` Objetivo del total (saldo + aporte único) · `C55` `=C53+C54` · `D55` `=C55*$C$45` · `E55` `=C55*$C$46`
+- **R56**: `B56` Movimiento sugerido hacia el objetivo · `D56:E56` `=D55-D54`
+- **R57**: `B57` Positivo: llevar dinero a ese tramo. Negativo: el tramo está por encima del objetivo. Los 
+- **R59**: `B59` Proyección ilustrativa (pesos de hoy, rendimientos no garantizados)
+- **R60**: `B60` Año · `C60` Edad al cierre · `D60` % en crecimiento · `E60` Rendimiento real mezclado · `F60` Saldo inicial · `G60` Aporte del sobrante · `H60` Abonos por cobrar · `I60` Rendimiento · `J60` Saldo final
+- **R61**: `B61` `=Supuestos!$C$14+0` · `C61` `=IF(Supuestos!$C$8="","",B61-YEAR(Supuestos!$C$8))` · `D61` `=IF($C$45=0,0,MAX(MIN(Supuestos!$C$31,$C$45),$C$45-Supuestos!$C$30*MAX(0,MIN(0,$C$71)-MAX(0,$C$71-10))))` · `E61` `=D61*Supuestos!$C$27+(1-D61)*Supuestos!$C$28` · `F61` `=C55` · `G61` `='Flujo anual'!$Q$25` · `H61` `=IF(Deudas!$C$23="Sí",0,IF(ISNUMBER(Supuestos!$J$46),MAX(0,MIN(B61*12+12,Supuestos!$K$46)-MAX(B61*12+1,Supuestos!$J$46)+1)*N(Supuestos!$D$46)*N(Supuestos!$H$46),0)+IF(ISNUMBER(Supuestos!$J$47),MAX(0,MIN(B61*12+12,Supuestos!$K$47)-MAX(B61*12+1,Supuestos!$J$47)+1)*N(Supuestos!$D$47)*N(Supuestos!$H$47),0)+IF(ISNUMBER(Supuestos!$J$48),MAX(0,MIN(B61*12+12,Supuestos!$K$48)-MAX(B61*12+1,Supuestos!$J$48)+1)*N(Supuestos!$D$48)*N(Supuestos!$H$48),0))` · `I61` `=(F61+(G61+H61)/2)*E61` · `J61` `=F61+G61+H61+I61`
+- **R62-70**: `B62` `=Supuestos!$C$14+1` · `C62` `=IF(Supuestos!$C$8="","",B62-YEAR(Supuestos!$C$8))` · `D62` `=IF($C$45=0,0,MAX(MIN(Supuestos!$C$31,$C$45),$C$45-Supuestos!$C$30*MAX(0,MIN(1,$C$71)-MAX(0,$C$71-10))))` · `E62` `=D62*Supuestos!$C$27+(1-D62)*Supuestos!$C$28` · `F62` `=J61` · `G62` `='Flujo anual'!$Q$25` · `H62` `=IF(Deudas!$C$23="Sí",0,IF(ISNUMBER(Supuestos!$J$46),MAX(0,MIN(B62*12+12,Supuestos!$K$46)-MAX(B62*12+1,Supuestos!$J$46)+1)*N(Supuestos!$D$46)*N(Supuestos!$H$46),0)+IF(ISNUMBER(Supuestos!$J$47),MAX(0,MIN(B62*12+12,Supuestos!$K$47)-MAX(B62*12+1,Supuestos!$J$47)+1)*N(Supuestos!$D$47)*N(Supuestos!$H$47),0)+IF(ISNUMBER(Supuestos!$J$48),MAX(0,MIN(B62*12+12,Supuestos!$K$48)-MAX(B62*12+1,Supuestos!$J$48)+1)*N(Supuestos!$D$48)*N(Supuestos!$H$48),0))` · `I62` `=(F62+(G62+H62)/2)*E62` · `J62` `=F62+G62+H62+I62`
+- **R71**: `B71` Años para el retiro hoy · `C71` `=IF(Supuestos!$C$13="",0,MAX(0,Supuestos!$C$29-Supuestos!$C$13))`
+- **R72**: `B72` El % en crecimiento baja gradualmente en los 10 años anteriores al retiro (Supuestos). El 
+
+## Pensión
+
+- **R1-2**: `B1` Pensión de vejez (Colombia)
+- **R5**: `B5` Dato · `C5` Valor · `D5` Nota
+- **R6**: `B6` Régimen · `C6` [editable]
+- **R7**: `B7` Semanas cotizadas · `C7` [editable] · `D7` Según la historia laboral.
+- **R8**: `B8` Fecha de esas semanas · `C8` [editable]
+- **R9**: `B9` Sexo · `C9` `=IF(Supuestos!$C$9="","",Supuestos!$C$9)` · `D9` Desde Supuestos.
+- **R10**: `B10` Edad de pensión · `C10` `=IF(C9="Hombre",62,57)`
+- **R11**: `B11` Fecha en que cumple la edad · `C11` `=IF(Supuestos!$C$8="","",DATE(YEAR(Supuestos!$C$8)+C10,MONTH(Supuestos!$C$8),DAY(Supuestos!$C$8)))`
+- **R12**: `B12` Meses cotizados por año · `C12` `=Ingresos!$S$17` · `D12` Meses con seguridad social (hoja Ingresos).
+- **R13**: `B13` Base de cotización actual (en salarios mínimos) · `C13` [editable] · `D13` Por ejemplo, 3. Contratistas: suele ser el 40% del contrato.
+- **R14**: `B14` Base de cotización en pesos · `C14` `=N(C13)*Supuestos!$C$18`
+- **R15**: `B15` Hijos · `C15` [editable] 0
+- **R16**: `B16` ¿Aplicar descuento de semanas por hijos? · `C16` [editable] No · `D16` Solo si la administradora lo reconoce.
+- **R17**: `B17` Semanas de descuento · `C17` `=IF(AND(C16="Sí",C9="Mujer"),MIN(3,N(C15))*50,0)` · `D17` 50 por hijo, máximo 3.
+- **R19**: `B19` Proyección de semanas
+- **R20**: `B20` Semanas estimadas al cumplir la edad · `C20` `=IF(OR(C7="",C8="",C11=""),"",C7+IFERROR(DATEDIF(C8,C11,"m"),0)*C12/12*30/7)`
+- **R21**: `B21` Año en que cumple la edad · `C21` `=IF(C11="","",YEAR(C11))`
+- **R22**: `B22` Semanas requeridas ese año · `C22` `=IF(OR(C21="",C6=""),"",IF($C$9="Hombre",IF($C$6="Fondo privado",1150,1300),IF($C$6="Fondo privado",IF(C21<2026,1150,MAX(1000,1135-15*(C21-2026))),IF(C21<2026,1300,MAX(1000,1250-25*(C21-2026)))))-$C$17)` · `D22` Colpensiones: mujeres según el año (1.250 en 2026, -25/año hasta 1.000); hombres 1.300. Fo
+- **R23**: `B23` Semanas de sobra (o faltantes) · `C23` `=IF(OR(C20="",C22=""),"",C20-C22)`
+- **R24**: `B24` ¿Cumple las semanas al llegar a la edad? · `C24` `=IF(C23="","",IF(C23>=0,"Sí","No"))`
+- **R25**: `B25` Si faltan: meses adicionales de cotización al ritmo actual · `C25` `=IF(OR(C23="",N(C23)>=0),0,ROUNDUP(-C23/(30/7)/MAX(C12,1)*12,0))`
+- **R27**: `B27` Semanas mujeres por año
+- **R28-39**: `B28` Año · `C28` Colpensiones · `D28` Fondo privado (garantía mínima)
+- **R41**: `B41` Semanas año por año
+- **R42**: `B42` Año · `C42` Edad al cierre · `D42` Semanas al cierre del año · `E42` Semanas requeridas · `F42` ¿Alcanza?
+- **R43-54**: `B43` `=YEAR(Supuestos!$C$12)+0` · `C43` `=IF(Supuestos!$C$8="","",B43-YEAR(Supuestos!$C$8))` · `D43` `=IF(OR($C$7="",$C$8=""),"",$C$7+IFERROR(DATEDIF($C$8,DATE(B43,12,31),"m"),0)*$C$12/12*30/7)` · `E43` `=IF($C$6="","",IF($C$9="Hombre",IF($C$6="Fondo privado",1150,1300),IF($C$6="Fondo privado",IF(B43<2026,1150,MAX(1000,1135-15*(B43-2026))),IF(B43<2026,1300,MAX(1000,1250-25*(B43-2026)))))-$C$17)` · `F43` `=IF(OR(D43="",E43=""),"",IF(D43>=E43,"Sí","No"))`
+- **R56**: `B56` Mesada estimada (solo Colpensiones)
+- **R57**: `B57` Concepto · `C57` Escenario bajo · `D57` Escenario medio · `E57` Escenario alto
+- **R58**: `B58` IBL en salarios mínimos (promedio últimos 10 años) · `C58:D58` `=MAX(1,N($C$13)-1)` · `E58` `=MAX(1,N($C$13))`
+- **R59**: `B59` IBL en pesos · `C59:E59` `=C58*Supuestos!$C$18`
+- **R60**: `B60` Tasa de reemplazo · `C60:E60` `=MAX(0.55,MIN(0.65,(65.5-0.5*C58)/100))`
+- **R61**: `B61` Mesada bruta · `C61:E61` `=MAX(Supuestos!$C$18,C59*C60)`
+- **R62**: `B62` Descuento de salud · `C62:E62` `=C61*$C$64`
+- **R63**: `B63` Mesada neta · `C63:E63` `=C61-C62`
+- **R64**: `B64` Aporte a salud del pensionado · `C64` [editable] 0.12 · `D64` Puede ser menor en mesadas bajas: verificar.
+- **R66**: `B66` Flujo mensual después de pensionarse (pesos de hoy)
+- **R67**: `B67` Concepto · `C67` Escenario bajo · `D67` Escenario medio · `E67` Escenario alto
+- **R68**: `B68` Mesada neta · `C68:E68` `=C63`
+- **R69**: `B69` Rentas y otros ingresos · `C69:E69` `=Ingresos!$U$21+Ingresos!$U$23`
+- **R70**: `B70` Gastos del mes sin seguridad social · `C70:E70` `=Presupuesto!$I$89-Presupuesto!$I$92`
+- **R71**: `B71` Ahorro programado · `C71:E71` `=Presupuesto!$I$94`
+- **R72**: `B72` Escenario 1: deja de trabajar. Sobrante mensual · `C72:E72` `=C68+C69-C70-C71`
+- **R73**: `B73` Ingreso laboral promedio si sigue trabajando · `C73:E73` `=Ingresos!$U$20`
+- **R74**: `B74` Salud y ARL del contrato (promedio mensual) · `C74:E74` `=$C$14*$C$75*$C$12/12`
+- **R75**: `B75` Salud y ARL del contrato (% de la base) · `C75` [editable] 0.13022 · `D75` Pensionado que trabaja: no cotiza pensión. Confirmar con el contador.
+- **R76**: `B76` Escenario 2: sigue trabajando. Sobrante mensual · `C76:E76` `=C68+C69+C73-C70-C71-C74`
+- **R77**: `B77` Para comparar: sobrante mensual promedio hoy · `C77:E77` `='Flujo anual'!$Q$22/12`
+- **R78**: `B78` ¿Brecha pensional? (escenario medio, deja de trabajar) · `C78` `=IF(C6="","",IF(C6="Fondo privado","Revisar con el fondo",IF(D72<0,"Sí","No")))`
+- **R80-81**: `B80` Tasa de reemplazo = 65,5% - 0,5 x IBL en salarios mínimos, entre 55% y 65%, con mesada mín
+
+## Patrimonio
+
+- **R1-2**: `B1` Patrimonio
+- **R5**: `B5` Activo · `C5` Tipo · `D5` Moneda · `E5` Valor en su moneda · `F5` Valor en pesos · `G5` ¿Genera ingreso? · `H5` Nota
+- **R6**: `B6` Inversiones (hoja Inversión) · `C6` Inversión · `D6` COP · `F6` `=Inversión!$F$12` · `H6` Automático.
+- **R7**: `B7` Cuentas por cobrar (Supuestos) · `C7` Por cobrar · `D7` COP · `F7` `=Supuestos!$I$49` · `H7` Automático.
+- **R8-27**: `B8` [editable] · `C8` [editable] · `D8` [editable] COP · `E8` [editable] · `F8` `=IF(N(E8)=0,0,IF(D8="USD",E8*N(Supuestos!$C$17),E8))` · `G8` [editable] · `H8` [editable]
+- **R28**: `B28` Total activos · `F28` `=SUM(F6:F27)`
+- **R29**: `B29` Deudas (hoja Deudas) · `F29` `=Deudas!$D$21`
+- **R30**: `B30` Patrimonio neto · `F30` `=F28-F29`
+- **R32**: `B32` Composición · `C32` Valor · `D32` % de activos
+- **R33-38**: `B33` Líquido · `C33` `=SUMIFS($F$6:$F$27,$C$6:$C$27,B33)` · `D33` `=IF($F$28=0,0,C33/$F$28)`
+- **R39**: `B39` Concentración en inmuebles y vehículos · `C39` `=IF(F28=0,0,(C35+C36)/F28)`
+- **R40**: `B40` Líquido: cuentas, bolsillos y efectivo disponibles. Aportes a cooperativas, cesantías o pe
+
+## Control mensual
+
+- **R1-2**: `B1` Control mensual
+- **R5**: `B5` Categoría · `C5` Presupuesto mensual · `D5` Ene · `E5` Feb · `F5` Mar · `G5` Abr · `H5` May · `I5` Jun · `J5` Jul · `K5` Ago · `L5` Sep · `M5` Oct · `N5` Nov · `O5` Dic · `P5` Promedio real · `Q5` Diferencia · `R5` % desviación · `S5` Meses registrados
+- **R6**: `B6` `=Listas!$E$2` · `C6` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B6)` · `D6` [editable] · `E6` [editable] · `F6` [editable] · `G6` [editable] · `H6` [editable] · `I6` [editable] · `J6` [editable] · `K6` [editable] · `L6` [editable] · `M6` [editable] · `N6` [editable] · `O6` [editable] · `P6` `=IF(COUNT(D6:O6)=0,"",AVERAGE(D6:O6))` · `Q6` `=IF(P6="","",P6-C6)` · `R6` `=IF(OR(P6="",C6=0),"",Q6/C6)` · `S6` `=COUNT(D6:O6)`
+- **R7**: `B7` `=Listas!$E$3` · `C7` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B7)` · `D7` [editable] · `E7` [editable] · `F7` [editable] · `G7` [editable] · `H7` [editable] · `I7` [editable] · `J7` [editable] · `K7` [editable] · `L7` [editable] · `M7` [editable] · `N7` [editable] · `O7` [editable] · `P7` `=IF(COUNT(D7:O7)=0,"",AVERAGE(D7:O7))` · `Q7` `=IF(P7="","",P7-C7)` · `R7` `=IF(OR(P7="",C7=0),"",Q7/C7)` · `S7` `=COUNT(D7:O7)`
+- **R8**: `B8` `=Listas!$E$4` · `C8` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B8)` · `D8` [editable] · `E8` [editable] · `F8` [editable] · `G8` [editable] · `H8` [editable] · `I8` [editable] · `J8` [editable] · `K8` [editable] · `L8` [editable] · `M8` [editable] · `N8` [editable] · `O8` [editable] · `P8` `=IF(COUNT(D8:O8)=0,"",AVERAGE(D8:O8))` · `Q8` `=IF(P8="","",P8-C8)` · `R8` `=IF(OR(P8="",C8=0),"",Q8/C8)` · `S8` `=COUNT(D8:O8)`
+- **R9**: `B9` `=Listas!$E$5` · `C9` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B9)` · `D9` [editable] · `E9` [editable] · `F9` [editable] · `G9` [editable] · `H9` [editable] · `I9` [editable] · `J9` [editable] · `K9` [editable] · `L9` [editable] · `M9` [editable] · `N9` [editable] · `O9` [editable] · `P9` `=IF(COUNT(D9:O9)=0,"",AVERAGE(D9:O9))` · `Q9` `=IF(P9="","",P9-C9)` · `R9` `=IF(OR(P9="",C9=0),"",Q9/C9)` · `S9` `=COUNT(D9:O9)`
+- **R10**: `B10` `=Listas!$E$6` · `C10` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B10)` · `D10` [editable] · `E10` [editable] · `F10` [editable] · `G10` [editable] · `H10` [editable] · `I10` [editable] · `J10` [editable] · `K10` [editable] · `L10` [editable] · `M10` [editable] · `N10` [editable] · `O10` [editable] · `P10` `=IF(COUNT(D10:O10)=0,"",AVERAGE(D10:O10))` · `Q10` `=IF(P10="","",P10-C10)` · `R10` `=IF(OR(P10="",C10=0),"",Q10/C10)` · `S10` `=COUNT(D10:O10)`
+- **R11**: `B11` `=Listas!$E$7` · `C11` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B11)` · `D11` [editable] · `E11` [editable] · `F11` [editable] · `G11` [editable] · `H11` [editable] · `I11` [editable] · `J11` [editable] · `K11` [editable] · `L11` [editable] · `M11` [editable] · `N11` [editable] · `O11` [editable] · `P11` `=IF(COUNT(D11:O11)=0,"",AVERAGE(D11:O11))` · `Q11` `=IF(P11="","",P11-C11)` · `R11` `=IF(OR(P11="",C11=0),"",Q11/C11)` · `S11` `=COUNT(D11:O11)`
+- **R12**: `B12` `=Listas!$E$8` · `C12` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B12)` · `D12` [editable] · `E12` [editable] · `F12` [editable] · `G12` [editable] · `H12` [editable] · `I12` [editable] · `J12` [editable] · `K12` [editable] · `L12` [editable] · `M12` [editable] · `N12` [editable] · `O12` [editable] · `P12` `=IF(COUNT(D12:O12)=0,"",AVERAGE(D12:O12))` · `Q12` `=IF(P12="","",P12-C12)` · `R12` `=IF(OR(P12="",C12=0),"",Q12/C12)` · `S12` `=COUNT(D12:O12)`
+- **R13**: `B13` `=Listas!$E$9` · `C13` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B13)` · `D13` [editable] · `E13` [editable] · `F13` [editable] · `G13` [editable] · `H13` [editable] · `I13` [editable] · `J13` [editable] · `K13` [editable] · `L13` [editable] · `M13` [editable] · `N13` [editable] · `O13` [editable] · `P13` `=IF(COUNT(D13:O13)=0,"",AVERAGE(D13:O13))` · `Q13` `=IF(P13="","",P13-C13)` · `R13` `=IF(OR(P13="",C13=0),"",Q13/C13)` · `S13` `=COUNT(D13:O13)`
+- **R14**: `B14` `=Listas!$E$10` · `C14` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B14)` · `D14` [editable] · `E14` [editable] · `F14` [editable] · `G14` [editable] · `H14` [editable] · `I14` [editable] · `J14` [editable] · `K14` [editable] · `L14` [editable] · `M14` [editable] · `N14` [editable] · `O14` [editable] · `P14` `=IF(COUNT(D14:O14)=0,"",AVERAGE(D14:O14))` · `Q14` `=IF(P14="","",P14-C14)` · `R14` `=IF(OR(P14="",C14=0),"",Q14/C14)` · `S14` `=COUNT(D14:O14)`
+- **R15**: `B15` `=Listas!$E$11` · `C15` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B15)` · `D15` [editable] · `E15` [editable] · `F15` [editable] · `G15` [editable] · `H15` [editable] · `I15` [editable] · `J15` [editable] · `K15` [editable] · `L15` [editable] · `M15` [editable] · `N15` [editable] · `O15` [editable] · `P15` `=IF(COUNT(D15:O15)=0,"",AVERAGE(D15:O15))` · `Q15` `=IF(P15="","",P15-C15)` · `R15` `=IF(OR(P15="",C15=0),"",Q15/C15)` · `S15` `=COUNT(D15:O15)`
+- **R16**: `B16` `=Listas!$E$12` · `C16` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B16)` · `D16` [editable] · `E16` [editable] · `F16` [editable] · `G16` [editable] · `H16` [editable] · `I16` [editable] · `J16` [editable] · `K16` [editable] · `L16` [editable] · `M16` [editable] · `N16` [editable] · `O16` [editable] · `P16` `=IF(COUNT(D16:O16)=0,"",AVERAGE(D16:O16))` · `Q16` `=IF(P16="","",P16-C16)` · `R16` `=IF(OR(P16="",C16=0),"",Q16/C16)` · `S16` `=COUNT(D16:O16)`
+- **R17**: `B17` `=Listas!$E$13` · `C17` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B17)` · `D17` [editable] · `E17` [editable] · `F17` [editable] · `G17` [editable] · `H17` [editable] · `I17` [editable] · `J17` [editable] · `K17` [editable] · `L17` [editable] · `M17` [editable] · `N17` [editable] · `O17` [editable] · `P17` `=IF(COUNT(D17:O17)=0,"",AVERAGE(D17:O17))` · `Q17` `=IF(P17="","",P17-C17)` · `R17` `=IF(OR(P17="",C17=0),"",Q17/C17)` · `S17` `=COUNT(D17:O17)`
+- **R18**: `B18` `=Listas!$E$14` · `C18` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B18)` · `D18` [editable] · `E18` [editable] · `F18` [editable] · `G18` [editable] · `H18` [editable] · `I18` [editable] · `J18` [editable] · `K18` [editable] · `L18` [editable] · `M18` [editable] · `N18` [editable] · `O18` [editable] · `P18` `=IF(COUNT(D18:O18)=0,"",AVERAGE(D18:O18))` · `Q18` `=IF(P18="","",P18-C18)` · `R18` `=IF(OR(P18="",C18=0),"",Q18/C18)` · `S18` `=COUNT(D18:O18)`
+- **R19**: `B19` `=Listas!$E$15` · `C19` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B19)` · `D19` [editable] · `E19` [editable] · `F19` [editable] · `G19` [editable] · `H19` [editable] · `I19` [editable] · `J19` [editable] · `K19` [editable] · `L19` [editable] · `M19` [editable] · `N19` [editable] · `O19` [editable] · `P19` `=IF(COUNT(D19:O19)=0,"",AVERAGE(D19:O19))` · `Q19` `=IF(P19="","",P19-C19)` · `R19` `=IF(OR(P19="",C19=0),"",Q19/C19)` · `S19` `=COUNT(D19:O19)`
+- **R20**: `B20` `=Listas!$E$16` · `C20` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B20)` · `D20` [editable] · `E20` [editable] · `F20` [editable] · `G20` [editable] · `H20` [editable] · `I20` [editable] · `J20` [editable] · `K20` [editable] · `L20` [editable] · `M20` [editable] · `N20` [editable] · `O20` [editable] · `P20` `=IF(COUNT(D20:O20)=0,"",AVERAGE(D20:O20))` · `Q20` `=IF(P20="","",P20-C20)` · `R20` `=IF(OR(P20="",C20=0),"",Q20/C20)` · `S20` `=COUNT(D20:O20)`
+- **R21**: `B21` `=Listas!$E$17` · `C21` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B21)` · `D21` [editable] · `E21` [editable] · `F21` [editable] · `G21` [editable] · `H21` [editable] · `I21` [editable] · `J21` [editable] · `K21` [editable] · `L21` [editable] · `M21` [editable] · `N21` [editable] · `O21` [editable] · `P21` `=IF(COUNT(D21:O21)=0,"",AVERAGE(D21:O21))` · `Q21` `=IF(P21="","",P21-C21)` · `R21` `=IF(OR(P21="",C21=0),"",Q21/C21)` · `S21` `=COUNT(D21:O21)`
+- **R22**: `B22` `=Listas!$E$18` · `C22` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B22)` · `D22` [editable] · `E22` [editable] · `F22` [editable] · `G22` [editable] · `H22` [editable] · `I22` [editable] · `J22` [editable] · `K22` [editable] · `L22` [editable] · `M22` [editable] · `N22` [editable] · `O22` [editable] · `P22` `=IF(COUNT(D22:O22)=0,"",AVERAGE(D22:O22))` · `Q22` `=IF(P22="","",P22-C22)` · `R22` `=IF(OR(P22="",C22=0),"",Q22/C22)` · `S22` `=COUNT(D22:O22)`
+- **R23**: `B23` `=Listas!$E$19` · `C23` `=SUMIFS(Presupuesto!$I$6:$I$87,Presupuesto!$B$6:$B$87,B23)` · `D23` [editable] · `E23` [editable] · `F23` [editable] · `G23` [editable] · `H23` [editable] · `I23` [editable] · `J23` [editable] · `K23` [editable] · `L23` [editable] · `M23` [editable] · `N23` [editable] · `O23` [editable] · `P23` `=IF(COUNT(D23:O23)=0,"",AVERAGE(D23:O23))` · `Q23` `=IF(P23="","",P23-C23)` · `R23` `=IF(OR(P23="",C23=0),"",Q23/C23)` · `S23` `=COUNT(D23:O23)`
+- **R24**: `B24` Total · `C24` `=SUM(C6:C23)` · `D24:O24` `=IF(COUNT(D6:D23)=0,"",SUM(D6:D23))` · `P24` `=IF(COUNT(D24:O24)=0,"",AVERAGE(D24:O24))` · `Q24` `=IF(P24="","",P24-C24)` · `R24` `=IF(OR(P24="",C24=0),"",Q24/C24)`
+- **R26**: `B26` El presupuesto mensual es el promedio (los gastos anuales se reparten en 12). Compara el p
+
+## Plan de acción
+
+- **R1-2**: `B1` Plan de acción
+- **R5**: `B5` # · `C5` Tarea · `D5` Prioridad · `E5` Responsable · `F5` Fecha límite · `G5` Estado · `H5` Nota
+- **R6-19**: `B6` 1 · `C6` [editable] Crear los bolsillos y repartir el saldo actual · `D6` [editable] Alta · `E6` [editable] Cliente · `F6` `=Supuestos!$C$12+7` · `G6` [editable] Pendiente · `H6` [editable]
+- **R20-27**: `B20` 15 · `C20` [editable] · `D20` [editable] · `E20` [editable] · `F20` [editable] · `G20` [editable] · `H20` [editable]
+
+## Listas
+
+- **R1-3**: `A1` Tipo de gasto · `B1` Sí / No · `C1` Frecuencia · `D1` Veces al año · `E1` Categoría · `F1` Bolsillos (editable) · `G1` Tipo de ingreso · `H1` Tipo de cliente · `I1` Meses de fondo sugeridos · `J1` Sexo · `K1` Régimen de pensión · `L1` Tipo de activo · `M1` Moneda · `N1` Si la inversión cae 15% · `O1` Puntos · `P1` Experiencia invirtiendo · `Q1` Puntos · `R1` Plazo del dinero · `S1` Método de pago de deudas · `T1` Tipo de deuda · `U1` Prioridad · `V1` Responsable · `W1` Estado · `X1` Tipo de inversión · `Y1` ¿Tiene el seguro?
+- **R4**: `A4` Seg. social · `C4` Mensual · `D4` 12 · `E4` Transporte · `F4` [editable] Salud y cuidado · `G4` Pensión · `H4` Independiente variable · `I4` 6 · `L4` Inmueble · `N4` Invertiría más · `O4` 3 · `P4` Bastante · `Q4` 3 · `R4` Más de 7 años · `T4` Vehículo · `U4` Baja · `V4` Contador · `W4` Hecho · `Y4` Cotizando
+- **R5**: `A5` Deuda · `C5` Bimestral · `D5` 6 · `E5` Salud y bienestar · `F5` [editable] Ropa · `G5` Otro · `H5` Pensionado · `I5` 3 · `L5` Vehículo · `T5` Hipotecario · `V5` Abogado
+- **R6**: `A6` Ahorro · `C6` Trimestral · `D6` 4 · `E6` Cuidado personal · `F6` [editable] Impuestos y trámites · `H6` Rentista · `I6` 4 · `L6` Por cobrar · `T6` Libranza · `V6` Aseguradora
+- **R7**: `C7` Cada 4 meses · `D7` 3 · `E7` Hijos y familia · `F7` [editable] Hogar y mascotas · `H7` Mixto · `I7` 4 · `L7` Otro · `T7` Informal · `V7` Administradora de pensiones
+- **R8**: `C8` Semestral · `D8` 2 · `E8` Mascotas · `F8` [editable] Vehículo · `T8` Otro
+- **R9-11**: `C9` Anual · `D9` 1 · `E9` Servicios · `F9` [editable] Educación
+- **R12**: `C12` Meses con seguridad social · `D12` Calculado · `E12` Impuestos y trámites
+- **R13-19**: `E13` Compras puntuales
+- **R20**: `B20` Los nombres de bolsillos (columna F) se pueden cambiar; las demás listas no deben modifica

@@ -1,0 +1,47 @@
+# Dependencias y compilados
+node_modules/
+.pnpm-store/
+.turbo/
+.next/
+out/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Variables de entorno y secretos (nunca se suben)
+.env
+.env.*
+!.env.example
+*.p8
+*.pem
+
+# Supabase local
+supabase/.branches/
+supabase/.temp/
+
+# Datos de clientes reales: nunca se suben al repositorio
+referencia/casos/*
+!referencia/casos/README.md
+
+# Salidas de herramientas de análisis (pueden contener datos de clientes)
+tools/**/salida/
+tools/**/*.cells.json
+tools/**/*.meta.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Pruebas end to end
+tests/e2e/.auth/
+playwright-report/
+test-results/
+
+# Sistema y editores
+.DS_Store
+*.log
+.idea/
+.vscode/*
+!.vscode/extensions.json

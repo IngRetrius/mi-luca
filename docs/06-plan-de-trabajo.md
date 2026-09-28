@@ -1,0 +1,211 @@
+# 06. Plan de trabajo
+
+## 1. Supuestos de la estimación
+
+- **Dedicación: 14 horas por semana** (decisión del 28/09/2026), con apoyo de un agente de código.
+- La estimación se hace en horas; una "semana a tiempo completo" equivale a 40 horas. A 14 horas por semana, cada semana a tiempo completo toma unas 2,9 semanas de calendario.
+- Las horas incluyen pruebas y documentación de cada fase. Se suma un 15 % de margen en el total.
+- **Supuesto:** inicio el lunes 5 de octubre de 2026, sin pausas largas. Si cambia la fecha de inicio o la dedicación, las fechas se corren en proporción.
+- Las decisiones de [07-preguntas-abiertas.md](07-preguntas-abiertas.md) marcadas "antes de la fase 0" están resueltas al empezar.
+- El abogado trabaja en paralelo desde la fase 0; su tiempo no está en las horas.
+
+## 2. Fases
+
+| Fase | Contenido | Horas | Acumulado | Fin estimado a 14 h/semana | Depende de |
+|---|---|---|---|---|---|
+| F0. Fundaciones y validaciones | Monorepo, CI, entornos, cuentas de Apple y Google, prueba de sesión en PWA de iOS, casos de prueba de oro, tokens de diseño, inicio del trabajo legal | 80 | 80 | mediados de noviembre de 2026 | Decisiones previas |
+| F1. Autenticación, clientes y permisos | Google y Apple, invitación, consentimiento, roles, RLS, auditoría, PWA base, lista y ficha de clientes | 120 | 200 | mediados de enero de 2027 | F0 |
+| F2. Motor núcleo: perfil, ingresos, presupuesto, resumen | Funciones de Excel, normalización, ingresos y gastos multimoneda, presupuesto con pagador, costo de vida, resumen parcial, antes y después | 160 | 360 | comienzos de abril de 2027 | F1 |
+| F3. Bolsillos, fondo, flujo anual, prueba de realidad, cobros y entrega mínima | Bancos y bolsillos, fondo de emergencia, plan de ahorro secuencial, flujo anual, meses sin ingreso, prueba de realidad, cuentas por cobrar, activos líquidos, plan entregado sin PDF, vista "Mi plan" | 160 | 520 | finales de junio de 2027 | F2 |
+| F4. Deudas y créditos | Motor único de deudas, simulación, créditos cuota a cuota, marcas de pago, panel | 160 | 680 | comienzos de septiembre de 2027 | F3 |
+| F5. Inversión, patrimonio, metas y seguros | Perfil de riesgo, rangos, distribución, proyección, patrimonio completo, metas y calculadora de viaje, seguros | 120 | 800 | comienzos de noviembre de 2027 | F3 (F4 para deuda cara) |
+| F6. Pensión por país | Módulo de Colombia completo, módulo informativo de España, activación por cliente | 80 | 880 | mediados de diciembre de 2027 | F3 |
+| F7. Entregables y seguimiento | Notas y carta con cifras enlazadas, PDF, ficha de continuidad, Excel compatible, control mensual, plan de acción, comparación con el plan entregado, avisos por correo, exportación y borrado | 160 | 1.040 | comienzos de marzo de 2028 | F4, F5, F6 |
+| F8. Endurecimiento y lanzamiento | Accesibilidad, rendimiento, seguridad, textos legales finales, restauración de copias, planes pagados, migración de clientes actuales | 80 | 1.120 | mediados de abril de 2028 | F7 |
+| Margen (15 %) | | 168 | **1.288** | **comienzos de julio de 2028** | |
+
+El orden sigue la sugerencia del encargo, con dos ajustes:
+
+1. **Fase 0 nueva.** La sesión en la PWA de iOS y los casos de prueba de oro son los dos riesgos mayores del proyecto; se validan antes de construir pantallas.
+2. **Entrega mínima en F3.** Para que el MVP sirva con clientes reales, el cliente necesita ver su plan en la app. La carta en PDF y la exportación a Excel quedan en F7.
+
+Con 14 horas por semana el calendario total es de unos 21 meses. La pregunta A9 de [07-preguntas-abiertas.md](07-preguntas-abiertas.md) propone cómo adelantar el primer uso real.
+
+```mermaid
+gantt
+  title Plan de trabajo a 14 horas por semana
+  dateFormat  YYYY-MM-DD
+  axisFormat  %b %Y
+  section Base
+  F0 Fundaciones y validaciones        :f0, 2026-10-05, 2026-11-14
+  F1 Autenticación y permisos          :f1, after f0, 2027-01-13
+  section MVP
+  F2 Motor núcleo                      :f2, after f1, 2027-04-03
+  F3 Bolsillos, fondo, flujo, entrega  :f3, after f2, 2027-06-22
+  section Paridad con la plantilla
+  F4 Deudas y créditos                 :f4, after f3, 2027-09-10
+  F5 Inversión, patrimonio, metas      :f5, after f4, 2027-11-09
+  F6 Pensión por país                  :f6, after f5, 2027-12-19
+  section Reemplazo total del Excel
+  F7 Entregables y seguimiento         :f7, after f6, 2028-03-08
+  F8 Endurecimiento y lanzamiento      :f8, after f7, 2028-04-17
+```
+
+## 3. MVP e hitos
+
+| Hito | Horas acumuladas | Fecha estimada | Qué se puede hacer |
+|---|---|---|---|
+| M0. Base validada | 80 | noviembre de 2026 | Sabemos que la sesión funciona en iPhone y tenemos los casos de prueba |
+| **M1. MVP** | **520** | **junio de 2027 (julio con margen)** | El asesor atiende un cliente sin deudas de principio a fin en la plataforma (como los dos casos reales): captura, diagnóstico, bolsillos, fondo, flujo, prueba de realidad y plan entregado. El cliente entra por invitación, ve su plan, ajusta ingresos y gastos, y el asesor recibe el antes y después. La carta se sigue escribiendo fuera |
+| M2. Deudas | 680 | septiembre de 2027 | Clientes con deudas y seguimiento de créditos por el cliente |
+| M3. Paridad de cálculo | 880 | diciembre de 2027 | La plataforma calcula todo lo que calcula la plantilla |
+| M4. Reemplazo del Excel | 1.040 | marzo de 2028 | Carta, notas, ficha, exportación a Excel, control mensual y seguimiento dentro de la plataforma |
+| M5. Lanzamiento | 1.120 (1.288 con margen) | abril a julio de 2028 | Planes pagados, textos legales validados, clientes actuales migrados con su consentimiento |
+
+Hasta M4, el asesor mantiene el Excel en paralelo para las partes que aún no existen.
+
+## 4. Detalle por fase y criterios de aceptación
+
+### F0. Fundaciones y validaciones (80 horas)
+
+Tareas:
+
+- Monorepo con pnpm y Turborepo, paquetes vacíos con su configuración, reglas de lint que impiden importaciones prohibidas entre paquetes, Vitest y Playwright, CI en GitHub Actions.
+- Supabase local (CLI); conectar el proyecto ya creado (us-east-2) y crear el de staging en la misma región; servidor MCP de Supabase autenticado para el agente.
+- Proyecto en Vercel con funciones en `cle1`; dominio.
+- Cuenta de Apple Developer (99 USD al año [F3]), App ID, Services ID, clave `.p8`; proyecto de Google Cloud y pantalla de consentimiento; verificación de marca en Google [F27].
+- Prueba de sesión en PWA de iOS (criterios en `02-arquitectura.md`, sección 5.4).
+- Casos de prueba de oro: anonimizar C2, construir C1 en la plantilla oficial, extraer C3; script `golden.py` y automatización del recálculo en Excel.
+- Tokens de diseño en `packages/ui`.
+- Contratar abogado y entregarle el borrador de alcance (sección 7 del encargo).
+
+Criterios de aceptación:
+
+- CI en verde con un paquete de ejemplo por capa.
+- En un iPhone real con las dos versiones mayores más recientes de iOS y en Android con Chrome: entrar con Google y con Apple dentro de la app instalada, sin terminar en Safari; la sesión sobrevive a cerrar la app y a reiniciar el teléfono.
+- Los casos C1, C2 y C3 están en `packages/engine/test/golden/` sin ningún dato identificable (revisión humana documentada).
+
+### F1. Autenticación, clientes y permisos (120 horas)
+
+Tareas: migraciones de identidad, acceso, invitaciones, textos legales, consentimientos, supuestos del caso, auditoría, avisos y solicitudes; RLS y pgTAP; `proxy.ts`; inicio de sesión; flujo de invitación completo; consentimiento; guía "Agregar a inicio"; manifiesto y service worker; P-A01, P-A02, P-A03 (esqueleto), P-C01 a P-C04 (inicio vacío), P-C11 (retirar acceso).
+
+Criterios de aceptación:
+
+- Prueba de extremo a extremo: el asesor crea un cliente, lo invita, el cliente acepta en el celular con Google y con Apple (incluido correo oculto de Apple) y queda vinculado.
+- pgTAP: el cliente A no lee ni escribe datos del cliente B; un asesor sin acceso no ve al cliente; al revocar, el acceso se pierde en la siguiente consulta; el cliente no puede escribir campos de criterio profesional.
+- Cada escritura deja una fila en `audit_log` con actor y valores anteriores.
+- Una cuenta sin invitación no ve datos y se borra a los 7 días.
+
+### F2. Motor núcleo (160 horas)
+
+Tareas: `excel`, `normalization`, `incomes`, `budget`, `cost-of-living`, resumen parcial; semillas de parámetros de Colombia y España con fuente y fecha; tablas de ingresos y presupuesto; P-A04 (bloques A a C), P-A05, P-A06, P-A11, P-C06 y P-C07 para ingresos y gastos; registro de impacto y aviso al asesor.
+
+Criterios de aceptación:
+
+- Pruebas de oro de C1, C2 y C3 en verde para los valores de Ingresos y Presupuesto y para `Resumen!C11:C13`.
+- Caso España: el costo de vida por niveles coincide con la hoja "Costo de vida" del Excel; con los gastos marcados "paga la familia", el ingreso anual del resumen coincide con el del Excel (15.710,46 EUR) y el indicador nativo de tasa de ahorro sobre ingreso propio es 100 %.
+- El cliente edita un gasto en el celular, ve el impacto antes de guardar y el asesor recibe el antes y después.
+
+### F3. Bolsillos, fondo, flujo, prueba de realidad, cobros y entrega mínima (160 horas)
+
+Tareas: `cashflow`, `reality-check`, `receivables`, `emergency-fund`, `pockets`, activos líquidos; bancos con límite de bolsillos; P-A07 a P-A10 (pestañas Flujo, Bolsillos, Fondo, Cobros); entrega mínima (plan entregado inmutable y P-C05 sin PDF); control de calidad para los módulos existentes.
+
+Criterios de aceptación:
+
+- Pruebas de oro de C1, C2 y C3 en verde para Flujo anual, Bolsillos y Fondo de emergencia completos, y para `Resumen!C14:C26` y `C35`.
+- No se puede entregar un plan con controles bloqueantes.
+- Un plan entregado no cambia aunque cambien los datos vivos; la vista "Comparar con hoy" muestra las diferencias.
+- **MVP:** un cliente real sin deudas se atiende de principio a fin en la plataforma.
+
+### F4. Deudas y créditos (160 horas)
+
+Tareas: motor único de deudas (120 y 360 meses, seguros, FRECH, orden manual, restricciones de abono, abono único), créditos cuota a cuota, marcas de pago, panel; casos C4 y C5; pantallas de deudas del asesor y P-C10.
+
+Criterios de aceptación: pruebas de oro de C4 (hoja Deudas) y C5 (plantilla de créditos) en verde; `Resumen!C16:C19` en verde; el cliente marca una cuota pagada y el panel se actualiza.
+
+### F5. Inversión, patrimonio, metas y seguros (120 horas)
+
+Criterios de aceptación: pruebas de oro de Inversión (perfil, rango, distribución, proyección), Patrimonio, Metas y Seguros en todos los casos; `Resumen!C25:C28`, `C33:C34`; toda proyección muestra "Ilustrativa, no garantizada"; ninguna pantalla nombra productos ni entidades.
+
+### F6. Pensión por país (80 horas)
+
+Criterios de aceptación: pruebas de oro de la hoja Pensión en C1; `Resumen!C29:C32`; el módulo se desactiva por cliente; España muestra la edad de referencia con fuente y la remisión a la Seguridad Social.
+
+### F7. Entregables y seguimiento (160 horas)
+
+Criterios de aceptación:
+
+- Carta y notas con cifras enlazadas; al entregar, las cifras se congelan y el PDF sigue la estructura de la sección 11 del protocolo.
+- El Excel exportado, abierto y recalculado en Excel, da los mismos valores que el motor dentro de la tolerancia.
+- La ficha de continuidad tiene todos los campos del Anexo C.
+- Control mensual y plan de acción funcionan en el celular del cliente.
+- Exportación de datos (JSON y Excel) completa; el borrado elimina todas las filas, archivos y la cuenta, verificado por prueba automática.
+
+### F8. Endurecimiento y lanzamiento (80 horas)
+
+Criterios de aceptación:
+
+- Auditoría de accesibilidad automática sin errores críticos y revisión manual con VoiceOver y TalkBack en los flujos principales.
+- Carga de la pantalla de inicio del cliente en red 4G lenta simulada en menos de 3 segundos (**Supuesto** de objetivo).
+- Revisión de seguridad: políticas RLS, cabeceras, dependencias, secretos.
+- Textos legales aprobados por el abogado y publicados como versión 1.0.
+- Restauración de una copia de seguridad probada en staging.
+- Supabase Pro y Vercel Pro activos antes de migrar el primer cliente real.
+
+## 5. Riesgos
+
+| Riesgo | Probabilidad | Impacto | Mitigación |
+|---|---|---|---|
+| La sesión se pierde en la PWA de iOS | Media | Alto | Prueba en F0 con dispositivos reales; plan B con token de identidad (`signInWithIdToken`); la web en Safari siempre funciona |
+| El motor no reproduce a Excel en algún borde (fechas, redondeos) | Media | Alto | Funciones de Excel probadas aparte; comparación de valores intermedios; tolerancias definidas |
+| El caso de prueba de Colombia no existe en la plantilla oficial (H-25) | Cierta | Medio | Construirlo en F0; si se retrasa, avanzar con C2, C3 y casos sintéticos |
+| Ninguno de los casos reales tiene deudas | Cierta | Medio | Casos sintéticos C4 y C5 desde el caso 15.1 del protocolo |
+| La plataforma se interpreta como asesoramiento en inversiones regulado | Baja con buenos textos | Alto | Sin productos ni entidades; textos de alcance; abogado desde F0 (ver 07-preguntas-abiertas.md) |
+| Datos de salud en el presupuesto (terapias, medicamentos) | Alta | Medio | Consentimiento explícito aparte; guía para nombrar partidas de forma genérica; abogado |
+| Transferencia a Estados Unidos (Supabase us-east-2) de los datos de clientes de España | Media | Medio | DPA de Supabase con su evaluación de transferencias [F23]; validación del abogado antes del primer cliente de España; si no se aprueba, segundo proyecto en la UE. Para Colombia, Estados Unidos está declarado adecuado por la SIC [F21] |
+| Se olvida regenerar el secreto de Apple (cada 6 meses) | Media | Alto (nadie entra con Apple) | Recordatorio fijo; alerta si aumentan los errores de inicio de sesión con Apple |
+| Cambian precios o límites de los proveedores | Media | Bajo | Revisar al contratar; arquitectura portable (Next.js y Postgres estándar) |
+| Apple vuelve a restringir las apps de pantalla de inicio en la UE [F10] | Baja | Medio | La app funciona como web en Safari; vigilar |
+| El alcance crece y una persona no alcanza | Alta | Medio | MVP estricto, lista de pendientes priorizada, margen del 15 % |
+| Pérdida de datos | Baja | Alto | Copias diarias en Pro [F1], prueba de restauración trimestral, PITR si el volumen lo justifica |
+
+## 6. Costos mensuales estimados
+
+Precios en USD consultados el 28/09/2026 (ver [fuentes.md](fuentes.md)). No incluyen impuestos, dominio (**Supuesto:** unos 1 a 2 USD al mes), honorarios del abogado ni el tiempo de desarrollo.
+
+| Concepto | Desarrollo (F0 a F7, sin datos reales; unos 17 meses) | Lanzamiento, 10 clientes | 100 clientes | 1.000 clientes |
+|---|---|---|---|---|
+| Supabase | 0 (plan gratuito, 2 proyectos) [F1] | 25 (Pro, incluye cómputo Micro) [F1] | 25 | 25 + 5 a 50 (cómputo Small o Medium, según métricas) [F26] |
+| Vercel | 20 (Pro desde el primer despliegue compartido) [F11][F12] | 20 | 20 | 20 + uso sobre el crédito incluido (probablemente 0 a 20) |
+| Apple Developer | 8,25 (99 al año) [F3] | 8,25 | 8,25 | 8,25 |
+| Resend | 0 (gratis) [F25] | 0 | 0 a 20 (Pro si se pasan 100 correos al día) [F25] | 20 [F25] |
+| Copias con recuperación a un punto en el tiempo (opcional) | 0 | 0 | 0 | 100 (PITR 7 días) [F1] |
+| **Total aproximado** | **unos 28** | **unos 53** | **53 a 73** | **78 a 143 sin PITR; 178 a 243 con PITR** |
+
+Volumen esperado a 1.000 clientes: datos de cada cliente del orden de cientos de kilobytes, historial de cambios de unos pocos gigabytes al año y PDF de unos cientos de kilobytes por plan entregado. **Supuesto:** cabe en los 8 GB de base de datos y 100 GB de archivos de Pro [F1] durante los primeros años.
+
+### Límites de los planes gratuitos
+
+| Servicio | Plan gratuito | Limitación que más importa aquí |
+|---|---|---|
+| Supabase Free [F1] | 500 MB de base de datos, 50.000 MAU, 1 GB de archivos, 5 GB de salida, 2 proyectos activos, registros de 1 día | **Se pausa tras 1 semana sin actividad y no tiene copias de seguridad** |
+| Supabase, correo incluido [F14] | 2 mensajes por hora, solo a miembros del equipo | No sirve para invitar clientes: hace falta SMTP propio desde F1 |
+| Vercel Hobby [F11][F12] | 1 millón de invocaciones y 100 GB de transferencia al mes | **Solo uso personal no comercial** |
+| Resend Free [F25] | 3.000 correos al mes, 100 al día, 3 dominios | Suficiente hasta unos 100 clientes activos |
+| Apple Developer [F3] | No hay plan gratuito para Sign in with Apple | 99 USD al año desde F0 |
+| Google OAuth [F27] | Gratis con alcances no sensibles | Verificación de marca para mostrar nombre y logo |
+
+### Cuándo pasar a planes pagados
+
+| Servicio | Momento | Por qué |
+|---|---|---|
+| Supabase Pro | Antes del primer dato real de un cliente | El plan gratuito no tiene copias de seguridad y pausa el proyecto tras una semana sin actividad [F1] |
+| Vercel Pro | En el primer despliegue que vea un cliente (o desde F1 para las vistas previas) | Hobby excluye el uso comercial [F12] |
+| Resend Pro | Al pasar de 100 correos al día o 3.000 al mes | Límite del plan gratuito [F25] |
+| Cómputo mayor en Supabase | Cuando la CPU o la memoria pasen del 70 % de forma sostenida o haya errores de conexiones | Micro tiene 1 GB y 60 conexiones [F26] |
+| PITR | Cuando perder hasta un día de cambios no sea aceptable (muchos clientes editando cada día) | Pro solo restaura copias diarias [F1] |
+| Plan Team de Supabase | Si un cliente o regulador exige SOC 2 o ISO 27001 del proveedor | Solo desde Team, 599 USD al mes [F1] |
+
+## 7. Después del lanzamiento (fuera de este plan)
+
+Segundo factor para el asesor, notificaciones push, simulaciones "qué pasa si", más asesores con rol administrador, registro libre, más países, módulo de pensión de España con estimación, integración con extractos bancarios.
