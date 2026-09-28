@@ -78,7 +78,7 @@ flowchart LR
 
 ## 4. Pila técnica propuesta
 
-Versiones a fijar en la fase 0, al instalar. La versión vigente de Next.js a la fecha es 16.3.x [F16].
+Versiones fijadas en la fase 0 (28/09/2026): Node.js 24 LTS, pnpm 12.6, Next.js 16.3.6, React 19.2, TypeScript 6.0 (la 7.0 todavía no es compatible con `typescript-eslint`), ESLint 9 (la configuración de Next.js aún no está preparada para ESLint 10), Tailwind CSS 4.3, Vitest 5, Playwright 1.63, `@supabase/ssr` 0.12.
 
 | Capa | Elección | Por qué |
 |---|---|---|

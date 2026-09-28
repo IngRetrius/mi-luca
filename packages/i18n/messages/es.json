@@ -1,0 +1,13 @@
+{
+  "app": {
+    "name": "MiLuca",
+    "tagline": "Planificación financiera personal",
+    "underConstruction": "Estamos construyendo tu plataforma. Muy pronto podrás ver tu plan aquí."
+  },
+  "money": {
+    "todayCurrency": "Cifras en {currency} de hoy"
+  },
+  "scope": {
+    "notInvestmentAdvice": "MiLuca es una herramienta de planificación y educación financiera personal. No recomienda productos financieros ni entidades."
+  }
+}

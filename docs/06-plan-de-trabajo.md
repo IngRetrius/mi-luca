@@ -79,6 +79,22 @@ Tareas:
 - Tokens de diseño en `packages/ui`.
 - Contratar abogado y entregarle el borrador de alcance (sección 7 del encargo).
 
+Avance al 28/09/2026 (rama `f0-fundaciones`):
+
+- [x] Monorepo con pnpm 12 y Turborepo; paquetes `domain`, `engine`, `ui`, `i18n`, `exporters`, `db`, `config`, `web` y `e2e`.
+- [x] Reglas de lint que impiden importaciones entre capas y el uso de la fecha del sistema en el motor (verificadas con violaciones de prueba).
+- [x] Primer código real: `Money` con moneda obligatoria y conversión a moneda base (modo nativo y modo compatible con la plantilla).
+- [x] Tokens de la paleta 3 con prueba automática de contraste WCAG en los temas claro y oscuro.
+- [x] App Next.js 16 como PWA: manifiesto, iconos desde el logo provisional, áreas seguras, `proxy.ts` con refresco de sesión de Supabase.
+- [x] Pruebas de extremo a extremo en iPhone (WebKit) y Android (Chromium) simulados.
+- [x] CI en GitHub Actions (formato, lint, tipos, pruebas, build, extremo a extremo, herramientas de Python). Pendiente verla en verde en GitHub.
+- [x] Configuración local de Supabase (`config.toml`) sin registro por correo.
+- [ ] Vincular el proyecto de Supabase y autenticar el servidor MCP (requiere al asesor).
+- [ ] Cuentas de Apple Developer y Google Cloud, dominio (requiere al asesor).
+- [ ] Prueba de sesión en PWA de iOS en iPhone real (requiere despliegue y cuentas).
+- [ ] Casos de prueba de oro C1, C2 y C3 y script `golden.py`.
+- [ ] Contratar abogado.
+
 Criterios de aceptación:
 
 - CI en verde con un paquete de ejemplo por capa.

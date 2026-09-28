@@ -1,0 +1,25 @@
+{
+  "name": "@miluca/exporters",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@miluca/domain": "workspace:*",
+    "@miluca/engine": "workspace:*",
+    "@miluca/i18n": "workspace:*"
+  },
+  "devDependencies": {
+    "@miluca/config": "workspace:*",
+    "eslint": "^9.39.5",
+    "typescript": "~6.0.3",
+    "vitest": "^5.0.2"
+  }
+}

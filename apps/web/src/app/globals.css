@@ -1,0 +1,38 @@
+@import 'tailwindcss';
+
+/* Las variables --ml-* se generan desde packages/ui (ver layout.tsx); aquí se exponen a Tailwind. */
+@theme inline {
+  --color-bg: var(--ml-bg);
+  --color-surface: var(--ml-surface);
+  --color-text: var(--ml-text);
+  --color-text-muted: var(--ml-text-muted);
+  --color-border: var(--ml-border);
+  --color-primary: var(--ml-primary);
+  --color-on-primary: var(--ml-on-primary);
+  --color-link: var(--ml-link);
+  --color-status-ok: var(--ml-status-ok);
+  --color-status-warning: var(--ml-status-warning);
+  --color-status-alert: var(--ml-status-alert);
+  --font-sans: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--ml-bg);
+  color: var(--ml-text);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  /* Áreas seguras del notch y de la barra de inicio en modo instalado. */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
+}
+
+/* Campos de 16 px o más: Safari no hace zoom al enfocarlos. */
+input,
+select,
+textarea {
+  font-size: max(1rem, 16px);
+}
