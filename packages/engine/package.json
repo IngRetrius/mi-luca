@@ -1,0 +1,23 @@
+{
+  "name": "@miluca/engine",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@miluca/domain": "workspace:*"
+  },
+  "devDependencies": {
+    "@miluca/config": "workspace:*",
+    "eslint": "^9.39.5",
+    "typescript": "~6.0.3",
+    "vitest": "^5.0.2"
+  }
+}

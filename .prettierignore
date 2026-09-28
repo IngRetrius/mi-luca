@@ -1,0 +1,10 @@
+pnpm-lock.yaml
+.next
+next-env.d.ts
+.turbo
+coverage
+docs/anexos/inventario-formulas
+referencia
+supabase/.temp
+# La documentación en Markdown no se reformatea (tablas alineadas a mano)
+**/*.md

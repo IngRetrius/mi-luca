@@ -20,6 +20,10 @@ MiLuca es una plataforma de planificación financiera personal para un asesor y 
 10. **Multimoneda.** Nunca asumas una moneda fija. Todo importe es `Money { amount, currency }`; la conversión a la moneda base usa las tasas del cliente (`client_fx_rates`) y solo ocurre en el motor.
 11. **Límites profesionales.** La interfaz no recomienda productos ni entidades, marca toda proyección como ilustrativa y remite impuestos, pensión y temas legales al profesional correspondiente.
 
+## Comandos
+
+`pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` y `pnpm test:e2e` deben pasar antes de dar un cambio por terminado. En `apps/web`, lee la guía de Next.js que trae el paquete (`apps/web/AGENTS.md`) antes de escribir código de Next.
+
 ## Dependencias entre paquetes
 
 `apps/web` puede usar todos los paquetes. `packages/exporters` usa `engine`, `domain` e `i18n`. `packages/engine` solo usa `domain`. `packages/domain` no depende de ningún otro paquete del repositorio. Detalle en `docs/08-estructura-del-repositorio.md`.

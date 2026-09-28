@@ -11,6 +11,20 @@ Estado: **etapa de planificación**. Todavía no hay código de la aplicación. 
 - El cliente tiene su propia cuenta: ve su plan, ajusta sus datos, registra su control mensual y marca sus tareas.
 - Cada plan entregado queda como una versión fija con fecha, para compararla con la situación actual en cada revisión.
 
+## Arrancar
+
+Requisitos: Node.js 24 (LTS) y pnpm 12 (con `corepack enable pnpm`).
+
+```bash
+pnpm install
+pnpm dev          # app en http://localhost:3000
+pnpm lint         # reglas de estilo y de dependencia entre capas
+pnpm typecheck
+pnpm test         # pruebas unitarias (motor, dominio, tokens, formatos)
+pnpm test:e2e     # extremo a extremo en iPhone y Android simulados
+pnpm build
+```
+
 ## Estructura del repositorio
 
 | Carpeta | Responsabilidad |

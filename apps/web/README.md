@@ -2,6 +2,16 @@
 
 Aplicación web progresiva (PWA) en Next.js con App Router. Es la única aplicación del repositorio: la usan el asesor y los clientes, cada uno con su vista.
 
+## Arrancar en local
+
+```bash
+cp apps/web/.env.example apps/web/.env.local   # completar la clave publicable de Supabase
+pnpm install
+pnpm dev                                       # http://localhost:3000
+```
+
+Sin las variables de Supabase la app arranca igual; el refresco de sesión se omite.
+
 ## Responsabilidad
 
 Mostrar pantallas, recibir datos, validar la sesión y guardar cambios mediante acciones de servidor. No contiene reglas de cálculo: todo cálculo se delega a `packages/engine`.
