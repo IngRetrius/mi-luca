@@ -37,3 +37,32 @@ export async function setAdvisorAccess(
   revalidatePath('/privacidad-y-datos');
   return { status, error: null };
 }
+
+export interface WithdrawState {
+  readonly withdrawn: boolean;
+  readonly error: 'unavailable' | null;
+}
+
+/**
+ * P-C11: el cliente retira su consentimiento de datos sensibles (RGPD, art. 7.3). La base solo lo
+ * permite al dueño, una vez y para ese tipo de texto, y pone la fecha.
+ */
+export async function withdrawSensitiveConsent(consentId: string): Promise<WithdrawState> {
+  const viewer = await requireClient('/privacidad-y-datos');
+  if (!UUID.test(consentId)) return { withdrawn: false, error: 'unavailable' };
+
+  const supabase = await createClient();
+  // La fecha enviada solo marca el cambio: la reemplaza la base.
+  const { data, error } = await supabase
+    .from('consents')
+    .update({ withdrawn_at: new Date().toISOString() })
+    .eq('id', consentId)
+    .eq('client_id', viewer.clientId)
+    .is('withdrawn_at', null)
+    .select('id')
+    .maybeSingle();
+  if (error || !data) return { withdrawn: false, error: 'unavailable' };
+
+  revalidatePath('/privacidad-y-datos');
+  return { withdrawn: true, error: null };
+}

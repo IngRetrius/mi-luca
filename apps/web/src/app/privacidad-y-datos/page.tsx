@@ -11,6 +11,8 @@ import {
   listAdvisorAccess,
   listConsents,
   setAdvisorAccess,
+  WithdrawConsent,
+  withdrawSensitiveConsent,
 } from '@/features/consent';
 import { countryDateFormat } from '@/features/invitations';
 import { withAddress } from '@/lib/address';
@@ -94,13 +96,28 @@ export default async function PrivacyPage() {
               <li key={consent.id} className="flex flex-col gap-1 p-4">
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <p className="font-medium">{consent.title}</p>
-                  <p className="text-sm">{consent.granted ? t.granted : t.declined}</p>
+                  <p className="text-sm">
+                    {consent.withdrawnAt
+                      ? t.withdrawn.replace(
+                          '{date}',
+                          formatDate(consent.withdrawnAt, locale, timeZone),
+                        )
+                      : consent.granted
+                        ? t.granted
+                        : t.declined}
+                  </p>
                 </div>
                 <p className="text-sm text-text-muted">
                   {t.consentLine
                     .replace('{version}', consent.version)
                     .replace('{date}', formatDate(consent.recordedAt, locale, timeZone))}
                 </p>
+                {consent.kind === 'datos_sensibles' && consent.granted && !consent.withdrawnAt ? (
+                  <WithdrawConsent
+                    text={t}
+                    action={withdrawSensitiveConsent.bind(null, consent.id)}
+                  />
+                ) : null}
               </li>
             ))}
           </ul>

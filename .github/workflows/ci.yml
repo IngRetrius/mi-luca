@@ -78,4 +78,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - run: python3 -m py_compile tools/excel-extractor/*.py
+      - run: python3 -m py_compile tools/excel-extractor/*.py tools/legal-texts/*.py
+      # Los textos legales se leen bien; mientras sean borradores, el script termina con 1 a propósito.
+      - run: python3 tools/legal-texts/build_migration.py || test $? -eq 1

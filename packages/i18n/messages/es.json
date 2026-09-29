@@ -49,7 +49,8 @@
     "signedInAs": "Entraste como {email}, pero esta cuenta no está vinculada a ningún perfil de MiLuca.",
     "signedIn": "Entraste, pero esta cuenta no está vinculada a ningún perfil de MiLuca.",
     "howTo": "El acceso es por invitación de tu asesor. Abre el enlace de la invitación que te envió y sigue los pasos.",
-    "otherAccount": "Si ya aceptaste una invitación con otra cuenta, cierra sesión y entra con esa."
+    "otherAccount": "Si ya aceptaste una invitación con otra cuenta, cierra sesión y entra con esa.",
+    "deletion": "Si no se vincula a un perfil, esta cuenta se borra 7 días después de creada."
   },
   "clientHome": {
     "greeting": "Hola, {name}",
@@ -70,7 +71,11 @@
       "invitado": "Invitado",
       "activo": "Activo",
       "borrado_solicitado": "Borrado solicitado"
-    }
+    },
+    "searchLabel": "Buscar por nombre",
+    "search": "Buscar",
+    "noMatches": "Ningún perfil coincide con “{query}”.",
+    "showAll": "Ver todos"
   },
   "newClient": {
     "title": "Nuevo cliente",
@@ -371,6 +376,15 @@
     "declined": "No aceptado",
     "errors": {
       "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
-    }
+    },
+    "withdrawn": "Retirado el {date}",
+    "withdraw": "Retirar consentimiento",
+    "withdrawConfirm": {
+      "tu": "Tu asesor dejará de usar los datos de salud de tu presupuesto. Puedes seguir usando MiLuca con esos gastos bajo un nombre genérico, como “Salud”. ¿Retirarlo?",
+      "usted": "Su asesor dejará de usar los datos de salud de su presupuesto. Puede seguir usando MiLuca con esos gastos bajo un nombre genérico, como “Salud”. ¿Retirarlo?"
+    },
+    "withdrawYes": "Sí, retirarlo",
+    "withdrawCancel": "No, mantenerlo",
+    "withdrawDone": "Consentimiento retirado."
   }
 }

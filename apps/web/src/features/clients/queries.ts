@@ -2,7 +2,7 @@ import 'server-only';
 
 import { createClient } from '@/lib/supabase/server';
 
-import { parseClientStatus, type ClientStatus } from './validation';
+import { escapeLike, parseClientStatus, type ClientStatus } from './validation';
 
 export interface ClientSummary {
   readonly id: string;
@@ -25,13 +25,18 @@ export interface CountryOption {
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-/** P-A01: perfiles a los que el asesor tiene acceso activo (RLS), por nombre. Null si falla. */
-export async function listClients(): Promise<readonly ClientSummary[] | null> {
+/**
+ * P-A01: perfiles a los que el asesor tiene acceso activo (RLS), por nombre; con `search`, solo los
+ * que contienen ese texto en el nombre visible, sin distinguir mayúsculas. Null si falla.
+ */
+export async function listClients(search = ''): Promise<readonly ClientSummary[] | null> {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  let query = supabase
     .from('clients')
     .select('id, display_name, status, country:countries(name)')
     .order('display_name');
+  if (search) query = query.ilike('display_name', `%${escapeLike(search)}%`);
+  const { data, error } = await query;
   if (error) return null;
   return data.map((row) => ({
     id: row.id,

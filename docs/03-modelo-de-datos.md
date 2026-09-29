@@ -833,6 +833,8 @@ Las secciones 3 a 10 siguen siendo el diseño de referencia. Lo que ya existe co
 | `20260929025943_signup_hook.sql` | Gancho `private.before_user_created`: solo deja pasar las altas con Google (ADR 0009) |
 | `20260929184227_invitation_consent.sql` | `legal_texts` y `consents` con RLS e historial; `current_legal_texts(país)`, `get_invitation(token)` y `accept_invitation(token, textos aceptados, navegador)`, que reemplaza a la versión anterior |
 | `20260929190605_revoke_accept_invitation_anon.sql` | Quita a `anon` el permiso de ejecutar `accept_invitation` (punto 13) |
+| `20260929200939_consent_withdrawal.sql` | El dueño retira su consentimiento de datos sensibles (punto 14) |
+| `20260929201135_unclaimed_account_cleanup.sql` | `private.delete_unclaimed_accounts()` y su tarea diaria en `pg_cron` (punto 15) |
 
 Diferencias con el borrador de las secciones 3.1, 4 y 5:
 
@@ -849,5 +851,7 @@ Diferencias con el borrador de las secciones 3.1, 4 y 5:
 11. **Consentimientos en la aceptación.** `accept_invitation` exige el texto de tratamiento de datos vigente del país (`23514` si falta, `55000` si el país no tiene uno) y registra en la misma transacción una fila por texto de P-C02: tratamiento (aceptado) y datos sensibles (aceptado o no). Nadie escribe consentimientos desde la API; retirarlos llega con P-C11, cuando el responsable defina qué implica (A7).
 12. **`get_invitation(token)`**, `security definer` y abierta a `anon`: con el token devuelve el estado (`valid`, `used`, `revoked`, `expired`, `invalid`) y, solo si está vigente, el nombre del asesor, el del perfil, el trato, el país, el correo y el vencimiento. Sin el token no expone nada.
 13. **Permisos de las funciones.** Supabase da `EXECUTE` a `anon` y `authenticated` directamente en cada función nueva de `public`, así que `revoke ... from public` no basta: cada función revoca y concede por rol. Sin sesión solo se ejecutan `get_invitation` y `current_legal_texts`; una prueba pgTAP lo vigila con la lista completa.
+14. **Retiro de consentimientos.** `authenticated` puede escribir solo `consents.withdrawn_at`, y RLS solo al dueño. Un disparador exige que el texto sea de `datos_sensibles`, que se haya aceptado y que no se haya retirado antes, y pone la fecha. El tratamiento de datos general no se retira así: sin él no hay servicio, y eso es pedir el borrado (F7).
+15. **Cuentas sin perfil.** `private.delete_unclaimed_accounts(7 días)` borra de `auth.users` las cuentas de más de 7 días que no son de un asesor, no son dueñas de un perfil, no crearon perfiles y no tienen consentimientos. Corre cada día a las 08:00 UTC con `pg_cron` (`cron.job`, `delete-unclaimed-accounts`). Solo la ejecuta la base.
 
-Pendiente de F1: `notifications` (aviso al asesor cuando el cliente acepta) y la tarea que borra cuentas sin perfil a los 7 días.
+Pendiente de F1: `notifications` (aviso al asesor cuando el cliente acepta).

@@ -23,6 +23,7 @@ export default async function NoProfilePage() {
       <p className="wrap-anywhere">{email ? t.signedInAs.replace('{email}', email) : t.signedIn}</p>
       <p className="text-text-muted">{t.howTo}</p>
       <p className="text-text-muted">{t.otherAccount}</p>
+      <p className="text-text-muted">{t.deletion}</p>
       <div className="mt-2">
         <SignOutButton />
       </div>

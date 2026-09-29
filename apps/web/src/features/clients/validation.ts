@@ -48,3 +48,15 @@ export function parseNewClient(formData: FormData): NewClientParse {
 
   return Object.keys(errors).length > 0 ? { ok: false, values, errors } : { ok: true, values };
 }
+
+export const SEARCH_MAX = 80;
+
+/** Texto de búsqueda de P-A01: sin espacios de más y con un largo máximo. Vacío si no hay. */
+export function parseSearch(value: unknown): string {
+  return typeof value === 'string' ? value.trim().replace(/\s+/g, ' ').slice(0, SEARCH_MAX) : '';
+}
+
+/** Escapa los comodines de `ilike` (%, _ y la barra invertida) para buscar el texto tal cual. */
+export function escapeLike(value: string): string {
+  return value.replace(/[\\%_]/g, '\\$&');
+}

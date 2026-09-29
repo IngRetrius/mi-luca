@@ -134,13 +134,16 @@ Avance:
 - [x] Flujo del cliente: `/invitacion/[token]` (P-C01, en tú o usted), consentimiento (P-C02) y alta con Google o con contraseña (P-C12, cuenta creada en el servidor con la clave secreta). `accept_invitation` registra los consentimientos en la misma transacción. El token pasa de la URL a una cookie `HttpOnly` del flujo; la página no envía Referer ni se indexa.
 - [x] Tablas `legal_texts` (textos inmutables con su sha256) y `consents`, con RLS; `get_invitation` para ver la invitación sin sesión. 35 pruebas pgTAP nuevas (114 en total). Aplicado al remoto el 29/09/2026 (`db push`, ejecutado por el asesor); el asesor de seguridad marcó que `anon` podía ejecutar `accept_invitation`, corregido en una migración aparte.
 - [x] Verificado contra Supabase local (asesor en Chromium, cliente en WebKit de iPhone): enlace, copia, anulación, enlace anulado, token inventado, errores de P-C02 y P-C12 con foco, alta con contraseña, perfil activo, dos consentimientos con el texto exacto, historial con su actor, enlace usado y ficha actualizada. Sin desborde a 320 px.
-- [ ] Textos legales para Colombia y España (tratamiento de datos, datos de salud, política de privacidad): borrador del agente, aprobación del responsable (A7) y migración con la versión 1.0. Sin ellos el remoto no acepta invitaciones (C15, C16).
+- [x] Borradores de los cuatro textos de P-C02 (tratamiento de datos y datos de salud, Colombia y España) en `docs/legal/textos/`, redactados desde la Ley 1581, el Decreto 1377 y el RGPD consultados el 29/09/2026, y `tools/legal-texts/build_migration.py`, que genera la migración y se niega mientras falte algo.
+- [ ] Completar y aprobar los textos (C17 a C19) y publicarlos. Sin ellos el remoto no acepta invitaciones (C15). Política de privacidad (C16) después.
+- [x] Retirar el consentimiento de datos de salud desde P-C11 (RGPD, art. 7.3): solo el dueño, una vez y solo ese tipo de texto; la fecha la pone la base. Qué hace la app con esos datos al retirarlo se define en F2 (C20).
+- [x] Tarea diaria (`pg_cron`, 08:00 UTC) que borra las cuentas sin perfil a los 7 días; P-G02 ya lo avisa.
+- [x] Buscador de P-A01 por nombre visible, con la búsqueda en la URL (`?q=`).
 - [ ] Alta con Google desde la invitación en un navegador real (requiere cuenta de prueba en Google).
 - [x] P-C03 Agregar a inicio (`/instalar`): al aceptar la invitación, instrucciones de Safari en iPhone, botón "Instalar" en Android cuando el navegador lo ofrece (`beforeinstallprompt`) y texto general en otros equipos; si la app ya corre instalada, sigue al inicio. Verificado en WebKit (iPhone) y Chromium (Android) contra Supabase local.
 - [x] P-C11 Privacidad y datos (`/privacidad-y-datos`), primera parte: retirar el acceso del asesor (con confirmación) y devolverlo, y ver los consentimientos con versión y fecha. Verificado contra Supabase local: al retirar, el perfil desaparece de la lista del asesor y su ficha da "No encontramos esta página"; al devolver, vuelve. Enlace desde el inicio del cliente.
 - [ ] P-C11: pedir una sesión reciente (menos de 10 minutos) antes de retirar el acceso (`02-arquitectura.md`, 5.6), exportar y pedir el borrado (F7).
 - [ ] Correo de la invitación con Resend (C14).
-- [ ] Tarea diaria que borra las cuentas sin perfil a los 7 días.
 
 Criterios de aceptación:
 

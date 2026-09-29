@@ -10,10 +10,13 @@ export interface AdvisorAccess {
 
 export interface ConsentRecord {
   readonly id: string;
+  /** Solo los de datos sensibles se pueden retirar desde P-C11. */
+  readonly kind: string;
   readonly title: string;
   readonly version: string;
   readonly granted: boolean;
   readonly recordedAt: string;
+  readonly withdrawnAt: string | null;
 }
 
 /** P-C11: asesores que tienen o tuvieron acceso al perfil (RLS: solo el dueño ve estas filas). */
@@ -39,15 +42,17 @@ export async function listConsents(clientId: string): Promise<readonly ConsentRe
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('consents')
-    .select('id, granted, recorded_at, text:legal_texts(title, version)')
+    .select('id, granted, recorded_at, withdrawn_at, text:legal_texts(kind, title, version)')
     .eq('client_id', clientId)
     .order('recorded_at', { ascending: false });
   if (error) return null;
   return data.map((row) => ({
     id: row.id,
+    kind: row.text.kind,
     title: row.text.title,
     version: row.text.version,
     granted: row.granted,
     recordedAt: row.recorded_at,
+    withdrawnAt: row.withdrawn_at,
   }));
 }

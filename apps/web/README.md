@@ -72,7 +72,7 @@ El plan Hobby es solo para uso personal no comercial: antes de que un cliente re
 
 | Ruta | Qué hace |
 |---|---|
-| `/clientes` | P-A01: perfiles con acceso activo, con su estado (texto y símbolo), o el estado vacío. Acción principal fija abajo: "Nuevo cliente" |
+| `/clientes` | P-A01: perfiles con acceso activo, con su estado (texto y símbolo), o el estado vacío. Buscador por nombre con la búsqueda en la URL (`?q=`), que funciona sin JavaScript. Acción principal fija abajo: "Nuevo cliente" |
 | `/clientes/nuevo` | P-A02: nombre visible, país y trato; llama a `create_client` y abre la ficha |
 | `/clientes/[id]` | P-A03 (esqueleto): datos del perfil e invitación. Mientras nadie haya aceptado: crear el enlace (se ve una sola vez, con botón de copiar), crear uno nuevo (anula el anterior) y anular con confirmación. Un id que no existe, o sin acceso, da la página 404 |
 
@@ -101,7 +101,7 @@ En `next dev`, el registro de acciones de servidor imprime sus argumentos y resu
 
 | Ruta | Qué hace |
 |---|---|
-| `/privacidad-y-datos` | P-C11 (primera parte): acceso del asesor con estado en texto y símbolo, retirar (con confirmación) o devolver; consentimientos con versión y fecha; cerrar sesión. Enlace desde el inicio (P-C04) mientras no haya navegación inferior |
+| `/privacidad-y-datos` | P-C11 (primera parte): acceso del asesor con estado en texto y símbolo, retirar (con confirmación) o devolver; consentimientos con versión y fecha, y retirar el de datos de salud (con confirmación); cerrar sesión. Enlace desde el inicio (P-C04) mientras no haya navegación inferior |
 
 ## Convenciones de interfaz
 

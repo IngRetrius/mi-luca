@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { DISPLAY_NAME_MAX, parseClientStatus, parseNewClient } from './validation';
+import {
+  DISPLAY_NAME_MAX,
+  escapeLike,
+  parseClientStatus,
+  parseNewClient,
+  parseSearch,
+} from './validation';
 
 function form(entries: Record<string, string>): FormData {
   const data = new FormData();
@@ -54,5 +60,21 @@ describe('parseClientStatus', () => {
 
   it('trata un valor desconocido como borrador', () => {
     expect(parseClientStatus('otro')).toBe('borrador');
+  });
+});
+
+describe('parseSearch', () => {
+  it('limpia espacios y recorta a 80 caracteres', () => {
+    expect(parseSearch('  Cliente   CO ')).toBe('Cliente CO');
+    expect(parseSearch('a'.repeat(100))).toHaveLength(80);
+    expect(parseSearch(undefined)).toBe('');
+    expect(parseSearch(['a'])).toBe('');
+  });
+});
+
+describe('escapeLike', () => {
+  it('escapa los comodines de ilike', () => {
+    expect(escapeLike('50%_a\\b')).toBe('50\\%\\_a\\\\b');
+    expect(escapeLike('María')).toBe('María');
   });
 });

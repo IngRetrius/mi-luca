@@ -197,10 +197,13 @@ reset role;
 select set_config('request.jwt.claims', '{"sub":"11111111-1111-4111-8111-111111111111"}', true);
 set local role authenticated;
 select is((select count(*)::int from public.consents), 6, 'La asesora ve los consentimientos de sus clientes');
-select throws_ok(
-  $$update public.consents set withdrawn_at = now()$$,
-  '42501', null, 'La asesora no cambia consentimientos');
+select lives_ok($$update public.consents set withdrawn_at = now()$$,
+  'La asesora intenta retirar consentimientos');
 reset role;
+select is(
+  (select count(*)::int from public.consents
+   where withdrawn_at is not null and client_id::text like 'c_c_c_c_-0000-%'), 0,
+  'RLS no deja a la asesora retirar consentimientos de sus clientes');
 
 update public.advisor_client_access set status = 'revoked'
 where client_id = 'c1c1c1c1-0000-4000-8000-000000000001';
@@ -209,6 +212,47 @@ set local role authenticated;
 select is((select count(*)::int from public.consents where client_id = 'c1c1c1c1-0000-4000-8000-000000000001'),
   0, 'Sin acceso, la asesora deja de ver los consentimientos de ese cliente');
 reset role;
+
+-- Retirar el consentimiento de datos sensibles (migración consent_withdrawal) ----------------
+
+select set_config('request.jwt.claims', '{"sub":"33333333-3333-4333-8333-333333333333"}', true);
+set local role authenticated;
+select throws_ok(
+  $$update public.consents set withdrawn_at = now()
+    where legal_text_id = 'd0d0d0d0-0000-4000-8000-000000000002'$$,
+  '42501', null, 'El tratamiento de datos no se retira desde aquí');
+select lives_ok(
+  $$update public.consents set withdrawn_at = '2000-01-01'
+    where legal_text_id = 'd0d0d0d0-0000-4000-8000-000000000003'$$,
+  'El cliente retira su consentimiento de datos de salud');
+select is(
+  (select withdrawn_at from public.consents where legal_text_id = 'd0d0d0d0-0000-4000-8000-000000000003'),
+  now(), 'La fecha de retiro la pone la base');
+select throws_ok(
+  $$update public.consents set withdrawn_at = null
+    where legal_text_id = 'd0d0d0d0-0000-4000-8000-000000000003'$$,
+  '55000', null, 'Un consentimiento retirado no se reactiva');
+reset role;
+select is(
+  (select count(*)::int from public.audit_log where table_name = 'consents' and action = 'update'
+     and client_id = 'c1c1c1c1-0000-4000-8000-000000000001' and actor_role = 'cliente'),
+  1, 'El retiro queda en el historial');
+
+select set_config('request.jwt.claims', '{"sub":"66666666-6666-4666-8666-666666666666"}', true);
+set local role authenticated;
+select throws_ok(
+  $$update public.consents set withdrawn_at = now()
+    where legal_text_id = 'd0d0d0d0-0000-4000-8000-000000000003'$$,
+  '55000', null, 'Un consentimiento que no se dio no se retira');
+select lives_ok(
+  $$update public.consents set withdrawn_at = now()
+    where client_id = 'c1c1c1c1-0000-4000-8000-000000000001'$$,
+  'Un cliente intenta retirar consentimientos de otro');
+reset role;
+select is(
+  (select count(*)::int from public.consents
+   where client_id = 'c1c1c1c1-0000-4000-8000-000000000001' and withdrawn_at is not null),
+  1, 'RLS no deja a un cliente retirar consentimientos de otro');
 
 select * from finish();
 rollback;

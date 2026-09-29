@@ -62,7 +62,7 @@ Principio: describir lo que la plataforma hace (planificar, organizar, explicar)
 
 ## 3. Documentos a redactar
 
-El agente prepara cada borrador con la norma de la sección 1; el responsable lo aprueba y se publica como texto legal (`legal_texts`) en una migración.
+El agente prepara cada borrador con la norma de la sección 1; el responsable lo aprueba y se publica como texto legal (`legal_texts`) en una migración. Los cuatro de P-C02 ya tienen borrador en `textos/` (ver su README).
 
 | Documento | País | Dónde se usa | Fase |
 |---|---|---|---|
