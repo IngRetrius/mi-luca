@@ -1,8 +1,10 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { messages } from '@miluca/i18n';
 
+import { textButton } from '@/components/ui-classes';
 import { SignOutButton } from '@/features/auth';
 import { homePath, requireViewer } from '@/server/viewer';
 
@@ -26,6 +28,9 @@ export default async function HomePage() {
         </h1>
         <p className="text-lg text-text-muted">{t.clientHome.preparing[viewer.formOfAddress]}</p>
       </div>
+      <Link href="/privacidad-y-datos" className={`inline-flex items-center ${textButton}`}>
+        {t.clientHome.privacyLink}
+      </Link>
       <SignOutButton />
       <p className="text-sm text-text-muted">{t.scope.notInvestmentAdvice}</p>
     </main>

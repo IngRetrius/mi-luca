@@ -15,8 +15,8 @@ Producción en el proyecto ya creado, en us-east-2. Las funciones de Vercel se c
 
 - Menor latencia para Colombia, que es donde está la mayoría de clientes.
 - Colombia: la SIC declaró a Estados Unidos país con nivel adecuado de protección (Circular Externa 5 de 2017) [F21].
-- España: los datos de clientes residentes en la UE salen del Espacio Económico Europeo. Hay que apoyarse en el DPA de Supabase, que incluye su evaluación de impacto de transferencias [F23], y confirmar con el abogado la base de la transferencia.
-- Si el abogado desaconseja la región para clientes de España, la alternativa es crear otro proyecto en la UE antes de cargar datos reales, y usar este como staging.
+- España: los datos de clientes residentes en la UE salen del Espacio Económico Europeo. Hay que apoyarse en el DPA de Supabase, que incluye su evaluación de impacto de transferencias [F23]. La base de la transferencia la decide el responsable del tratamiento (sin abogado, decisión A7).
+- Si el responsable no acepta esa base para clientes de España, la alternativa es crear otro proyecto en la UE antes de cargar datos reales, y usar este como staging.
 
 ## Alternativas consideradas
 

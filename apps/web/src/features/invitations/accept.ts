@@ -33,7 +33,8 @@ export async function acceptFromFlow(
   });
   if (!error) {
     await clearInvitationFlow();
-    return '/';
+    // P-C03: primero la guía para agregar la app a la pantalla de inicio.
+    return '/instalar';
   }
 
   // 23514: el texto aceptado ya no es el vigente; se vuelve a mostrar el consentimiento.

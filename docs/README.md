@@ -24,7 +24,7 @@ Plan de trabajo de la primera etapa (planificación, sin código de la aplicaci�
 | [adr/](adr/README.md) | Registro de decisiones de arquitectura |
 | [anexos/](anexos/README.md) | Inventario completo de fórmulas de las dos plantillas |
 | [diseno/](diseno/tokens.md) | Tokens de diseño (paleta 3) y semáforo accesible |
-| [legal/](legal/README.md) | Textos legales pendientes de redactar y validar con abogado |
+| [legal/](legal/README.md) | Marco legal y textos pendientes de redactar; los aprueba el responsable (A7) |
 
 ## Convenciones de esta documentación
 

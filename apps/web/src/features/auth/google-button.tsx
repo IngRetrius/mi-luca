@@ -5,7 +5,9 @@ import { useEffect, useId, useState, type MouseEvent } from 'react';
 
 import { secondaryButton } from '@/components/ui-classes';
 
-import { AUTH_CHANNEL, isStandalone, type AuthChannelMessage } from './channel';
+import { isStandalone } from '@/lib/pwa';
+
+import { AUTH_CHANNEL, type AuthChannelMessage } from './channel';
 import type { AuthText } from './text';
 
 /** Logo de Google: estático, se crea una sola vez. */

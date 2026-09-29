@@ -30,6 +30,10 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Consentimiento, crear tu acceso | `/invitacion/consentimiento`, `/invitacion/acceso` | P-C02, P-C12 |
 | Aceptar desde el flujo | `acceptFromFlow`, `/invitacion/aceptar` | Llama a `accept_invitation` con el token y los textos aceptados |
 | Anular una invitación | `revokeInvitation` | Pone `revoked_at`; el enlace deja de servir |
+| Agregar a inicio | `/instalar`, `InstallGuide` | P-C03; instrucciones según `detectPlatform` (`ios`, `android`, `other`) |
+| Privacidad y datos | `/privacidad-y-datos` | P-C11 |
+| Retirar o devolver el acceso del asesor | `setAdvisorAccess` | Cambia `advisor_client_access.status` a `revoked` o `active` |
+| Pantalla solo del cliente | `requireClient` | Guarda de `src/server/viewer.ts`; otro rol va a su inicio |
 | Trato | `form_of_address` / `FormOfAddress` (`tu`, `usted`) | Los textos del cliente vienen en las dos variantes y se eligen con `withAddress` |
 | Entrar (iniciar sesión) | `signIn` | Pantalla P-G01, ruta `/entrar` |
 | Cerrar sesión | `signOut` | Solo en el dispositivo actual (`scope: 'local'`) |

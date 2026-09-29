@@ -19,14 +19,15 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 | Nueva | **Inicio de sesión:** Google y correo con contraseña; Apple aplazado. Cambia la regla "solo Google y Apple" del encargo. El alta con contraseña solo es posible desde una invitación | 28/09/2026 | ADR 0009; `02-arquitectura.md` 5.2; `05-pantallas-y-flujos.md` (P-G01, P-G05, P-C12) |
 | A9 | **Se mantiene el plan original:** el MVP incluye desde el inicio la cuenta del cliente, la invitación y el consentimiento (no se adelanta un "MVP del asesor"). MVP hacia junio o julio de 2027 a 14 horas por semana | 28/09/2026 | `06-plan-de-trabajo.md` |
 | E5 | **Contraseña:** 8 caracteres o más, sin reglas de composición y con rechazo de contraseñas filtradas (Pro). Por debajo de los 15 que el NIST pide cuando la contraseña es el único factor [F36] | 28/09/2026 | ADR 0009, `supabase/config.toml` |
-| Nueva | **Autorización de los clientes:** el asesor indica que ya tiene la autorización de todos sus clientes. El abogado confirma su alcance; la plataforma igual registra el consentimiento de cada cliente con fecha y texto | 28/09/2026 | `legal/README.md`, sección 0 |
+| Nueva | **Autorización de los clientes:** el asesor indica que ya tiene la autorización de todos sus clientes. La plataforma igual registra el consentimiento de cada cliente con fecha y texto | 28/09/2026 | `legal/README.md`, sección 0 |
+| A7 | **Sin abogado:** el proyecto no contrata abogado. El responsable del tratamiento redacta o aprueba los textos legales y decide los puntos de `legal/README.md`, sección 4; el agente prepara los borradores a partir de la norma registrada en `fuentes.md` y los marca como no revisados por un abogado. Riesgo aceptado por el responsable | 29/09/2026 | `legal/README.md`; `06-plan-de-trabajo.md` |
+| Nueva | **Prueba de la app publicada en iPhone:** el asesor la probó en su iPhone y funciona | 29/09/2026 | `06-plan-de-trabajo.md`, F0 |
 
 ## A. Antes de empezar la fase 0
 
 | N.º | Pregunta | Contexto | Recomendación | Cuándo |
 |---|---|---|---|---|
 | A6 | ¿Cobras honorarios por la asesoría? | Confirma que el uso es comercial (Vercel Pro) y afecta el texto de alcance | Asumo que sí o que podrías hacerlo; por eso el plan usa Vercel Pro | F0 |
-| A7 | ¿Tienes abogado en Colombia y en España? | Hay que validar protección de datos, transferencia a Estados Unidos de los datos de clientes de España y alcance de la asesoría en los dos países | Una firma con presencia en ambos o un abogado por país, desde la fase 0. Preguntas concretas en `legal/README.md` | F0 |
 | A11 | ¿Apruebas el caso de oro C1 (Colombia)? | Construido en la plantilla oficial con seis supuestos, entre ellos seguridad social en 11 pagos (enero sí, febrero no) como en la sección 15 del protocolo, aunque la tabla del libro original marca 12. Reproduce todas las cifras de la sección 15 salvo la inversión anual (15,7 frente a 19,5 millones), porque la prueba de realidad está pendiente y la plantilla invierte el 50 % | Revisar los supuestos y el contraste en `packages/engine/test/golden/README.md` y los datos en `c1-colombia/inputs.json`; aprobar o indicar qué cambiar | F0 |
 | A8 | Tolerancia de la prueba de oro para porcentajes | 0,01 sobre una razón es un punto porcentual | Importes ±0,01; razones ±0,000001; fechas y textos iguales | F0 |
 
@@ -50,8 +51,8 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 | N.º | Pregunta | Recomendación | Cuándo |
 |---|---|---|---|
 | C1 | ¿Se permite el registro libre en el futuro? | No en el MVP. El modelo ya lo soporta (cliente sin asesor), pero abre temas de soporte, abuso y alcance legal sin acompañamiento | Después del lanzamiento |
-| C2 | ¿Qué conserva el asesor si el cliente revoca su acceso o pide el borrado? | Nada dentro de la plataforma, salvo lo que el abogado indique como obligación de conservación | F1 (con abogado) |
-| C3 | ¿Plazo de gracia antes de borrar definitivamente? | 7 días para poder cancelar, dentro del plazo legal que confirme el abogado | F7 |
+| C2 | ¿Qué conserva el asesor si el cliente revoca su acceso o pide el borrado? | Nada dentro de la plataforma, salvo una obligación de conservación que decida el responsable (`legal/README.md`, sección 4, punto 4) | F7 |
+| C3 | ¿Plazo de gracia antes de borrar definitivamente? | 7 días para poder cancelar, dentro del plazo legal de cada país (`legal/README.md`, sección 4, punto 5) | F7 |
 | C4 | ¿Cuánto dura una invitación? | 7 días, reenviable | F1 |
 | C5 | ¿Cómo tratamos los datos de salud que aparecen en el presupuesto (terapias, medicamentos, lentes)? | Consentimiento explícito aparte y sugerencia de nombres genéricos ("Salud"). Son datos sensibles en Colombia y categoría especial en el RGPD [F28][F29] | F1 |
 | C6 | ¿Cómo avisamos al asesor de los cambios del cliente? | Aviso dentro de la app al momento y un correo resumen como máximo una vez al día | F2 |
@@ -63,8 +64,8 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 | C12 | ¿El asesor puede borrar un perfil de cliente? | Solo mientras nadie lo haya aceptado (borradores e invitaciones sin usar). **Supuesto** aplicado en RLS. Un perfil con dueño se borra solo por la solicitud del cliente (sección 9 del modelo de datos) | F1 |
 | C13 | ¿El cliente puede cambiar el idioma y formato (`locale`) de su perfil? | No por ahora: va con el país y lo cambia el asesor. **Supuesto**; la matriz de permisos no lo menciona. Se puede abrir sin migrar datos | F1 |
 | C14 | Mientras la app no envíe correos (Resend), ¿cómo llega la invitación? | El asesor copia el enlace en la ficha (P-A03) y lo envía por el medio que use con la persona. **Supuesto** aplicado. Consecuencia: la cuenta con contraseña se crea con el correo que escribió el asesor sin que el enlace haya pasado por ese buzón (ADR 0009 da por hecho que sí). P-C12 muestra el correo y pide una invitación nueva si no es el de la persona. Con Resend, el enlace va a ese correo y el supuesto desaparece | F1 (antes de clientes reales) |
-| C15 | Sin los textos del abogado, ¿se pueden aceptar invitaciones en el proyecto remoto? | No: `accept_invitation` exige un texto de tratamiento de datos vigente del país y la migración no carga ninguno. En local hay textos de prueba (`supabase/seed/`). Un texto que ya tiene consentimientos no se puede borrar, así que no conviene cargar textos de prueba en producción: la prueba de sesión en iPhone con cuentas de prueba se hace en el proyecto de staging, con los textos de prueba | F1 |
-| C16 | ¿Qué política de privacidad enlaza P-C02? | La que redacte el abogado, publicada como texto legal `privacidad`. Hasta entonces P-C02 no muestra el enlace | F1 (con abogado) |
+| C15 | Sin textos legales publicados, ¿se pueden aceptar invitaciones en el proyecto remoto? | No: `accept_invitation` exige un texto de tratamiento de datos vigente del país y la migración no carga ninguno. En local hay textos de prueba (`supabase/seed/`). Un texto que ya tiene consentimientos no se puede borrar, así que no conviene cargar textos de prueba en producción: la prueba de sesión en iPhone con cuentas de prueba se hace en el proyecto de staging, con los textos de prueba | F1 |
+| C16 | ¿Qué política de privacidad enlaza P-C02? | La que apruebe el responsable (A7), publicada como texto legal `privacidad`. Hasta entonces P-C02 no muestra el enlace | F1 |
 
 ## D. Producto y marca
 

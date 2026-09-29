@@ -56,7 +56,8 @@
     "preparing": {
       "tu": "Tu asesor está preparando tu plan. Cuando lo entregue, lo verás aquí.",
       "usted": "Su asesor está preparando su plan. Cuando lo entregue, lo verá aquí."
-    }
+    },
+    "privacyLink": "Privacidad y datos"
   },
   "clients": {
     "title": "Clientes",
@@ -282,5 +283,94 @@
     },
     "signIn": "Entrar",
     "goHome": "Ir al inicio"
+  },
+  "install": {
+    "title": {
+      "tu": "Ten tu plan a un toque",
+      "usted": "Tenga su plan a un toque"
+    },
+    "intro": {
+      "tu": "Agrega MiLuca a la pantalla de inicio y ábrela como una app.",
+      "usted": "Agregue MiLuca a la pantalla de inicio y ábrala como una app."
+    },
+    "ios": {
+      "step1": {
+        "tu": "Toca el botón Compartir en la barra de Safari.",
+        "usted": "Toque el botón Compartir en la barra de Safari."
+      },
+      "step2": {
+        "tu": "Elige “Agregar a inicio”. Si no lo ves, desliza la lista hacia arriba.",
+        "usted": "Elija “Agregar a inicio”. Si no lo ve, deslice la lista hacia arriba."
+      },
+      "step3": {
+        "tu": "Toca “Agregar”.",
+        "usted": "Toque “Agregar”."
+      },
+      "shareIcon": "Compartir",
+      "afterwards": {
+        "tu": "Después abre MiLuca desde tu pantalla de inicio y entra de nuevo con tu cuenta. Es un paso único: el iPhone no comparte la sesión de Safari con la app.",
+        "usted": "Después abra MiLuca desde su pantalla de inicio y entre de nuevo con su cuenta. Es un paso único: el iPhone no comparte la sesión de Safari con la app."
+      }
+    },
+    "android": {
+      "button": "Instalar MiLuca",
+      "installed": {
+        "tu": "Listo. Ya puedes abrir MiLuca desde tu pantalla de inicio.",
+        "usted": "Listo. Ya puede abrir MiLuca desde su pantalla de inicio."
+      },
+      "manual": {
+        "tu": "Abre el menú de Chrome (los tres puntos arriba a la derecha) y elige “Instalar aplicación” o “Agregar a la pantalla principal”.",
+        "usted": "Abra el menú de Chrome (los tres puntos arriba a la derecha) y elija “Instalar aplicación” o “Agregar a la pantalla principal”."
+      }
+    },
+    "other": {
+      "tu": "En el celular, abre MiLuca en Safari (iPhone) o en Chrome (Android) y agrégala a la pantalla de inicio desde el menú del navegador.",
+      "usted": "En el celular, abra MiLuca en Safari (iPhone) o en Chrome (Android) y agréguela a la pantalla de inicio desde el menú del navegador."
+    },
+    "done": "Ya la agregué",
+    "notNow": "Ahora no"
+  },
+  "privacy": {
+    "title": "Privacidad y datos",
+    "back": "Inicio",
+    "advisorTitle": {
+      "tu": "Tu asesor",
+      "usted": "Su asesor"
+    },
+    "access": {
+      "active": "Con acceso",
+      "revoked": "Sin acceso"
+    },
+    "activeHint": {
+      "tu": "Ve y edita tus datos para preparar tu plan. Si retiras el acceso, deja de verlos al instante; tus datos se quedan contigo.",
+      "usted": "Ve y edita sus datos para preparar su plan. Si retira el acceso, deja de verlos al instante; sus datos se quedan con usted."
+    },
+    "revokedHint": {
+      "tu": "No ve tus datos. Puedes devolverle el acceso cuando quieras.",
+      "usted": "No ve sus datos. Puede devolverle el acceso cuando quiera."
+    },
+    "revoke": "Retirar acceso",
+    "revokeConfirm": {
+      "tu": "Tu asesor dejará de ver tus datos y no podrá seguir con tu plan hasta que le devuelvas el acceso. ¿Retirarlo?",
+      "usted": "Su asesor dejará de ver sus datos y no podrá seguir con su plan hasta que le devuelva el acceso. ¿Retirarlo?"
+    },
+    "revokeYes": "Sí, retirar acceso",
+    "revokeCancel": "No, mantenerlo",
+    "restore": "Devolver el acceso",
+    "saving": "Guardando…",
+    "revokedDone": "Acceso retirado.",
+    "restoredDone": "Acceso devuelto.",
+    "noAdvisor": {
+      "tu": "No tienes un asesor vinculado.",
+      "usted": "No tiene un asesor vinculado."
+    },
+    "consentsTitle": "Consentimientos",
+    "consentsEmpty": "No hay consentimientos registrados.",
+    "consentLine": "Versión {version} · {date}",
+    "granted": "Aceptado",
+    "declined": "No aceptado",
+    "errors": {
+      "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+    }
   }
 }

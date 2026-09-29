@@ -19,6 +19,7 @@ export type Viewer =
       readonly clientId: string;
       readonly displayName: string;
       readonly formOfAddress: FormOfAddress;
+      readonly countryCode: string;
     }
   | { readonly role: 'none'; readonly user: SessionUser };
 
@@ -35,7 +36,7 @@ export const getViewer = cache(async (): Promise<Viewer | null> => {
     supabase.from('advisors').select('id').eq('user_id', user.id).maybeSingle(),
     supabase
       .from('clients')
-      .select('id, display_name, form_of_address')
+      .select('id, display_name, form_of_address, country_code')
       .eq('owner_user_id', user.id)
       .maybeSingle(),
   ]);
@@ -50,6 +51,7 @@ export const getViewer = cache(async (): Promise<Viewer | null> => {
       clientId: client.data.id,
       displayName: client.data.display_name,
       formOfAddress: client.data.form_of_address === 'usted' ? 'usted' : 'tu',
+      countryCode: client.data.country_code,
     };
   }
   return { role: 'none', user };
@@ -67,6 +69,13 @@ export async function requireViewer(next = '/'): Promise<Viewer> {
 export async function requireAdvisor(next = '/'): Promise<Extract<Viewer, { role: 'advisor' }>> {
   const viewer = await requireViewer(next);
   if (viewer.role !== 'advisor') redirect(homePath(viewer));
+  return viewer;
+}
+
+/** Para pantallas y acciones del cliente: sin sesión lleva a Entrar; con otro rol, a su inicio. */
+export async function requireClient(next = '/'): Promise<Extract<Viewer, { role: 'client' }>> {
+  const viewer = await requireViewer(next);
+  if (viewer.role !== 'client') redirect(homePath(viewer));
   return viewer;
 }
 

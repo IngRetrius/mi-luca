@@ -7,7 +7,6 @@
 - Las horas incluyen pruebas y documentación de cada fase. Se suma un 15 % de margen en el total.
 - **Supuesto:** inicio el lunes 5 de octubre de 2026, sin pausas largas. Si cambia la fecha de inicio o la dedicación, las fechas se corren en proporción.
 - Las decisiones de [07-preguntas-abiertas.md](07-preguntas-abiertas.md) marcadas "antes de la fase 0" están resueltas al empezar.
-- El abogado trabaja en paralelo desde la fase 0; su tiempo no está en las horas.
 
 ## 2. Fases
 
@@ -77,7 +76,6 @@ Tareas:
 - Prueba de sesión en PWA de iOS (criterios en `02-arquitectura.md`, sección 5.4).
 - Casos de prueba de oro: anonimizar C2, construir C1 en la plantilla oficial, extraer C3; script `golden.py` y automatización del recálculo en Excel.
 - Tokens de diseño en `packages/ui`.
-- Contratar abogado y entregarle el borrador de alcance (sección 7 del encargo).
 
 Avance al 28/09/2026 (PR #1 a #4 unidos):
 
@@ -101,13 +99,12 @@ Avance al 28/09/2026 (PR #1 a #4 unidos):
 - [x] Google activo en el proyecto remoto (`supabase config push`).
 - [ ] Proyecto en Vercel (`mi-luca`, plan Hobby) creado y conectado al repositorio el 28/09/2026; `vercel.json` con `cle1`. Dominio de producción: `mi-luca.vercel.app`, ya declarado en `[remotes.production.auth]` de `supabase/config.toml`. Falta: en el panel, Root Directory `apps/web` y variables de entorno (`apps/web/README.md`, "Despliegue en Vercel"); y `pnpm supabase config push` para llevar el dominio a Supabase Auth.
 - [ ] Dominio y verificación de marca en Google (requiere al asesor).
-- [ ] Prueba de sesión en PWA de iOS en iPhone real (requiere despliegue y cuentas).
+- [x] Prueba de la app publicada (`mi-luca.vercel.app`) en el iPhone del asesor, el 29/09/2026: funciona. Quedan por comprobar, cuando haga falta, los criterios de largo plazo (sesión tras 14 días sin abrir) y Android.
 - [x] Herramientas de casos de oro: `recalc.py` (recálculo en Excel, validado celda a celda) y `golden.py` (extracción con verificación de privacidad).
 - [x] Caso C3 (plantilla vacía) y primera prueba de oro del motor (conversión de moneda de Ingresos).
 - [x] Caso de oro C2 (España), anonimizado y revisado por el asesor.
 - [x] Caso de oro C1 (Colombia) llevado a la plantilla oficial y anonimizado; reproduce las cifras de la sección 15 del protocolo salvo la inversión anual.
 - [ ] Revisión del caso C1 por el asesor (pregunta A11).
-- [ ] Contratar abogado.
 
 Criterios de aceptación:
 
@@ -137,8 +134,11 @@ Avance:
 - [x] Flujo del cliente: `/invitacion/[token]` (P-C01, en tú o usted), consentimiento (P-C02) y alta con Google o con contraseña (P-C12, cuenta creada en el servidor con la clave secreta). `accept_invitation` registra los consentimientos en la misma transacción. El token pasa de la URL a una cookie `HttpOnly` del flujo; la página no envía Referer ni se indexa.
 - [x] Tablas `legal_texts` (textos inmutables con su sha256) y `consents`, con RLS; `get_invitation` para ver la invitación sin sesión. 35 pruebas pgTAP nuevas (114 en total). Aplicado al remoto el 29/09/2026 (`db push`, ejecutado por el asesor); el asesor de seguridad marcó que `anon` podía ejecutar `accept_invitation`, corregido en una migración aparte.
 - [x] Verificado contra Supabase local (asesor en Chromium, cliente en WebKit de iPhone): enlace, copia, anulación, enlace anulado, token inventado, errores de P-C02 y P-C12 con foco, alta con contraseña, perfil activo, dos consentimientos con el texto exacto, historial con su actor, enlace usado y ficha actualizada. Sin desborde a 320 px.
-- [ ] Textos legales del abogado para Colombia y España (tratamiento de datos, datos de salud, política de privacidad); sin ellos el remoto no acepta invitaciones (C15, C16).
-- [ ] Alta con Google desde la invitación en un navegador real (requiere cuenta de prueba en Google) y guía "Agregar a inicio" (P-C03), que por ahora se salta: al aceptar se va al inicio.
+- [ ] Textos legales para Colombia y España (tratamiento de datos, datos de salud, política de privacidad): borrador del agente, aprobación del responsable (A7) y migración con la versión 1.0. Sin ellos el remoto no acepta invitaciones (C15, C16).
+- [ ] Alta con Google desde la invitación en un navegador real (requiere cuenta de prueba en Google).
+- [x] P-C03 Agregar a inicio (`/instalar`): al aceptar la invitación, instrucciones de Safari en iPhone, botón "Instalar" en Android cuando el navegador lo ofrece (`beforeinstallprompt`) y texto general en otros equipos; si la app ya corre instalada, sigue al inicio. Verificado en WebKit (iPhone) y Chromium (Android) contra Supabase local.
+- [x] P-C11 Privacidad y datos (`/privacidad-y-datos`), primera parte: retirar el acceso del asesor (con confirmación) y devolverlo, y ver los consentimientos con versión y fecha. Verificado contra Supabase local: al retirar, el perfil desaparece de la lista del asesor y su ficha da "No encontramos esta página"; al devolver, vuelve. Enlace desde el inicio del cliente.
+- [ ] P-C11: pedir una sesión reciente (menos de 10 minutos) antes de retirar el acceso (`02-arquitectura.md`, 5.6), exportar y pedir el borrado (F7).
 - [ ] Correo de la invitación con Resend (C14).
 - [ ] Tarea diaria que borra las cuentas sin perfil a los 7 días.
 
@@ -201,7 +201,7 @@ Criterios de aceptación:
 - Auditoría de accesibilidad automática sin errores críticos y revisión manual con VoiceOver y TalkBack en los flujos principales.
 - Carga de la pantalla de inicio del cliente en red 4G lenta simulada en menos de 3 segundos (**Supuesto** de objetivo).
 - Revisión de seguridad: políticas RLS, cabeceras, dependencias, secretos.
-- Textos legales aprobados por el abogado y publicados como versión 1.0.
+- Textos legales aprobados por el responsable y publicados (A7).
 - Restauración de una copia de seguridad probada en staging.
 - Supabase Pro y Vercel Pro activos antes de migrar el primer cliente real.
 
@@ -213,9 +213,9 @@ Criterios de aceptación:
 | El motor no reproduce a Excel en algún borde (fechas, redondeos) | Media | Alto | Funciones de Excel probadas aparte; comparación de valores intermedios; tolerancias definidas |
 | El caso de prueba de Colombia no existe en la plantilla oficial (H-25) | Resuelto | Medio | Construido en F0 el 28/09/2026 (`c1-colombia`), pendiente de revisión del asesor |
 | Ninguno de los casos reales tiene deudas | Cierta | Medio | Casos sintéticos C4 y C5 desde el caso 15.1 del protocolo |
-| La plataforma se interpreta como asesoramiento en inversiones regulado | Baja con buenos textos | Alto | Sin productos ni entidades; textos de alcance; abogado desde F0 (ver 07-preguntas-abiertas.md) |
-| Datos de salud en el presupuesto (terapias, medicamentos) | Alta | Medio | Consentimiento explícito aparte; guía para nombrar partidas de forma genérica; abogado |
-| Transferencia a Estados Unidos (Supabase us-east-2) de los datos de clientes de España | Media | Medio | DPA de Supabase con su evaluación de transferencias [F23]; validación del abogado antes del primer cliente de España; si no se aprueba, segundo proyecto en la UE. Para Colombia, Estados Unidos está declarado adecuado por la SIC [F21] |
+| La plataforma se interpreta como asesoramiento en inversiones regulado | Baja con buenos textos | Alto | Sin productos ni entidades; textos de alcance; puntos de `legal/README.md` decididos por el responsable (A7) |
+| Datos de salud en el presupuesto (terapias, medicamentos) | Alta | Medio | Consentimiento explícito aparte; guía para nombrar partidas de forma genérica |
+| Transferencia a Estados Unidos (Supabase us-east-2) de los datos de clientes de España | Media | Medio | DPA de Supabase con su evaluación de transferencias [F23]; decisión del responsable antes del primer cliente de España (A7); si no la acepta, segundo proyecto en la UE. Para Colombia, Estados Unidos está declarado adecuado por la SIC [F21] |
 | Contraseñas débiles o reutilizadas de los clientes | Media | Alto | Mínimo de longitud, rechazo de contraseñas filtradas (Pro) [F34], límites de intentos; el asesor entra con Google con verificación en dos pasos (ADR 0009) |
 | Cambian precios o límites de los proveedores | Media | Bajo | Revisar al contratar; arquitectura portable (Next.js y Postgres estándar) |
 | Apple vuelve a restringir las apps de pantalla de inicio en la UE [F10] | Baja | Medio | La app funciona como web en Safari; vigilar |
@@ -224,7 +224,7 @@ Criterios de aceptación:
 
 ## 6. Costos mensuales estimados
 
-Precios en USD consultados el 28/09/2026 (ver [fuentes.md](fuentes.md)). No incluyen impuestos, dominio (**Supuesto:** unos 1 a 2 USD al mes), honorarios del abogado ni el tiempo de desarrollo.
+Precios en USD consultados el 28/09/2026 (ver [fuentes.md](fuentes.md)). No incluyen impuestos, dominio (**Supuesto:** unos 1 a 2 USD al mes) ni el tiempo de desarrollo.
 
 | Concepto | Desarrollo (F0 a F7, sin datos reales; unos 17 meses) | Lanzamiento, 10 clientes | 100 clientes | 1.000 clientes |
 |---|---|---|---|---|

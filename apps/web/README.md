@@ -86,6 +86,7 @@ Flujo de `docs/02-arquitectura.md`, 5.3. Todas las rutas llevan `referrer: no-re
 | `/invitacion/consentimiento` | P-C02: textos vigentes del país (`current_legal_texts`) con versión y fecha; tratamiento de datos obligatorio y datos de salud facultativo. Guarda los textos aceptados en otra cookie del flujo |
 | `/invitacion/acceso` | P-C12: Google (vuelve a `/invitacion/aceptar`) o contraseña con el correo de la invitación, que el servidor crea con `SUPABASE_SECRET_KEY` (`src/server/admin.ts`) y luego inicia sesión |
 | `/invitacion/aceptar` | Route Handler para las llegadas por navegación (Google, Entrar): llama a `acceptFromFlow`, que ejecuta `accept_invitation` y borra las cookies. Las acciones de servidor llaman a `acceptFromFlow` directamente, porque una acción no debe redirigir a un Route Handler |
+| `/instalar` | P-C03: a donde llega el cliente al aceptar. Instrucciones según el sistema (User-Agent en el servidor): Safari en iPhone, botón "Instalar" de Chrome en Android si el navegador lo ofrece, texto general en otros equipos. Si la app ya corre instalada, sigue al inicio |
 | `/invitacion/problema` | Explica por qué no se puede seguir (`?motivo=`): enlace inválido, vencido, anulado o usado, flujo vencido, cuenta de asesor, cuenta ya vinculada, sin texto legal vigente o servicio caído |
 
 Para probar el flujo en local hace falta, además de las claves de arriba, la clave secreta local (`SECRET_KEY` de `pnpm supabase status`, pública y solo de prueba) en `SUPABASE_SECRET_KEY`, y los textos legales de prueba de `supabase/seed/`, que se cargan con `pnpm supabase db reset` o a mano:
@@ -95,6 +96,12 @@ docker exec -i supabase_db_miluca psql -U postgres < supabase/seed/legal_texts_d
 ```
 
 En `next dev`, el registro de acciones de servidor imprime sus argumentos y resultados, entre ellos el enlace con el token. Solo pasa en desarrollo; en producción no se registran.
+
+## Cliente
+
+| Ruta | Qué hace |
+|---|---|
+| `/privacidad-y-datos` | P-C11 (primera parte): acceso del asesor con estado en texto y símbolo, retirar (con confirmación) o devolver; consentimientos con versión y fecha; cerrar sesión. Enlace desde el inicio (P-C04) mientras no haya navegación inferior |
 
 ## Convenciones de interfaz
 
@@ -134,7 +141,8 @@ El archivo `src/proxy.ts` (antes `middleware.ts` en Next.js 15) refresca la sesi
 | `auth` | Entrar (P-G01), flujo de Google en la app instalada y cerrar sesión |
 | `clients` | Lista (P-A01), alta con `create_client` (P-A02) y ficha (P-A03) de los perfiles del asesor |
 | `invitations` | Enlace de invitación del asesor (P-A03) y flujo del cliente: P-C01, consentimiento (P-C02), acceso (P-C12) y aceptación |
-| `consent` | Privacidad y datos del cliente (P-C11): ver y retirar consentimientos |
+| `consent` | Privacidad y datos del cliente (P-C11): acceso del asesor y consentimientos |
+| `install` | Guía para agregar la app a la pantalla de inicio (P-C03) |
 | `profile` | Hoja Supuestos (datos del cliente y parámetros) |
 | `incomes` | Hoja Ingresos |
 | `budget` | Hoja Presupuesto |
