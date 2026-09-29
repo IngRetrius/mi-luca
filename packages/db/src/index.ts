@@ -1,10 +1,4 @@
-// Tipos de la base de datos. Se reemplaza por el archivo que genera `supabase gen types`
-// cuando existan las primeras migraciones (fase 1).
+// Tipos de la base de datos. `database.types.ts` lo genera `pnpm db:types` desde el esquema local
+// (Supabase local encendido y migraciones aplicadas); no se edita a mano.
 
-export interface Database {
-  public: {
-    Tables: Record<string, never>;
-    Views: Record<string, never>;
-    Functions: Record<string, never>;
-  };
-}
+export type { Database, Json, Tables, TablesInsert, TablesUpdate } from './database.types';

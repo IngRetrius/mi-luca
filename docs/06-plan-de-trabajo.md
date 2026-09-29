@@ -123,7 +123,14 @@ Avance:
 - [x] Guarda de sesión en el servidor (`requireSessionUser`) y cerrar sesión solo en el dispositivo actual.
 - [x] Verificado contra Supabase local en Chromium y WebKit: contraseña correcta e incorrecta, cerrar sesión, ruta de retorno externa descartada y aviso entre ventanas. El inicio con Google llega hasta la pantalla de Google; completarlo requiere una cuenta real.
 - [ ] En P-G01: enlace "Olvidé mi contraseña" (llega con P-G05) y enlaces a privacidad y términos (llegan con los textos legales).
-- [ ] Migraciones de identidad, acceso e invitaciones con RLS y pgTAP; gancho que cierra el registro público por correo; P-G02 (sin invitación).
+- [x] Migraciones de identidad, acceso e invitaciones (`countries`, `advisors`, `clients`, `advisor_client_access`, `invitations`) con RLS, privilegios por columna, guarda de columnas y historial (`audit_log`); funciones `create_client` y `accept_invitation`. 72 pruebas pgTAP con los criterios de abajo, salvo el borrado a los 7 días.
+- [x] Gancho `before_user_created`: solo deja pasar las altas con Google. Verificado en local con Supabase Auth: registro por correo rechazado con 403, alta del servidor con la API de administración aceptada.
+- [x] Tipos de TypeScript generados en `packages/db` (`pnpm db:types`) y trabajo de CI para migraciones, pgTAP, lint de SQL y tipos al día.
+- [x] Migraciones y gancho aplicados al proyecto remoto el 28/09/2026 (`supabase db push` y `supabase config push`, ejecutados por el asesor). Verificado con el MCP: seis tablas con RLS, dos migraciones registradas; el asesor de rendimiento solo marca índices sin uso (base vacía).
+- [ ] Crear la fila del primer asesor (`supabase/README.md`, "Primer asesor"); requiere que el asesor entre una vez con Google.
+- [ ] P-G02 (sin invitación) y resolución del rol al entrar (asesor, cliente o sin perfil).
+- [ ] Textos legales y consentimientos (`legal_texts`, `consents`), con el abogado.
+- [ ] Tarea diaria que borra las cuentas sin perfil a los 7 días.
 
 Criterios de aceptación:
 

@@ -125,7 +125,7 @@ Decisión y detalle en el ADR 0009. Resumen:
 | Tema | Regla |
 |---|---|
 | Alta | Solo desde una invitación vigente: el servidor verifica el token y crea la cuenta con `auth.admin.createUser` (correo de la invitación, `email_confirm: true`) usando la clave secreta. No hay segundo correo de confirmación, porque el token ya llegó a ese buzón |
-| Registro público | Cerrado con el gancho "antes de crear usuario", que rechaza las altas por correo [F24]. `[auth.email] enable_signup = false` no sirve: apaga también el inicio de sesión (verificado en local) |
+| Registro público | Cerrado con el gancho "antes de crear usuario" (`private.before_user_created`), que solo deja pasar las altas con Google [F24]. `[auth.email] enable_signup = false` no sirve: apaga también el inicio de sesión (verificado en local) |
 | Inicio de sesión | `signInWithPassword` desde un formulario de la app. No sale de la app instalada, así que no tiene el problema de la sección 5.4 |
 | Recuperación | Código de 6 dígitos por correo (`{{ .Token }}`), escrito dentro de la app, y luego la nueva contraseña. No se usa enlace: se abriría en Safari y no en la app instalada [F4][F35] |
 | Política | Mínimo de 8 caracteres (decisión E5 del asesor; el NIST pide 15 si es el único factor), máximo de al menos 64, sin reglas de composición, rechazo de contraseñas filtradas en Pro [F34][F36] |

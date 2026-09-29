@@ -57,6 +57,9 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 | C8 | ¿Cómo migramos a los clientes actuales? | En F8, uno por uno, con invitación y consentimiento nuevos; los datos se cargan desde su Excel con el extractor | F8 |
 | C9 | ¿Sin conexión basta con leer el último plan? | Sí. Editar sin conexión obliga a resolver conflictos entre asesor y cliente | F1 |
 | C10 | ¿El cliente registra el control mensual por categoría o movimiento por movimiento? | Por categoría, como la plantilla. Movimientos más adelante, si hace falta | F7 |
+| C11 | ¿Una cuenta de asesor puede aceptar una invitación de cliente? | No. **Supuesto** aplicado en `accept_invitation`: evita que la misma cuenta sea asesor y dueño de un perfil, lo que confundiría la pantalla de inicio. Para probar el flujo de cliente, el asesor usa otra cuenta | F1 |
+| C12 | ¿El asesor puede borrar un perfil de cliente? | Solo mientras nadie lo haya aceptado (borradores e invitaciones sin usar). **Supuesto** aplicado en RLS. Un perfil con dueño se borra solo por la solicitud del cliente (sección 9 del modelo de datos) | F1 |
+| C13 | ¿El cliente puede cambiar el idioma y formato (`locale`) de su perfil? | No por ahora: va con el país y lo cambia el asesor. **Supuesto**; la matriz de permisos no lo menciona. Se puede abrir sin migrar datos | F1 |
 
 ## D. Producto y marca
 

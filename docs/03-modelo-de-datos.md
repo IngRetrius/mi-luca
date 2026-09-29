@@ -1,6 +1,6 @@
 # 03. Modelo de datos
 
-Borrador para Postgres en Supabase. Es una propuesta para revisar, no una migración lista: los nombres de tablas y columnas están en inglés (ver [glosario.md](glosario.md)) y los valores de catálogo en español sin tildes, porque son los que se muestran al exportar.
+Borrador para Postgres en Supabase. Es una propuesta para revisar, no una migración lista (lo que ya está migrado y sus diferencias con este borrador están en la sección 11): los nombres de tablas y columnas están en inglés (ver [glosario.md](glosario.md)) y los valores de catálogo en español sin tildes, porque son los que se muestran al exportar.
 
 ## 1. Principios
 
@@ -822,3 +822,25 @@ Qué conserva el asesor tras la revocación o el borrado (por ejemplo, copia de 
 |---|---|---|---|
 | `deliveries` | Sí | `{client_id}/{delivery_id}.pdf` | Lectura si `private.can_access` del primer segmento de la ruta; escritura solo del servidor |
 | `exports` | Sí | `{client_id}/{request_id}.zip` | Lectura solo del dueño; borrado automático a los 7 días |
+
+## 11. Estado de la implementación
+
+Las secciones 3 a 10 siguen siendo el diseño de referencia. Lo que ya existe como migración en `supabase/migrations/`, con sus pruebas en `supabase/tests/database/`:
+
+| Migración | Contenido |
+|---|---|
+| `20260929025941_identity_access_audit.sql` | `countries` (Colombia y España), `advisors`, `clients`, `advisor_client_access`, `invitations`, `audit_log`; funciones de la sección 4; guarda de columnas en `clients`; historial en las cinco tablas; `create_client` y `accept_invitation` |
+| `20260929025943_signup_hook.sql` | Gancho `private.before_user_created`: solo deja pasar las altas con Google (ADR 0009) |
+
+Diferencias con el borrador de las secciones 3.1, 4 y 5:
+
+1. **Privilegios por columna además de RLS.** `authenticated` solo puede escribir las columnas que la matriz le permite; `anon` no tiene acceso a ninguna tabla. Dueño, estado y autor de un perfil no se cambian desde la API.
+2. **Los perfiles se crean con `create_client(nombre, país, moneda?, tratamiento?)`.** Crea el perfil y el acceso del asesor en la misma transacción. Con un `insert` directo, el asesor aún no tendría acceso y no podría leer la fila recién creada. La moneda base y el formato (`locale`) salen del país si no se indican.
+3. **Invitaciones.** Desde la API solo se escriben `client_id`, `email` y `token_hash`; el asesor y el vencimiento (7 días, C4) los pone la base. Solo se invita a perfiles sin dueño. Una invitación se revoca una vez, con la fecha que pone la base, y no se reactiva.
+4. **`accept_invitation`** usa `sha256` de Postgres (sin `pgcrypto`), rechaza cuentas de asesor (C11) y, al aceptar, revoca las demás invitaciones abiertas del perfil y borra su correo.
+5. **Funciones de apoyo nuevas:** `private.current_advisor_id()`, `private.is_my_advisor(asesor)` (el cliente ve el nombre de su asesor) y `private.is_unclaimed(cliente)`.
+6. **Historial.** `private.audit_row` recibe la columna del cliente y las columnas que no se copian: en `invitations`, el hash del token y el correo. Un cambio que solo toca `updated_at` no deja fila.
+7. **Revocación.** La fecha y el autor de la revocación del acceso los pone un disparador. El dueño puede restablecer el acceso.
+8. **Supuestos** anotados en `07-preguntas-abiertas.md`: el asesor borra solo perfiles sin dueño (C12) y el cliente no cambia su `locale` (C13).
+
+Pendiente de F1: `legal_texts` y `consents` (con los textos del abogado), `notifications`, la tarea que borra cuentas sin perfil a los 7 días y la resolución del rol en la app.

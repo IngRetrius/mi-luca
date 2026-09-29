@@ -52,6 +52,27 @@ jobs:
           path: tests/e2e/playwright-report
           retention-days: 7
 
+  base-de-datos:
+    name: Base de datos (migraciones, pgTAP y tipos)
+    runs-on: ubuntu-latest
+    env:
+      # config.toml lee el secreto de Google al arrancar; la base de datos no lo usa.
+      SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET: sin-secreto-en-ci
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm supabase db start
+      - run: pnpm supabase migration up --local
+      - run: pnpm test:db
+      - run: pnpm supabase db lint --local --level warning --fail-on warning
+      - name: Los tipos generados están al día
+        run: pnpm db:types && git diff --exit-code packages/db/src/database.types.ts
+
   herramientas:
     name: Herramientas de Python
     runs-on: ubuntu-latest

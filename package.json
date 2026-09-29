@@ -15,7 +15,9 @@
     "test:e2e": "pnpm --filter @miluca/e2e e2e",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "supabase": "supabase"
+    "supabase": "supabase",
+    "test:db": "supabase test db",
+    "db:types": "supabase gen types typescript --local --schema public > packages/db/src/database.types.ts && prettier --write packages/db/src/database.types.ts"
   },
   "devDependencies": {
     "prettier": "^3.9.9",

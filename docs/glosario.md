@@ -7,6 +7,15 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Asesor | `advisor` | |
 | Cliente | `client` | La persona asesorada |
 | Invitación | `invitation` | |
+| Aceptar la invitación | `accept_invitation` | Función de Postgres que vincula la cuenta al perfil con el token |
+| Crear perfil de cliente | `create_client` | Función de Postgres; crea el perfil y el acceso del asesor |
+| Dueño del perfil | `owner_user_id` | Cuenta del cliente vinculada al perfil; vacía hasta aceptar |
+| Perfil sin dueño | `is_unclaimed` | Borrador o invitado; el único que se invita o se borra desde la app |
+| Acceso del asesor | `advisor_client_access` | Activo o revocado; lo controla el cliente |
+| Revocar, restablecer | `revoked`, `active` | Estados del acceso del asesor |
+| Tratamiento | `form_of_address` | tu, usted |
+| País | `country` | Catálogo `countries` con moneda, formato y módulo de pensión |
+| Gancho de registro | `before_user_created` | Cierra el registro público; solo pasan las altas con Google |
 | Consentimiento | `consent` | |
 | Entrar (iniciar sesión) | `signIn` | Pantalla P-G01, ruta `/entrar` |
 | Cerrar sesión | `signOut` | Solo en el dispositivo actual (`scope: 'local'`) |

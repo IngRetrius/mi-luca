@@ -5,20 +5,21 @@ Todo lo que vive en el proyecto de Supabase, versionado como código.
 | Carpeta | Qué contiene |
 |---|---|
 | `migrations/` | Migraciones SQL en orden. Cada tabla nueva lleva en la misma migración su RLS, sus políticas, sus índices y su disparador de auditoría. |
-| `seed/` | Datos semilla: países, parámetros por país con fuente y fecha, catálogos y textos legales versionados. Nunca datos de clientes. |
+| `seed/` | Datos de ejemplo solo para desarrollo local (`supabase db reset`). Lo que producción necesita (países, parámetros por país con fuente y fecha, textos legales) va en migraciones, porque `db push` no carga semillas. Nunca datos de clientes. |
 | `functions/` | Funciones de servidor de Supabase (Edge Functions) si hacen falta, por ejemplo tareas programadas de limpieza o recordatorios. |
-| `tests/` | Pruebas de base de datos (pgTAP): políticas RLS por rol y reglas de los disparadores. |
+| `tests/database/` | Pruebas de base de datos (pgTAP): políticas RLS por rol y reglas de los disparadores. |
 
-El esquema propuesto está en `docs/03-modelo-de-datos.md`.
+El esquema propuesto está en `docs/03-modelo-de-datos.md`; lo que ya está migrado, en su sección 11.
 
 ## Configuración local
 
 `config.toml` lo generó `supabase init` (CLI instalada como dependencia del repositorio: `pnpm supabase ...`). Cambios respecto al valor por defecto:
 
-- `[auth.email] enable_signup = true`: se entra con Google o con correo y contraseña (ADR 0009). Con `false` se apaga el proveedor de correo entero, también el inicio de sesión y la recuperación (probado en local). El registro público por correo lo cerrará el gancho `before_user_created` en F1; las cuentas con contraseña se crean desde el servidor con la API de administración, que no pasa por el gancho.
+- `[auth.email] enable_signup = true`: se entra con Google o con correo y contraseña (ADR 0009). Con `false` se apaga el proveedor de correo entero, también el inicio de sesión y la recuperación (probado en local). El registro público lo cierra el gancho `before_user_created` (abajo); las cuentas con contraseña se crean desde el servidor con la API de administración, que no pasa por el gancho.
 - `minimum_password_length = 8`, sin reglas de composición (decisión E5 del asesor).
 - `site_url` y `additional_redirect_urls` apuntan a `http://localhost:3000` y a su `/auth/callback`.
 - `[auth.external.google]` activo (ADR 0009), con el Client ID del cliente web de Google Cloud y el secreto leído de `supabase/.env`.
+- `[auth.hook.before_user_created]` activo con `private.before_user_created` (migración `signup_hook`): solo pasan las altas con Google. Verificado en local: un registro por correo recibe 403 y un alta con la API de administración pasa.
 - Las semillas se leen de `seed/*.sql`.
 
 ## Secretos
@@ -47,6 +48,20 @@ colima stop                           # apaga la máquina virtual
 
 Las claves locales son públicas y de prueba; no se mezclan con las del proyecto remoto.
 
+## Migraciones y pruebas
+
+Las migraciones se escriben a mano (`pnpm supabase migration new <nombre>`) y se prueban en local antes de subirlas:
+
+```sh
+pnpm supabase migration up          # aplica las migraciones nuevas a la base local sin borrar datos
+pnpm test:db                        # pruebas pgTAP de tests/database/ (cada archivo se deshace al terminar)
+pnpm supabase db lint --local       # revisa las funciones de SQL
+pnpm db:types                       # regenera los tipos de packages/db/src/database.types.ts
+pnpm supabase db reset              # opcional: base local desde cero (borra también los usuarios locales)
+```
+
+CI repite estos pasos en el trabajo "Base de datos" y falla si los tipos generados no están al día.
+
 ## Proyecto remoto
 
 El proyecto de producción (`miluca`, us-east-2) está vinculado desde el 28/09/2026. El vínculo vive en `supabase/.temp/` (fuera de git), así que en otro equipo se repite una vez, porque `login` abre el navegador:
@@ -64,5 +79,34 @@ pnpm supabase config push   # aplica config.toml al remoto; muestra el cambio y 
 ```
 
 `config push` no cambia el tamaño del pooler ni apaga el proveedor de SMS; eso se hace en el panel si hace falta.
+
+### Subir migraciones al remoto
+
+Las ejecuta el asesor desde su terminal: el agente no despliega a producción. El orden importa, porque el gancho de registro apunta a una función que crea la migración; si se activa antes, fallan todas las altas, también las de Google.
+
+```sh
+pnpm supabase db push --dry-run   # solo lectura: qué migraciones faltan en el remoto
+pnpm supabase db push             # aplica las migraciones; pide confirmación
+pnpm supabase config diff         # debe mostrar solo el bloque del gancho
+pnpm supabase config push         # activa el gancho en el remoto; pide confirmación
+```
+
+Después de subir, el asesor de seguridad del panel (o `get_advisors` del MCP) muestra tres avisos que no hay que corregir:
+
+- `create_client` y `accept_invitation` se pueden ejecutar con sesión (lint 0029): es intencional, son las funciones que llama la app y validan quién las llama.
+- `public.rls_auto_enable()` (lints 0028 y 0029): la creó Supabase con el proyecto remoto para el disparador de eventos `ensure_rls`, que activa RLS en cada tabla nueva de `public`. No existe en local ni está en las migraciones. Una función de disparador de eventos no se puede ejecutar desde la API.
+
+Cuando exista el proyecto de staging, las migraciones pasan primero por allí y a producción desde CI con aprobación manual (`docs/02-arquitectura.md`, sección 8).
+
+### Primer asesor
+
+Las filas de `advisors` no se crean desde la app. El asesor entra una vez con Google en la app conectada al remoto (así existe su usuario en Auth) y luego, en el editor SQL del panel de Supabase, se ejecuta con su correo y el nombre que verán sus clientes:
+
+```sql
+insert into public.advisors (user_id, display_name)
+select id, 'Nombre visible' from auth.users where email = 'correo-del-asesor@example.com';
+```
+
+El correo real no se escribe en el repositorio.
 
 El servidor MCP de Supabase para agentes está registrado en el alcance local de Claude Code (fuera del repositorio) y se autentica una vez con `claude mcp login`.
