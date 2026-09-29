@@ -1,29 +1,44 @@
 'use client';
 
-import { useActionState, useId, useState } from 'react';
+import { useActionState, useEffect, useId, useRef, useState } from 'react';
 
-import { messages } from '@miluca/i18n';
+import { primaryButton, textButton, textField } from '@/components/ui-classes';
 
-import { signInWithPassword } from './actions';
-
-const t = messages.es.auth;
-
-const fieldClass =
-  'min-h-12 w-full rounded-xl border border-border bg-bg px-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
+import { signInWithPassword, type SignInField } from './actions';
+import type { AuthText } from './text';
 
 /** Correo y contraseña. Se puede pegar y usar gestores de contraseñas (ADR 0009). */
-export function PasswordForm({ next }: { next: string }) {
+export function PasswordForm({ next, text }: { next: string; text: AuthText }) {
   const [state, formAction, pending] = useActionState(signInWithPassword, null);
   const [visible, setVisible] = useState(false);
   const errorId = useId();
+  const emailId = useId();
   const passwordId = useId();
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
+  const isInvalid = (field: SignInField) => state?.invalidFields.includes(field) ?? false;
+
+  // El resultado llega del servidor después del envío, así que el foco se mueve cuando se muestra:
+  // al primer campo marcado que esté vacío (la contraseña se borra al reenviar), o al primero marcado.
+  useEffect(() => {
+    if (!state) return;
+    const refs = { email: emailRef, password: passwordRef };
+    const fields = state.invalidFields.map((field) => refs[field].current);
+    const target = fields.find((input) => input && !input.value) ?? fields[0];
+    target?.focus();
+  }, [state]);
 
   return (
     <form action={formAction} noValidate className="flex flex-col gap-4">
       <input type="hidden" name="next" value={next} />
-      <label className="flex flex-col gap-1">
-        <span className="font-medium">{t.email}</span>
+      <div className="flex flex-col gap-1">
+        <label htmlFor={emailId} className="font-medium">
+          {text.email}
+        </label>
         <input
+          ref={emailRef}
+          id={emailId}
           name="email"
           type="email"
           autoComplete="username"
@@ -32,46 +47,44 @@ export function PasswordForm({ next }: { next: string }) {
           spellCheck={false}
           required
           defaultValue={state?.email}
-          aria-describedby={state ? errorId : undefined}
-          className={fieldClass}
+          aria-invalid={isInvalid('email')}
+          aria-describedby={errorId}
+          className={textField}
         />
-      </label>
+      </div>
       <div className="flex flex-col gap-1">
         <label htmlFor={passwordId} className="font-medium">
-          {t.password}
+          {text.password}
         </label>
         <div className="flex gap-2">
           <input
+            ref={passwordRef}
             id={passwordId}
             name="password"
             type={visible ? 'text' : 'password'}
             autoComplete="current-password"
             required
-            aria-describedby={state ? errorId : undefined}
-            className={fieldClass}
+            aria-invalid={isInvalid('password')}
+            aria-describedby={errorId}
+            className={textField}
           />
           <button
             type="button"
             onClick={() => setVisible((value) => !value)}
-            aria-pressed={visible}
+            aria-label={visible ? text.hidePasswordLabel : text.showPasswordLabel}
             aria-controls={passwordId}
-            className="min-h-12 shrink-0 rounded-xl px-3 text-link focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            className={`shrink-0 ${textButton}`}
           >
-            {visible ? t.hidePassword : t.showPassword}
+            {visible ? text.hidePassword : text.showPassword}
           </button>
         </div>
-      </div>
-      {state && (
-        <p id={errorId} role="alert" className="text-sm text-status-alert">
-          {t.errors[state.error]}
+        {/* Siempre presente y vacía hasta que haya un error: así los lectores de pantalla lo anuncian. */}
+        <p id={errorId} aria-live="polite" className="text-sm text-status-alert">
+          {state ? text.errors[state.error] : null}
         </p>
-      )}
-      <button
-        type="submit"
-        disabled={pending}
-        className="min-h-12 rounded-xl bg-primary px-4 font-medium text-on-primary disabled:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-      >
-        {pending ? t.submitting : t.submit}
+      </div>
+      <button type="submit" disabled={pending} className={primaryButton}>
+        {pending ? text.submitting : text.submit}
       </button>
     </form>
   );

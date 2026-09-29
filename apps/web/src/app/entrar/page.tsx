@@ -8,8 +8,9 @@ import { getSessionUser } from '@/server/session';
 export const metadata: Metadata = { title: 'Entrar | MiLuca' };
 
 export default async function SignInPage({ searchParams }: PageProps<'/entrar'>) {
-  const params = await searchParams;
+  // Independientes: los parámetros y la sesión se resuelven a la vez.
+  const [params, user] = await Promise.all([searchParams, getSessionUser()]);
   const next = safeNextPath(params.next);
-  if (await getSessionUser()) redirect(next);
+  if (user) redirect(next);
   return <LoginScreen next={next} error={parseLoginError(params.error)} />;
 }

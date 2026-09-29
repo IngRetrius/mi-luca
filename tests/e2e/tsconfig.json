@@ -1,6 +1,8 @@
 {
   "extends": "@miluca/config/tsconfig/library.json",
   "compilerOptions": {
+    // DOM: las funciones que se pasan a page.evaluate corren en el navegador.
+    "lib": ["ES2023", "DOM"],
     "types": ["node"]
   },
   "include": ["*.ts", "specs"]

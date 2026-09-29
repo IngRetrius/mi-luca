@@ -18,6 +18,12 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  /* Controles nativos, autocompletado y barras de desplazamiento siguen el tema claro u oscuro. */
+  color-scheme: light dark;
+  /* Sin la espera del doble toque; el zoom con dos dedos sigue disponible. */
+  touch-action: manipulation;
+  /* Sin el destello gris de iOS al tocar: cada control tiene su propio estado active:. */
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {

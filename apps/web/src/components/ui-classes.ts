@@ -1,0 +1,23 @@
+/**
+ * Clases de Tailwind compartidas por los controles de la app, con los colores de los tokens de
+ * packages/ui. Mientras no existan componentes base en packages/ui, así se mantienen iguales el
+ * foco, el paso del puntero y la respuesta al toque en todas las pantallas.
+ */
+
+/** Foco visible solo con teclado (WCAG 2.4.7). */
+export const focusRing =
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
+
+const control = `min-h-12 rounded-xl px-4 font-medium transition-colors ${focusRing}`;
+
+/** Acción principal de la pantalla. */
+export const primaryButton = `${control} bg-primary text-on-primary hover:bg-primary/90 active:bg-primary/80 disabled:opacity-70`;
+
+/** Acción secundaria con borde; al pasar el puntero o tocar, el borde gana contraste. */
+export const secondaryButton = `${control} border border-border hover:border-text-muted active:border-text`;
+
+/** Acción de texto, como un enlace. */
+export const textButton = `min-h-12 rounded-xl px-3 text-link hover:underline active:opacity-80 ${focusRing}`;
+
+/** Campo de texto. `min-w-0` deja que se encoja dentro de una fila flex en pantallas de 320 px. */
+export const textField = `min-h-12 w-full min-w-0 rounded-xl border border-border bg-bg px-3 transition-colors hover:border-text-muted aria-[invalid=true]:border-status-alert ${focusRing}`;
