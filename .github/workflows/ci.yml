@@ -79,5 +79,5 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - run: python3 -m py_compile tools/excel-extractor/*.py tools/legal-texts/*.py
-      # Los textos legales se leen bien; mientras sean borradores, el script termina con 1 a propósito.
+      # Los textos legales se leen bien. Termina con 1 si hay una versión nueva sin aprobar o incompleta.
       - run: python3 tools/legal-texts/build_migration.py || test $? -eq 1

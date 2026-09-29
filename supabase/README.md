@@ -5,7 +5,7 @@ Todo lo que vive en el proyecto de Supabase, versionado como código.
 | Carpeta | Qué contiene |
 |---|---|
 | `migrations/` | Migraciones SQL en orden. Cada tabla nueva lleva en la misma migración su RLS, sus políticas, sus índices y su disparador de auditoría. |
-| `seed/` | Datos de ejemplo solo para desarrollo local (`supabase db reset`). Lo que producción necesita (países, parámetros por país con fuente y fecha, textos legales) va en migraciones, porque `db push` no carga semillas. Nunca datos de clientes. Hoy: `legal_texts_dev.sql`, textos legales de prueba (versión `0.1-prueba`) para recorrer la invitación en local. |
+| `seed/` | Datos de ejemplo solo para desarrollo local (`supabase db reset`). Lo que producción necesita (países, parámetros por país con fuente y fecha, textos legales) va en migraciones, porque `db push` no carga semillas. Nunca datos de clientes. |
 | `functions/` | Funciones de servidor de Supabase (Edge Functions) si hacen falta, por ejemplo tareas programadas de limpieza o recordatorios. |
 | `tests/database/` | Pruebas de base de datos (pgTAP): políticas RLS por rol y reglas de los disparadores. |
 

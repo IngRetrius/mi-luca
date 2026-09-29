@@ -89,11 +89,7 @@ Flujo de `docs/02-arquitectura.md`, 5.3. Todas las rutas llevan `referrer: no-re
 | `/instalar` | P-C03: a donde llega el cliente al aceptar. Instrucciones según el sistema (User-Agent en el servidor): Safari en iPhone, botón "Instalar" de Chrome en Android si el navegador lo ofrece, texto general en otros equipos. Si la app ya corre instalada, sigue al inicio |
 | `/invitacion/problema` | Explica por qué no se puede seguir (`?motivo=`): enlace inválido, vencido, anulado o usado, flujo vencido, cuenta de asesor, cuenta ya vinculada, sin texto legal vigente o servicio caído |
 
-Para probar el flujo en local hace falta, además de las claves de arriba, la clave secreta local (`SECRET_KEY` de `pnpm supabase status`, pública y solo de prueba) en `SUPABASE_SECRET_KEY`, y los textos legales de prueba de `supabase/seed/`, que se cargan con `pnpm supabase db reset` o a mano:
-
-```bash
-docker exec -i supabase_db_miluca psql -U postgres < supabase/seed/legal_texts_dev.sql
-```
+Para probar el flujo en local hace falta, además de las claves de arriba, la clave secreta local (`SECRET_KEY` de `pnpm supabase status`, pública y solo de prueba) en `SUPABASE_SECRET_KEY`. Los avisos de privacidad llegan con las migraciones (`docs/legal/textos/`).
 
 En `next dev`, el registro de acciones de servidor imprime sus argumentos y resultados, entre ellos el enlace con el token. Solo pasa en desarrollo; en producción no se registran.
 

@@ -61,12 +61,23 @@ def dollar_quote(value: str) -> str:
     return f"${tag}${value}${tag}$"
 
 
+def row_prefix(text: dict[str, str]) -> str:
+    """Comienzo de la fila de un texto: tipo, país y versión, que lo identifican en la tabla."""
+    country = f"'{text['country_code']}'" if text.get("country_code") else "null"
+    return f"  ('{text['kind']}', {country}, {dollar_quote(text['version'])}, "
+
+
+def already_published(text: dict[str, str]) -> bool:
+    """La versión ya está en alguna migración: publicarla otra vez violaría la clave única."""
+    prefix = row_prefix(text)
+    return any(prefix in path.read_text(encoding="utf-8") for path in MIGRATIONS.glob("*.sql"))
+
+
 def sql(texts: list[dict[str, str]]) -> str:
     rows = []
     for text in texts:
-        country = f"'{text['country_code']}'" if text.get("country_code") else "null"
         rows.append(
-            f"  ('{text['kind']}', {country}, {dollar_quote(text['version'])}, "
+            f"{row_prefix(text)}"
             f"{dollar_quote(text['title'])},\n   {dollar_quote(text['body'])})"
         )
     files = ", ".join(t["file"] for t in texts)
@@ -85,7 +96,18 @@ def main() -> int:
     parser.add_argument("--write", action="store_true", help="escribe la migración")
     args = parser.parse_args()
 
-    texts = [parse(path) for path in sorted(TEXTS.glob("*.md")) if path.name != "README.md"]
+    texts = []
+    for path in sorted(TEXTS.glob("*.md")):
+        if path.name == "README.md":
+            continue
+        text = parse(path)
+        if already_published(text):
+            print(f"{text['file']}: v{text['version']} ya publicada")
+        else:
+            texts.append(text)
+    if not texts:
+        print("\nNada nuevo que publicar.")
+        return 0
     blocked = False
     for text in texts:
         issues = problems(text)

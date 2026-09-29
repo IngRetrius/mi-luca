@@ -38,7 +38,7 @@ insert into public.invitations (client_id, advisor_id, token_hash, revoked_at) v
 
 -- Textos: Colombia tiene una versión vieja y una vigente, España los suyos, una versión
 -- futura que aún no se ve y términos comunes a todos los países. Se publican al empezar la
--- transacción, después de los textos de prueba de supabase/seed/, para que sean los vigentes.
+-- transacción, después de los avisos de las migraciones, para que sean los vigentes.
 insert into public.legal_texts (id, kind, country_code, version, title, body_markdown, published_at) values
   ('d0d0d0d0-0000-4000-8000-000000000001', 'tratamiento_datos', 'CO', '1', 'Tratamiento CO v1', 'Viejo',
    now() - interval '30 days'),
