@@ -104,7 +104,8 @@ Avance al 28/09/2026 (PR #1 a #4 unidos):
 - [x] Herramientas de casos de oro: `recalc.py` (recálculo en Excel, validado celda a celda) y `golden.py` (extracción con verificación de privacidad).
 - [x] Caso C3 (plantilla vacía) y primera prueba de oro del motor (conversión de moneda de Ingresos).
 - [x] Caso de oro C2 (España), anonimizado y revisado por el asesor.
-- [ ] Caso de oro C1 (Colombia), llevado a la plantilla oficial y revisado por el asesor. **Siguiente tarea del agente.**
+- [x] Caso de oro C1 (Colombia) llevado a la plantilla oficial y anonimizado; reproduce las cifras de la sección 15 del protocolo salvo la inversión anual.
+- [ ] Revisión del caso C1 por el asesor (pregunta A11).
 - [ ] Contratar abogado.
 
 Criterios de aceptación:
@@ -201,7 +202,7 @@ Criterios de aceptación:
 |---|---|---|---|
 | La sesión se pierde en la PWA de iOS | Media | Alto | Prueba en F0 con dispositivos reales; plan B con token de identidad (`signInWithIdToken`); la web en Safari siempre funciona |
 | El motor no reproduce a Excel en algún borde (fechas, redondeos) | Media | Alto | Funciones de Excel probadas aparte; comparación de valores intermedios; tolerancias definidas |
-| El caso de prueba de Colombia no existe en la plantilla oficial (H-25) | Cierta | Medio | Construirlo en F0; si se retrasa, avanzar con C2, C3 y casos sintéticos |
+| El caso de prueba de Colombia no existe en la plantilla oficial (H-25) | Resuelto | Medio | Construido en F0 el 28/09/2026 (`c1-colombia`), pendiente de revisión del asesor |
 | Ninguno de los casos reales tiene deudas | Cierta | Medio | Casos sintéticos C4 y C5 desde el caso 15.1 del protocolo |
 | La plataforma se interpreta como asesoramiento en inversiones regulado | Baja con buenos textos | Alto | Sin productos ni entidades; textos de alcance; abogado desde F0 (ver 07-preguntas-abiertas.md) |
 | Datos de salud en el presupuesto (terapias, medicamentos) | Alta | Medio | Consentimiento explícito aparte; guía para nombrar partidas de forma genérica; abogado |

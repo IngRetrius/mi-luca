@@ -3,6 +3,9 @@
  * Cada caso guarda las celdas por hoja: `inputs` (celdas de entrada) y `expected` (fórmulas con
  * el valor que calculó Excel). Para agregar un caso, genera su carpeta y regístralo aquí.
  */
+import c1Case from './c1-colombia/case.json' with { type: 'json' };
+import c1Expected from './c1-colombia/expected.json' with { type: 'json' };
+import c1Inputs from './c1-colombia/inputs.json' with { type: 'json' };
 import c2Case from './c2-espana/case.json' with { type: 'json' };
 import c2Expected from './c2-espana/expected.json' with { type: 'json' };
 import c2Inputs from './c2-espana/inputs.json' with { type: 'json' };
@@ -25,6 +28,7 @@ export interface GoldenCase {
 }
 
 export const goldenCases: readonly GoldenCase[] = [
+  { ...c1Case, inputs: c1Inputs as Sheets, expected: c1Expected as Sheets },
   { ...c2Case, inputs: c2Inputs as Sheets, expected: c2Expected as Sheets },
   { ...c3Case, inputs: c3Inputs as Sheets, expected: c3Expected as Sheets },
 ];

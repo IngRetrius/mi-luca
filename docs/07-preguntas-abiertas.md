@@ -6,7 +6,7 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 
 | N.º | Decisión | Fecha | Dónde quedó reflejada |
 |---|---|---|---|
-| A1, A2 | **Casos de prueba de oro:** el agente anonimiza el caso de España y construye el de Colombia en la plantilla oficial; el asesor revisa antes de subirlos. C2 (España) revisado y aprobado por el asesor; C1 (Colombia) pendiente | 28/09/2026 | `04-motor-de-calculo.md`, 7.2 y 7.3; `packages/engine/test/golden/` |
+| A1, A2 | **Casos de prueba de oro:** el agente anonimiza el caso de España y construye el de Colombia en la plantilla oficial; el asesor revisa antes de subirlos. C2 (España) revisado y aprobado por el asesor; C1 (Colombia) construido el 28/09/2026 y publicado en `main` ese día por decisión del asesor, antes de su revisión (A11 sigue abierta) | 28/09/2026 | `04-motor-de-calculo.md`, 7.2 y 7.3; `packages/engine/test/golden/` |
 | Nueva | **Multimoneda en general:** cada importe (ingresos, gastos, bolsillos, deudas, metas, primas, activos, inversiones, cobros, control mensual) lleva su moneda con un selector; tasas por cliente y por moneda; cualquier país se puede habilitar | 28/09/2026 | RN-010, RN-017, RN-018; `03-modelo-de-datos.md` (principios 8 y 9, `client_fx_rates`); `05-pantallas-y-flujos.md` (P-A19) |
 | A3 | **Región:** el proyecto de Supabase ya creado, en us-east-2 (Ohio); funciones de Vercel en `cle1` | 28/09/2026 | ADR 0003, `02-arquitectura.md` sección 7 |
 | A4 | **Dedicación:** 14 horas por semana. MVP hacia junio o julio de 2027; lanzamiento entre abril y julio de 2028 | 28/09/2026 | `06-plan-de-trabajo.md` |
@@ -26,6 +26,7 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 |---|---|---|---|---|
 | A6 | ¿Cobras honorarios por la asesoría? | Confirma que el uso es comercial (Vercel Pro) y afecta el texto de alcance | Asumo que sí o que podrías hacerlo; por eso el plan usa Vercel Pro | F0 |
 | A7 | ¿Tienes abogado en Colombia y en España? | Hay que validar protección de datos, transferencia a Estados Unidos de los datos de clientes de España y alcance de la asesoría en los dos países | Una firma con presencia en ambos o un abogado por país, desde la fase 0. Preguntas concretas en `legal/README.md` | F0 |
+| A11 | ¿Apruebas el caso de oro C1 (Colombia)? | Construido en la plantilla oficial con seis supuestos, entre ellos seguridad social en 11 pagos (enero sí, febrero no) como en la sección 15 del protocolo, aunque la tabla del libro original marca 12. Reproduce todas las cifras de la sección 15 salvo la inversión anual (15,7 frente a 19,5 millones), porque la prueba de realidad está pendiente y la plantilla invierte el 50 % | Revisar los supuestos y el contraste en `packages/engine/test/golden/README.md` y los datos en `c1-colombia/inputs.json`; aprobar o indicar qué cambiar | F0 |
 | A8 | Tolerancia de la prueba de oro para porcentajes | 0,01 sobre una razón es un punto porcentual | Importes ±0,01; razones ±0,000001; fechas y textos iguales | F0 |
 
 ## B. Reglas del cálculo (antes de F2 y F3)
