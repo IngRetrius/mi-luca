@@ -164,6 +164,15 @@ Criterios de aceptación:
 - Caso España: el costo de vida por niveles coincide con la hoja "Costo de vida" del Excel; con los gastos marcados "paga la familia", el ingreso anual del resumen coincide con el del Excel (15.710,46 EUR) y el indicador nativo de tasa de ahorro sobre ingreso propio es 100 %.
 - El cliente edita un gasto en el celular, ve el impacto antes de guardar y el asesor recibe el antes y después.
 
+Avance:
+
+- [x] Motor: `normalization` (`timesPerYear`, con la tabla `Listas!C2:D10`), `incomes` (`computeIncomes`, `socialSecurityPayments`, `baseIncome`) y `budget` (`computeBudget`), en modo compatible. Tipos compartidos en `packages/domain` (`Frequency`, `ExpenseType`, `IncomeKind`, `Payer`, `MonthFlags`) con los mismos códigos que el modelo de datos. `ENGINE_VERSION` 0.2.0.
+- [x] Pruebas de oro de C1, C2 y C3 en verde para Ingresos (F:U de cada fila, fila 14, totales por tipo, USD, S17 y la calculadora de ingreso base), Presupuesto (G:I de las 82 partidas y las filas 89 a 97) y `Resumen!C11:C13`. Adaptador de celdas en `test/golden/adapters.ts`; se comprobó que las pruebas fallan con un error provocado.
+- [ ] Filas automáticas del presupuesto (6 a 12) calculadas desde Deudas, Seguros y Metas: hoy la prueba toma su valor de la plantilla.
+- [ ] Modo nativo: pagador y aporte implícito de terceros (RN-015), indicadores personales y caso España con los gastos de la familia.
+- [ ] `cost-of-living` y la hoja "Costo de vida" del caso España.
+- [ ] Parámetros por país con fuente y fecha; tablas `incomes`, `budget_items`, `client_fx_rates`; pantallas P-A04 a P-A06, P-A11, P-C06 y P-C07; registro de impacto.
+
 ### F3. Bolsillos, fondo, flujo, prueba de realidad, cobros y entrega mínima (160 horas)
 
 Tareas: `cashflow`, `reality-check`, `receivables`, `emergency-fund`, `pockets`, activos líquidos; bancos con límite de bolsillos; P-A07 a P-A10 (pestañas Flujo, Bolsillos, Fondo, Cobros); entrega mínima (plan entregado inmutable y P-C05 sin PDF); control de calidad para los módulos existentes.

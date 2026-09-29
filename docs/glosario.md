@@ -56,12 +56,14 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Tasas del cliente | `clientFxRates` | Una por moneda distinta de la base, con fecha |
 | Selector de moneda | `CurrencySelect` | Componente de `packages/ui` junto a cada campo de dinero |
 | Importe con moneda | `Money` | `{ amount, currency }` |
-| Ingreso | `income` | |
+| Ingreso | `income` | Tipos (`incomeKind`): laboral, renta, pension, otro |
+| Pagos por mes | `paymentsByMonth` / `MonthFlags` | Doce marcas, de enero a diciembre |
+| Meses con seguridad social | `socialSecurityPayments` | `Ingresos!S17` |
 | Ingreso base (variable) | `baseIncome` | |
 | Aporte implícito de terceros | `impliedThirdPartyIncome` | RN-015 |
 | Presupuesto | `budget` | |
 | Partida del presupuesto | `budgetItem` | |
-| Frecuencia | `frequency` | |
+| Frecuencia | `frequency` | semanal, quincenal, mensual, bimestral, trimestral, cada_4_meses, semestral, anual, cada_2_anos, por_duracion, meses_seguridad_social |
 | Veces al año | `timesPerYear` | |
 | Tipo de gasto | `expenseType` | directo, bolsillo, seg_social, deuda, ahorro |
 | Esencial | `essential` | |

@@ -22,3 +22,14 @@ Motor de cálculo puro. Recibe los datos de un cliente y los parámetros de su p
 | `test/properties/` | Pruebas de propiedades (invariantes del control de calidad del protocolo). |
 
 El orden de cálculo y el catálogo de funciones están en `docs/04-motor-de-calculo.md`.
+
+## Estado
+
+| Módulo | Qué hay | Pruebas de oro |
+|---|---|---|
+| `currency` | `toBase`, `toBaseCompat`, `missingRates` | `Ingresos!F6:F13` |
+| `normalization` | `timesPerYear` | `Presupuesto!G6:G87` |
+| `incomes` | `computeIncomes`, `socialSecurityPayments`, `baseIncome` | Hoja Ingresos y `Resumen!C11` |
+| `budget` | `computeBudget` | Hoja Presupuesto y `Resumen!C12:C13` |
+
+Todo en modo compatible con la plantilla 2.2.

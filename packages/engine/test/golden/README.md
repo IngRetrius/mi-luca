@@ -6,7 +6,14 @@ Cada caso vive en su carpeta, generada con `tools/excel-extractor/` (`recalc.py`
 - `inputs.json`: celdas de entrada (crema o ámbar) con valor, más las entradas del perfil de la plantilla (por ejemplo, la moneda base en `Listas!M2`), por hoja y celda.
 - `expected.json`: todas las celdas con fórmula y el valor que calculó Excel, por hoja y celda.
 
-Los valores quedan a nivel de celda. La traducción al modelo del motor la hace el mapa de celdas (`cell-map.ts`, fase 2; ver `docs/04-motor-de-calculo.md`, 7.4). Mientras tanto, `golden.test.ts` compara con Excel lo que el motor ya calcula (hoy, la conversión a moneda base de `Ingresos!F6:F13`).
+Los valores quedan a nivel de celda. `adapters.ts` traduce las celdas a las entradas del motor: etiquetas de la plantilla a códigos del modelo (una etiqueta desconocida es un error) y los valores fijos de las filas automáticas del presupuesto (6 a 12), que no están en los casos por no ser fórmulas ni entradas.
+
+| Prueba | Qué compara con Excel |
+|---|---|
+| `golden.test.ts` | Conteos de cada caso y conversión a moneda base de `Ingresos!F6:F13` |
+| `incomes-budget.test.ts` | Ingresos (F:U de las filas 6 a 13, fila 14, `T20:U25`, `S17`, `E30:E32`), Presupuesto (G:I de las filas 6 a 87 y los totales de las filas 89 a 97) y `Resumen!C11:C13` |
+
+Las filas automáticas del presupuesto toman por ahora su valor de la plantilla; cuando existan Deudas, Seguros y Metas en el motor, se calcularán.
 
 | Caso | Contenido | Estado |
 |---|---|---|
