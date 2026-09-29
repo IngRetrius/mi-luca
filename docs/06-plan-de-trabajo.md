@@ -97,7 +97,9 @@ Avance al 28/09/2026 (rama `f0-fundaciones`):
 - [ ] Vincular la CLI con el proyecto remoto (`supabase login` y `link`; requiere al asesor).
 - [ ] Cuenta de Google Cloud y dominio (requiere al asesor).
 - [ ] Prueba de sesión en PWA de iOS en iPhone real (requiere despliegue y cuentas).
-- [ ] Casos de prueba de oro C1, C2 y C3 y script `golden.py`.
+- [x] Herramientas de casos de oro: `recalc.py` (recálculo en Excel, validado celda a celda) y `golden.py` (extracción con verificación de privacidad).
+- [x] Caso C3 (plantilla vacía) y primera prueba de oro del motor (conversión de moneda de Ingresos).
+- [ ] Casos de oro C2 (España) y C1 (Colombia), con revisión del asesor.
 - [ ] Contratar abogado.
 
 Criterios de aceptación:

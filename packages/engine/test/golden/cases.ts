@@ -1,0 +1,42 @@
+/**
+ * Casos de prueba de oro generados con tools/excel-extractor (recalc.py y golden.py).
+ * Cada caso guarda las celdas por hoja: `inputs` (celdas de entrada) y `expected` (fórmulas con
+ * el valor que calculó Excel). Para agregar un caso, genera su carpeta y regístralo aquí.
+ */
+import c3Case from './c3-plantilla-vacia/case.json' with { type: 'json' };
+import c3Expected from './c3-plantilla-vacia/expected.json' with { type: 'json' };
+import c3Inputs from './c3-plantilla-vacia/inputs.json' with { type: 'json' };
+
+export type CellValue = string | number | boolean | null;
+export type Sheets = Readonly<Record<string, Readonly<Record<string, CellValue>>>>;
+
+export interface GoldenCase {
+  readonly case: string;
+  readonly template: string;
+  readonly cutoffCell: string;
+  readonly cutoffDate: string;
+  readonly inputCells: number;
+  readonly formulaCells: number;
+  readonly inputs: Sheets;
+  readonly expected: Sheets;
+}
+
+export const goldenCases: readonly GoldenCase[] = [
+  { ...c3Case, inputs: c3Inputs as Sheets, expected: c3Expected as Sheets },
+];
+
+/** Valor de una celda del caso: primero en las entradas y luego en las fórmulas. Vacía es undefined. */
+export function cell(golden: GoldenCase, ref: string): CellValue | undefined {
+  const [sheet, address] = ref.split('!');
+  if (sheet === undefined || address === undefined) throw new Error(`Referencia inválida: ${ref}`);
+  return golden.inputs[sheet]?.[address] ?? golden.expected[sheet]?.[address];
+}
+
+/**
+ * Equivalente a N() de Excel para valores de celda: números igual, verdadero 1 y el resto 0.
+ * Las fechas llegan como texto "AAAA-MM-DD" y aquí valen 0; conviértelas antes si hace falta.
+ */
+export function excelN(value: CellValue | undefined): number {
+  if (typeof value === 'number') return value;
+  return value === true ? 1 : 0;
+}
