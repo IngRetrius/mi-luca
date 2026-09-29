@@ -14,7 +14,7 @@ Revisadas el 28/09/2026: sin comandos que se ejecuten solos, sin descargas en ti
 
 ## Cómo se aplican
 
-La regla 12 de `CLAUDE.md` pide seguir `vercel-react-best-practices`, `frontend-ui-engineering` y `vercel-composition-patterns` al escribir interfaz, y revisar cada pantalla con `web-design-guidelines`. La parte que se puede comprobar sola la exige el lint de `apps/web` (reglas recomendadas de `jsx-a11y` y dependencias de los efectos, como error).
+La regla 12 de `CLAUDE.md` y `.claude/rules/frontend.md` piden invocar `vercel-react-best-practices`, `frontend-ui-engineering` y, según el caso, `vercel-composition-patterns` y `frontend-design` antes de escribir interfaz, y revisar cada pantalla con `web-design-guidelines`. La regla tiene rutas (`paths`), así que Claude Code la carga sola al abrir archivos de `apps/web`, `packages/ui`, `packages/i18n` o `tests/e2e`. La parte que se puede comprobar sola la exige el lint de `apps/web` (reglas recomendadas de `jsx-a11y` y dependencias de los efectos, como error).
 
 ## Precedencia
 
