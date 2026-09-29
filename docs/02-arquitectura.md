@@ -128,7 +128,7 @@ Decisión y detalle en el ADR 0009. Resumen:
 | Registro público | Cerrado con el gancho "antes de crear usuario", que rechaza las altas por correo [F24]. `[auth.email] enable_signup = false` no sirve: apaga también el inicio de sesión (verificado en local) |
 | Inicio de sesión | `signInWithPassword` desde un formulario de la app. No sale de la app instalada, así que no tiene el problema de la sección 5.4 |
 | Recuperación | Código de 6 dígitos por correo (`{{ .Token }}`), escrito dentro de la app, y luego la nueva contraseña. No se usa enlace: se abriría en Safari y no en la app instalada [F4][F35] |
-| Política | Mínimo de 12 caracteres (**Supuesto**, pregunta E5; el NIST pide 15 si es el único factor), máximo de al menos 64, sin reglas de composición, rechazo de contraseñas filtradas en Pro [F34][F36] |
+| Política | Mínimo de 8 caracteres (decisión E5 del asesor; el NIST pide 15 si es el único factor), máximo de al menos 64, sin reglas de composición, rechazo de contraseñas filtradas en Pro [F34][F36] |
 | Abuso | Límites de intentos por IP de Supabase Auth; CAPTCHA (Turnstile) si aparecen ataques |
 | Almacenamiento | Supabase Auth guarda solo un hash bcrypt [F34]; MiLuca no tiene columnas de contraseña ni las escribe en registros |
 | Asesor | Entra con Google, con verificación en dos pasos en su cuenta de Google, mientras MiLuca no tenga segundo factor (5.5) |

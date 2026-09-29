@@ -88,7 +88,7 @@ Avance al 28/09/2026 (PR #1 y #2 unidos; PR #3 con los casos de oro, pendiente d
 - [x] App Next.js 16 como PWA: manifiesto, iconos desde el logo provisional, áreas seguras, `proxy.ts` con refresco de sesión de Supabase.
 - [x] Pruebas de extremo a extremo en iPhone (WebKit) y Android (Chromium) simulados.
 - [x] CI en GitHub Actions (formato, lint, tipos, pruebas, build, extremo a extremo, herramientas de Python), en verde en el pull request #1.
-- [x] Configuración local de Supabase (`config.toml`): proveedor de correo activo y contraseña de 12 caracteres como mínimo (ADR 0009).
+- [x] Configuración local de Supabase (`config.toml`): proveedor de correo activo y contraseña de 8 caracteres como mínimo (ADR 0009, decisión E5).
 - [x] Claves del proyecto de Supabase en `apps/web/.env.local` (fuera de git), verificadas contra la API.
 - [x] Servidor MCP de Supabase registrado en `.mcp.json`.
 - [x] Supabase local funcionando (Docker con Colima).

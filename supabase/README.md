@@ -16,7 +16,7 @@ El esquema propuesto está en `docs/03-modelo-de-datos.md`.
 `config.toml` lo generó `supabase init` (CLI instalada como dependencia del repositorio: `pnpm supabase ...`). Cambios respecto al valor por defecto:
 
 - `[auth.email] enable_signup = true`: se entra con Google o con correo y contraseña (ADR 0009). Con `false` se apaga el proveedor de correo entero, también el inicio de sesión y la recuperación (probado en local). El registro público por correo lo cerrará el gancho `before_user_created` en F1; las cuentas con contraseña se crean desde el servidor con la API de administración, que no pasa por el gancho.
-- `minimum_password_length = 12`, sin reglas de composición (supuesto, pregunta E5).
+- `minimum_password_length = 8`, sin reglas de composición (decisión E5 del asesor).
 - `site_url` y `additional_redirect_urls` apuntan a `http://localhost:3000` y a su `/auth/callback`.
 - Las semillas se leen de `seed/*.sql`.
 

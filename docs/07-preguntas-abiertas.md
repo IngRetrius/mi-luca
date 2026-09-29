@@ -17,6 +17,8 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 | A10 | **Repositorio público** en GitHub (`IngRetrius/mi-luca`), por decisión del asesor, sabiendo que incluye el protocolo, las plantillas y el plan. Los libros de clientes siguen excluidos | 28/09/2026 | `.gitignore` |
 | Nueva | **Inicio de sesión:** Google y correo con contraseña; Apple aplazado. Cambia la regla "solo Google y Apple" del encargo. El alta con contraseña solo es posible desde una invitación | 28/09/2026 | ADR 0009; `02-arquitectura.md` 5.2; `05-pantallas-y-flujos.md` (P-G01, P-G05, P-C12) |
 | A9 | **Se mantiene el plan original:** el MVP incluye desde el inicio la cuenta del cliente, la invitación y el consentimiento (no se adelanta un "MVP del asesor"). MVP hacia junio o julio de 2027 a 14 horas por semana | 28/09/2026 | `06-plan-de-trabajo.md` |
+| E5 | **Contraseña:** 8 caracteres o más, sin reglas de composición y con rechazo de contraseñas filtradas (Pro). Por debajo de los 15 que el NIST pide cuando la contraseña es el único factor [F36] | 28/09/2026 | ADR 0009, `supabase/config.toml` |
+| Nueva | **Autorización de los clientes:** el asesor indica que ya tiene la autorización de todos sus clientes. El abogado confirma su alcance; la plataforma igual registra el consentimiento de cada cliente con fecha y texto | 28/09/2026 | `legal/README.md`, sección 0 |
 
 ## A. Antes de empezar la fase 0
 
@@ -73,4 +75,3 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 | E2 | Next.js en Vercel Pro | Sí (ADR 0002) | F0 |
 | E3 | Segundo factor para el asesor | Fuera por ahora, como decidiste. Diseño listo para activarlo sin rehacer (02, 5.5). Sugiero reconsiderarlo antes de tener más de 20 clientes, porque la cuenta del asesor ve los datos de todos. Con contraseñas (ADR 0009), mientras tanto el asesor entra con Google y con la verificación en dos pasos de su cuenta de Google | Después del lanzamiento |
 | E4 | ¿Dónde viven los parámetros de la metodología (70 %, 50 %, 90 %, umbrales)? | En `country_parameters` con país vacío (comunes) y versionados, igual que los del país | F2 |
-| E5 | Longitud mínima de la contraseña | 12 caracteres, sin reglas de composición y con rechazo de contraseñas filtradas (Pro) [F34]; la pantalla sugiere una frase. El NIST pide 15 cuando la contraseña es el único factor [F36]: si prefieres seguirlo al pie de la letra, 15. Hoy `config.toml` usa 12 | F1 |
