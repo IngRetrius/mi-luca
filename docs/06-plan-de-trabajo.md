@@ -99,6 +99,7 @@ Avance al 28/09/2026 (PR #1 a #4 unidos):
 - [x] Configuración de Auth aplicada al remoto con `supabase config push` (contraseña de 8, código de 6 dígitos, sin TOTP, URL de retorno local).
 - [x] Proyecto de Google Cloud (`miluca-510102`) y cliente de OAuth web; Google activo en el Supabase local, verificado hasta la pantalla de inicio de sesión de Google [F37].
 - [x] Google activo en el proyecto remoto (`supabase config push`).
+- [ ] Proyecto en Vercel (`mi-luca`, plan Hobby) creado y conectado al repositorio el 28/09/2026; `vercel.json` con `cle1`. Dominio de producción: `mi-luca.vercel.app`, ya declarado en `[remotes.production.auth]` de `supabase/config.toml`. Falta: en el panel, Root Directory `apps/web` y variables de entorno (`apps/web/README.md`, "Despliegue en Vercel"); y `pnpm supabase config push` para llevar el dominio a Supabase Auth.
 - [ ] Dominio y verificación de marca en Google (requiere al asesor).
 - [ ] Prueba de sesión en PWA de iOS en iPhone real (requiere despliegue y cuentas).
 - [x] Herramientas de casos de oro: `recalc.py` (recálculo en Excel, validado celda a celda) y `golden.py` (extracción con verificación de privacidad).

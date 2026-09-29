@@ -48,3 +48,6 @@ test-results/
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# Vercel CLI (vínculo local del proyecto)
+.vercel

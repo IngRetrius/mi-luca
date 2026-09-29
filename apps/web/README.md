@@ -34,6 +34,28 @@ docker exec supabase_db_miluca psql -U postgres -c \
 
 Una cuenta sin fila de asesor ni perfil vinculado sirve para ver P-G02.
 
+## Despliegue en Vercel
+
+El proyecto `mi-luca` de Vercel está conectado al repositorio: cada push a `main` despliega producción y cada rama, una vista previa. Lo que vive en el repositorio:
+
+- `vercel.json`: funciones en `cle1` (Cleveland, junto a Supabase en us-east-2; ADR 0003). El plan Hobby admite una sola región.
+- Node 24 sale de `engines` en el `package.json` raíz y pnpm 12 de `packageManager`.
+
+Lo que se configura en el panel de Vercel (una sola vez):
+
+| Dónde | Valor |
+|---|---|
+| Settings > Build and Deployment > Root Directory | `apps/web` (Next.js se detecta solo) |
+| Environment Variables, Production y Preview | `ENABLE_EXPERIMENTAL_COREPACK=1`: sin ella Vercel usa pnpm 9 o 10 y no pnpm 12 |
+| Environment Variables, solo Production | `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, los mismos de `.env.local` |
+| Environment Variables, solo Production, marcada como sensible | `SUPABASE_SECRET_KEY`, cuando llegue el alta con contraseña desde la invitación |
+
+Las vistas previas no llevan las claves de Supabase: así nunca tocan los datos de producción. La app arranca igual y avisa que el acceso no está disponible. Cuando exista el proyecto de staging, sus claves van en Preview (`docs/02-arquitectura.md`, sección 8).
+
+El dominio de producción es `mi-luca.vercel.app`. Está declarado en Supabase Auth (`site_url` y `additional_redirect_urls` en `[remotes.production.auth]` de `supabase/config.toml`) y se aplica con `pnpm supabase config push`; sin eso, el regreso de Google no vuelve a la app publicada. Si cambia el dominio, se cambia allí.
+
+El plan Hobby es solo para uso personal no comercial: antes de que un cliente real use la app, el proyecto pasa a Pro (`docs/06-plan-de-trabajo.md`, sección de costos).
+
 ## Acceso
 
 | Ruta | Qué hace |

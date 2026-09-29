@@ -434,6 +434,14 @@ enabled = true
 [remotes.production]
 project_id = "ryhvshstjuuasgwcepua"
 
+# App publicada en Vercel. Se mantiene localhost para desarrollar contra el remoto.
+[remotes.production.auth]
+site_url = "https://mi-luca.vercel.app"
+additional_redirect_urls = [
+  "https://mi-luca.vercel.app/auth/callback",
+  "http://localhost:3000/auth/callback",
+]
+
 [remotes.production.auth.email]
 enable_confirmations = true
 max_frequency = "1m0s"

@@ -71,7 +71,7 @@ pnpm supabase login
 pnpm supabase link --project-ref ryhvshstjuuasgwcepua
 ```
 
-La configuración del remoto también es código. Hereda todo `config.toml`, y el bloque `[remotes.production]` solo cambia lo que el entorno local relaja para desarrollo: el remoto exige confirmar el correo, espera 1 minuto entre correos a la misma persona y conserva la analítica de Storage.
+La configuración del remoto también es código. Hereda todo `config.toml`, y el bloque `[remotes.production]` solo cambia lo que difiere del entorno local: la URL de la app publicada (`https://mi-luca.vercel.app`, conservando `localhost:3000` para desarrollar contra el remoto), exigir confirmar el correo, esperar 1 minuto entre correos a la misma persona y conservar la analítica de Storage.
 
 ```sh
 pnpm supabase config diff   # solo lectura: diferencias entre config.toml y el remoto
