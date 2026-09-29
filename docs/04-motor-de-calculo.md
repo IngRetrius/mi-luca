@@ -157,7 +157,7 @@ Además se verifican los valores intermedios de Ingresos y Presupuesto, para loc
 | Caso | Fuente | Qué cubre | Estado |
 |---|---|---|---|
 | C1. Colombia (contratista con arriendos y meses sin ingreso) | Plantilla oficial llenada con los datos del libro del caso real de Colombia, anonimizados | Meses sin ingreso, seguridad social por mes, cobros, USD, pensión Colpensiones, patrimonio concentrado | **Por construir** (H-25): el libro actual no usa la plantilla |
-| C2. España (estudiante, padres pagan, sueldo a ahorro) | Libro del caso real de España, anonimizado | Euro como base, pagador, costo de vida por niveles, perfil conservador, pensión desactivada | Por anonimizar |
+| C2. España (estudiante, padres pagan, sueldo a ahorro) | Libro del caso real de España, anonimizado | Euro como base, pagador, costo de vida por niveles, perfil conservador, pensión desactivada | **Listo** (466 entradas, 5.851 fórmulas; revisado por el asesor) |
 | C3. Plantilla vacía | `Plantilla_Asesoria_Financiera.xlsx` con fecha de corte fija (28/09/2026) | Valores por defecto, pendientes, divisiones entre cero | **Listo** (535 entradas, 5.738 fórmulas, sin errores) |
 | C4. Deudas | Plantilla oficial con 6 a 8 deudas sintéticas inspiradas en el caso 15.1 del protocolo (FRECH, préstamo familiar a 0 %, ingreso en USD, carga de 64 %) | Deuda cara, avalancha, bola de nieve, restricciones de abono, más de 120 meses | Por construir |
 | C5. Créditos | Plantilla de créditos con los mismos créditos de C4 y marcas de pago | 360 cuotas, FRECH, seguros, cuotas vencidas, panel, puente a Deudas | Por construir |

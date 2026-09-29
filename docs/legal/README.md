@@ -12,6 +12,8 @@ Consecuencias que el abogado debe validar:
 - El RGPD aplica también a un responsable fuera de la UE que ofrece servicios a personas que están en la UE (art. 3.2), y puede exigir designar un representante en la UE (art. 27), salvo tratamiento ocasional y sin datos de categorías especiales a gran escala [F29]. Los datos de salud del presupuesto hacen que este punto importe.
 - Los datos se alojan en Estados Unidos (Supabase us-east-2, ADR 0003): transferencia internacional para los clientes de España.
 
+**Autorización de los clientes actuales.** El asesor indica (28/09/2026) que ya tiene la autorización de todos sus clientes. No se precisó su alcance. El abogado debe confirmar si cubre el tratamiento en la plataforma, el alojamiento en Estados Unidos, los datos de salud del presupuesto y el uso de casos anonimizados en las pruebas. En cualquier caso, la plataforma registra el consentimiento de cada cliente con fecha y texto aceptado al entrar por la invitación (requisito del encargo).
+
 ## 1. Marco que aplica
 
 ### 1.1 Asesoría en inversiones

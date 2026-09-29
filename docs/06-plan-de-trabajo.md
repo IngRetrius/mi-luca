@@ -79,7 +79,7 @@ Tareas:
 - Tokens de diseño en `packages/ui`.
 - Contratar abogado y entregarle el borrador de alcance (sección 7 del encargo).
 
-Avance al 28/09/2026 (rama `f0-fundaciones`):
+Avance al 28/09/2026 (PR #1 y #2 unidos; PR #3 con los casos de oro, pendiente de unir):
 
 - [x] Monorepo con pnpm 12 y Turborepo; paquetes `domain`, `engine`, `ui`, `i18n`, `exporters`, `db`, `config`, `web` y `e2e`.
 - [x] Reglas de lint que impiden importaciones entre capas y el uso de la fecha del sistema en el motor (verificadas con violaciones de prueba).
@@ -88,18 +88,19 @@ Avance al 28/09/2026 (rama `f0-fundaciones`):
 - [x] App Next.js 16 como PWA: manifiesto, iconos desde el logo provisional, áreas seguras, `proxy.ts` con refresco de sesión de Supabase.
 - [x] Pruebas de extremo a extremo en iPhone (WebKit) y Android (Chromium) simulados.
 - [x] CI en GitHub Actions (formato, lint, tipos, pruebas, build, extremo a extremo, herramientas de Python), en verde en el pull request #1.
-- [x] Configuración local de Supabase (`config.toml`): proveedor de correo activo y contraseña de 12 caracteres como mínimo (ADR 0009).
+- [x] Configuración local de Supabase (`config.toml`): proveedor de correo activo y contraseña de 8 caracteres como mínimo (ADR 0009, decisión E5).
 - [x] Claves del proyecto de Supabase en `apps/web/.env.local` (fuera de git), verificadas contra la API.
 - [x] Servidor MCP de Supabase registrado en `.mcp.json`.
 - [x] Supabase local funcionando (Docker con Colima).
 - [x] Decisión de inicio de sesión: Google y correo con contraseña, Apple aplazado (ADR 0009), con el bloqueo del registro público probado en local.
-- [ ] Autenticar el servidor MCP de Supabase (requiere al asesor, una vez).
+- [x] Servidor MCP de Supabase autenticado (con `claude mcp login` desde la CLI; el panel de VS Code falla con URLs con parámetros).
 - [ ] Vincular la CLI con el proyecto remoto (`supabase login` y `link`; requiere al asesor).
 - [ ] Cuenta de Google Cloud y dominio (requiere al asesor).
 - [ ] Prueba de sesión en PWA de iOS en iPhone real (requiere despliegue y cuentas).
 - [x] Herramientas de casos de oro: `recalc.py` (recálculo en Excel, validado celda a celda) y `golden.py` (extracción con verificación de privacidad).
 - [x] Caso C3 (plantilla vacía) y primera prueba de oro del motor (conversión de moneda de Ingresos).
-- [ ] Casos de oro C2 (España) y C1 (Colombia), con revisión del asesor.
+- [x] Caso de oro C2 (España), anonimizado y revisado por el asesor.
+- [ ] Caso de oro C1 (Colombia), llevado a la plantilla oficial y revisado por el asesor. **Siguiente tarea del agente.**
 - [ ] Contratar abogado.
 
 Criterios de aceptación:
