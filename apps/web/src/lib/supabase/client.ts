@@ -1,5 +1,7 @@
 import { createBrowserClient } from '@supabase/ssr';
 
+import type { Database } from '@miluca/db';
+
 import { supabaseEnv } from './env';
 
 /** Cliente de Supabase para componentes de cliente (navegador). */
@@ -8,5 +10,5 @@ export function createClient() {
   if (!env) {
     throw new Error('Faltan NEXT_PUBLIC_SUPABASE_URL o NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.');
   }
-  return createBrowserClient(env.url, env.publishableKey);
+  return createBrowserClient<Database>(env.url, env.publishableKey);
 }

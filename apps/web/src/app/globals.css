@@ -38,6 +38,11 @@ body {
     env(safe-area-inset-left);
 }
 
+/* Con la barra de acciones fija (ScreenActions), el campo enfocado no queda debajo de ella. */
+html:has([data-screen-actions]) {
+  scroll-padding-bottom: 10rem;
+}
+
 /* Campos de 16 px o más: Safari no hace zoom al enfocarlos. */
 input,
 select,

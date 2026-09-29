@@ -130,7 +130,9 @@ Avance:
 - [x] Migraciones y gancho aplicados al proyecto remoto el 28/09/2026 (`supabase db push` y `supabase config push`, ejecutados por el asesor). Verificado con el MCP: seis tablas con RLS, dos migraciones registradas; el asesor de rendimiento solo marca índices sin uso (base vacía).
 - [x] Primer asesor creado en el remoto el 28/09/2026 (entró con Google; fila de `advisors` desde el editor SQL). Verificado con su sesión simulada: RLS lo reconoce como asesor y ve su nombre.
 - [x] Tipografía de la marca (D4): Livvic, alojada con `next/font`, como alternativa libre a Laca (que exige Creative Cloud). Prueba de extremo a extremo: la pantalla usa Livvic y ninguna fuente se pide a otro dominio. En la cuenta de Adobe del asesor quedó un proyecto web vacío ("MiLuca") que se puede borrar.
-- [ ] P-G02 (sin invitación) y resolución del rol al entrar (asesor, cliente o sin perfil).
+- [x] Resolución del rol al entrar (`getViewer`): el asesor va a sus clientes, la cuenta sin perfil a P-G02 y el cliente a su inicio.
+- [x] P-A01 Clientes (sin buscador todavía), P-A02 Nuevo cliente (sin el correo de la invitación, que llega con el flujo de invitación), P-A03 esqueleto, P-G02 Sin invitación (sin la frase "la cuenta se borra en 7 días" hasta que exista la tarea de borrado) y P-C04 vacío. Verificado contra Supabase local en WebKit: estado vacío, errores junto a cada campo con foco, alta, ficha, lista, 404 y P-G02; sin desborde a 320 px. Revisado con `web-design-guidelines`.
+- [ ] Invitar desde la ficha (P-A03): token, enlace para copiar, `/invitacion/[token]` (P-C01), consentimiento (P-C02) y alta con Google o contraseña (P-C12).
 - [ ] Textos legales y consentimientos (`legal_texts`, `consents`), con el abogado.
 - [ ] Tarea diaria que borra las cuentas sin perfil a los 7 días.
 

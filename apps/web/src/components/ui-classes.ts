@@ -21,3 +21,12 @@ export const textButton = `min-h-12 rounded-xl px-3 text-link hover:underline ac
 
 /** Campo de texto. `min-w-0` deja que se encoja dentro de una fila flex en pantallas de 320 px. */
 export const textField = `min-h-12 w-full min-w-0 rounded-xl border border-border bg-bg px-3 transition-colors hover:border-text-muted aria-[invalid=true]:border-status-alert ${focusRing}`;
+
+/** Enlace con forma de botón: centra el texto como un `<button>`. */
+export const linkButton = 'inline-flex items-center justify-center text-center';
+
+/** Opción de un grupo de radios como tarjeta: todo el recuadro responde al toque. */
+export const choiceCard = `flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border px-4 transition-colors hover:border-text-muted has-[:checked]:border-primary has-[:checked]:bg-surface has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary`;
+
+/** Radio dentro de `choiceCard`, con el color primario de los tokens. */
+export const choiceInput = 'size-5 shrink-0 accent-primary';

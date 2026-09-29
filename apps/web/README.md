@@ -21,6 +21,19 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<PUBLISHABLE_KEY de pnpm supabase status> \
 pnpm dev                                       # puerto 3000: es la URL de retorno registrada
 ```
 
+Para ver las pantallas del asesor en local, crea el usuario con la API de administración local y su fila de asesor (solo en la base local):
+
+```bash
+curl -X POST http://127.0.0.1:54321/auth/v1/admin/users \
+  -H "apikey: <SECRET_KEY local>" -H "Authorization: Bearer <SECRET_KEY local>" \
+  -H 'Content-Type: application/json' \
+  -d '{"email":"asesora.local@example.com","password":"<contraseña>","email_confirm":true}'
+docker exec supabase_db_miluca psql -U postgres -c \
+  "insert into public.advisors (user_id, display_name) select id, 'Asesora local' from auth.users where email = 'asesora.local@example.com'"
+```
+
+Una cuenta sin fila de asesor ni perfil vinculado sirve para ver P-G02.
+
 ## Acceso
 
 | Ruta | Qué hace |
@@ -29,6 +42,16 @@ pnpm dev                                       # puerto 3000: es la URL de retor
 | `/auth/start` | Inicia Google con PKCE; guarda la ruta de retorno en una cookie de 10 minutos |
 | `/auth/callback` | Cambia el código por la sesión y sigue a la ruta de retorno |
 | `/auth/listo` | Fin de la ventana de Google abierta por la app instalada: avisa a la principal y se cierra |
+| `/` | Reparte según el rol (`getViewer`, `src/server/viewer.ts`): el asesor va a `/clientes`, la cuenta sin perfil a `/sin-invitacion`; el cliente ve aquí su inicio (P-C04, vacío hasta la entrega) |
+| `/sin-invitacion` | P-G02: la cuenta existe pero no tiene perfil; cerrar sesión |
+
+## Asesor
+
+| Ruta | Qué hace |
+|---|---|
+| `/clientes` | P-A01: perfiles con acceso activo, con su estado (texto y símbolo), o el estado vacío. Acción principal fija abajo: "Nuevo cliente" |
+| `/clientes/nuevo` | P-A02: nombre visible, país y trato; llama a `create_client` y abre la ficha |
+| `/clientes/[id]` | P-A03 (esqueleto): datos del perfil y estado de la invitación. Un id que no existe, o sin acceso, da la página 404 |
 
 ## Convenciones de interfaz
 
@@ -36,10 +59,12 @@ pnpm dev                                       # puerto 3000: es la URL de retor
 - Los componentes de cliente reciben sus textos por props desde un componente de servidor (por ejemplo, `AuthText`), para no mandar el catálogo completo de `packages/i18n` al navegador.
 - Errores de formulario junto al campo, en una región `aria-live="polite"` que siempre está en la página; los campos con error llevan `aria-invalid` y el foco va al primero que hay que corregir.
 - Tipografía: Livvic en todo (`font-sans`, por defecto), alojada con `next/font/google` en `layout.tsx` con los pesos 400, 500 y 600. Si hace falta otro peso, se agrega allí; si no, el navegador lo simula. Montos y tablas con `tabular-nums`.
+- Pantallas con `Screen` y, si tienen acción principal, `ScreenActions` (`src/components/screen.tsx`): la barra queda fija abajo, respeta la barra de inicio del iPhone y `globals.css` deja margen para que no tape el campo enfocado.
+- Estados de cada pantalla: vacío con texto que dice qué hacer, carga con esqueleto (`loading.tsx`, sin animación si se reduce el movimiento) y error de carga con "Intentar de nuevo" en la misma página.
 - `pnpm lint` exige como error las reglas recomendadas de `jsx-a11y`.
 - Antes de dar por terminada una pantalla, se revisa con la skill `web-design-guidelines` (`.claude/skills/`).
 
-Las páginas protegidas llaman a `requireSessionUser()` (`src/server/session.ts`), que valida el token con `getClaims()`. La revisión se hace en cada página y en cada acción, no en el layout ni en `proxy.ts`.
+Las páginas protegidas llaman a `requireViewer()` o `requireAdvisor()` (`src/server/viewer.ts`), que validan el token con `getClaims()` y resuelven el rol con RLS como el propio usuario, una vez por petición. La revisión se hace en cada página y en cada acción de servidor, no en el layout ni en `proxy.ts`.
 
 ## Responsabilidad
 
@@ -64,7 +89,8 @@ El archivo `src/proxy.ts` (antes `middleware.ts` en Next.js 15) refresca la sesi
 | Módulo | Equivale a |
 |---|---|
 | `auth` | Entrar (P-G01), flujo de Google en la app instalada y cerrar sesión |
-| `clients`, `invitations`, `consent` | Alta de clientes, invitación por correo, consentimiento de datos |
+| `clients` | Lista (P-A01), alta con `create_client` (P-A02) y ficha (P-A03) de los perfiles del asesor |
+| `invitations`, `consent` | Invitación por correo, consentimiento de datos |
 | `profile` | Hoja Supuestos (datos del cliente y parámetros) |
 | `incomes` | Hoja Ingresos |
 | `budget` | Hoja Presupuesto |

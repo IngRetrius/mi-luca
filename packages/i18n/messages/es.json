@@ -35,5 +35,74 @@
   },
   "scope": {
     "notInvestmentAdvice": "MiLuca es una herramienta de planificación y educación financiera personal. No recomienda productos financieros ni entidades."
+  },
+  "common": {
+    "loadError": "No pudimos cargar esta información. Revisa tu conexión e intenta de nuevo.",
+    "retry": "Intentar de nuevo",
+    "loading": "Cargando…",
+    "notFoundTitle": "No encontramos esta página",
+    "notFoundBody": "Puede que el enlace esté mal escrito o que ya no tengas acceso a lo que buscas.",
+    "backHome": "Ir al inicio"
+  },
+  "noProfile": {
+    "title": "Tu cuenta aún no tiene un perfil",
+    "signedInAs": "Entraste como {email}, pero esta cuenta no está vinculada a ningún perfil de MiLuca.",
+    "signedIn": "Entraste, pero esta cuenta no está vinculada a ningún perfil de MiLuca.",
+    "howTo": "El acceso es por invitación de tu asesor. Abre el enlace de la invitación que te envió y sigue los pasos.",
+    "otherAccount": "Si ya aceptaste una invitación con otra cuenta, cierra sesión y entra con esa."
+  },
+  "clientHome": {
+    "greeting": "Hola, {name}",
+    "preparing": {
+      "tu": "Tu asesor está preparando tu plan. Cuando lo entregue, lo verás aquí.",
+      "usted": "Su asesor está preparando su plan. Cuando lo entregue, lo verá aquí."
+    }
+  },
+  "clients": {
+    "title": "Clientes",
+    "new": "Nuevo cliente",
+    "listLabel": "Tus clientes",
+    "emptyTitle": "Aún no tienes clientes",
+    "emptyBody": "Crea el primer perfil. Después podrás invitar a la persona para que vea su plan en la app.",
+    "status": {
+      "borrador": "Borrador",
+      "invitado": "Invitado",
+      "activo": "Activo",
+      "borrado_solicitado": "Borrado solicitado"
+    }
+  },
+  "newClient": {
+    "title": "Nuevo cliente",
+    "intro": "Con estos datos creas el perfil. El resto lo completas durante la asesoría.",
+    "displayName": "Nombre visible",
+    "displayNameHint": "Así aparece en tu lista y así lo saluda la app. No hace falta el nombre completo.",
+    "country": "País",
+    "countryHint": "Define la moneda base y los módulos del plan.",
+    "countryOption": "{name} ({currency})",
+    "formOfAddress": "Trato",
+    "formOfAddressHint": "Cómo le habla la app.",
+    "tu": "Tú",
+    "usted": "Usted",
+    "submit": "Crear perfil",
+    "submitting": "Creando…",
+    "cancel": "Cancelar",
+    "errors": {
+      "missingName": "Escribe el nombre visible.",
+      "nameTooLong": "El nombre visible puede tener hasta 80 caracteres.",
+      "missingCountry": "Elige el país.",
+      "notAllowed": "Tu cuenta no puede crear perfiles de cliente. Cierra sesión y entra con tu cuenta de asesor.",
+      "unavailable": "No se pudo crear el perfil. Intenta de nuevo en unos minutos."
+    }
+  },
+  "clientProfile": {
+    "backToClients": "Clientes",
+    "summary": "{country} · {currency} · Trato: {address}",
+    "invitationTitle": "Invitación",
+    "invitation": {
+      "borrador": "Aún no has enviado la invitación. Cuando la persona la acepte, podrá ver su plan en la app.",
+      "invitado": "Invitación enviada. Cuando la persona la acepte, podrá ver su plan en la app.",
+      "activo": "Aceptó la invitación y ya puede entrar a la app.",
+      "borrado_solicitado": "Pidió borrar sus datos."
+    }
   }
 }

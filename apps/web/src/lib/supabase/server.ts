@@ -3,6 +3,8 @@ import 'server-only';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
+import type { Database } from '@miluca/db';
+
 import { supabaseEnv } from './env';
 
 /**
@@ -16,7 +18,7 @@ export async function createClient() {
     throw new Error('Faltan NEXT_PUBLIC_SUPABASE_URL o NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY.');
   }
   const cookieStore = await cookies();
-  return createServerClient(env.url, env.publishableKey, {
+  return createServerClient<Database>(env.url, env.publishableKey, {
     cookies: {
       getAll() {
         return cookieStore.getAll();

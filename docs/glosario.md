@@ -9,6 +9,11 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Invitación | `invitation` | |
 | Aceptar la invitación | `accept_invitation` | Función de Postgres que vincula la cuenta al perfil con el token |
 | Crear perfil de cliente | `create_client` | Función de Postgres; crea el perfil y el acceso del asesor |
+| Rol de la sesión | `Viewer` (`advisor`, `client`, `none`) | Se resuelve con `getViewer` en `src/server/viewer.ts` |
+| Nombre visible | `display_name` / `displayName` | Cómo aparece el cliente en la lista y cómo lo saluda la app |
+| Estado del perfil | `status` | borrador, invitado, activo, borrado_solicitado |
+| Clientes, nuevo cliente, ficha | `/clientes`, `/clientes/nuevo`, `/clientes/[id]` | P-A01, P-A02, P-A03 |
+| Sin invitación | `/sin-invitacion` | P-G02 |
 | Dueño del perfil | `owner_user_id` | Cuenta del cliente vinculada al perfil; vacía hasta aceptar |
 | Perfil sin dueño | `is_unclaimed` | Borrador o invitado; el único que se invita o se borra desde la app |
 | Acceso del asesor | `advisor_client_access` | Activo o revocado; lo controla el cliente |
