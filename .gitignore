@@ -16,6 +16,8 @@ next-env.d.ts
 !.env.example
 *.p8
 *.pem
+# Credenciales de OAuth descargadas de Google Cloud
+client_secret*.json
 
 # Supabase local
 supabase/.branches/

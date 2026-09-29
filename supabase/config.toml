@@ -336,6 +336,17 @@ skip_nonce_check = false
 # If enabled, it will allow the user to successfully authenticate when the provider does not return an email address.
 email_optional = false
 
+# Google (ADR 0009): cliente web del proyecto de Google Cloud `miluca-510102`. El Client ID es público;
+# el secreto va en supabase/.env, fuera de git (ver supabase/.env.example). Vale para local y remoto.
+[auth.external.google]
+enabled = true
+client_id = "40564132755-mfuspgsrh6680bjjf3246sfvqn8cgmc5.apps.googleusercontent.com"
+secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET)"
+redirect_uri = ""
+url = ""
+skip_nonce_check = false
+email_optional = false
+
 # Allow Solana wallet holders to sign in to your project via the Sign in with Solana (SIWS, EIP-4361) standard.
 # You can configure "web3" rate limit in the [auth.rate_limit] section and set up [auth.captcha] if self-hosting.
 [auth.web3.solana]
@@ -416,3 +427,16 @@ enabled = true
 # formatted with uppercase keywords, indent 2, max width 180, trailing commas,
 # and column/key alignment. Set to "null" to emit raw, unformatted SQL.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":180,\"commaStyle\":\"trailing\"}"
+
+# Proyecto remoto de producción (us-east-2), vinculado con `supabase link`. Hereda todo lo anterior
+# y solo cambia lo que el entorno local relaja para desarrollo. Se aplica con `supabase config push`.
+[remotes.production]
+project_id = "ryhvshstjuuasgwcepua"
+
+[remotes.production.auth.email]
+enable_confirmations = true
+max_frequency = "1m0s"
+
+[remotes.production.storage.analytics]
+enabled = true
+max_namespaces = 10

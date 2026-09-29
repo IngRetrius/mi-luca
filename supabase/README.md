@@ -18,7 +18,19 @@ El esquema propuesto está en `docs/03-modelo-de-datos.md`.
 - `[auth.email] enable_signup = true`: se entra con Google o con correo y contraseña (ADR 0009). Con `false` se apaga el proveedor de correo entero, también el inicio de sesión y la recuperación (probado en local). El registro público por correo lo cerrará el gancho `before_user_created` en F1; las cuentas con contraseña se crean desde el servidor con la API de administración, que no pasa por el gancho.
 - `minimum_password_length = 8`, sin reglas de composición (decisión E5 del asesor).
 - `site_url` y `additional_redirect_urls` apuntan a `http://localhost:3000` y a su `/auth/callback`.
+- `[auth.external.google]` activo (ADR 0009), con el Client ID del cliente web de Google Cloud y el secreto leído de `supabase/.env`.
 - Las semillas se leen de `seed/*.sql`.
+
+## Secretos
+
+Los `env(...)` de `config.toml` se resuelven con `supabase/.env`, que está fuera de git. Para crearlo, copia `supabase/.env.example` y completa los valores. Sin ese archivo, `supabase start` y `supabase config push` no pueden configurar Google.
+
+## Google
+
+- Proyecto de Google Cloud `miluca-510102`, cliente de OAuth de tipo "Web application".
+- URIs de redirección registradas en Google: `https://ryhvshstjuuasgwcepua.supabase.co/auth/v1/callback` (remoto) y `http://127.0.0.1:54321/auth/v1/callback` (local). Origen de JavaScript: `http://localhost:3000`. Al desplegar hay que agregar el dominio de producción en Google y en `site_url`.
+- Mientras la audiencia de la app esté en modo de prueba en Google Auth Platform, solo entran los usuarios de prueba que se agreguen allí. Para abrirla a clientes hace falta publicarla y, para que Google muestre el nombre y el logo de MiLuca, la verificación de marca con dominio propio [F27].
+- Google muestra el secreto solo al crear el cliente. Si se pierde, se crea uno nuevo en la consola y se actualiza `supabase/.env`.
 
 ## Supabase local
 
@@ -37,11 +49,20 @@ Las claves locales son públicas y de prueba; no se mezclan con las del proyecto
 
 ## Proyecto remoto
 
-El proyecto (us-east-2) se vincula una sola vez desde una terminal, porque pide abrir el navegador:
+El proyecto de producción (`miluca`, us-east-2) está vinculado desde el 28/09/2026. El vínculo vive en `supabase/.temp/` (fuera de git), así que en otro equipo se repite una vez, porque `login` abre el navegador:
 
 ```sh
 pnpm supabase login
 pnpm supabase link --project-ref ryhvshstjuuasgwcepua
 ```
 
-El servidor MCP de Supabase para agentes está en `.mcp.json` (raíz del repositorio) y se autentica una vez con `/mcp` en Claude Code.
+La configuración del remoto también es código. Hereda todo `config.toml`, y el bloque `[remotes.production]` solo cambia lo que el entorno local relaja para desarrollo: el remoto exige confirmar el correo, espera 1 minuto entre correos a la misma persona y conserva la analítica de Storage.
+
+```sh
+pnpm supabase config diff   # solo lectura: diferencias entre config.toml y el remoto
+pnpm supabase config push   # aplica config.toml al remoto; muestra el cambio y pide confirmación
+```
+
+`config push` no cambia el tamaño del pooler ni apaga el proveedor de SMS; eso se hace en el panel si hace falta.
+
+El servidor MCP de Supabase para agentes está registrado en el alcance local de Claude Code (fuera del repositorio) y se autentica una vez con `claude mcp login`.

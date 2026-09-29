@@ -79,7 +79,7 @@ Tareas:
 - Tokens de diseño en `packages/ui`.
 - Contratar abogado y entregarle el borrador de alcance (sección 7 del encargo).
 
-Avance al 28/09/2026 (PR #1 y #2 unidos; PR #3 con los casos de oro, pendiente de unir):
+Avance al 28/09/2026 (PR #1 a #4 unidos):
 
 - [x] Monorepo con pnpm 12 y Turborepo; paquetes `domain`, `engine`, `ui`, `i18n`, `exporters`, `db`, `config`, `web` y `e2e`.
 - [x] Reglas de lint que impiden importaciones entre capas y el uso de la fecha del sistema en el motor (verificadas con violaciones de prueba).
@@ -90,12 +90,16 @@ Avance al 28/09/2026 (PR #1 y #2 unidos; PR #3 con los casos de oro, pendiente d
 - [x] CI en GitHub Actions (formato, lint, tipos, pruebas, build, extremo a extremo, herramientas de Python), en verde en el pull request #1.
 - [x] Configuración local de Supabase (`config.toml`): proveedor de correo activo y contraseña de 8 caracteres como mínimo (ADR 0009, decisión E5).
 - [x] Claves del proyecto de Supabase en `apps/web/.env.local` (fuera de git), verificadas contra la API.
-- [x] Servidor MCP de Supabase registrado en `.mcp.json`.
+- [x] Servidor MCP de Supabase registrado en el alcance local de Claude Code (fuera del repositorio).
 - [x] Supabase local funcionando (Docker con Colima).
 - [x] Decisión de inicio de sesión: Google y correo con contraseña, Apple aplazado (ADR 0009), con el bloqueo del registro público probado en local.
 - [x] Servidor MCP de Supabase autenticado (con `claude mcp login` desde la CLI; el panel de VS Code falla con URLs con parámetros).
-- [ ] Vincular la CLI con el proyecto remoto (`supabase login` y `link`; requiere al asesor).
-- [ ] Cuenta de Google Cloud y dominio (requiere al asesor).
+- [x] Vincular la CLI con el proyecto remoto (`supabase login` y `link`), verificado contra la base remota.
+- [x] Configuración del remoto como código: bloque `[remotes.production]` en `config.toml`.
+- [x] Configuración de Auth aplicada al remoto con `supabase config push` (contraseña de 8, código de 6 dígitos, sin TOTP, URL de retorno local).
+- [x] Proyecto de Google Cloud (`miluca-510102`) y cliente de OAuth web; Google activo en el Supabase local, verificado hasta la pantalla de inicio de sesión de Google [F37].
+- [x] Google activo en el proyecto remoto (`supabase config push`).
+- [ ] Dominio y verificación de marca en Google (requiere al asesor).
 - [ ] Prueba de sesión en PWA de iOS en iPhone real (requiere despliegue y cuentas).
 - [x] Herramientas de casos de oro: `recalc.py` (recálculo en Excel, validado celda a celda) y `golden.py` (extracción con verificación de privacidad).
 - [x] Caso C3 (plantilla vacía) y primera prueba de oro del motor (conversión de moneda de Ingresos).
