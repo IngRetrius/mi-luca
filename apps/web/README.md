@@ -66,13 +66,14 @@ El plan Hobby es solo para uso personal no comercial: antes de que un cliente re
 | `/auth/callback` | Cambia el código por la sesión y sigue a la ruta de retorno |
 | `/auth/listo` | Fin de la ventana de Google abierta por la app instalada: avisa a la principal y se cierra |
 | `/` | Reparte según el rol (`getViewer`, `src/server/viewer.ts`): el asesor va a `/clientes`, la cuenta sin perfil a `/sin-invitacion`; el cliente ve aquí su inicio (P-C04, vacío hasta la entrega) |
-| `/sin-invitacion` | P-G02: la cuenta existe pero no tiene perfil; cerrar sesión |
+| `/sin-invitacion` | P-G02: la cuenta existe pero no tiene perfil; cerrar sesión. Avisa que se borra a los 7 días |
+| `/recuperar` | P-G05: correo, código de 6 dígitos que llega por correo y contraseña nueva, en la misma pantalla y sin salir de la app. Responde igual exista o no la cuenta. En local, los correos se ven en Mailpit (`http://127.0.0.1:54324`) |
 
 ## Asesor
 
 | Ruta | Qué hace |
 |---|---|
-| `/clientes` | P-A01: perfiles con acceso activo, con su estado (texto y símbolo), o el estado vacío. Buscador por nombre con la búsqueda en la URL (`?q=`), que funciona sin JavaScript. Acción principal fija abajo: "Nuevo cliente" |
+| `/clientes` | P-A01: perfiles con acceso activo, con su estado (texto y símbolo), o el estado vacío. Buscador por nombre con la búsqueda en la URL (`?q=`), que funciona sin JavaScript. Arriba, los avisos sin ver (el cliente aceptó la invitación), con "Marcar como visto". Acción principal fija abajo: "Nuevo cliente" |
 | `/clientes/nuevo` | P-A02: nombre visible, país y trato; llama a `create_client` y abre la ficha |
 | `/clientes/[id]` | P-A03 (esqueleto): datos del perfil e invitación. Mientras nadie haya aceptado: crear el enlace (se ve una sola vez, con botón de copiar), crear uno nuevo (anula el anterior) y anular con confirmación. Un id que no existe, o sin acceso, da la página 404 |
 
@@ -139,6 +140,7 @@ El archivo `src/proxy.ts` (antes `middleware.ts` en Next.js 15) refresca la sesi
 | `invitations` | Enlace de invitación del asesor (P-A03) y flujo del cliente: P-C01, consentimiento (P-C02), acceso (P-C12) y aceptación |
 | `consent` | Privacidad y datos del cliente (P-C11): acceso del asesor y consentimientos |
 | `install` | Guía para agregar la app a la pantalla de inicio (P-C03) |
+| `notifications` | Avisos dentro de la app (hoy, invitación aceptada) |
 | `profile` | Hoja Supuestos (datos del cliente y parámetros) |
 | `incomes` | Hoja Ingresos |
 | `budget` | Hoja Presupuesto |

@@ -13,6 +13,7 @@ import {
 } from '@/components/ui-classes';
 import { SignOutButton } from '@/features/auth';
 import { ClientList, listClients, parseSearch, SEARCH_MAX } from '@/features/clients';
+import { listUnreadNotices, NoticeList } from '@/features/notifications';
 import { requireAdvisor } from '@/server/viewer';
 
 const t = messages.es;
@@ -24,7 +25,8 @@ export default async function ClientsPage({ searchParams }: PageProps<'/clientes
   // Independientes: la sesión y los parámetros se resuelven a la vez.
   const [viewer, params] = await Promise.all([requireAdvisor('/clientes'), searchParams]);
   const search = parseSearch(params.q);
-  const clients = await listClients(search);
+  // Independientes: los perfiles y los avisos se piden a la vez.
+  const [clients, notices] = await Promise.all([listClients(search), listUnreadNotices()]);
   const { email } = viewer.user;
   // El buscador aparece cuando hay algo que buscar, o si ya se buscó.
   const showSearch = clients !== null && (clients.length > 0 || search !== '');
@@ -32,6 +34,8 @@ export default async function ClientsPage({ searchParams }: PageProps<'/clientes
   return (
     <Screen>
       <h1 className="text-2xl font-semibold">{t.clients.title}</h1>
+      {/* Si los avisos no cargan, la lista sigue: no son imprescindibles. */}
+      {notices ? <NoticeList notices={notices} /> : null}
       {showSearch ? (
         <form role="search" action="/clientes" className="flex gap-2">
           <label htmlFor="client-search" className="sr-only">

@@ -36,6 +36,9 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Retirar el consentimiento de datos de salud | `withdrawSensitiveConsent`, `consents.withdrawn_at` | P-C11 |
 | Borrar cuentas sin perfil | `private.delete_unclaimed_accounts` | Tarea diaria de `pg_cron`, `delete-unclaimed-accounts` |
 | Buscar clientes | `?q=`, `parseSearch` | P-A01 |
+| Recuperar contraseña | `/recuperar`, `recoverPassword` | P-G05; pasos `email`, `code`, `password` |
+| Aviso | `notification` / `Notice` | Fila de `notifications`; tipo `invitacion_aceptada` |
+| Marcar como visto | `markNoticeRead`, `read_at` | |
 | Generar la migración de textos legales | `tools/legal-texts/build_migration.py` | Desde `docs/legal/textos/` |
 | Pantalla solo del cliente | `requireClient` | Guarda de `src/server/viewer.ts`; otro rol va a su inicio |
 | Trato | `form_of_address` / `FormOfAddress` (`tu`, `usted`) | Los textos del cliente vienen en las dos variantes y se eligen con `withAddress` |

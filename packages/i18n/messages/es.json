@@ -28,7 +28,8 @@
       "tooManyRequests": "Hiciste muchos intentos. Espera unos minutos y vuelve a intentarlo.",
       "unavailable": "El servicio de acceso no responde. Intenta de nuevo en unos minutos.",
       "google": "No se pudo entrar con Google. Intenta de nuevo."
-    }
+    },
+    "forgotPassword": "Olvidé mi contraseña"
   },
   "money": {
     "todayCurrency": "Cifras en {currency} de hoy"
@@ -386,5 +387,44 @@
     "withdrawYes": "Sí, retirarlo",
     "withdrawCancel": "No, mantenerlo",
     "withdrawDone": "Consentimiento retirado."
+  },
+  "recovery": {
+    "title": "Recuperar contraseña",
+    "step": "Paso {n} de 3",
+    "emailIntro": "Escribe el correo de tu cuenta. Te enviaremos un código de 6 dígitos.",
+    "email": "Correo",
+    "sendCode": "Enviar código",
+    "sending": "Enviando…",
+    "codeIntro": "Si hay una cuenta con {email}, te llegó un correo con un código de 6 dígitos. Escríbelo aquí. Si no lo ves, revisa el correo no deseado.",
+    "code": "Código",
+    "verify": "Continuar",
+    "verifying": "Verificando…",
+    "resend": "Enviar otro código",
+    "resent": "Te enviamos otro código.",
+    "otherEmail": "Usar otro correo",
+    "passwordIntro": "Elige tu nueva contraseña.",
+    "newPassword": "Nueva contraseña",
+    "passwordHint": "Al menos 8 caracteres. Puedes usar frases y tu gestor de contraseñas.",
+    "save": "Guardar contraseña",
+    "saving": "Guardando…",
+    "backToSignIn": "Volver a Entrar",
+    "errors": {
+      "missingEmail": "Escribe tu correo.",
+      "invalidEmail": "Revisa el correo: debe tener la forma nombre@dominio.",
+      "invalidCode": "El código no es correcto o ya venció. Revísalo o pide otro.",
+      "tooManyRequests": "Hiciste muchos intentos. Espera unos minutos y vuelve a intentarlo.",
+      "unavailable": "El servicio no responde. Intenta de nuevo en unos minutos.",
+      "tooShort": "La contraseña debe tener al menos 8 caracteres.",
+      "tooLong": "La contraseña puede tener hasta 72 caracteres.",
+      "weakPassword": "Esa contraseña aparece en filtraciones conocidas o es muy fácil de adivinar. Elige otra.",
+      "samePassword": "Esa es tu contraseña actual. Elige una distinta.",
+      "expired": "Pasó mucho tiempo desde que verificaste el código. Empieza de nuevo."
+    }
+  },
+  "notifications": {
+    "title": "Avisos",
+    "accepted": "{name} aceptó la invitación.",
+    "acceptedUnknown": "Un cliente aceptó la invitación.",
+    "markRead": "Marcar como visto"
   }
 }

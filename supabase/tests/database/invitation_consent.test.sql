@@ -254,5 +254,40 @@ select is(
    where client_id = 'c1c1c1c1-0000-4000-8000-000000000001' and withdrawn_at is not null),
   1, 'RLS no deja a un cliente retirar consentimientos de otro');
 
+-- Aviso al asesor cuando el cliente acepta (migración notifications) ---------------------------
+
+select is(
+  (select count(*)::int from public.notifications
+   where recipient_user_id = '11111111-1111-4111-8111-111111111111' and kind = 'invitacion_aceptada'
+     and client_id::text like 'c_c_c_c_-0000-%'),
+  3, 'Cada invitación aceptada deja un aviso para la asesora');
+
+select set_config('request.jwt.claims', '{"sub":"44444444-4444-4444-8444-444444444444"}', true);
+set local role authenticated;
+select is((select count(*)::int from public.notifications), 0, 'El cliente no ve los avisos de la asesora');
+select throws_ok(
+  $$insert into public.notifications (recipient_user_id, kind)
+    values ('44444444-4444-4444-8444-444444444444', 'invitacion_aceptada')$$,
+  '42501', null, 'Nadie crea avisos desde la API');
+reset role;
+
+select set_config('request.jwt.claims', '{"sub":"11111111-1111-4111-8111-111111111111"}', true);
+set local role authenticated;
+select is(
+  (select count(*)::int from public.notifications where client_id::text like 'c_c_c_c_-0000-%'), 3,
+  'La asesora ve sus avisos');
+select lives_ok(
+  $$update public.notifications set read_at = '2000-01-01'
+    where client_id = 'c2c2c2c2-0000-4000-8000-000000000002'$$,
+  'La asesora marca un aviso como visto');
+select is(
+  (select read_at from public.notifications where client_id = 'c2c2c2c2-0000-4000-8000-000000000002'),
+  now(), 'La fecha de lectura la pone la base');
+select throws_ok(
+  $$update public.notifications set read_at = null
+    where client_id = 'c2c2c2c2-0000-4000-8000-000000000002'$$,
+  '55000', null, 'Un aviso visto no se desmarca');
+reset role;
+
 select * from finish();
 rollback;

@@ -1,6 +1,9 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { messages } from '@miluca/i18n';
+
+import { focusRing } from '@/components/ui-classes';
 
 import { GoogleButton } from './google-button';
 import { PasswordForm } from './password-form';
@@ -36,6 +39,12 @@ export function LoginScreen({ next, error }: { next: string; error?: LoginError 
         <span aria-hidden="true" className="h-px flex-1 bg-border" />
       </div>
       <PasswordForm next={next} text={t.auth} />
+      <Link
+        href="/recuperar"
+        className={`-mt-2 inline-flex min-h-12 items-center self-center rounded-xl px-3 text-link hover:underline ${focusRing}`}
+      >
+        {t.auth.forgotPassword}
+      </Link>
       <p className="text-center text-sm text-text-muted">{t.auth.invitationOnly}</p>
     </main>
   );

@@ -835,6 +835,8 @@ Las secciones 3 a 10 siguen siendo el diseño de referencia. Lo que ya existe co
 | `20260929190605_revoke_accept_invitation_anon.sql` | Quita a `anon` el permiso de ejecutar `accept_invitation` (punto 13) |
 | `20260929200939_consent_withdrawal.sql` | El dueño retira su consentimiento de datos sensibles (punto 14) |
 | `20260929201135_unclaimed_account_cleanup.sql` | `private.delete_unclaimed_accounts()` y su tarea diaria en `pg_cron` (punto 15) |
+| `20260929202128_legal_texts_1_0.sql` | Avisos de privacidad y de datos de salud 1.0, Colombia y España (A7b), generados desde `docs/legal/textos/` |
+| `20260929203237_notifications.sql` | `notifications` con RLS; aviso `invitacion_aceptada` al asesor (punto 16) |
 
 Diferencias con el borrador de las secciones 3.1, 4 y 5:
 
@@ -853,5 +855,6 @@ Diferencias con el borrador de las secciones 3.1, 4 y 5:
 13. **Permisos de las funciones.** Supabase da `EXECUTE` a `anon` y `authenticated` directamente en cada función nueva de `public`, así que `revoke ... from public` no basta: cada función revoca y concede por rol. Sin sesión solo se ejecutan `get_invitation` y `current_legal_texts`; una prueba pgTAP lo vigila con la lista completa.
 14. **Retiro de consentimientos.** `authenticated` puede escribir solo `consents.withdrawn_at`, y RLS solo al dueño. Un disparador exige que el texto sea de `datos_sensibles`, que se haya aceptado y que no se haya retirado antes, y pone la fecha. El tratamiento de datos general no se retira así: sin él no hay servicio, y eso es pedir el borrado (F7).
 15. **Cuentas sin perfil.** `private.delete_unclaimed_accounts(7 días)` borra de `auth.users` las cuentas de más de 7 días que no son de un asesor, no son dueñas de un perfil, no crearon perfiles y no tienen consentimientos. Corre cada día a las 08:00 UTC con `pg_cron` (`cron.job`, `delete-unclaimed-accounts`). Solo la ejecuta la base.
+16. **Avisos.** `notifications` sigue la sección 3 con `kind` limitado por ahora a `invitacion_aceptada` y `payload` vacío: el nombre del cliente se lee con RLS al mostrarlo, así que deja de verse si el cliente retira el acceso. Los crea un disparador de `invitations` cuando se pone `accepted_at`; cada usuario ve y marca como vistos solo los suyos, y la fecha de lectura la pone la base.
 
-Pendiente de F1: `notifications` (aviso al asesor cuando el cliente acepta).
+Sin pendientes de F1 en el modelo de datos.

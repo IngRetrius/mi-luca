@@ -33,6 +33,11 @@ Los `env(...)` de `config.toml` se resuelven con `supabase/.env`, que está fuer
 - Mientras la audiencia de la app esté en modo de prueba en Google Auth Platform, solo entran los usuarios de prueba que se agreguen allí. Para abrirla a clientes hace falta publicarla y, para que Google muestre el nombre y el logo de MiLuca, la verificación de marca con dominio propio [F27].
 - Google muestra el secreto solo al crear el cliente. Si se pierde, se crea uno nuevo en la consola y se actualiza `supabase/.env`.
 
+## Correo
+
+- Recuperación de contraseña con un código de 6 dígitos y sin enlace: plantilla `templates/recovery.html` en `[auth.email.template.recovery]` (ADR 0009). En local, los correos los recoge Mailpit (`http://127.0.0.1:54324`); tras cambiar la plantilla hay que reiniciar con `pnpm supabase stop` y `pnpm supabase start`.
+- En producción salen del Gmail del responsable (decisión A7c): `[remotes.production.auth.email.smtp]` con `smtp.gmail.com`, puerto 587, y la contraseña de aplicación de Google en `SUPABASE_AUTH_SMTP_PASS` de `supabase/.env` (ver `.env.example`). Se aplica con `pnpm supabase config push`. Gmail personal envía hasta 500 correos al día; el límite de Supabase queda en 30 por hora.
+
 ## Supabase local
 
 Corre en Docker. En macOS se usa Colima (libre y sin interfaz gráfica), instalado con Homebrew:

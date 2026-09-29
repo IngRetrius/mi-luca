@@ -82,3 +82,16 @@ test('el nombre de la marca no se traduce', async ({ page }) => {
     'no',
   );
 });
+
+test('"Olvidé mi contraseña" abre la recuperación en la misma app', async ({ page }) => {
+  await page.goto('/entrar');
+  await page.getByRole('link', { name: 'Olvidé mi contraseña' }).click();
+  await expect(page).toHaveURL('/recuperar');
+  await expect(page.getByRole('heading', { level: 1, name: 'Recuperar contraseña' })).toBeVisible();
+  await expect(page.getByText('Paso 1 de 3')).toBeVisible();
+  await expect(page.getByLabel('Correo')).toHaveAttribute('autocomplete', 'username');
+  await expect(page.getByRole('link', { name: 'Volver a Entrar' })).toHaveAttribute(
+    'href',
+    '/entrar',
+  );
+});

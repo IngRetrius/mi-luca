@@ -245,6 +245,11 @@ otp_expiry = 3600
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
+# MiLuca: recuperación con un código de 6 dígitos que se escribe en la app, sin enlace (ADR 0009).
+[auth.email.template.recovery]
+subject = "Tu código para cambiar la contraseña de MiLuca"
+content_path = "./supabase/templates/recovery.html"
+
 # Uncomment to customize email template
 # [auth.email.template.invite]
 # subject = "You have been invited"
@@ -445,6 +450,22 @@ additional_redirect_urls = [
 [remotes.production.auth.email]
 enable_confirmations = true
 max_frequency = "1m0s"
+
+# Correo de producción por el Gmail del responsable (decisión A7c): smtp.gmail.com con TLS en el
+# puerto 587 y una contraseña de aplicación de Google, que exige la verificación en dos pasos [F42,
+# F44]. En local los correos los recoge Mailpit ([local_smtp]).
+[remotes.production.auth.email.smtp]
+enabled = true
+host = "smtp.gmail.com"
+port = 587
+user = "retrius2001@gmail.com"
+pass = "env(SUPABASE_AUTH_SMTP_PASS)"
+admin_email = "retrius2001@gmail.com"
+sender_name = "MiLuca"
+
+# Con SMTP propio, Supabase permite más de 2 correos por hora; Gmail personal envía hasta 500 al día [F43].
+[remotes.production.auth.rate_limit]
+email_sent = 30
 
 [remotes.production.storage.analytics]
 enabled = true

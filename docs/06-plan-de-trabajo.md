@@ -121,7 +121,7 @@ Avance:
 - [x] P-G01 Entrar (`/entrar`): Google y correo con contraseña. Google con PKCE por `/auth/start` y `/auth/callback`; en la app instalada, con `window.open` y aviso por `BroadcastChannel` desde `/auth/listo` (02-arquitectura, 5.4). Ruta de retorno validada contra redirecciones externas.
 - [x] Guarda de sesión en el servidor (`requireSessionUser`) y cerrar sesión solo en el dispositivo actual.
 - [x] Verificado contra Supabase local en Chromium y WebKit: contraseña correcta e incorrecta, cerrar sesión, ruta de retorno externa descartada y aviso entre ventanas. El inicio con Google llega hasta la pantalla de Google; completarlo requiere una cuenta real.
-- [ ] En P-G01: enlace "Olvidé mi contraseña" (llega con P-G05) y enlaces a privacidad y términos (llegan con los textos legales).
+- [x] En P-G01: enlace "Olvidé mi contraseña". Sin enlaces a privacidad y términos: los avisos se muestran al aceptar la invitación (A7b).
 - [x] Migraciones de identidad, acceso e invitaciones (`countries`, `advisors`, `clients`, `advisor_client_access`, `invitations`) con RLS, privilegios por columna, guarda de columnas y historial (`audit_log`); funciones `create_client` y `accept_invitation`. 72 pruebas pgTAP con los criterios de abajo, salvo el borrado a los 7 días.
 - [x] Gancho `before_user_created`: solo deja pasar las altas con Google. Verificado en local con Supabase Auth: registro por correo rechazado con 403, alta del servidor con la API de administración aceptada.
 - [x] Tipos de TypeScript generados en `packages/db` (`pnpm db:types`) y trabajo de CI para migraciones, pgTAP, lint de SQL y tipos al día.
@@ -142,8 +142,10 @@ Avance:
 - [ ] Alta con Google desde la invitación en un navegador real (requiere cuenta de prueba en Google).
 - [x] P-C03 Agregar a inicio (`/instalar`): al aceptar la invitación, instrucciones de Safari en iPhone, botón "Instalar" en Android cuando el navegador lo ofrece (`beforeinstallprompt`) y texto general en otros equipos; si la app ya corre instalada, sigue al inicio. Verificado en WebKit (iPhone) y Chromium (Android) contra Supabase local.
 - [x] P-C11 Privacidad y datos (`/privacidad-y-datos`), primera parte: retirar el acceso del asesor (con confirmación) y devolverlo, y ver los consentimientos con versión y fecha. Verificado contra Supabase local: al retirar, el perfil desaparece de la lista del asesor y su ficha da "No encontramos esta página"; al devolver, vuelve. Enlace desde el inicio del cliente.
-- [ ] P-C11: pedir una sesión reciente (menos de 10 minutos) antes de retirar el acceso (`02-arquitectura.md`, 5.6), exportar y pedir el borrado (F7).
-- [ ] Correo de la invitación con Resend (C14).
+- [ ] P-C11: exportar y pedir el borrado (F7). Pedir una sesión reciente antes de retirar el acceso se descartó (A7c).
+- [x] P-G05 Recuperar contraseña (`/recuperar`), enlazada desde P-G01: correo, código de 6 dígitos y contraseña nueva, sin salir de la app; responde igual exista o no la cuenta. Plantilla del correo sin enlaces. Verificado contra Supabase local con Mailpit. En producción, los correos salen por el Gmail del responsable (A7c).
+- [x] Aviso al asesor cuando el cliente acepta la invitación (`notifications`), arriba de P-A01, con "Marcar como visto".
+- [ ] Correo de la invitación (C14): el asesor sigue enviando el enlace a mano. Se puede enviar desde el Gmail cuando haga falta.
 
 Criterios de aceptación:
 

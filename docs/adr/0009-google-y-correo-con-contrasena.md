@@ -39,7 +39,7 @@ Reglas del método de correo:
 - Un cliente sin cuenta de Google puede entrar sin crearla.
 - El correo con contraseña funciona dentro de la app instalada sin redirecciones. La prueba de sesión en iOS (`02-arquitectura.md`, 5.4) sigue siendo necesaria para Google, pero ya no bloquea a todos los clientes.
 - MiLuca pasa a tener contraseñas que proteger: límites de intentos por IP de Supabase Auth, rechazo de filtradas (requiere Pro, que ya se contrata antes del primer dato real) y CAPTCHA (Turnstile, compatible con Supabase) si aparecen abusos.
-- El SMTP propio (Resend) es indispensable desde F1 también para la recuperación.
+- El SMTP propio es indispensable desde F1 también para la recuperación. Mientras no haya dominio, es el Gmail del responsable con una contraseña de aplicación (decisión A7c del 29/09/2026); Resend queda para cuando haya dominio.
 - La clave secreta de Supabase se usa en el servidor: variable `SUPABASE_SECRET_KEY`, sin prefijo `NEXT_PUBLIC_`, en un módulo con `import 'server-only'`.
 - Estimación: sale la configuración de Apple de F0 y F1 y entran el alta con contraseña y la recuperación con código. Se compensa; las horas del plan no cambian.
 
