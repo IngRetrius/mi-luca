@@ -178,7 +178,8 @@ enable_anonymous_sign_ins = false
 # Allow/disallow testing manual linking of accounts
 enable_manual_linking = false
 # Passwords shorter than this value will be rejected as weak. Minimum 6, recommended 8 or more.
-minimum_password_length = 6
+# MiLuca: 12 (supuesto, pregunta E5 de docs/07). Sin reglas de composición (NIST SP 800-63B-4).
+minimum_password_length = 12
 # Passwords that do not meet the following requirements will be rejected as weak. Supported values
 # are: `letters_digits`, `lower_upper_letters_digits`, `lower_upper_letters_digits_symbols`
 password_requirements = ""
@@ -216,8 +217,10 @@ web3 = 30
 # secret = ""
 
 [auth.email]
-# MiLuca: solo se entra con Google o Apple (decisión tomada). Sin registro por correo.
-enable_signup = false
+# MiLuca (ADR 0009): el proveedor de correo queda activo, porque en false también bloquea el inicio
+# de sesión y la recuperación. El registro público por correo lo rechaza el gancho
+# before_user_created (se activa en F1 con su migración); las cuentas se crean desde el servidor.
+enable_signup = true
 # If enabled, a user will be required to confirm any email change on both the old, and new email
 # addresses. If disabled, only the new email is required to confirm.
 double_confirm_changes = true

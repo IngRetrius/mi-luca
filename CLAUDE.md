@@ -15,8 +15,8 @@ MiLuca es una plataforma de planificación financiera personal para un asesor y 
 5. **Motor de cálculo puro.** `packages/engine` no importa nada de React, Next.js, Supabase ni del sistema de archivos. Recibe la fecha de corte como dato; nunca usa la fecha del sistema.
 6. **Fórmulas.** Cualquier cambio que altere un resultado del motor necesita un ADR en `docs/adr/` y la actualización de las pruebas de oro, con la explicación de la diferencia frente a la plantilla.
 7. **Números.** El motor calcula con `number` (doble precisión, igual que Excel) y solo redondea al presentar. No uses librerías decimales en el motor sin un ADR.
-8. **Seguridad.** Toda tabla nueva lleva RLS activado y sus políticas en la misma migración, con pruebas en `supabase/tests/`. La clave `service_role` nunca llega al navegador.
-9. **Privacidad.** No se guardan números de cuenta, tarjeta, documento ni contraseñas del cliente. Los bancos se identifican solo por su nombre.
+8. **Seguridad.** Toda tabla nueva lleva RLS activado y sus políticas en la misma migración, con pruebas en `supabase/tests/`. La clave secreta de Supabase (`SUPABASE_SECRET_KEY`, antes `service_role`) solo se usa en módulos con `import 'server-only'` y nunca llega al navegador.
+9. **Privacidad.** No se guardan números de cuenta, tarjeta, documento ni contraseñas del cliente. Los bancos se identifican solo por su nombre. La contraseña de acceso a MiLuca la maneja solo Supabase Auth (guarda un hash); nunca va a tablas propias ni a registros (ADR 0009).
 10. **Multimoneda.** Nunca asumas una moneda fija. Todo importe es `Money { amount, currency }`; la conversión a la moneda base usa las tasas del cliente (`client_fx_rates`) y solo ocurre en el motor.
 11. **Límites profesionales.** La interfaz no recomienda productos ni entidades, marca toda proyección como ilustrativa y remite impuestos, pensión y temas legales al profesional correspondiente.
 

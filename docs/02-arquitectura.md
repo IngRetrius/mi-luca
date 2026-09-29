@@ -5,7 +5,7 @@
 | Requisito | Origen | Consecuencia técnica |
 |---|---|---|
 | Web mobile-first instalable, sin tiendas | Decisión tomada | PWA con manifiesto, service worker, áreas seguras e instalación guiada |
-| Solo Google y Apple, sin contraseñas | Decisión tomada | Supabase Auth con OAuth; proveedor de correo desactivado para inicio de sesión |
+| Google y correo con contraseña; Apple aplazado | Decisión del 28/09/2026 (ADR 0009); el encargo pedía Google y Apple | Supabase Auth con OAuth de Google y con contraseña; registro público cerrado, alta solo por invitación |
 | Supabase como base | Decisión tomada | Postgres con RLS como única fuente de autorización |
 | El cliente es dueño de sus datos | Sección 4.3 del encargo | Invitación, consentimiento, historial, exportación, borrado y revocación desde el modelo de datos |
 | Cálculos idénticos a la plantilla (±0,01) | Sección 5 del encargo | Motor puro en TypeScript, con doble precisión, compartido entre navegador y servidor |
@@ -45,13 +45,12 @@ flowchart LR
     EXP["Exportadores<br/>Excel, PDF"]
   end
   subgraph Supabase["Supabase (us-east-2, Ohio)"]
-    AUTH["Auth<br/>Google y Apple"]
+    AUTH["Auth<br/>Google y contraseña"]
     DB[("Postgres<br/>RLS, auditoría")]
     ST["Storage<br/>PDF de planes entregados"]
     CRON["pg_cron / Edge Functions<br/>limpieza y recordatorios"]
   end
   GOOG["Google OAuth"]
-  APPL["Sign in with Apple"]
   MAIL["Resend<br/>invitaciones y avisos"]
 
   PWA <--> SW
@@ -62,7 +61,6 @@ flowchart LR
   SSR --> ST
   PWA -->|OAuth PKCE| AUTH
   AUTH --> GOOG
-  AUTH --> APPL
   SSR --> MAIL
   AUTH -->|SMTP propio| MAIL
   CRON --> DB
@@ -120,24 +118,22 @@ sequenceDiagram
 
 Requisitos: proyecto en Google Cloud, pantalla de consentimiento "External" en producción, alcances `openid`, `email` y `profile`. Con solo alcances no sensibles no se exige verificación de la app, pero para mostrar nombre y logo hace falta la verificación de marca, que tarda 2 a 3 días hábiles [F27].
 
-### 5.2 Apple
+### 5.2 Correo y contraseña
 
-Requisitos para Sign in with Apple en web [F2][F3]:
+Decisión y detalle en el ADR 0009. Resumen:
 
-| Elemento | Detalle |
+| Tema | Regla |
 |---|---|
-| Cuenta | Apple Developer Program, 99 USD al año |
-| Team ID | Identificador de 10 caracteres de la cuenta |
-| App ID | Identificador con la capacidad Sign in with Apple |
-| Services ID | Identificador para la web; se configura con el dominio de Supabase y la URL `https://<proyecto>.supabase.co/auth/v1/callback` (o el dominio propio de Auth) |
-| Clave privada | Archivo `.p8`, se guarda fuera del repositorio (gestor de secretos) |
-| Secreto de cliente | JWT firmado con la `.p8`. **Apple exige regenerarlo cada 6 meses** [F2]: recordatorio fijo en el calendario y tarea en el plan de operación |
-| Correo | Registrar el dominio de envío en el servicio de relay de Apple, para que los correos lleguen a direcciones `privaterelay.appleid.com` |
+| Alta | Solo desde una invitación vigente: el servidor verifica el token y crea la cuenta con `auth.admin.createUser` (correo de la invitación, `email_confirm: true`) usando la clave secreta. No hay segundo correo de confirmación, porque el token ya llegó a ese buzón |
+| Registro público | Cerrado con el gancho "antes de crear usuario", que rechaza las altas por correo [F24]. `[auth.email] enable_signup = false` no sirve: apaga también el inicio de sesión (verificado en local) |
+| Inicio de sesión | `signInWithPassword` desde un formulario de la app. No sale de la app instalada, así que no tiene el problema de la sección 5.4 |
+| Recuperación | Código de 6 dígitos por correo (`{{ .Token }}`), escrito dentro de la app, y luego la nueva contraseña. No se usa enlace: se abriría en Safari y no en la app instalada [F4][F35] |
+| Política | Mínimo de 12 caracteres (**Supuesto**, pregunta E5; el NIST pide 15 si es el único factor), máximo de al menos 64, sin reglas de composición, rechazo de contraseñas filtradas en Pro [F34][F36] |
+| Abuso | Límites de intentos por IP de Supabase Auth; CAPTCHA (Turnstile) si aparecen ataques |
+| Almacenamiento | Supabase Auth guarda solo un hash bcrypt [F34]; MiLuca no tiene columnas de contraseña ni las escribe en registros |
+| Asesor | Entra con Google, con verificación en dos pasos en su cuenta de Google, mientras MiLuca no tenga segundo factor (5.5) |
 
-Dos comportamientos de Apple que afectan el diseño:
-
-1. **Apple solo entrega el nombre en el primer inicio de sesión** [F2]. El nombre visible del cliente lo escribe el asesor al crear el perfil; el de la cuenta de Apple no se usa.
-2. **El cliente puede ocultar su correo** (relay privado). Por eso la invitación **no se vincula comparando correos**: se vincula con un token de un solo uso (sección 5.3).
+**Apple, aplazado.** Si se retoma, hacen falta la membresía de Apple Developer (99 USD al año) [F3], Services ID, clave `.p8` y regenerar el secreto cada 6 meses [F2]. La invitación por token (5.3) ya admite el correo oculto de Apple, así que no cambia el modelo.
 
 ### 5.3 Alta por invitación
 
@@ -155,8 +151,8 @@ sequenceDiagram
   A->>A: Guarda el token en cookie httpOnly de corta duración
   A-->>C: Presenta al asesor, alcance y aviso de privacidad
   C->>A: Acepta el tratamiento de datos (y datos sensibles si aplica)
-  C->>A: Continúa con Google o Apple
-  A->>A: /auth/callback crea la sesión
+  C->>A: Continúa con Google o crea su contraseña (correo de la invitación)
+  A->>A: Crea la sesión (/auth/callback de Google, o alta en el servidor y signInWithPassword)
   A->>DB: rpc accept_invitation(token) como el usuario
   DB->>DB: Verifica hash y vigencia, vincula client.owner_user_id, registra consentimientos, da acceso al asesor, marca la invitación como usada
   A-->>C: Guía "Agregar a inicio" y luego su plan
@@ -165,7 +161,7 @@ sequenceDiagram
 
 - El token tiene 32 bytes aleatorios; en la base solo se guarda su hash. Un solo uso, vence a los 7 días (**Supuesto**), el asesor puede reenviar o revocar.
 - Una cuenta que entra sin invitación queda sin acceso a datos ("Necesitas una invitación de tu asesor"). Una tarea diaria borra cuentas sin cliente vinculado después de 7 días.
-- Se desactiva el inicio de sesión por correo y contraseña y por enlace mágico en Supabase. Los correos de invitación los envía la app, no `inviteUserByEmail` de Supabase, porque ese método autentica por enlace de correo, y la decisión es entrar solo con Google o Apple.
+- No hay enlace mágico. Los correos de invitación los envía la app, no `inviteUserByEmail` de Supabase, porque ese método crea la cuenta al invitar, antes del consentimiento, y su enlace inicia sesión en el navegador donde se abre (ADR 0005).
 - Registro libre en el futuro: el mismo flujo sin token crea un cliente sin asesor. El modelo ya lo permite (un cliente puede no tener asesor). Se recomienda no abrirlo en el MVP (ver preguntas abiertas).
 
 ### 5.4 Sesión en la PWA de iOS
@@ -178,14 +174,14 @@ sequenceDiagram
 
 1. **Primer ingreso en el navegador.** La invitación se acepta en Safari o Chrome, donde el flujo de redirección normal funciona. Allí se registra el consentimiento.
 2. **Guía de instalación.** Después de aceptar, la app muestra cómo agregarla a inicio (pantalla P-C03 en `05-pantallas-y-flujos.md`).
-3. **Primer arranque de la app instalada.** La app detecta el modo instalado (`display-mode: standalone` o `navigator.standalone`) y, sin sesión, muestra "Entrar con Google" y "Entrar con Apple".
+3. **Primer arranque de la app instalada.** La app detecta el modo instalado (`display-mode: standalone` o `navigator.standalone`) y, sin sesión, muestra "Entrar con Google" y el formulario de correo y contraseña. El formulario no sale de la app; los pasos 4 y 6 aplican solo a Google.
 4. **Inicio de sesión dentro de la app con `window.open`.** El botón abre con `window.open` una ruta propia (`/auth/start?provider=...`), que llama a `signInWithOAuth` en el servidor, guarda el verificador PKCE en una cookie y redirige al proveedor. El proveedor vuelve a `/auth/callback`, que intercambia el código y deja la sesión en cookies del almacenamiento de la app. Esa ventana avisa a la principal con `BroadcastChannel` (o `postMessage`) y se cierra; la principal recarga ya con sesión.
 5. **Sesión larga y persistente.** Sesión en cookies con refresh token rotativo. El dominio propio de una app de pantalla de inicio está exento del límite de 7 días de almacenamiento de ITP [F9], y la app pide `navigator.storage.persist()`, que WebKit concede con más facilidad a apps instaladas [F8].
-6. **Plan B, sin redirecciones.** Si la prueba en dispositivos muestra fallas, se usa el flujo de token de identidad: botón de Google Identity Services y Sign in with Apple JS en modo ventana emergente, seguidos de `signInWithIdToken` en Supabase [F2].
+6. **Plan B, sin redirecciones.** Si la prueba en dispositivos muestra fallas, se usa el flujo de token de identidad: botón de Google Identity Services en modo ventana emergente, seguido de `signInWithIdToken` en Supabase.
 
 **Prueba temprana obligatoria (fase 0).** Esta estrategia se valida en iPhone reales antes de construir pantallas. Criterios de aceptación:
 
-- Con las dos versiones mayores más recientes de iOS y con Android y Chrome, el cliente entra con Google y con Apple dentro de la app instalada sin terminar en Safari.
+- Con las dos versiones mayores más recientes de iOS y con Android y Chrome, el cliente entra con Google y con correo y contraseña dentro de la app instalada sin terminar en Safari, y recupera la contraseña con el código sin salir de ella.
 - La sesión sobrevive a cerrar la app, reiniciar el teléfono y 14 días sin abrirla.
 - Cerrar sesión en la app no afecta la sesión de Safari y viceversa (esperado y documentado para el usuario).
 
@@ -228,7 +224,7 @@ Fuera del MVP. Diseño para no rehacer nada: Supabase Auth ofrece factores TOTP,
 - **España:** los datos de clientes residentes en la UE salen del Espacio Económico Europeo. La transferencia se apoya en el DPA de Supabase y su evaluación de impacto de transferencias [F23]; el abogado debe confirmarlo antes de cargar el primer cliente de España. Si lo desaconseja, se crea un segundo proyecto en la UE y este queda como staging.
 - **Contratos:** aceptar el DPA de Supabase [F23] y el de Vercel y Resend; registrar a los tres como encargados en la política de privacidad.
 - **Cifrado:** en tránsito con TLS (HTTPS obligatorio, HSTS). En reposo, el cifrado de disco del proveedor. **Supuesto:** confirmar en la documentación de seguridad de Supabase el algoritmo de cifrado en reposo.
-- **Datos que no se guardan:** números de documento, cuenta, tarjeta y contraseñas. Los bancos se identifican solo por nombre. Validaciones en la interfaz avisan si un campo de texto parece contener un número de cuenta o de tarjeta.
+- **Datos que no se guardan:** números de documento, cuenta, tarjeta y contraseñas de productos financieros. La contraseña de acceso a MiLuca la guarda Supabase Auth solo como hash (ADR 0009). Los bancos se identifican solo por nombre. Validaciones en la interfaz avisan si un campo de texto parece contener un número de cuenta o de tarjeta.
 - **Copias de seguridad:** diarias con 7 días de retención en Pro [F1]. PITR (100 USD al mes) solo si el volumen lo justifica.
 
 ## 8. Despliegue
@@ -252,13 +248,12 @@ Reglas:
 
 - Las migraciones se escriben a mano en `supabase/migrations/`, se prueban en local y en staging, y se aplican a producción desde CI con aprobación manual.
 - Ningún entorno distinto de producción recibe datos reales.
-- Secretos (claves de Supabase, `.p8` de Apple, clave de Resend) en las variables de entorno de Vercel y en el gestor de secretos de GitHub; nunca en el repositorio.
+- Secretos (clave secreta de Supabase, secreto de OAuth de Google, clave de Resend) en las variables de entorno de Vercel y en el gestor de secretos de GitHub; nunca en el repositorio.
 
 ## 9. Operación
 
 | Tarea | Frecuencia |
 |---|---|
-| Regenerar el secreto de Sign in with Apple | Cada 6 meses [F2] |
 | Actualizar parámetros por país (salario mínimo, tasas, umbrales) con fuente y fecha | Al inicio de cada año y ante cambios normativos |
 | Probar la restauración de una copia de seguridad en staging | Cada 3 meses |
 | Revisar dependencias y avisos de seguridad (por ejemplo, las publicaciones de seguridad de Next.js [F16]) | Mensual |
