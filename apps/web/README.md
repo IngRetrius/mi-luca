@@ -18,6 +18,7 @@ Para probar el acceso sin tocar el proyecto remoto, con Supabase local (`pnpm su
 cd apps/web
 NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321 \
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<PUBLISHABLE_KEY de pnpm supabase status> \
+SUPABASE_SECRET_KEY=<SECRET_KEY de pnpm supabase status> \
 pnpm dev                                       # puerto 3000: es la URL de retorno registrada
 ```
 
@@ -48,7 +49,7 @@ Lo que se configura en el panel de Vercel (una sola vez):
 | Settings > Build and Deployment > Root Directory | `apps/web` (Next.js se detecta solo) |
 | Environment Variables, Production y Preview | `ENABLE_EXPERIMENTAL_COREPACK=1`: sin ella Vercel usa pnpm 9 o 10 y no pnpm 12 |
 | Environment Variables, solo Production | `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, los mismos de `.env.local` |
-| Environment Variables, solo Production, marcada como sensible | `SUPABASE_SECRET_KEY`, cuando llegue el alta con contraseña desde la invitación |
+| Environment Variables, solo Production, marcada como sensible | `SUPABASE_SECRET_KEY` (clave `sb_secret_...` del proyecto): crea la cuenta con contraseña desde la invitación. Sin ella, P-C12 solo funciona con Google |
 
 Las vistas previas no llevan las claves de Supabase: así nunca tocan los datos de producción. La app arranca igual y avisa que el acceso no está disponible. Cuando exista el proyecto de staging, sus claves van en Preview (`docs/02-arquitectura.md`, sección 8).
 
@@ -73,7 +74,27 @@ El plan Hobby es solo para uso personal no comercial: antes de que un cliente re
 |---|---|
 | `/clientes` | P-A01: perfiles con acceso activo, con su estado (texto y símbolo), o el estado vacío. Acción principal fija abajo: "Nuevo cliente" |
 | `/clientes/nuevo` | P-A02: nombre visible, país y trato; llama a `create_client` y abre la ficha |
-| `/clientes/[id]` | P-A03 (esqueleto): datos del perfil y estado de la invitación. Un id que no existe, o sin acceso, da la página 404 |
+| `/clientes/[id]` | P-A03 (esqueleto): datos del perfil e invitación. Mientras nadie haya aceptado: crear el enlace (se ve una sola vez, con botón de copiar), crear uno nuevo (anula el anterior) y anular con confirmación. Un id que no existe, o sin acceso, da la página 404 |
+
+## Invitación (cliente)
+
+Flujo de `docs/02-arquitectura.md`, 5.3. Todas las rutas llevan `referrer: no-referrer` y `noindex` (`src/app/invitacion/layout.tsx`).
+
+| Ruta | Qué hace |
+|---|---|
+| `/invitacion/[token]` | P-C01: quién invita, qué es y qué no es MiLuca, qué datos se piden y cuáles nunca, en tú o usted según el perfil. "Continuar" guarda el token en una cookie `HttpOnly` de una hora limitada a `/invitacion` (`features/invitations/flow.ts`) |
+| `/invitacion/consentimiento` | P-C02: textos vigentes del país (`current_legal_texts`) con versión y fecha; tratamiento de datos obligatorio y datos de salud facultativo. Guarda los textos aceptados en otra cookie del flujo |
+| `/invitacion/acceso` | P-C12: Google (vuelve a `/invitacion/aceptar`) o contraseña con el correo de la invitación, que el servidor crea con `SUPABASE_SECRET_KEY` (`src/server/admin.ts`) y luego inicia sesión |
+| `/invitacion/aceptar` | Route Handler para las llegadas por navegación (Google, Entrar): llama a `acceptFromFlow`, que ejecuta `accept_invitation` y borra las cookies. Las acciones de servidor llaman a `acceptFromFlow` directamente, porque una acción no debe redirigir a un Route Handler |
+| `/invitacion/problema` | Explica por qué no se puede seguir (`?motivo=`): enlace inválido, vencido, anulado o usado, flujo vencido, cuenta de asesor, cuenta ya vinculada, sin texto legal vigente o servicio caído |
+
+Para probar el flujo en local hace falta, además de las claves de arriba, la clave secreta local (`SECRET_KEY` de `pnpm supabase status`, pública y solo de prueba) en `SUPABASE_SECRET_KEY`, y los textos legales de prueba de `supabase/seed/`, que se cargan con `pnpm supabase db reset` o a mano:
+
+```bash
+docker exec -i supabase_db_miluca psql -U postgres < supabase/seed/legal_texts_dev.sql
+```
+
+En `next dev`, el registro de acciones de servidor imprime sus argumentos y resultados, entre ellos el enlace con el token. Solo pasa en desarrollo; en producción no se registran.
 
 ## Convenciones de interfaz
 
@@ -112,7 +133,8 @@ El archivo `src/proxy.ts` (antes `middleware.ts` en Next.js 15) refresca la sesi
 |---|---|
 | `auth` | Entrar (P-G01), flujo de Google en la app instalada y cerrar sesión |
 | `clients` | Lista (P-A01), alta con `create_client` (P-A02) y ficha (P-A03) de los perfiles del asesor |
-| `invitations`, `consent` | Invitación por correo, consentimiento de datos |
+| `invitations` | Enlace de invitación del asesor (P-A03) y flujo del cliente: P-C01, consentimiento (P-C02), acceso (P-C12) y aceptación |
+| `consent` | Privacidad y datos del cliente (P-C11): ver y retirar consentimientos |
 | `profile` | Hoja Supuestos (datos del cliente y parámetros) |
 | `incomes` | Hoja Ingresos |
 | `budget` | Hoja Presupuesto |

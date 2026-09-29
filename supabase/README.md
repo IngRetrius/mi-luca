@@ -5,7 +5,7 @@ Todo lo que vive en el proyecto de Supabase, versionado como código.
 | Carpeta | Qué contiene |
 |---|---|
 | `migrations/` | Migraciones SQL en orden. Cada tabla nueva lleva en la misma migración su RLS, sus políticas, sus índices y su disparador de auditoría. |
-| `seed/` | Datos de ejemplo solo para desarrollo local (`supabase db reset`). Lo que producción necesita (países, parámetros por país con fuente y fecha, textos legales) va en migraciones, porque `db push` no carga semillas. Nunca datos de clientes. |
+| `seed/` | Datos de ejemplo solo para desarrollo local (`supabase db reset`). Lo que producción necesita (países, parámetros por país con fuente y fecha, textos legales) va en migraciones, porque `db push` no carga semillas. Nunca datos de clientes. Hoy: `legal_texts_dev.sql`, textos legales de prueba (versión `0.1-prueba`) para recorrer la invitación en local. |
 | `functions/` | Funciones de servidor de Supabase (Edge Functions) si hacen falta, por ejemplo tareas programadas de limpieza o recordatorios. |
 | `tests/database/` | Pruebas de base de datos (pgTAP): políticas RLS por rol y reglas de los disparadores. |
 
@@ -91,9 +91,11 @@ pnpm supabase config diff         # debe mostrar solo el bloque del gancho
 pnpm supabase config push         # activa el gancho en el remoto; pide confirmación
 ```
 
-Después de subir, el asesor de seguridad del panel (o `get_advisors` del MCP) muestra tres avisos que no hay que corregir:
+Después de subir, el asesor de seguridad del panel (o `get_advisors` del MCP) muestra avisos que no hay que corregir:
 
 - `create_client` y `accept_invitation` se pueden ejecutar con sesión (lint 0029): es intencional, son las funciones que llama la app y validan quién las llama.
+- `get_invitation` se puede ejecutar sin sesión (lints 0028 y 0029): es intencional, P-C01 se abre antes de tener cuenta. Sin el token de 32 bytes no devuelve nada. Si aparece cualquier otra función en el lint 0028, es un error: Supabase da `EXECUTE` a `anon` en cada función nueva y hay que revocarlo en la migración (la prueba pgTAP de permisos también falla).
+- Protección de contraseñas filtradas desactivada y pocas opciones de MFA: la primera requiere el plan Pro, que se contrata antes del primer cliente real (ADR 0009); el segundo factor es una mejora futura (`docs/02-arquitectura.md`, 5.5).
 - `public.rls_auto_enable()` (lints 0028 y 0029): la creó Supabase con el proyecto remoto para el disparador de eventos `ensure_rls`, que activa RLS en cada tabla nueva de `public`. No existe en local ni está en las migraciones. Una función de disparador de eventos no se puede ejecutar desde la API.
 
 Cuando exista el proyecto de staging, las migraciones pasan primero por allí y a producción desde CI con aprobación manual (`docs/02-arquitectura.md`, sección 8).

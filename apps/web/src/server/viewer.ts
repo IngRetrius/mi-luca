@@ -3,11 +3,12 @@ import 'server-only';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
 
+import type { FormOfAddress } from '@/lib/address';
 import { createClient } from '@/lib/supabase/server';
 
 import { getSessionUser, requireSessionUser, type SessionUser } from './session';
 
-export type FormOfAddress = 'tu' | 'usted';
+export type { FormOfAddress } from '@/lib/address';
 
 /** Quién mira la pantalla: asesor, dueño de un perfil de cliente, o cuenta sin perfil (P-G02). */
 export type Viewer =

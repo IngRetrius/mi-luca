@@ -28,6 +28,10 @@ insert into public.invitations (client_id, advisor_id, email, token_hash) values
 insert into public.invitations (client_id, advisor_id, token_hash, expires_at, created_at) values
   ('c2c2c2c2-0000-4000-8000-000000000002', 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
    sha256(convert_to('token-vencido', 'UTF8')), now() - interval '1 day', now() - interval '8 days');
+-- Textos de tratamiento de datos vigentes: aceptar exige el del país (invitation_consent.test.sql).
+insert into public.legal_texts (id, kind, country_code, version, title, body_markdown) values
+  ('d0d0d0d0-0000-4000-8000-0000000000c0', 'tratamiento_datos', 'CO', '1', 'Tratamiento CO', 'Texto CO'),
+  ('d0d0d0d0-0000-4000-8000-0000000000e0', 'tratamiento_datos', 'ES', '1', 'Tratamiento ES', 'Texto ES');
 
 -- Estructura ----------------------------------------------------------------------------------
 
@@ -126,7 +130,8 @@ reset role;
 
 select set_config('request.jwt.claims', '{"sub":"33333333-3333-4333-8333-333333333333"}', true);
 set local role authenticated;
-select is(public.accept_invitation('token-uno'), 'c1c1c1c1-0000-4000-8000-000000000001'::uuid,
+select is(public.accept_invitation('token-uno', '{d0d0d0d0-0000-4000-8000-0000000000c0}'),
+  'c1c1c1c1-0000-4000-8000-000000000001'::uuid,
   'El cliente uno acepta su invitación');
 select throws_ok($$select public.accept_invitation('token-dos')$$, '23505', null,
   'Una cuenta vinculada no acepta otra invitación');
@@ -171,7 +176,8 @@ select throws_ok($$select public.accept_invitation('token-dos')$$, '22023', null
   'Una invitación revocada no sirve');
 select throws_ok($$select public.accept_invitation('token-vencido')$$, '22023', null,
   'Una invitación vencida no sirve');
-select is(public.accept_invitation('token-dos-b'), 'c2c2c2c2-0000-4000-8000-000000000002'::uuid,
+select is(public.accept_invitation('token-dos-b', '{d0d0d0d0-0000-4000-8000-0000000000e0}'),
+  'c2c2c2c2-0000-4000-8000-000000000002'::uuid,
   'El cliente dos acepta la invitación nueva');
 reset role;
 

@@ -21,7 +21,16 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Tratamiento | `form_of_address` | tu, usted |
 | País | `country` | Catálogo `countries` con moneda, formato y módulo de pensión |
 | Gancho de registro | `before_user_created` | Cierra el registro público; solo pasan las altas con Google |
-| Consentimiento | `consent` | |
+| Consentimiento | `consent` | Fila de `consents`: qué texto legal exacto aceptó (o no) el cliente, cuándo y desde qué navegador |
+| Texto legal | `legal_text` | Fila de `legal_texts`: tipo, país, versión y cuerpo con su sha256. No cambia una vez publicado |
+| Textos legales vigentes | `current_legal_texts` | Función de Postgres: la última versión publicada de cada tipo para un país |
+| Tratamiento de datos, datos sensibles | `tratamiento_datos`, `datos_sensibles` | Tipos de texto legal de P-C02: obligatorio y facultativo (salud) |
+| Ver una invitación | `get_invitation` | Función de Postgres que, con el token y sin sesión, devuelve el estado y lo que P-C01 muestra |
+| Enlace de invitación | `/invitacion/[token]` | P-C01; el token pasa luego a una cookie del flujo |
+| Consentimiento, crear tu acceso | `/invitacion/consentimiento`, `/invitacion/acceso` | P-C02, P-C12 |
+| Aceptar desde el flujo | `acceptFromFlow`, `/invitacion/aceptar` | Llama a `accept_invitation` con el token y los textos aceptados |
+| Anular una invitación | `revokeInvitation` | Pone `revoked_at`; el enlace deja de servir |
+| Trato | `form_of_address` / `FormOfAddress` (`tu`, `usted`) | Los textos del cliente vienen en las dos variantes y se eligen con `withAddress` |
 | Entrar (iniciar sesión) | `signIn` | Pantalla P-G01, ruta `/entrar` |
 | Cerrar sesión | `signOut` | Solo en el dispositivo actual (`scope: 'local'`) |
 | Sesión | `session` | Usuario de la sesión: `SessionUser` |

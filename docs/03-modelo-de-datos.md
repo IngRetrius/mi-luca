@@ -831,6 +831,8 @@ Las secciones 3 a 10 siguen siendo el diseño de referencia. Lo que ya existe co
 |---|---|
 | `20260929025941_identity_access_audit.sql` | `countries` (Colombia y España), `advisors`, `clients`, `advisor_client_access`, `invitations`, `audit_log`; funciones de la sección 4; guarda de columnas en `clients`; historial en las cinco tablas; `create_client` y `accept_invitation` |
 | `20260929025943_signup_hook.sql` | Gancho `private.before_user_created`: solo deja pasar las altas con Google (ADR 0009) |
+| `20260929184227_invitation_consent.sql` | `legal_texts` y `consents` con RLS e historial; `current_legal_texts(país)`, `get_invitation(token)` y `accept_invitation(token, textos aceptados, navegador)`, que reemplaza a la versión anterior |
+| `20260929190605_revoke_accept_invitation_anon.sql` | Quita a `anon` el permiso de ejecutar `accept_invitation` (punto 13) |
 
 Diferencias con el borrador de las secciones 3.1, 4 y 5:
 
@@ -842,5 +844,10 @@ Diferencias con el borrador de las secciones 3.1, 4 y 5:
 6. **Historial.** `private.audit_row` recibe la columna del cliente y las columnas que no se copian: en `invitations`, el hash del token y el correo. Un cambio que solo toca `updated_at` no deja fila.
 7. **Revocación.** La fecha y el autor de la revocación del acceso los pone un disparador. El dueño puede restablecer el acceso.
 8. **Supuestos** anotados en `07-preguntas-abiertas.md`: el asesor borra solo perfiles sin dueño (C12) y el cliente no cambia su `locale` (C13).
+9. **Textos legales.** Llevan `title` (P-C02 lo muestra). `body_sha256` lo calcula un disparador, porque `convert_to` no es inmutable y no sirve en una columna generada; el mismo disparador rechaza cambiar un texto publicado: una corrección es una versión nueva. `unique nulls not distinct` hace única también la combinación con `country_code` nulo (texto común). Se leen sin sesión (`anon`), porque P-C02 se ve antes de tener cuenta; nadie los escribe desde la API. La migración no carga textos: los redacta el abogado (C15).
+10. **Textos vigentes.** `current_legal_texts(país)` elige por tipo la versión publicada más reciente, la del país antes que la común. P-C02 y `accept_invitation` usan la misma función, así que se acepta exactamente lo que se mostró; si cambió entre medio, la aceptación falla con `23514` y la app vuelve a mostrar el texto.
+11. **Consentimientos en la aceptación.** `accept_invitation` exige el texto de tratamiento de datos vigente del país (`23514` si falta, `55000` si el país no tiene uno) y registra en la misma transacción una fila por texto de P-C02: tratamiento (aceptado) y datos sensibles (aceptado o no). Nadie escribe consentimientos desde la API; retirarlos llega con P-C11, cuando el abogado defina qué implica.
+12. **`get_invitation(token)`**, `security definer` y abierta a `anon`: con el token devuelve el estado (`valid`, `used`, `revoked`, `expired`, `invalid`) y, solo si está vigente, el nombre del asesor, el del perfil, el trato, el país, el correo y el vencimiento. Sin el token no expone nada.
+13. **Permisos de las funciones.** Supabase da `EXECUTE` a `anon` y `authenticated` directamente en cada función nueva de `public`, así que `revoke ... from public` no basta: cada función revoca y concede por rol. Sin sesión solo se ejecutan `get_invitation` y `current_legal_texts`; una prueba pgTAP lo vigila con la lista completa.
 
-Pendiente de F1: `legal_texts` y `consents` (con los textos del abogado), `notifications`, la tarea que borra cuentas sin perfil a los 7 días y la resolución del rol en la app.
+Pendiente de F1: `notifications` (aviso al asesor cuando el cliente acepta) y la tarea que borra cuentas sin perfil a los 7 días.

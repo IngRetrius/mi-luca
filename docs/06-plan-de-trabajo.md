@@ -133,8 +133,13 @@ Avance:
 - [x] Tipografía de la marca (D4): Livvic, alojada con `next/font`, como alternativa libre a Laca (que exige Creative Cloud). Prueba de extremo a extremo: la pantalla usa Livvic y ninguna fuente se pide a otro dominio. En la cuenta de Adobe del asesor quedó un proyecto web vacío ("MiLuca") que se puede borrar.
 - [x] Resolución del rol al entrar (`getViewer`): el asesor va a sus clientes, la cuenta sin perfil a P-G02 y el cliente a su inicio.
 - [x] P-A01 Clientes (sin buscador todavía), P-A02 Nuevo cliente (sin el correo de la invitación, que llega con el flujo de invitación), P-A03 esqueleto, P-G02 Sin invitación (sin la frase "la cuenta se borra en 7 días" hasta que exista la tarea de borrado) y P-C04 vacío. Verificado contra Supabase local en WebKit: estado vacío, errores junto a cada campo con foco, alta, ficha, lista, 404 y P-G02; sin desborde a 320 px. Revisado con `web-design-guidelines`.
-- [ ] Invitar desde la ficha (P-A03): token, enlace para copiar, `/invitacion/[token]` (P-C01), consentimiento (P-C02) y alta con Google o contraseña (P-C12).
-- [ ] Textos legales y consentimientos (`legal_texts`, `consents`), con el abogado.
+- [x] Invitar desde la ficha (P-A03): enlace con token de 32 bytes que se ve una sola vez, copiar, crear uno nuevo (anula el anterior) y anular con confirmación. Sin correo todavía (C14).
+- [x] Flujo del cliente: `/invitacion/[token]` (P-C01, en tú o usted), consentimiento (P-C02) y alta con Google o con contraseña (P-C12, cuenta creada en el servidor con la clave secreta). `accept_invitation` registra los consentimientos en la misma transacción. El token pasa de la URL a una cookie `HttpOnly` del flujo; la página no envía Referer ni se indexa.
+- [x] Tablas `legal_texts` (textos inmutables con su sha256) y `consents`, con RLS; `get_invitation` para ver la invitación sin sesión. 35 pruebas pgTAP nuevas (114 en total). Aplicado al remoto el 29/09/2026 (`db push`, ejecutado por el asesor); el asesor de seguridad marcó que `anon` podía ejecutar `accept_invitation`, corregido en una migración aparte.
+- [x] Verificado contra Supabase local (asesor en Chromium, cliente en WebKit de iPhone): enlace, copia, anulación, enlace anulado, token inventado, errores de P-C02 y P-C12 con foco, alta con contraseña, perfil activo, dos consentimientos con el texto exacto, historial con su actor, enlace usado y ficha actualizada. Sin desborde a 320 px.
+- [ ] Textos legales del abogado para Colombia y España (tratamiento de datos, datos de salud, política de privacidad); sin ellos el remoto no acepta invitaciones (C15, C16).
+- [ ] Alta con Google desde la invitación en un navegador real (requiere cuenta de prueba en Google) y guía "Agregar a inicio" (P-C03), que por ahora se salta: al aceptar se va al inicio.
+- [ ] Correo de la invitación con Resend (C14).
 - [ ] Tarea diaria que borra las cuentas sin perfil a los 7 días.
 
 Criterios de aceptación:

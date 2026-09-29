@@ -12,6 +12,7 @@ export interface ClientSummary {
 }
 
 export interface ClientDetail extends ClientSummary {
+  readonly countryCode: string;
   readonly baseCurrency: string;
   readonly formOfAddress: 'tu' | 'usted';
 }
@@ -46,7 +47,9 @@ export async function getClientDetail(id: string): Promise<ClientDetail | 'not-f
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('clients')
-    .select('id, display_name, status, base_currency, form_of_address, country:countries(name)')
+    .select(
+      'id, display_name, status, country_code, base_currency, form_of_address, country:countries(name)',
+    )
     .eq('id', id)
     .maybeSingle();
   if (error) return null;
@@ -56,6 +59,7 @@ export async function getClientDetail(id: string): Promise<ClientDetail | 'not-f
     displayName: data.display_name,
     countryName: data.country.name,
     status: parseClientStatus(data.status),
+    countryCode: data.country_code,
     baseCurrency: data.base_currency,
     formOfAddress: data.form_of_address === 'usted' ? 'usted' : 'tu',
   };

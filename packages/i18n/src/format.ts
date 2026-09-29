@@ -41,3 +41,12 @@ export function formatPercent(ratio: number, locale: string, decimals = 1): stri
     maximumFractionDigits: decimals,
   }).format(ratio);
 }
+
+/**
+ * Formatea una fecha con día, mes y año en letras ("6 de octubre de 2026"). La zona horaria es la
+ * del país del cliente: el servidor corre en UTC y, sin ella, una fecha cerca de la medianoche
+ * saldría con el día equivocado.
+ */
+export function formatDate(date: Date | string, locale: string, timeZone: string): string {
+  return new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone }).format(new Date(date));
+}

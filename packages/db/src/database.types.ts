@@ -176,6 +176,54 @@ export type Database = {
           },
         ];
       };
+      consents: {
+        Row: {
+          client_id: string;
+          granted: boolean;
+          id: string;
+          legal_text_id: string;
+          recorded_at: string;
+          user_agent: string | null;
+          user_id: string;
+          withdrawn_at: string | null;
+        };
+        Insert: {
+          client_id: string;
+          granted: boolean;
+          id?: string;
+          legal_text_id: string;
+          recorded_at?: string;
+          user_agent?: string | null;
+          user_id: string;
+          withdrawn_at?: string | null;
+        };
+        Update: {
+          client_id?: string;
+          granted?: boolean;
+          id?: string;
+          legal_text_id?: string;
+          recorded_at?: string;
+          user_agent?: string | null;
+          user_id?: string;
+          withdrawn_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'consents_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'consents_legal_text_id_fkey';
+            columns: ['legal_text_id'];
+            isOneToOne: false;
+            referencedRelation: 'legal_texts';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       countries: {
         Row: {
           code: string;
@@ -257,12 +305,59 @@ export type Database = {
           },
         ];
       };
+      legal_texts: {
+        Row: {
+          body_markdown: string;
+          body_sha256: string;
+          country_code: string | null;
+          id: string;
+          kind: string;
+          locale: string;
+          published_at: string;
+          title: string;
+          version: string;
+        };
+        Insert: {
+          body_markdown: string;
+          body_sha256: string;
+          country_code?: string | null;
+          id?: string;
+          kind: string;
+          locale?: string;
+          published_at?: string;
+          title: string;
+          version: string;
+        };
+        Update: {
+          body_markdown?: string;
+          body_sha256?: string;
+          country_code?: string | null;
+          id?: string;
+          kind?: string;
+          locale?: string;
+          published_at?: string;
+          title?: string;
+          version?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'legal_texts_country_code_fkey';
+            columns: ['country_code'];
+            isOneToOne: false;
+            referencedRelation: 'countries';
+            referencedColumns: ['code'];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;
     };
     Functions: {
-      accept_invitation: { Args: { p_token: string }; Returns: string };
+      accept_invitation: {
+        Args: { p_granted_texts?: string[]; p_token: string; p_user_agent?: string };
+        Returns: string;
+      };
       create_client: {
         Args: {
           p_base_currency?: string;
@@ -271,6 +366,38 @@ export type Database = {
           p_form_of_address?: string;
         };
         Returns: string;
+      };
+      current_legal_texts: {
+        Args: { p_country_code: string };
+        Returns: {
+          body_markdown: string;
+          body_sha256: string;
+          country_code: string | null;
+          id: string;
+          kind: string;
+          locale: string;
+          published_at: string;
+          title: string;
+          version: string;
+        }[];
+        SetofOptions: {
+          from: '*';
+          to: 'legal_texts';
+          isOneToOne: false;
+          isSetofReturn: true;
+        };
+      };
+      get_invitation: {
+        Args: { p_token: string };
+        Returns: {
+          advisor_name: string;
+          client_name: string;
+          country_code: string;
+          email: string;
+          expires_at: string;
+          form_of_address: string;
+          status: string;
+        }[];
       };
     };
     Enums: {

@@ -99,10 +99,188 @@
     "summary": "{country} · {currency} · Trato: {address}",
     "invitationTitle": "Invitación",
     "invitation": {
-      "borrador": "Aún no has enviado la invitación. Cuando la persona la acepte, podrá ver su plan en la app.",
-      "invitado": "Invitación enviada. Cuando la persona la acepte, podrá ver su plan en la app.",
+      "borrador": "Aún no has invitado a esta persona. Cuando acepte, podrá ver su plan en la app.",
+      "invitado": "Invitaste a esta persona. Cuando acepte, podrá ver su plan en la app.",
       "activo": "Aceptó la invitación y ya puede entrar a la app.",
       "borrado_solicitado": "Pidió borrar sus datos."
+    },
+    "invite": {
+      "open": "Invitación abierta para {email}. Vence el {date}.",
+      "openNoEmail": "Hay una invitación abierta. Vence el {date}.",
+      "email": "Correo de la persona",
+      "emailHint": "Con este correo podrá crear su contraseña. También puede entrar con Google.",
+      "create": "Crear enlace de invitación",
+      "createAnother": "Crear un enlace nuevo",
+      "replaceHint": "El enlace nuevo anula el anterior.",
+      "creating": "Creando…",
+      "link": "Enlace de invitación",
+      "linkHint": "Cópialo y envíaselo por el medio que usen. Por seguridad solo se muestra ahora: si lo pierdes, crea uno nuevo. Vence en 7 días.",
+      "copy": "Copiar enlace",
+      "copied": "Enlace copiado.",
+      "copyFailed": "No se pudo copiar. Mantén presionado el enlace y cópialo a mano.",
+      "revoke": "Anular invitación",
+      "revoking": "Anulando…",
+      "revoked": "Invitación anulada. El enlace ya no sirve.",
+      "errors": {
+        "missingEmail": "Escribe el correo.",
+        "invalidEmail": "Revisa el correo: debe tener la forma nombre@dominio.",
+        "notAllowed": "Este perfil ya no se puede invitar: ya aceptó una invitación o tu cuenta no tiene acceso.",
+        "unavailable": "No se pudo completar. Intenta de nuevo en unos minutos."
+      },
+      "revokeFailed": "No se pudo anular. Intenta de nuevo en unos minutos.",
+      "revokeConfirm": "El enlace dejará de servir y la persona no podrá aceptarlo. ¿Anular la invitación?",
+      "revokeConfirmYes": "Sí, anular",
+      "revokeCancel": "No, mantenerla"
     }
+  },
+  "invitation": {
+    "welcome": {
+      "title": {
+        "tu": "{advisor} te invita a MiLuca",
+        "usted": "{advisor} le invita a MiLuca"
+      },
+      "greeting": "Hola, {name}.",
+      "whatIs": {
+        "tu": "MiLuca es una herramienta de planificación y educación financiera personal. Allí verás el plan que prepara tu asesor y podrás mantener tus datos al día.",
+        "usted": "MiLuca es una herramienta de planificación y educación financiera personal. Allí verá el plan que prepara su asesor y podrá mantener sus datos al día."
+      },
+      "whatIsNot": {
+        "tu": "No recomienda productos financieros ni entidades, y no reemplaza a un profesional autorizado en inversiones, impuestos, pensiones o temas legales.",
+        "usted": "No recomienda productos financieros ni entidades, y no reemplaza a un profesional autorizado en inversiones, impuestos, pensiones o temas legales."
+      },
+      "askedTitle": {
+        "tu": "Qué datos te pedimos",
+        "usted": "Qué datos le pedimos"
+      },
+      "asked": {
+        "tu": "Tus ingresos, gastos, ahorros, deudas y metas, y datos básicos como tu fecha de nacimiento y las personas a tu cargo. Si tu presupuesto incluye gastos de salud, te pedimos una autorización aparte.",
+        "usted": "Sus ingresos, gastos, ahorros, deudas y metas, y datos básicos como su fecha de nacimiento y las personas a su cargo. Si su presupuesto incluye gastos de salud, le pedimos una autorización aparte."
+      },
+      "neverTitle": {
+        "tu": "Qué nunca te pedimos",
+        "usted": "Qué nunca le pedimos"
+      },
+      "never": {
+        "tu": "Números de cuenta, de tarjeta ni de documento, ni las contraseñas de tus bancos. Los bancos se identifican solo por su nombre.",
+        "usted": "Números de cuenta, de tarjeta ni de documento, ni las contraseñas de sus bancos. Los bancos se identifican solo por su nombre."
+      },
+      "expires": "La invitación vence el {date}.",
+      "continue": "Continuar",
+      "continuing": "Un momento…"
+    },
+    "consent": {
+      "title": {
+        "tu": "Autoriza el tratamiento de tus datos",
+        "usted": "Autorice el tratamiento de sus datos"
+      },
+      "intro": {
+        "tu": "Lee el texto. Para usar MiLuca necesitas aceptarlo.",
+        "usted": "Lea el texto. Para usar MiLuca necesita aceptarlo."
+      },
+      "version": "Versión {version}, publicada el {date}",
+      "accept": "Acepto el tratamiento de mis datos personales según este texto.",
+      "sensitiveIntro": {
+        "tu": "Es opcional. Solo hace falta si tu presupuesto incluye gastos de salud. Puedes continuar sin aceptarlo.",
+        "usted": "Es opcional. Solo hace falta si su presupuesto incluye gastos de salud. Puede continuar sin aceptarlo."
+      },
+      "acceptSensitive": "Acepto el tratamiento de mis datos de salud según este texto.",
+      "submit": "Aceptar y continuar",
+      "submitting": "Guardando…",
+      "errors": {
+        "required": {
+          "tu": "Para continuar, marca la casilla de aceptación.",
+          "usted": "Para continuar, marque la casilla de aceptación."
+        },
+        "outdated": {
+          "tu": "El texto cambió mientras lo leías. Revisa la versión nueva.",
+          "usted": "El texto cambió mientras lo leía. Revise la versión nueva."
+        }
+      }
+    },
+    "access": {
+      "title": {
+        "tu": "Crea tu acceso",
+        "usted": "Cree su acceso"
+      },
+      "intro": {
+        "tu": "Elige cómo vas a entrar a MiLuca.",
+        "usted": "Elija cómo va a entrar a MiLuca."
+      },
+      "orPassword": {
+        "tu": "o crea una contraseña",
+        "usted": "o cree una contraseña"
+      },
+      "email": "Correo",
+      "emailHint": {
+        "tu": "Tu cuenta usa el correo de la invitación. Si no es tu correo, pide a tu asesor una invitación nueva.",
+        "usted": "Su cuenta usa el correo de la invitación. Si no es su correo, pida a su asesor una invitación nueva."
+      },
+      "password": "Contraseña",
+      "passwordHint": {
+        "tu": "Al menos 8 caracteres. Puedes usar frases y tu gestor de contraseñas.",
+        "usted": "Al menos 8 caracteres. Puede usar frases y su gestor de contraseñas."
+      },
+      "missingChars": "Faltan {count} caracteres.",
+      "missingChar": "Falta 1 carácter.",
+      "lengthOk": "Longitud suficiente.",
+      "submit": "Crear mi acceso",
+      "submitting": {
+        "tu": "Creando tu acceso…",
+        "usted": "Creando su acceso…"
+      },
+      "noEmail": {
+        "tu": "Esta invitación no tiene correo, así que entras con Google. Si prefieres una contraseña, pide a tu asesor una invitación con tu correo.",
+        "usted": "Esta invitación no tiene correo, así que entra con Google. Si prefiere una contraseña, pida a su asesor una invitación con su correo."
+      },
+      "signInInstead": "Entrar con esa cuenta",
+      "errors": {
+        "tooShort": "La contraseña debe tener al menos 8 caracteres.",
+        "tooLong": "La contraseña puede tener hasta 72 caracteres.",
+        "weakPassword": "Esa contraseña aparece en filtraciones conocidas o es muy fácil de adivinar. Elige otra.",
+        "emailExists": "Ya hay una cuenta con este correo. Entra con ella para aceptar la invitación.",
+        "tooManyRequests": "Hiciste muchos intentos. Espera unos minutos y vuelve a intentarlo.",
+        "unavailable": "No se pudo crear el acceso. Intenta de nuevo en unos minutos."
+      }
+    },
+    "problem": {
+      "invalid": {
+        "title": "Este enlace de invitación no sirve",
+        "body": "Revisa que el enlace esté completo o pide uno nuevo a tu asesor."
+      },
+      "expired": {
+        "title": "Esta invitación venció",
+        "body": "Las invitaciones duran 7 días. Pide una nueva a tu asesor."
+      },
+      "revoked": {
+        "title": "Esta invitación ya no está activa",
+        "body": "Tu asesor la anuló o la cambió por otra. Usa el enlace más reciente o pide uno nuevo."
+      },
+      "used": {
+        "title": "Esta invitación ya se aceptó",
+        "body": "Si fuiste tú, entra con la cuenta que usaste."
+      },
+      "missing": {
+        "title": "Abre de nuevo el enlace de la invitación",
+        "body": "Pasó mucho tiempo desde que lo abriste. Abre otra vez el enlace que te envió tu asesor."
+      },
+      "advisor": {
+        "title": "Entraste con una cuenta de asesor",
+        "body": "Una cuenta de asesor no puede aceptar una invitación de cliente. Cierra sesión y abre el enlace de nuevo."
+      },
+      "linked": {
+        "title": "Tu cuenta ya tiene un perfil",
+        "body": "Esta cuenta ya está vinculada a un perfil de MiLuca. Para aceptar esta invitación, cierra sesión y abre el enlace de nuevo con otra cuenta."
+      },
+      "noLegalText": {
+        "title": "Aún no puedes aceptar la invitación",
+        "body": "Estamos terminando los textos de privacidad para tu país. Tu asesor te avisará cuando estén listos."
+      },
+      "unavailable": {
+        "title": "No pudimos continuar",
+        "body": "El servicio no responde. Intenta de nuevo en unos minutos."
+      }
+    },
+    "signIn": "Entrar",
+    "goHome": "Ir al inicio"
   }
 }
