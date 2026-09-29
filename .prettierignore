@@ -2,6 +2,8 @@ pnpm-lock.yaml
 .next
 next-env.d.ts
 .mcp.json
+# Casos de oro generados por tools/excel-extractor/golden.py
+packages/engine/test/golden/**/*.json
 .turbo
 coverage
 docs/anexos/inventario-formulas

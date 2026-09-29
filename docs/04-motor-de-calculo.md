@@ -158,7 +158,7 @@ Además se verifican los valores intermedios de Ingresos y Presupuesto, para loc
 |---|---|---|---|
 | C1. Colombia (contratista con arriendos y meses sin ingreso) | Plantilla oficial llenada con los datos del libro del caso real de Colombia, anonimizados | Meses sin ingreso, seguridad social por mes, cobros, USD, pensión Colpensiones, patrimonio concentrado | **Por construir** (H-25): el libro actual no usa la plantilla |
 | C2. España (estudiante, padres pagan, sueldo a ahorro) | Libro del caso real de España, anonimizado | Euro como base, pagador, costo de vida por niveles, perfil conservador, pensión desactivada | Por anonimizar |
-| C3. Plantilla vacía | `Plantilla_Asesoria_Financiera.xlsx` con fecha de corte fija | Valores por defecto, pendientes, divisiones entre cero | Listo para extraer |
+| C3. Plantilla vacía | `Plantilla_Asesoria_Financiera.xlsx` con fecha de corte fija (28/09/2026) | Valores por defecto, pendientes, divisiones entre cero | **Listo** (535 entradas, 5.738 fórmulas, sin errores) |
 | C4. Deudas | Plantilla oficial con 6 a 8 deudas sintéticas inspiradas en el caso 15.1 del protocolo (FRECH, préstamo familiar a 0 %, ingreso en USD, carga de 64 %) | Deuda cara, avalancha, bola de nieve, restricciones de abono, más de 120 meses | Por construir |
 | C5. Créditos | Plantilla de créditos con los mismos créditos de C4 y marcas de pago | 360 cuotas, FRECH, seguros, cuotas vencidas, panel, puente a Deudas | Por construir |
 | C6. Ingreso variable y déficit | Plantilla oficial sintética | Ingreso base, aporte proporcional, alerta de déficit | Por construir |
@@ -169,9 +169,9 @@ Ninguno de los dos casos reales tiene deudas, por eso C4 y C5 son necesarios par
 
 1. **Anonimizar antes de calcular.** Sobre una copia local fuera del repositorio: nombre por "Cliente Colombia" o "Clienta España"; fecha de nacimiento cambiada conservando el tramo de edad; entidades financieras por genéricos ("Banco A", "Plataforma de inversión"); conceptos que revelen salud o terceros identificables por genéricos ("Salud visual", "Regalo familiar"); textos de notas reescritos. Los importes pueden quedar o redondearse.
 2. **Fijar la fecha de corte** con un valor (no `=TODAY()`).
-3. **Recalcular en Microsoft Excel** (instalado en el equipo del asesor), por ejemplo con un AppleScript que abre, recalcula todo y guarda. No se usa LibreOffice para generar valores esperados, porque puede diferir de Excel en funciones como `DATEDIF`.
+3. **Recalcular en Microsoft Excel** (instalado en el equipo del asesor) con `tools/excel-extractor/recalc.py`, que aplica los cambios y recalcula dentro de Excel mediante AppleScript. No se usa LibreOffice para generar valores esperados, porque puede diferir de Excel en funciones como `DATEDIF`. Validación del método: con la fecha en que se guardó la plantilla, las 5.738 fórmulas recalculadas coincidieron exactamente con las guardadas por Excel.
 4. **Verificar** cero errores y revisar la lista de pendientes.
-5. **Extraer** con `tools/excel-extractor/` (script `golden.py`, fase 0): las celdas crema pasan a `inputs.json` según un mapa de celdas a campos del modelo; las celdas de fórmula de las hojas verificadas pasan a `expected.json` con su referencia.
+5. **Extraer** con `tools/excel-extractor/golden.py`: las celdas de entrada pasan a `inputs.json` y todas las celdas de fórmula a `expected.json`, por hoja y celda. El mapa de celdas (7.4) las traduce al modelo del motor. Con `--forbid`, el script falla si encuentra en el libro algún nombre o entidad real de una lista guardada fuera del repositorio.
 6. **Revisión humana** del JSON (que no quede ningún dato identificable) y commit en `packages/engine/test/golden/<caso>/`.
 7. **Contraste** del caso C1 con las cifras de la sección 15 del protocolo (ingreso anual 90,8 millones, gasto 63,7 millones, sobrante 19,3 millones, faltante de enero 3,83 millones, aporte de 348.346, fondo de 8,64 millones). Las diferencias por la anonimización se documentan.
 
