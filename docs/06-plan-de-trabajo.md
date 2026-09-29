@@ -13,8 +13,8 @@
 
 | Fase | Contenido | Horas | Acumulado | Fin estimado a 14 h/semana | Depende de |
 |---|---|---|---|---|---|
-| F0. Fundaciones y validaciones | Monorepo, CI, entornos, cuentas de Apple y Google, prueba de sesión en PWA de iOS, casos de prueba de oro, tokens de diseño, inicio del trabajo legal | 80 | 80 | mediados de noviembre de 2026 | Decisiones previas |
-| F1. Autenticación, clientes y permisos | Google y Apple, invitación, consentimiento, roles, RLS, auditoría, PWA base, lista y ficha de clientes | 120 | 200 | mediados de enero de 2027 | F0 |
+| F0. Fundaciones y validaciones | Monorepo, CI, entornos, cuenta de Google Cloud, prueba de sesión en PWA de iOS, casos de prueba de oro, tokens de diseño, inicio del trabajo legal | 80 | 80 | mediados de noviembre de 2026 | Decisiones previas |
+| F1. Autenticación, clientes y permisos | Google y correo con contraseña, invitación, consentimiento, roles, RLS, auditoría, PWA base, lista y ficha de clientes | 120 | 200 | mediados de enero de 2027 | F0 |
 | F2. Motor núcleo: perfil, ingresos, presupuesto, resumen | Funciones de Excel, normalización, ingresos y gastos multimoneda, presupuesto con pagador, costo de vida, resumen parcial, antes y después | 160 | 360 | comienzos de abril de 2027 | F1 |
 | F3. Bolsillos, fondo, flujo anual, prueba de realidad, cobros y entrega mínima | Bancos y bolsillos, fondo de emergencia, plan de ahorro secuencial, flujo anual, meses sin ingreso, prueba de realidad, cuentas por cobrar, activos líquidos, plan entregado sin PDF, vista "Mi plan" | 160 | 520 | finales de junio de 2027 | F2 |
 | F4. Deudas y créditos | Motor único de deudas, simulación, créditos cuota a cuota, marcas de pago, panel | 160 | 680 | comienzos de septiembre de 2027 | F3 |
@@ -71,9 +71,9 @@ Hasta M4, el asesor mantiene el Excel en paralelo para las partes que aún no ex
 Tareas:
 
 - Monorepo con pnpm y Turborepo, paquetes vacíos con su configuración, reglas de lint que impiden importaciones prohibidas entre paquetes, Vitest y Playwright, CI en GitHub Actions.
-- Supabase local (CLI); conectar el proyecto ya creado (us-east-2) y crear el de staging en la misma región; servidor MCP de Supabase autenticado para el agente.
+- Supabase local (CLI sobre Docker con Colima); conectar el proyecto ya creado (us-east-2) y crear el de staging en la misma región; servidor MCP de Supabase autenticado para el agente.
 - Proyecto en Vercel con funciones en `cle1`; dominio.
-- Cuenta de Apple Developer (99 USD al año [F3]), App ID, Services ID, clave `.p8`; proyecto de Google Cloud y pantalla de consentimiento; verificación de marca en Google [F27].
+- Proyecto de Google Cloud, cliente OAuth y pantalla de consentimiento; verificación de marca en Google [F27]. Apple queda aplazado (ADR 0009).
 - Prueba de sesión en PWA de iOS (criterios en `02-arquitectura.md`, sección 5.4).
 - Casos de prueba de oro: anonimizar C2, construir C1 en la plantilla oficial, extraer C3; script `golden.py` y automatización del recálculo en Excel.
 - Tokens de diseño en `packages/ui`.
@@ -87,10 +87,15 @@ Avance al 28/09/2026 (rama `f0-fundaciones`):
 - [x] Tokens de la paleta 3 con prueba automática de contraste WCAG en los temas claro y oscuro.
 - [x] App Next.js 16 como PWA: manifiesto, iconos desde el logo provisional, áreas seguras, `proxy.ts` con refresco de sesión de Supabase.
 - [x] Pruebas de extremo a extremo en iPhone (WebKit) y Android (Chromium) simulados.
-- [x] CI en GitHub Actions (formato, lint, tipos, pruebas, build, extremo a extremo, herramientas de Python). Pendiente verla en verde en GitHub.
-- [x] Configuración local de Supabase (`config.toml`) sin registro por correo.
-- [ ] Vincular el proyecto de Supabase y autenticar el servidor MCP (requiere al asesor).
-- [ ] Cuentas de Apple Developer y Google Cloud, dominio (requiere al asesor).
+- [x] CI en GitHub Actions (formato, lint, tipos, pruebas, build, extremo a extremo, herramientas de Python), en verde en el pull request #1.
+- [x] Configuración local de Supabase (`config.toml`): proveedor de correo activo y contraseña de 12 caracteres como mínimo (ADR 0009).
+- [x] Claves del proyecto de Supabase en `apps/web/.env.local` (fuera de git), verificadas contra la API.
+- [x] Servidor MCP de Supabase registrado en `.mcp.json`.
+- [x] Supabase local funcionando (Docker con Colima).
+- [x] Decisión de inicio de sesión: Google y correo con contraseña, Apple aplazado (ADR 0009), con el bloqueo del registro público probado en local.
+- [ ] Autenticar el servidor MCP de Supabase (requiere al asesor, una vez).
+- [ ] Vincular la CLI con el proyecto remoto (`supabase login` y `link`; requiere al asesor).
+- [ ] Cuenta de Google Cloud y dominio (requiere al asesor).
 - [ ] Prueba de sesión en PWA de iOS en iPhone real (requiere despliegue y cuentas).
 - [ ] Casos de prueba de oro C1, C2 y C3 y script `golden.py`.
 - [ ] Contratar abogado.
@@ -98,16 +103,16 @@ Avance al 28/09/2026 (rama `f0-fundaciones`):
 Criterios de aceptación:
 
 - CI en verde con un paquete de ejemplo por capa.
-- En un iPhone real con las dos versiones mayores más recientes de iOS y en Android con Chrome: entrar con Google y con Apple dentro de la app instalada, sin terminar en Safari; la sesión sobrevive a cerrar la app y a reiniciar el teléfono.
+- En un iPhone real con las dos versiones mayores más recientes de iOS y en Android con Chrome: entrar con Google y con correo y contraseña dentro de la app instalada, sin terminar en Safari; la sesión sobrevive a cerrar la app y a reiniciar el teléfono.
 - Los casos C1, C2 y C3 están en `packages/engine/test/golden/` sin ningún dato identificable (revisión humana documentada).
 
 ### F1. Autenticación, clientes y permisos (120 horas)
 
-Tareas: migraciones de identidad, acceso, invitaciones, textos legales, consentimientos, supuestos del caso, auditoría, avisos y solicitudes; RLS y pgTAP; `proxy.ts`; inicio de sesión; flujo de invitación completo; consentimiento; guía "Agregar a inicio"; manifiesto y service worker; P-A01, P-A02, P-A03 (esqueleto), P-C01 a P-C04 (inicio vacío), P-C11 (retirar acceso).
+Tareas: migraciones de identidad, acceso, invitaciones, textos legales, consentimientos, supuestos del caso, auditoría, avisos y solicitudes; RLS y pgTAP; `proxy.ts`; inicio de sesión con Google y con contraseña; gancho que cierra el registro público; recuperación con código y plantillas de correo en Resend; flujo de invitación completo; consentimiento; guía "Agregar a inicio"; manifiesto y service worker; P-A01, P-A02, P-A03 (esqueleto), P-G01, P-G05, P-C01 a P-C04 (inicio vacío), P-C11 (retirar acceso), P-C12.
 
 Criterios de aceptación:
 
-- Prueba de extremo a extremo: el asesor crea un cliente, lo invita, el cliente acepta en el celular con Google y con Apple (incluido correo oculto de Apple) y queda vinculado.
+- Prueba de extremo a extremo: el asesor crea un cliente, lo invita, el cliente acepta en el celular con Google y, en otra prueba, creando su contraseña, y queda vinculado. Un registro por correo sin invitación se rechaza. La recuperación con código funciona dentro de la app instalada.
 - pgTAP: el cliente A no lee ni escribe datos del cliente B; un asesor sin acceso no ve al cliente; al revocar, el acceso se pierde en la siguiente consulta; el cliente no puede escribir campos de criterio profesional.
 - Cada escritura deja una fila en `audit_log` con actor y valores anteriores.
 - Una cuenta sin invitación no ve datos y se borra a los 7 días.
@@ -179,7 +184,7 @@ Criterios de aceptación:
 | La plataforma se interpreta como asesoramiento en inversiones regulado | Baja con buenos textos | Alto | Sin productos ni entidades; textos de alcance; abogado desde F0 (ver 07-preguntas-abiertas.md) |
 | Datos de salud en el presupuesto (terapias, medicamentos) | Alta | Medio | Consentimiento explícito aparte; guía para nombrar partidas de forma genérica; abogado |
 | Transferencia a Estados Unidos (Supabase us-east-2) de los datos de clientes de España | Media | Medio | DPA de Supabase con su evaluación de transferencias [F23]; validación del abogado antes del primer cliente de España; si no se aprueba, segundo proyecto en la UE. Para Colombia, Estados Unidos está declarado adecuado por la SIC [F21] |
-| Se olvida regenerar el secreto de Apple (cada 6 meses) | Media | Alto (nadie entra con Apple) | Recordatorio fijo; alerta si aumentan los errores de inicio de sesión con Apple |
+| Contraseñas débiles o reutilizadas de los clientes | Media | Alto | Mínimo de longitud, rechazo de contraseñas filtradas (Pro) [F34], límites de intentos; el asesor entra con Google con verificación en dos pasos (ADR 0009) |
 | Cambian precios o límites de los proveedores | Media | Bajo | Revisar al contratar; arquitectura portable (Next.js y Postgres estándar) |
 | Apple vuelve a restringir las apps de pantalla de inicio en la UE [F10] | Baja | Medio | La app funciona como web en Safari; vigilar |
 | El alcance crece y una persona no alcanza | Alta | Medio | MVP estricto, lista de pendientes priorizada, margen del 15 % |
@@ -193,10 +198,9 @@ Precios en USD consultados el 28/09/2026 (ver [fuentes.md](fuentes.md)). No incl
 |---|---|---|---|---|
 | Supabase | 0 (plan gratuito, 2 proyectos) [F1] | 25 (Pro, incluye cómputo Micro) [F1] | 25 | 25 + 5 a 50 (cómputo Small o Medium, según métricas) [F26] |
 | Vercel | 20 (Pro desde el primer despliegue compartido) [F11][F12] | 20 | 20 | 20 + uso sobre el crédito incluido (probablemente 0 a 20) |
-| Apple Developer | 8,25 (99 al año) [F3] | 8,25 | 8,25 | 8,25 |
 | Resend | 0 (gratis) [F25] | 0 | 0 a 20 (Pro si se pasan 100 correos al día) [F25] | 20 [F25] |
 | Copias con recuperación a un punto en el tiempo (opcional) | 0 | 0 | 0 | 100 (PITR 7 días) [F1] |
-| **Total aproximado** | **unos 28** | **unos 53** | **53 a 73** | **78 a 143 sin PITR; 178 a 243 con PITR** |
+| **Total aproximado** | **unos 20** | **unos 45** | **45 a 65** | **70 a 135 sin PITR; 170 a 235 con PITR** |
 
 Volumen esperado a 1.000 clientes: datos de cada cliente del orden de cientos de kilobytes, historial de cambios de unos pocos gigabytes al año y PDF de unos cientos de kilobytes por plan entregado. **Supuesto:** cabe en los 8 GB de base de datos y 100 GB de archivos de Pro [F1] durante los primeros años.
 
@@ -208,7 +212,6 @@ Volumen esperado a 1.000 clientes: datos de cada cliente del orden de cientos de
 | Supabase, correo incluido [F14] | 2 mensajes por hora, solo a miembros del equipo | No sirve para invitar clientes: hace falta SMTP propio desde F1 |
 | Vercel Hobby [F11][F12] | 1 millón de invocaciones y 100 GB de transferencia al mes | **Solo uso personal no comercial** |
 | Resend Free [F25] | 3.000 correos al mes, 100 al día, 3 dominios | Suficiente hasta unos 100 clientes activos |
-| Apple Developer [F3] | No hay plan gratuito para Sign in with Apple | 99 USD al año desde F0 |
 | Google OAuth [F27] | Gratis con alcances no sensibles | Verificación de marca para mostrar nombre y logo |
 
 ### Cuándo pasar a planes pagados

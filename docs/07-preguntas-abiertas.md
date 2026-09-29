@@ -15,6 +15,7 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 | D1 | **Marca:** se mantiene la paleta opción 3; el logo actual se usa de forma provisional hasta que lo actualices. Nombre del producto: MiLuca | 28/09/2026 | `diseno/tokens.md` sección 5 |
 | D1b | **Logo:** movido a `docs/diseno/marca/logo.png` como archivo fuente; de ahí salen los iconos de la PWA | 28/09/2026 | `diseno/tokens.md` sección 5 |
 | A10 | **Repositorio público** en GitHub (`IngRetrius/mi-luca`), por decisión del asesor, sabiendo que incluye el protocolo, las plantillas y el plan. Los libros de clientes siguen excluidos | 28/09/2026 | `.gitignore` |
+| Nueva | **Inicio de sesión:** Google y correo con contraseña; Apple aplazado. Cambia la regla "solo Google y Apple" del encargo. El alta con contraseña solo es posible desde una invitación | 28/09/2026 | ADR 0009; `02-arquitectura.md` 5.2; `05-pantallas-y-flujos.md` (P-G01, P-G05, P-C12) |
 
 ## A. Antes de empezar la fase 0
 
@@ -60,7 +61,7 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 | N.º | Pregunta | Recomendación | Cuándo |
 |---|---|---|---|
 | D2 | ¿El Excel exportado conserva la marca Petróleo y Oro? | Estructura, hojas y celdas idénticas a la plantilla (es lo que da la compatibilidad), con la marca MiLuca y las mismas convenciones de color de celdas (crema = editable) | F7 |
-| D3 | Dominio | Comprar el dominio de MiLuca antes de configurar Apple y Google (ambos piden el dominio). No verifiqué disponibilidad | F0 |
+| D3 | Dominio | Comprar el dominio de MiLuca antes de configurar Google (la pantalla de consentimiento pide el dominio) y Resend (verifica el dominio desde el que se envían los correos). No verifiqué disponibilidad | F0 |
 | D4 | Tipografía | Fuente del sistema (San Francisco en iPhone, Roboto en Android): cero descarga, mejor en conexión lenta | F0 |
 | D5 | ¿Nombre visible "MiLuca" en la pantalla de consentimiento de Google? | Sí, con verificación de marca (2 a 3 días hábiles) [F27] | F0 |
 
@@ -70,5 +71,6 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 |---|---|---|---|
 | E1 | Identificadores de código en inglés y producto en español | Sí (ADR 0006), con glosario | F0 |
 | E2 | Next.js en Vercel Pro | Sí (ADR 0002) | F0 |
-| E3 | Segundo factor para el asesor | Fuera por ahora, como decidiste. Diseño listo para activarlo sin rehacer (02, 5.5). Sugiero reconsiderarlo antes de tener más de 20 clientes, porque la cuenta del asesor ve los datos de todos | Después del lanzamiento |
+| E3 | Segundo factor para el asesor | Fuera por ahora, como decidiste. Diseño listo para activarlo sin rehacer (02, 5.5). Sugiero reconsiderarlo antes de tener más de 20 clientes, porque la cuenta del asesor ve los datos de todos. Con contraseñas (ADR 0009), mientras tanto el asesor entra con Google y con la verificación en dos pasos de su cuenta de Google | Después del lanzamiento |
 | E4 | ¿Dónde viven los parámetros de la metodología (70 %, 50 %, 90 %, umbrales)? | En `country_parameters` con país vacío (comunes) y versionados, igual que los del país | F2 |
+| E5 | Longitud mínima de la contraseña | 12 caracteres, sin reglas de composición y con rechazo de contraseñas filtradas (Pro) [F34]; la pantalla sugiere una frase. El NIST pide 15 cuando la contraseña es el único factor [F36]: si prefieres seguirlo al pie de la letra, 15. Hoy `config.toml` usa 12 | F1 |

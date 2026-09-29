@@ -76,7 +76,7 @@ La fase 8 del protocolo (llenar el Excel) desaparece: los datos viven en la plat
 flowchart TD
   C1[Correo de invitación] --> C2[P-C01 Invitación]
   C2 --> C3[P-C02 Consentimiento]
-  C3 --> C4[P-G01 Continuar con Google o Apple]
+  C3 --> C4[P-C12 Crear tu acceso: Google o contraseña]
   C4 --> C5[P-C03 Agregar a inicio]
   C5 --> C6[P-C04 Inicio]
   C6 --> C7[P-C05 Mi plan]
@@ -94,10 +94,11 @@ flowchart TD
 
 | Id | Pantalla | Contenido |
 |---|---|---|
-| P-G01 | Entrar | Marca, "Continuar con Google", "Continuar con Apple", texto "El acceso es por invitación de tu asesor", enlaces a privacidad y términos |
+| P-G01 | Entrar | Marca, "Continuar con Google", formulario de correo y contraseña (permite pegar y gestores de contraseñas), enlace "Olvidé mi contraseña", texto "El acceso es por invitación de tu asesor", enlaces a privacidad y términos |
 | P-G02 | Sin invitación | Explica que la cuenta existe pero no tiene perfil; opción de cerrar sesión; la cuenta se borra en 7 días |
 | P-G03 | Navegador no compatible | Versión mínima (Safari 16.4 [F15]) y cómo actualizar |
 | P-G04 | Sin conexión | Qué se puede ver y qué no |
+| P-G05 | Recuperar contraseña | Tres pasos: correo, código de 6 dígitos recibido por correo y nueva contraseña. Todo dentro de la app. El mensaje es el mismo exista o no la cuenta, para no revelar qué correos están registrados (ADR 0009) |
 
 ### 5.2 Cliente
 
@@ -114,6 +115,7 @@ flowchart TD
 | P-C09 | Tareas | Lista del plan de acción; tocar para marcar hecha; filtro pendientes y hechas |
 | P-C10 | Créditos | Tarjeta por crédito con próxima cuota, fecha y estado; marcar pagada con fecha; panel con deuda total y fecha de libertad |
 | P-C11 | Privacidad y datos | Exportar mis datos, pedir borrado, retirar o restablecer el acceso del asesor, ver consentimientos, cerrar sesión |
+| P-C12 | Crear tu acceso | Después del consentimiento: "Continuar con Google" o "Crear contraseña" con el correo de la invitación fijo, contraseña con indicador de longitud mínima y opción de mostrarla (ADR 0009) |
 | P-C12 | Historial | Cambios por fecha, quién los hizo y su efecto en las cifras |
 
 ### 5.3 Asesor

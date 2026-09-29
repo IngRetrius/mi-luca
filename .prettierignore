@@ -1,6 +1,7 @@
 pnpm-lock.yaml
 .next
 next-env.d.ts
+.mcp.json
 .turbo
 coverage
 docs/anexos/inventario-formulas

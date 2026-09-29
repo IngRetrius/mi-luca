@@ -12,5 +12,6 @@ Cada decisión que cambia la arquitectura, el modelo de datos o un resultado del
 | [0006](0006-codigo-en-ingles-producto-en-espanol.md) | Código en inglés, producto y documentación en español | Propuesta |
 | [0007](0007-modo-compatible-y-nativo.md) | Modo compatible con la plantilla y modo nativo | Propuesta |
 | [0008](0008-plan-de-ahorro-secuencial.md) | Plan de ahorro secuencial para completar el fondo de emergencia | Aceptada |
+| [0009](0009-google-y-correo-con-contrasena.md) | Inicio de sesión con Google y con correo y contraseña; Apple aplazado | Aceptada |
 
 Plantilla: [plantilla.md](plantilla.md).
