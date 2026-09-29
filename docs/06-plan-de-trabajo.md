@@ -79,7 +79,7 @@ Tareas:
 - Tokens de diseño en `packages/ui`.
 - Contratar abogado y entregarle el borrador de alcance (sección 7 del encargo).
 
-Avance al 28/09/2026 (rama `f0-fundaciones`):
+Avance al 28/09/2026 (PR #1 y #2 unidos; PR #3 con los casos de oro, pendiente de unir):
 
 - [x] Monorepo con pnpm 12 y Turborepo; paquetes `domain`, `engine`, `ui`, `i18n`, `exporters`, `db`, `config`, `web` y `e2e`.
 - [x] Reglas de lint que impiden importaciones entre capas y el uso de la fecha del sistema en el motor (verificadas con violaciones de prueba).
@@ -93,14 +93,14 @@ Avance al 28/09/2026 (rama `f0-fundaciones`):
 - [x] Servidor MCP de Supabase registrado en `.mcp.json`.
 - [x] Supabase local funcionando (Docker con Colima).
 - [x] Decisión de inicio de sesión: Google y correo con contraseña, Apple aplazado (ADR 0009), con el bloqueo del registro público probado en local.
-- [ ] Autenticar el servidor MCP de Supabase (requiere al asesor, una vez).
+- [x] Servidor MCP de Supabase autenticado (con `claude mcp login` desde la CLI; el panel de VS Code falla con URLs con parámetros).
 - [ ] Vincular la CLI con el proyecto remoto (`supabase login` y `link`; requiere al asesor).
 - [ ] Cuenta de Google Cloud y dominio (requiere al asesor).
 - [ ] Prueba de sesión en PWA de iOS en iPhone real (requiere despliegue y cuentas).
 - [x] Herramientas de casos de oro: `recalc.py` (recálculo en Excel, validado celda a celda) y `golden.py` (extracción con verificación de privacidad).
 - [x] Caso C3 (plantilla vacía) y primera prueba de oro del motor (conversión de moneda de Ingresos).
 - [x] Caso de oro C2 (España), anonimizado y revisado por el asesor.
-- [ ] Caso de oro C1 (Colombia), llevado a la plantilla oficial.
+- [ ] Caso de oro C1 (Colombia), llevado a la plantilla oficial y revisado por el asesor. **Siguiente tarea del agente.**
 - [ ] Contratar abogado.
 
 Criterios de aceptación:

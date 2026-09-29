@@ -6,7 +6,7 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 
 | N.º | Decisión | Fecha | Dónde quedó reflejada |
 |---|---|---|---|
-| A1, A2 | **Supuesto:** preparo yo el caso de Colombia en la plantilla oficial y anonimizo el de España; tú revisas antes del commit. La respuesta recibida para este punto fue el requisito multimoneda (fila siguiente), así que aplico mi recomendación hasta que digas otra cosa | 28/09/2026 | `04-motor-de-calculo.md`, 7.2 y 7.3 |
+| A1, A2 | **Casos de prueba de oro:** el agente anonimiza el caso de España y construye el de Colombia en la plantilla oficial; el asesor revisa antes de subirlos. C2 (España) revisado y aprobado por el asesor; C1 (Colombia) pendiente | 28/09/2026 | `04-motor-de-calculo.md`, 7.2 y 7.3; `packages/engine/test/golden/` |
 | Nueva | **Multimoneda en general:** cada importe (ingresos, gastos, bolsillos, deudas, metas, primas, activos, inversiones, cobros, control mensual) lleva su moneda con un selector; tasas por cliente y por moneda; cualquier país se puede habilitar | 28/09/2026 | RN-010, RN-017, RN-018; `03-modelo-de-datos.md` (principios 8 y 9, `client_fx_rates`); `05-pantallas-y-flujos.md` (P-A19) |
 | A3 | **Región:** el proyecto de Supabase ya creado, en us-east-2 (Ohio); funciones de Vercel en `cle1` | 28/09/2026 | ADR 0003, `02-arquitectura.md` sección 7 |
 | A4 | **Dedicación:** 14 horas por semana. MVP hacia junio o julio de 2027; lanzamiento entre abril y julio de 2028 | 28/09/2026 | `06-plan-de-trabajo.md` |
@@ -16,6 +16,7 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 | D1b | **Logo:** movido a `docs/diseno/marca/logo.png` como archivo fuente; de ahí salen los iconos de la PWA | 28/09/2026 | `diseno/tokens.md` sección 5 |
 | A10 | **Repositorio público** en GitHub (`IngRetrius/mi-luca`), por decisión del asesor, sabiendo que incluye el protocolo, las plantillas y el plan. Los libros de clientes siguen excluidos | 28/09/2026 | `.gitignore` |
 | Nueva | **Inicio de sesión:** Google y correo con contraseña; Apple aplazado. Cambia la regla "solo Google y Apple" del encargo. El alta con contraseña solo es posible desde una invitación | 28/09/2026 | ADR 0009; `02-arquitectura.md` 5.2; `05-pantallas-y-flujos.md` (P-G01, P-G05, P-C12) |
+| A9 | **Se mantiene el plan original:** el MVP incluye desde el inicio la cuenta del cliente, la invitación y el consentimiento (no se adelanta un "MVP del asesor"). MVP hacia junio o julio de 2027 a 14 horas por semana | 28/09/2026 | `06-plan-de-trabajo.md` |
 
 ## A. Antes de empezar la fase 0
 
@@ -24,7 +25,6 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 | A6 | ¿Cobras honorarios por la asesoría? | Confirma que el uso es comercial (Vercel Pro) y afecta el texto de alcance | Asumo que sí o que podrías hacerlo; por eso el plan usa Vercel Pro | F0 |
 | A7 | ¿Tienes abogado en Colombia y en España? | Hay que validar protección de datos, transferencia a Estados Unidos de los datos de clientes de España y alcance de la asesoría en los dos países | Una firma con presencia en ambos o un abogado por país, desde la fase 0. Preguntas concretas en `legal/README.md` | F0 |
 | A8 | Tolerancia de la prueba de oro para porcentajes | 0,01 sobre una razón es un punto porcentual | Importes ±0,01; razones ±0,000001; fechas y textos iguales | F0 |
-| A9 | ¿Adelantamos el primer uso real? | A 14 horas por semana el MVP llega hacia junio o julio de 2027 | Opción 1 (recomendada): mantener el plan, porque la cuenta del cliente es lo que diferencia a MiLuca del Excel, y revisar en M0 con las horas reales. Opción 2: un "MVP del asesor" sin cuenta del cliente (invitación, consentimiento y pantallas del cliente pasan a después); ahorra unas 90 horas, unas 6 semanas | M0 |
 
 ## B. Reglas del cálculo (antes de F2 y F3)
 
