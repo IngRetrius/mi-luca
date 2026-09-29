@@ -117,6 +117,14 @@ Criterios de aceptación:
 
 Tareas: migraciones de identidad, acceso, invitaciones, textos legales, consentimientos, supuestos del caso, auditoría, avisos y solicitudes; RLS y pgTAP; `proxy.ts`; inicio de sesión con Google y con contraseña; gancho que cierra el registro público; recuperación con código y plantillas de correo en Resend; flujo de invitación completo; consentimiento; guía "Agregar a inicio"; manifiesto y service worker; P-A01, P-A02, P-A03 (esqueleto), P-G01, P-G05, P-C01 a P-C04 (inicio vacío), P-C11 (retirar acceso), P-C12.
 
+Avance:
+
+- [x] P-G01 Entrar (`/entrar`): Google y correo con contraseña. Google con PKCE por `/auth/start` y `/auth/callback`; en la app instalada, con `window.open` y aviso por `BroadcastChannel` desde `/auth/listo` (02-arquitectura, 5.4). Ruta de retorno validada contra redirecciones externas.
+- [x] Guarda de sesión en el servidor (`requireSessionUser`) y cerrar sesión solo en el dispositivo actual.
+- [x] Verificado contra Supabase local en Chromium y WebKit: contraseña correcta e incorrecta, cerrar sesión, ruta de retorno externa descartada y aviso entre ventanas. El inicio con Google llega hasta la pantalla de Google; completarlo requiere una cuenta real.
+- [ ] En P-G01: enlace "Olvidé mi contraseña" (llega con P-G05) y enlaces a privacidad y términos (llegan con los textos legales).
+- [ ] Migraciones de identidad, acceso e invitaciones con RLS y pgTAP; gancho que cierra el registro público por correo; P-G02 (sin invitación).
+
 Criterios de aceptación:
 
 - Prueba de extremo a extremo: el asesor crea un cliente, lo invita, el cliente acepta en el celular con Google y, en otra prueba, creando su contraseña, y queda vinculado. Un registro por correo sin invitación se rechaza. La recuperación con código funciona dentro de la app instalada.

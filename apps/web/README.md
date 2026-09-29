@@ -10,7 +10,27 @@ pnpm install
 pnpm dev                                       # http://localhost:3000
 ```
 
-Sin las variables de Supabase la app arranca igual; el refresco de sesión se omite.
+Sin las variables de Supabase la app arranca igual; el refresco de sesión se omite y, al intentar entrar, la pantalla avisa que el acceso no está disponible.
+
+Para probar el acceso sin tocar el proyecto remoto, con Supabase local (`pnpm supabase start`), un usuario creado con la API de administración local y las claves locales, que tienen prioridad sobre `.env.local`:
+
+```bash
+cd apps/web
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321 \
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<PUBLISHABLE_KEY de pnpm supabase status> \
+pnpm dev                                       # puerto 3000: es la URL de retorno registrada
+```
+
+## Acceso
+
+| Ruta | Qué hace |
+|---|---|
+| `/entrar` | P-G01: Google o correo y contraseña. Con sesión, sigue a la ruta de retorno (`next`) |
+| `/auth/start` | Inicia Google con PKCE; guarda la ruta de retorno en una cookie de 10 minutos |
+| `/auth/callback` | Cambia el código por la sesión y sigue a la ruta de retorno |
+| `/auth/listo` | Fin de la ventana de Google abierta por la app instalada: avisa a la principal y se cierra |
+
+Las páginas protegidas llaman a `requireSessionUser()` (`src/server/session.ts`), que valida el token con `getClaims()`. La revisión se hace en cada página y en cada acción, no en el layout ni en `proxy.ts`.
 
 ## Responsabilidad
 
@@ -34,6 +54,7 @@ El archivo `src/proxy.ts` (antes `middleware.ts` en Next.js 15) refresca la sesi
 
 | Módulo | Equivale a |
 |---|---|
+| `auth` | Entrar (P-G01), flujo de Google en la app instalada y cerrar sesión |
 | `clients`, `invitations`, `consent` | Alta de clientes, invitación por correo, consentimiento de datos |
 | `profile` | Hoja Supuestos (datos del cliente y parámetros) |
 | `incomes` | Hoja Ingresos |

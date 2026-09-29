@@ -8,6 +8,10 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Cliente | `client` | La persona asesorada |
 | Invitación | `invitation` | |
 | Consentimiento | `consent` | |
+| Entrar (iniciar sesión) | `signIn` | Pantalla P-G01, ruta `/entrar` |
+| Cerrar sesión | `signOut` | Solo en el dispositivo actual (`scope: 'local'`) |
+| Sesión | `session` | Usuario de la sesión: `SessionUser` |
+| Ruta de retorno | `next` | Ruta interna a la que se vuelve después de entrar; se valida con `safeNextPath` |
 | Fecha de corte | `cutoffDate` | Fecha a la que se refieren los cálculos |
 | Año del flujo | `flowYear` | |
 | Tipo de cliente | `clientType` | empleado, contratista, independiente_variable, pensionado, rentista, mixto |
