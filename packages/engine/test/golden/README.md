@@ -11,7 +11,7 @@ Los valores quedan a nivel de celda. La traducción al modelo del motor la hace 
 | Caso | Contenido | Estado |
 |---|---|---|
 | `c3-plantilla-vacia` | Plantilla oficial sin datos, fecha de corte 28/09/2026 | Listo |
-| `c2-espana` | Caso real de España anonimizado | Pendiente de revisión del asesor |
+| `c2-espana` | Caso real de España anonimizado (nombre, fecha de nacimiento con la misma edad, entidad, ocupación, salud y terceros), corte 28/09/2026 | Listo, revisado por el asesor el 28/09/2026 |
 | `c1-colombia` | Caso real de Colombia llevado a la plantilla oficial y anonimizado | Por construir |
 
 Criterio de aceptación: diferencia absoluta máxima de 0,01 en importes; tolerancias de porcentajes, fechas y textos en `docs/04-motor-de-calculo.md`.

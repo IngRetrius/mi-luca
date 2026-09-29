@@ -99,7 +99,8 @@ Avance al 28/09/2026 (rama `f0-fundaciones`):
 - [ ] Prueba de sesión en PWA de iOS en iPhone real (requiere despliegue y cuentas).
 - [x] Herramientas de casos de oro: `recalc.py` (recálculo en Excel, validado celda a celda) y `golden.py` (extracción con verificación de privacidad).
 - [x] Caso C3 (plantilla vacía) y primera prueba de oro del motor (conversión de moneda de Ingresos).
-- [ ] Casos de oro C2 (España) y C1 (Colombia), con revisión del asesor.
+- [x] Caso de oro C2 (España), anonimizado y revisado por el asesor.
+- [ ] Caso de oro C1 (Colombia), llevado a la plantilla oficial.
 - [ ] Contratar abogado.
 
 Criterios de aceptación:
