@@ -35,6 +35,7 @@ pnpm dev                                       # puerto 3000: es la URL de retor
 - Controles (botones, campos, enlaces de acción) con las clases de `src/components/ui-classes.ts`: foco visible solo con teclado, estado al pasar el puntero, respuesta al toque y colores de los tokens de `packages/ui`.
 - Los componentes de cliente reciben sus textos por props desde un componente de servidor (por ejemplo, `AuthText`), para no mandar el catálogo completo de `packages/i18n` al navegador.
 - Errores de formulario junto al campo, en una región `aria-live="polite"` que siempre está en la página; los campos con error llevan `aria-invalid` y el foco va al primero que hay que corregir.
+- Tipografía: Livvic en todo (`font-sans`, por defecto), alojada con `next/font/google` en `layout.tsx` con los pesos 400, 500 y 600. Si hace falta otro peso, se agrega allí; si no, el navegador lo simula. Montos y tablas con `tabular-nums`.
 - `pnpm lint` exige como error las reglas recomendadas de `jsx-a11y`.
 - Antes de dar por terminada una pantalla, se revisa con la skill `web-design-guidelines` (`.claude/skills/`).
 

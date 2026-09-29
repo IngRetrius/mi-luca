@@ -45,6 +45,14 @@ Nivel de verificación:
 | F36 | [NIST SP 800-63B-4, Digital Identity Guidelines](https://pages.nist.gov/800-63-4/sp800-63b.html) (versión del 26/08/2025) | Contraseña como único factor: mínimo 15 caracteres; como parte de varios factores: mínimo 8. Máximo permitido de al menos 64. Sin reglas de composición. Comparar con listas de contraseñas comunes o filtradas. Sin cambios periódicos obligatorios. | Leída |
 | F37 | [Supabase, Login with Google](https://supabase.com/docs/guides/auth/social-login/auth-google) | Supabase Auth no trae credenciales de Google: hace falta un proyecto de Google Cloud y un cliente de OAuth web (Client ID y Client Secret) creado en Google Auth Platform. URIs de redirección: la del proyecto (`https://<ref>.supabase.co/auth/v1/callback`) y, en local, `http://127.0.0.1:54321/auth/v1/callback`. En `config.toml` el secreto va como `env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET)`. Alcances por defecto: `openid`, `email` y `profile`. | Leída |
 
+## Diseño
+
+| N.º | Fuente | Dato usado | Nivel |
+|---|---|---|---|
+| F38 | [Adobe Fonts, Laca](https://fonts.adobe.com/fonts/laca) y [Nova Type Foundry, Laca Text](https://novatypefoundry.com/fonts/laca-text/) (consultadas el 28/09/2026) | Referencia de estilo pedida por el asesor: semi-sans de Joana Correia inspirada en empaques antiguos de jabón portugueses, con colas curvas en los remates; versión de títulos y versión de texto. Solo en la biblioteca completa de Adobe Fonts (la API de Adobe la rechazó para la cuenta del asesor el 28/09/2026) | Leída |
+| F39 | [Google Fonts, Livvic](https://fonts.google.com/specimen/Livvic) y su [ficha en google/fonts](https://github.com/google/fonts/blob/main/ofl/livvic/METADATA.pb) (consultadas el 28/09/2026) | Diseñada por Jacques Le Bailly para LV=; licencia OFL; pesos 100 a 900 (sin 800) con cursivas; subconjuntos latin, latin-ext y vietnamese | Leída |
+| F40 | Guía de fuentes de Next.js 16 (`node_modules/next/dist/docs/01-app/01-getting-started/13-fonts.md` y la referencia de `next/font`) | `next/font/google` aloja la fuente como archivo estático del mismo dominio y el navegador no hace peticiones a Google; `display: 'swap'`, precarga y respaldo ajustado por defecto | Leída |
+
 ## Normativa
 
 | N.º | Fuente | Dato usado | Nivel |

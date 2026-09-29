@@ -128,7 +128,8 @@ Avance:
 - [x] Gancho `before_user_created`: solo deja pasar las altas con Google. Verificado en local con Supabase Auth: registro por correo rechazado con 403, alta del servidor con la API de administración aceptada.
 - [x] Tipos de TypeScript generados en `packages/db` (`pnpm db:types`) y trabajo de CI para migraciones, pgTAP, lint de SQL y tipos al día.
 - [x] Migraciones y gancho aplicados al proyecto remoto el 28/09/2026 (`supabase db push` y `supabase config push`, ejecutados por el asesor). Verificado con el MCP: seis tablas con RLS, dos migraciones registradas; el asesor de rendimiento solo marca índices sin uso (base vacía).
-- [ ] Crear la fila del primer asesor (`supabase/README.md`, "Primer asesor"); requiere que el asesor entre una vez con Google.
+- [x] Primer asesor creado en el remoto el 28/09/2026 (entró con Google; fila de `advisors` desde el editor SQL). Verificado con su sesión simulada: RLS lo reconoce como asesor y ve su nombre.
+- [x] Tipografía de la marca (D4): Livvic, alojada con `next/font`, como alternativa libre a Laca (que exige Creative Cloud). Prueba de extremo a extremo: la pantalla usa Livvic y ninguna fuente se pide a otro dominio. En la cuenta de Adobe del asesor quedó un proyecto web vacío ("MiLuca") que se puede borrar.
 - [ ] P-G02 (sin invitación) y resolución del rol al entrar (asesor, cliente o sin perfil).
 - [ ] Textos legales y consentimientos (`legal_texts`, `consents`), con el abogado.
 - [ ] Tarea diaria que borra las cuentas sin perfil a los 7 días.

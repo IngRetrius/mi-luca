@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { Livvic } from 'next/font/google';
 
 import { darkTheme, lightTheme, themeToCssVariables } from '@miluca/ui';
 
@@ -31,9 +32,17 @@ export const viewport: Viewport = {
 const themeCss = `:root{${themeToCssVariables(lightTheme)}}
 @media (prefers-color-scheme: dark){:root{${themeToCssVariables(darkTheme)}}}`;
 
+// Tipografía de la marca (docs/diseno/tokens.md, sección 4). next/font la descarga al construir y
+// la sirve desde el mismo dominio: el navegador no le pide nada a Google. Solo los pesos en uso.
+const livvic = Livvic({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-livvic',
+});
+
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html lang="es" className="h-full antialiased">
+    <html lang="es" className={`${livvic.variable} h-full antialiased`}>
       <head>
         <style>{themeCss}</style>
       </head>

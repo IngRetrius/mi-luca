@@ -13,7 +13,9 @@
   --color-status-ok: var(--ml-status-ok);
   --color-status-warning: var(--ml-status-warning);
   --color-status-alert: var(--ml-status-alert);
-  --font-sans: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Livvic, alojada por la app con next/font (layout.tsx); si no carga, las fuentes del sistema. */
+  --font-sans:
+    var(--font-livvic), -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 html {

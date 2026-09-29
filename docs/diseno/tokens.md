@@ -51,7 +51,8 @@ Colores fuera de la paleta de marca a propósito, para que un estado nunca se co
 
 | Token | Valor |
 |---|---|
-| Fuente | Del sistema (`-apple-system`, `system-ui`, Roboto): sin descarga (decisión D4 propuesta) |
+| Fuente | **Livvic** (Jacques Le Bailly para la aseguradora LV=, licencia OFL) [F39], en texto y títulos. Sans humanista de formas redondas, con la `l` y la `y` de cola curva; la más parecida a Laca [F38], que el asesor prefería pero exige un plan pago de Creative Cloud. Cifras tabulares por defecto (medido en el navegador). Pesos en uso: 400, 500 y 600. Token `--font-sans` |
+| Carga | La aloja la app con `next/font/google`: se descarga al construir y se sirve desde el mismo dominio, sin pedir nada a Google [F40]; `font-display: swap` y respaldo ajustado para que el texto no salte. Si no carga, siguen las fuentes del sistema (`-apple-system`, `system-ui`, Roboto). Decisión D4 del 28/09/2026 |
 | Tamaño base | 16 px (también el mínimo en campos, para que Safari no haga zoom) |
 | Escala | 12, 14, 16, 18, 22, 28, 34 px, en `rem` para respetar el tamaño de texto del sistema |
 | Cifras | `font-variant-numeric: tabular-nums` en tablas y montos |

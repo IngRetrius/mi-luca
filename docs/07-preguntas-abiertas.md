@@ -13,6 +13,7 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 | A5 | **Responsable del tratamiento:** Juan Camilo Perea Possos, persona natural, dueño de MiLuca | 28/09/2026 | `legal/README.md` |
 | B1 | **Aporte al fondo de emergencia:** se corrige en modo nativo con el plan de ahorro secuencial (primero el fondo, luego el reparto). Decidido por el agente a pedido del asesor | 28/09/2026 | ADR 0008 |
 | D1 | **Marca:** se mantiene la paleta opción 3; el logo actual se usa de forma provisional hasta que lo actualices. Nombre del producto: MiLuca | 28/09/2026 | `diseno/tokens.md` sección 5 |
+| D4 | **Tipografía:** Livvic (licencia OFL), alojada por la app. El asesor pidió Laca (Nova Type Foundry) [F38], pero solo está en la biblioteca completa de Adobe Fonts, que exige un plan pago de Creative Cloud que su cuenta no tiene; Livvic es la alternativa libre más parecida entre las comparadas (Radio Canada, Rosario, Alegreya Sans, Commissioner y otras). Cambia la recomendación de usar la fuente del sistema. Sin terceros: el navegador no pide nada a Google | 28/09/2026 | `diseno/tokens.md` sección 4 |
 | D1b | **Logo:** movido a `docs/diseno/marca/logo.png` como archivo fuente; de ahí salen los iconos de la PWA | 28/09/2026 | `diseno/tokens.md` sección 5 |
 | A10 | **Repositorio público** en GitHub (`IngRetrius/mi-luca`), por decisión del asesor, sabiendo que incluye el protocolo, las plantillas y el plan. Los libros de clientes siguen excluidos | 28/09/2026 | `.gitignore` |
 | Nueva | **Inicio de sesión:** Google y correo con contraseña; Apple aplazado. Cambia la regla "solo Google y Apple" del encargo. El alta con contraseña solo es posible desde una invitación | 28/09/2026 | ADR 0009; `02-arquitectura.md` 5.2; `05-pantallas-y-flujos.md` (P-G01, P-G05, P-C12) |
@@ -68,7 +69,6 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 |---|---|---|---|
 | D2 | ¿El Excel exportado conserva la marca Petróleo y Oro? | Estructura, hojas y celdas idénticas a la plantilla (es lo que da la compatibilidad), con la marca MiLuca y las mismas convenciones de color de celdas (crema = editable) | F7 |
 | D3 | Dominio | Comprar el dominio de MiLuca antes de configurar Google (la pantalla de consentimiento pide el dominio) y Resend (verifica el dominio desde el que se envían los correos). No verifiqué disponibilidad | F0 |
-| D4 | Tipografía | Fuente del sistema (San Francisco en iPhone, Roboto en Android): cero descarga, mejor en conexión lenta | F0 |
 | D5 | ¿Nombre visible "MiLuca" en la pantalla de consentimiento de Google? | Sí, con verificación de marca (2 a 3 días hábiles) [F27] | F0 |
 
 ## E. Técnicas (confirmar)
