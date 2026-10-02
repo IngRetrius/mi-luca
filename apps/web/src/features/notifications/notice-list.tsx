@@ -1,13 +1,17 @@
 import Link from 'next/link';
 
-import { formatDate, messages } from '@miluca/i18n';
+import { KEY_FIGURES, type KeyFigureDelta } from '@miluca/engine';
+import { formatDate, formatMoney, formatPercent, messages } from '@miluca/i18n';
 
 import { focusRing, textButton } from '@/components/ui-classes';
 
 import { markNoticeRead } from './actions';
-import type { Notice } from './queries';
+import type { ChangeNotice, Notice } from './queries';
 
-const t = messages.es.notifications;
+const t = messages.es;
+
+// Cuántas cifras del antes y después caben en el aviso; el resto se ve en la ficha.
+const MAX_DELTAS = 4;
 
 /**
  * Avisos sin ver, arriba de P-A01. Sin JavaScript también funciona: marcar como visto es un
@@ -18,42 +22,72 @@ export function NoticeList({ notices }: { notices: readonly Notice[] }) {
   return (
     <section aria-labelledby="notices-title" className="flex flex-col gap-2">
       <h2 id="notices-title" className="font-semibold">
-        {t.title}
+        {t.notifications.title}
       </h2>
       <ul className="flex flex-col divide-y divide-border rounded-xl border border-primary">
-        {notices.map((notice) => {
-          const [before, after] = t.accepted.split('{name}');
-          return (
-            <li key={notice.id} className="flex flex-col gap-1 p-4">
-              <p className="wrap-anywhere">
-                {notice.clientName && notice.clientId ? (
-                  <>
-                    {before}
-                    <Link
-                      href={`/clientes/${notice.clientId}`}
-                      translate="no"
-                      className={`rounded font-medium text-link underline hover:no-underline ${focusRing}`}
-                    >
-                      {notice.clientName}
-                    </Link>
-                    {after}
-                  </>
-                ) : (
-                  t.acceptedUnknown
-                )}
-              </p>
-              <p className="text-sm text-text-muted">
-                {formatDate(notice.createdAt, 'es-CO', 'America/Bogota')}
-              </p>
-              <form action={markNoticeRead.bind(null, notice.id)}>
-                <button type="submit" className={`-ml-3 ${textButton}`}>
-                  {t.markRead}
-                </button>
-              </form>
-            </li>
-          );
-        })}
+        {notices.map((notice) => (
+          <li key={notice.id} className="flex flex-col gap-1 p-4">
+            <NoticeMessage notice={notice} />
+            {notice.kind === 'cambio_del_cliente' && notice.deltas.length > 0 ? (
+              <ChangeDeltas notice={notice} />
+            ) : null}
+            <p className="text-sm text-text-muted">
+              {formatDate(notice.createdAt, 'es-CO', 'America/Bogota')}
+            </p>
+            <form action={markNoticeRead.bind(null, notice.id)}>
+              <button type="submit" className={`-ml-3 ${textButton}`}>
+                {t.notifications.markRead}
+              </button>
+            </form>
+          </li>
+        ))}
       </ul>
     </section>
+  );
+}
+
+function NoticeMessage({ notice }: { notice: Notice }) {
+  const accepted = notice.kind === 'invitacion_aceptada';
+  if (!notice.clientName || !notice.clientId) {
+    return <p>{accepted ? t.notifications.acceptedUnknown : t.notifications.changedUnknown}</p>;
+  }
+  const [before, after] = (accepted ? t.notifications.accepted : t.notifications.changed).split(
+    '{name}',
+  );
+  return (
+    <p className="wrap-anywhere">
+      {before}
+      <Link
+        href={`/clientes/${notice.clientId}`}
+        translate="no"
+        className={`rounded font-medium text-link underline hover:no-underline ${focusRing}`}
+      >
+        {notice.clientName}
+      </Link>
+      {after}
+    </p>
+  );
+}
+
+/** Antes y después de las cifras clave que movió el cambio. */
+function ChangeDeltas({ notice }: { notice: ChangeNotice }) {
+  const format = (delta: KeyFigureDelta, value: number | null) => {
+    if (value === null) return '—';
+    if (KEY_FIGURES[delta.id] === 'ratio') return formatPercent(value, notice.locale);
+    return notice.currency ? formatMoney(value, notice.currency, notice.locale) : String(value);
+  };
+  return (
+    <dl className="flex flex-col gap-1 text-sm">
+      {notice.deltas.slice(0, MAX_DELTAS).map((delta) => (
+        <div key={delta.id} className="flex flex-wrap items-baseline justify-between gap-x-3">
+          <dt>{t.keyFigures[delta.id]}</dt>
+          <dd className="font-medium tabular-nums">
+            {t.budget.preview.change
+              .replace('{before}', format(delta, delta.before))
+              .replace('{after}', format(delta, delta.after))}
+          </dd>
+        </div>
+      ))}
+    </dl>
   );
 }

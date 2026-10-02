@@ -28,6 +28,9 @@ export default async function HomePage() {
         </h1>
         <p className="text-lg text-text-muted">{t.clientHome.preparing[viewer.formOfAddress]}</p>
       </div>
+      <Link href="/mis-datos" className={`inline-flex items-center ${textButton}`}>
+        {t.myData.link}
+      </Link>
       <Link href="/privacidad-y-datos" className={`inline-flex items-center ${textButton}`}>
         {t.clientHome.privacyLink}
       </Link>

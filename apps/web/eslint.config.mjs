@@ -19,8 +19,10 @@ export default defineConfig([
         {
           patterns: [
             {
-              group: ['@/features/*/*'],
-              message: 'Importa el módulo por su API pública: @/features/<modulo>.',
+              // `client` es la API pública para componentes de cliente (sin nada de servidor).
+              group: ['@/features/*/*', '!@/features/*/client'],
+              message:
+                'Importa el módulo por su API pública: @/features/<modulo>, o @/features/<modulo>/client desde un componente de cliente.',
             },
           ],
         },

@@ -98,7 +98,7 @@ pnpm supabase config push         # activa el gancho en el remoto; pide confirma
 
 Después de subir, el asesor de seguridad del panel (o `get_advisors` del MCP) muestra avisos que no hay que corregir:
 
-- `create_client` y `accept_invitation` se pueden ejecutar con sesión (lint 0029): es intencional, son las funciones que llama la app y validan quién las llama.
+- `create_client`, `accept_invitation` y `record_change_impact` se pueden ejecutar con sesión (lint 0029): es intencional, son las funciones que llama la app y validan quién las llama.
 - `get_invitation` se puede ejecutar sin sesión (lints 0028 y 0029): es intencional, P-C01 se abre antes de tener cuenta. Sin el token de 32 bytes no devuelve nada. Si aparece cualquier otra función en el lint 0028, es un error: Supabase da `EXECUTE` a `anon` en cada función nueva y hay que revocarlo en la migración (la prueba pgTAP de permisos también falla).
 - Protección de contraseñas filtradas desactivada y pocas opciones de MFA: la primera requiere el plan Pro, que se contrata antes del primer cliente real (ADR 0009); el segundo factor es una mejora futura (`docs/02-arquitectura.md`, 5.5).
 - `public.rls_auto_enable()` (lints 0028 y 0029): la creó Supabase con el proyecto remoto para el disparador de eventos `ensure_rls`, que activa RLS en cada tabla nueva de `public`. No existe en local ni está en las migraciones. Una función de disparador de eventos no se puede ejecutar desde la API.

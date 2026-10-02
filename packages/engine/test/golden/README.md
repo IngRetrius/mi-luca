@@ -12,6 +12,7 @@ Los valores quedan a nivel de celda. `adapters.ts` traduce las celdas a las entr
 |---|---|
 | `golden.test.ts` | Conteos de cada caso y conversión a moneda base de `Ingresos!F6:F13` |
 | `incomes-budget.test.ts` | Ingresos (F:U de las filas 6 a 13, fila 14, `T20:U25`, `S17`, `E30:E32`), Presupuesto (G:I de las filas 6 a 87 y los totales de las filas 89 a 97) y `Resumen!C11:C13` |
+| `compute.test.ts` | `compute` con el caso entero: `Resumen!C11:C15` en todos los casos, determinismo, y cifras clave antes y después |
 | `c2-cost-of-living.test.ts` | Hoja "Costo de vida" de C2 (no está en la plantilla): niveles de cada partida, totales, lo que paga la familia, costo sin matrícula, umbral fiscal y control contra el presupuesto (filas 6 a 39) |
 | `goals-insurance-debts.test.ts` | Metas (F, J y K de las filas 6 a 10, `K11` y la calculadora `E17:E30`), Seguros (`I6:I16`, `H16`), Deudas (`D21`, `F21`) y el valor de las filas automáticas `Presupuesto!D6:D12` |
 

@@ -59,7 +59,7 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 | C3 | ¿Plazo de gracia antes de borrar definitivamente? | 7 días para poder cancelar, dentro del plazo legal de cada país (`legal/README.md`, sección 4, punto 5) | F7 |
 | C4 | ¿Cuánto dura una invitación? | 7 días, reenviable | F1 |
 | C5 | ¿Cómo tratamos los datos de salud que aparecen en el presupuesto (terapias, medicamentos, lentes)? | Consentimiento explícito aparte y sugerencia de nombres genéricos ("Salud"). Son datos sensibles en Colombia y categoría especial en el RGPD [F28][F29] | F1 |
-| C6 | ¿Cómo avisamos al asesor de los cambios del cliente? | Aviso dentro de la app al momento y un correo resumen como máximo una vez al día | F2 |
+| C6 | ¿Cómo avisamos al asesor de los cambios del cliente? | Aviso dentro de la app al momento (hecho en F2, con el antes y después) y un correo resumen como máximo una vez al día (pendiente: la app aún no envía correos; hoy solo los envía Supabase Auth, A7c) | F2 |
 | C7 | ¿El cliente puede cambiar su país, su moneda base o su tipo de cliente? | No: cambian reglas y módulos, lo hace el asesor. Sí puede usar cualquier moneda en sus importes | F1 |
 | C8 | ¿Cómo migramos a los clientes actuales? | En F8, uno por uno, con invitación y consentimiento nuevos; los datos se cargan desde su Excel con el extractor | F8 |
 | C9 | ¿Sin conexión basta con leer el último plan? | Sí. Editar sin conexión obliga a resolver conflictos entre asesor y cliente | F1 |

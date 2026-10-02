@@ -28,6 +28,7 @@ El orden de cálculo y el catálogo de funciones están en `docs/04-motor-de-cal
 
 | Módulo | Qué hay | Pruebas de oro |
 |---|---|---|
+| (raíz) | `compute` (caso completo hasta F2), `keyFigures`, `diffKeyFigures` | `Resumen!C11:C15` en los cuatro casos |
 | `excel` | `datedifMonths`, `parseIsoDate` | Contra Excel en `test/excel-compat/` |
 | `currency` | `toBase`, `toBaseCompat`, `missingRates` | `Ingresos!F6:F13` |
 | `normalization` | `timesPerYear` | `Presupuesto!G6:G87` |

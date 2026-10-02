@@ -27,6 +27,7 @@ interface ComputeOptions {
 }
 ```
 
+- **Estado (F2):** existen `compute(input, { mode })`, `keyFigures` y `diffKeyFigures`, con los módulos hasta F2 (ingresos, deudas, metas y seguros mínimos, presupuesto con filas automáticas, costo de vida y Resumen `C11:C15`). Los parámetros llegan ya resueltos dentro de `CaseInput` (por ahora, los umbrales fiscales); `ResolvedParameters` y `qualityChecks` llegan con los módulos que los usan.
 - `CaseInput`: las entradas vivas del cliente (tablas de la sección 3.4 de `03-modelo-de-datos.md`) más `case_settings`, sin identificadores personales innecesarios (el motor no necesita el nombre).
 - `ResolvedParameters`: los parámetros vigentes en la fecha de corte, ya resueltos (país y metodología), con el id de cada versión para guardarlo en el plan entregado.
 - `CaseResult`: un objeto por módulo (sección 3) más `summary`, `pending` y `trace` (versión del motor y parámetros usados).

@@ -75,7 +75,21 @@ El plan Hobby es solo para uso personal no comercial: antes de que un cliente re
 |---|---|
 | `/clientes` | P-A01: perfiles con acceso activo, con su estado (texto y símbolo), o el estado vacío. Buscador por nombre con la búsqueda en la URL (`?q=`), que funciona sin JavaScript. Arriba, los avisos sin ver (el cliente aceptó la invitación), con "Marcar como visto". Acción principal fija abajo: "Nuevo cliente" |
 | `/clientes/nuevo` | P-A02: nombre visible, país y trato; llama a `create_client` y abre la ficha |
-| `/clientes/[id]` | P-A03 (esqueleto): datos del perfil e invitación. Mientras nadie haya aceptado: crear el enlace (se ve una sola vez, con botón de copiar), crear uno nuevo (anula el anterior) y anular con confirmación. Un id que no existe, o sin acceso, da la página 404 |
+| `/clientes/[id]` | P-A03 (esqueleto): datos del perfil, datos del caso (enlace al presupuesto) y cifras del plan que calcula el motor (`compute`) con lo registrado hoy, e invitación. Mientras nadie haya aceptado: crear el enlace (se ve una sola vez, con botón de copiar), crear uno nuevo (anula el anterior) y anular con confirmación. Un id que no existe, o sin acceso, da la página 404 |
+| `/clientes/[id]/presupuesto` | P-A06: partidas por categoría con su promedio mensual, totales (gasto, esencial, ahorro), partidas incompletas y filtros por tipo, pagador y esencial en la URL (`?tipo=`, `?pagador=`, `?esencial=1`), que funcionan sin JavaScript. Acción principal: "Agregar gasto" |
+| `/clientes/[id]/presupuesto/nuevo`, `/[itemId]` | Alta, edición y borrado (con confirmación) de una partida. El asesor escribe además el nivel básico y la marca de propuesto. Debajo, "Así cambia el plan": el motor recalcula en el navegador mientras se escribe |
+
+Los avisos de `/clientes` incluyen los cambios del cliente (`cambio_del_cliente`) con las cifras clave antes y después.
+
+## Cliente: Mis datos
+
+| Ruta | Qué hace |
+|---|---|
+| `/mis-datos` | P-C06: los módulos que el cliente edita, con su total (por ahora, sus gastos). Se llega desde el inicio |
+| `/mis-datos/gastos` | Lista de gastos por categoría, en el trato del cliente |
+| `/mis-datos/gastos/nuevo`, `/[itemId]` | P-C07: alta y edición de un gasto ("¿Quién lo paga? Yo, Mi familia, Otra persona") con "Así cambia tu plan" calculado en el teléfono antes de guardar |
+
+Cada guardado pasa por `withImpact` (`features/summary/impact.ts`): calcula el caso antes y después y llama a `record_change_impact`, que actualiza la caché de cifras, agrupa los cambios de 10 minutos y avisa al asesor si cambió algo el cliente. Para ver las pantallas del cliente en local, crea su usuario con la API de administración y un perfil con `owner_user_id` y acceso del asesor (solo en la base local).
 
 ## Invitación (cliente)
 

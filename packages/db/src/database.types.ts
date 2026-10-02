@@ -111,6 +111,247 @@ export type Database = {
         };
         Relationships: [];
       };
+      budget_items: {
+        Row: {
+          amount: number | null;
+          basic_amount: number | null;
+          category: string;
+          client_id: string;
+          concept: string;
+          currency: string;
+          duration_days: number | null;
+          essential: boolean;
+          expense_type: string | null;
+          frequency: string | null;
+          id: string;
+          is_proposed: boolean;
+          is_temporary: boolean;
+          note: string | null;
+          payer: string;
+          payer_label: string | null;
+          scope: string;
+          sort_order: number;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          amount?: number | null;
+          basic_amount?: number | null;
+          category: string;
+          client_id: string;
+          concept: string;
+          currency: string;
+          duration_days?: number | null;
+          essential?: boolean;
+          expense_type?: string | null;
+          frequency?: string | null;
+          id?: string;
+          is_proposed?: boolean;
+          is_temporary?: boolean;
+          note?: string | null;
+          payer?: string;
+          payer_label?: string | null;
+          scope?: string;
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          amount?: number | null;
+          basic_amount?: number | null;
+          category?: string;
+          client_id?: string;
+          concept?: string;
+          currency?: string;
+          duration_days?: number | null;
+          essential?: boolean;
+          expense_type?: string | null;
+          frequency?: string | null;
+          id?: string;
+          is_proposed?: boolean;
+          is_temporary?: boolean;
+          note?: string | null;
+          payer?: string;
+          payer_label?: string | null;
+          scope?: string;
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'budget_items_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      case_settings: {
+        Row: {
+          client_id: string;
+          compatibility_mode: boolean;
+          cutoff_date: string | null;
+          fiscal_threshold_keys: string[];
+          flow_year: number | null;
+          pension_enabled: boolean;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          client_id: string;
+          compatibility_mode?: boolean;
+          cutoff_date?: string | null;
+          fiscal_threshold_keys?: string[];
+          flow_year?: number | null;
+          pension_enabled?: boolean;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          client_id?: string;
+          compatibility_mode?: boolean;
+          cutoff_date?: string | null;
+          fiscal_threshold_keys?: string[];
+          flow_year?: number | null;
+          pension_enabled?: boolean;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'case_settings_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: true;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      change_impacts: {
+        Row: {
+          actor_role: string;
+          actor_user_id: string;
+          after_figures: NonNullable<Json>;
+          audit_from_id: number;
+          audit_to_id: number;
+          before_figures: NonNullable<Json>;
+          client_id: string;
+          created_at: string;
+          deltas: NonNullable<Json>;
+          engine_version: string;
+          id: string;
+          updated_at: string;
+        };
+        Insert: {
+          actor_role: string;
+          actor_user_id: string;
+          after_figures: NonNullable<Json>;
+          audit_from_id: number;
+          audit_to_id: number;
+          before_figures: NonNullable<Json>;
+          client_id: string;
+          created_at?: string;
+          deltas: NonNullable<Json>;
+          engine_version: string;
+          id?: string;
+          updated_at?: string;
+        };
+        Update: {
+          actor_role?: string;
+          actor_user_id?: string;
+          after_figures?: NonNullable<Json>;
+          audit_from_id?: number;
+          audit_to_id?: number;
+          before_figures?: NonNullable<Json>;
+          client_id?: string;
+          created_at?: string;
+          deltas?: NonNullable<Json>;
+          engine_version?: string;
+          id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'change_impacts_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      client_fx_rates: {
+        Row: {
+          as_of: string;
+          client_id: string;
+          currency: string;
+          note: string | null;
+          rate_to_base: number;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          as_of: string;
+          client_id: string;
+          currency: string;
+          note?: string | null;
+          rate_to_base: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          as_of?: string;
+          client_id?: string;
+          currency?: string;
+          note?: string | null;
+          rate_to_base?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'client_fx_rates_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      client_key_figures: {
+        Row: {
+          client_id: string;
+          computed_at: string;
+          engine_version: string;
+          figures: NonNullable<Json>;
+          mode: string;
+        };
+        Insert: {
+          client_id: string;
+          computed_at?: string;
+          engine_version: string;
+          figures: NonNullable<Json>;
+          mode: string;
+        };
+        Update: {
+          client_id?: string;
+          computed_at?: string;
+          engine_version?: string;
+          figures?: NonNullable<Json>;
+          mode?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'client_key_figures_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: true;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       clients: {
         Row: {
           base_currency: string;
@@ -251,6 +492,121 @@ export type Database = {
         };
         Relationships: [];
       };
+      country_parameters: {
+        Row: {
+          consulted_at: string;
+          country_code: string | null;
+          created_at: string;
+          created_by: string | null;
+          id: string;
+          key: string;
+          notes: string | null;
+          source_name: string;
+          source_url: string | null;
+          unit: string | null;
+          valid_from: string;
+          valid_to: string | null;
+          value: NonNullable<Json>;
+        };
+        Insert: {
+          consulted_at: string;
+          country_code?: string | null;
+          created_at?: string;
+          created_by?: string | null;
+          id?: string;
+          key: string;
+          notes?: string | null;
+          source_name: string;
+          source_url?: string | null;
+          unit?: string | null;
+          valid_from: string;
+          valid_to?: string | null;
+          value: NonNullable<Json>;
+        };
+        Update: {
+          consulted_at?: string;
+          country_code?: string | null;
+          created_at?: string;
+          created_by?: string | null;
+          id?: string;
+          key?: string;
+          notes?: string | null;
+          source_name?: string;
+          source_url?: string | null;
+          unit?: string | null;
+          valid_from?: string;
+          valid_to?: string | null;
+          value?: NonNullable<Json>;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'country_parameters_country_code_fkey';
+            columns: ['country_code'];
+            isOneToOne: false;
+            referencedRelation: 'countries';
+            referencedColumns: ['code'];
+          },
+        ];
+      };
+      incomes: {
+        Row: {
+          allocation: string;
+          amount: number;
+          client_id: string;
+          currency: string;
+          id: string;
+          is_net: boolean;
+          kind: string;
+          lost_in_scenario: string | null;
+          name: string;
+          note: string | null;
+          payments_by_month: number[];
+          sort_order: number;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          allocation?: string;
+          amount: number;
+          client_id: string;
+          currency: string;
+          id?: string;
+          is_net?: boolean;
+          kind: string;
+          lost_in_scenario?: string | null;
+          name: string;
+          note?: string | null;
+          payments_by_month?: number[];
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          allocation?: string;
+          amount?: number;
+          client_id?: string;
+          currency?: string;
+          id?: string;
+          is_net?: boolean;
+          kind?: string;
+          lost_in_scenario?: string | null;
+          name?: string;
+          note?: string | null;
+          payments_by_month?: number[];
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'incomes_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       invitations: {
         Row: {
           accepted_at: string | null;
@@ -387,6 +743,70 @@ export type Database = {
           },
         ];
       };
+      social_security_months: {
+        Row: {
+          client_id: string;
+          payments_by_month: number[];
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          client_id: string;
+          payments_by_month?: number[];
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          client_id?: string;
+          payments_by_month?: number[];
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'social_security_months_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: true;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      variable_income_history: {
+        Row: {
+          amount: number;
+          client_id: string;
+          currency: string;
+          month_index: number;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          amount: number;
+          client_id: string;
+          currency: string;
+          month_index: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          amount?: number;
+          client_id?: string;
+          currency?: string;
+          month_index?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'variable_income_history_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -436,6 +856,43 @@ export type Database = {
           form_of_address: string;
           status: string;
         }[];
+      };
+      parameter_at: {
+        Args: { p_country: string; p_key: string; p_on: string };
+        Returns: {
+          consulted_at: string;
+          country_code: string | null;
+          created_at: string;
+          created_by: string | null;
+          id: string;
+          key: string;
+          notes: string | null;
+          source_name: string;
+          source_url: string | null;
+          unit: string | null;
+          valid_from: string;
+          valid_to: string | null;
+          value: NonNullable<Json>;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'country_parameters';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      record_change_impact: {
+        Args: {
+          p_after: Json;
+          p_audit_after: number;
+          p_before: Json;
+          p_client: string;
+          p_deltas: Json;
+          p_engine_version: string;
+          p_impact?: string;
+          p_mode: string;
+        };
+        Returns: string;
       };
     };
     Enums: {

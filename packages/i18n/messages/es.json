@@ -138,6 +138,13 @@
       "revokeConfirm": "El enlace dejará de servir y la persona no podrá aceptarlo. ¿Anular la invitación?",
       "revokeConfirmYes": "Sí, anular",
       "revokeCancel": "No, mantenerla"
+    },
+    "caseData": {
+      "title": "Datos del caso",
+      "budget": "Presupuesto",
+      "budgetSummary": "{amount} de gasto al mes",
+      "figuresTitle": "Cifras del plan",
+      "figuresNote": "Con los datos registrados hoy. Las cifras de flujo, fondo e inversión llegan con sus módulos."
     }
   },
   "invitation": {
@@ -425,6 +432,207 @@
     "title": "Avisos",
     "accepted": "{name} aceptó la invitación.",
     "acceptedUnknown": "Un cliente aceptó la invitación.",
-    "markRead": "Marcar como visto"
+    "markRead": "Marcar como visto",
+    "changed": "{name} cambió sus datos.",
+    "changedUnknown": "Un cliente cambió sus datos."
+  },
+  "keyFigures": {
+    "annualIncome": "Ingreso al año",
+    "annualExpenses": "Gasto al año",
+    "monthlyExpenses": "Gasto al mes",
+    "programmedSavings": "Ahorro programado al año",
+    "annualSurplus": "Sobrante al año",
+    "savingsRate": "Tasa de ahorro",
+    "essentialMonthly": "Costo de vida esencial al mes",
+    "basicMonthly": "Costo de vida básico al mes",
+    "ownSavingsRate": "Tasa de ahorro sobre el ingreso propio"
+  },
+  "budget": {
+    "title": "Presupuesto",
+    "intro": "Partidas del cliente por categoría. Las cuotas de deudas, los seguros nuevos y los aportes a metas se suman solos cuando esos módulos tengan datos.",
+    "back": "Ficha del cliente",
+    "add": "Agregar gasto",
+    "empty": "Todavía no hay gastos registrados.",
+    "categoryTotal": "{amount} al mes",
+    "itemSummary": "{amount} · {frequency}",
+    "incomplete": "Sin frecuencia o sin tipo: no suma hasta completarlo",
+    "incompleteCount": "Partidas sin frecuencia o sin tipo: {count}",
+    "familyReference": "Referencia familiar: no suma",
+    "temporary": "Temporal",
+    "essentialTag": "Esencial",
+    "paidBy": {
+      "familia": "La paga la familia",
+      "tercero": "La paga otra persona"
+    },
+    "totals": {
+      "title": "Totales",
+      "expenses": "Gasto al mes",
+      "essential": "Gasto esencial al mes",
+      "savings": "Ahorro programado al mes"
+    },
+    "filters": {
+      "title": "Filtrar",
+      "type": "Cómo se paga",
+      "payer": "Quién lo paga",
+      "essential": "Esencial",
+      "all": "Todos",
+      "onlyEssential": "Solo esenciales",
+      "apply": "Filtrar",
+      "clear": "Quitar filtros",
+      "noMatches": "Ninguna partida coincide con el filtro."
+    },
+    "frequencies": {
+      "semanal": "Semanal",
+      "quincenal": "Quincenal",
+      "mensual": "Mensual",
+      "bimestral": "Bimestral",
+      "trimestral": "Trimestral",
+      "cada_4_meses": "Cada 4 meses",
+      "semestral": "Semestral",
+      "anual": "Anual",
+      "cada_2_anos": "Cada 2 años",
+      "por_duracion": "Por duración (días)",
+      "meses_seguridad_social": "Meses con seguridad social"
+    },
+    "noFrequency": "sin frecuencia",
+    "expenseTypes": {
+      "directo": "Pago directo",
+      "bolsillo": "Bolsillo",
+      "seg_social": "Seguridad social",
+      "deuda": "Cuota de deuda",
+      "ahorro": "Ahorro"
+    },
+    "expenseTypeHints": {
+      "directo": "Se paga con el dinero del mes.",
+      "bolsillo": "No es mensual: se aparta cada mes y se paga cuando toca.",
+      "seg_social": "Salud, pensión y riesgos laborales.",
+      "deuda": "Cuota de un crédito.",
+      "ahorro": "Es ahorro, no gasto."
+    },
+    "payers": {
+      "cliente": "El cliente",
+      "familia": "La familia",
+      "tercero": "Otra persona"
+    },
+    "categories": [
+      "Vivienda",
+      "Alimentación",
+      "Transporte",
+      "Salud y bienestar",
+      "Cuidado personal",
+      "Hijos y familia",
+      "Mascotas",
+      "Servicios",
+      "Viajes y ocio",
+      "Temporada",
+      "Impuestos y trámites",
+      "Compras puntuales",
+      "Seguridad social",
+      "Ahorro"
+    ],
+    "form": {
+      "newTitle": "Nuevo gasto",
+      "editTitle": "Editar gasto",
+      "category": "Categoría",
+      "categoryHint": "Por ejemplo, Vivienda o Alimentación.",
+      "concept": "Concepto",
+      "conceptHint": "Por ejemplo, Mercado o Arriendo.",
+      "amount": "Valor por pago",
+      "amountHint": "Lo que se paga cada vez.",
+      "currency": "Moneda",
+      "currencyHint": "Para otra moneda, registra antes su tasa en Monedas.",
+      "frequency": "Frecuencia",
+      "durationDays": "Días que dura",
+      "durationDaysHint": "Por ejemplo, cuántos días dura un frasco.",
+      "expenseType": "Cómo se paga",
+      "essential": "Es esencial",
+      "essentialHint": "No se puede dejar de pagar aunque baje el ingreso.",
+      "payer": "Quién lo paga",
+      "payerLabel": "Quién, si es otra persona o la familia (opcional)",
+      "payerLabelHint": "Por ejemplo, sus padres.",
+      "temporary": "Es temporal",
+      "temporaryHint": "Por ejemplo, la matrícula: el costo de vida se calcula también sin él.",
+      "familyReference": "Es solo una referencia familiar",
+      "familyReferenceHint": "Se anota pero no suma en ningún cálculo, por ejemplo la vivienda de la familia.",
+      "note": "Nota (opcional)",
+      "advisorTitle": "Criterio del asesor",
+      "basicAmount": "Valor por pago en el nivel básico (opcional)",
+      "basicAmountHint": "Tu propuesta para el costo de vida básico. Vacío es igual al valor actual; 0 lo deja fuera.",
+      "proposed": "El valor es una propuesta del asesor",
+      "submit": "Guardar",
+      "submitting": "Guardando…",
+      "cancel": "Cancelar",
+      "deleteToggle": "Borrar este gasto",
+      "deleteConfirm": "Sí, borrarlo",
+      "deleting": "Borrando…",
+      "deleteHint": "Se borra del presupuesto. El historial de cambios lo conserva.",
+      "errors": {
+        "missingCategory": "Escribe la categoría.",
+        "missingConcept": "Escribe el concepto.",
+        "tooLong": "Es demasiado largo.",
+        "invalidAmount": "Escribe un valor de 0 o más, solo con números.",
+        "missingDays": "Escribe cuántos días dura.",
+        "invalidCurrency": "Elige una moneda de la lista.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrala en Monedas y vuelve a intentarlo.",
+        "notAllowed": "No tienes permiso para cambiar este dato.",
+        "notFound": "Este gasto ya no existe.",
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      }
+    },
+    "preview": {
+      "title": {
+        "tu": "Así cambia tu plan",
+        "usted": "Así cambia su plan"
+      },
+      "advisorTitle": "Así cambia el plan",
+      "unchanged": "Sin cambios en las cifras.",
+      "change": "{before} → {after}",
+      "note": "Calculado con los datos de hoy, antes de guardar."
+    },
+    "client": {
+      "title": {
+        "tu": "Mis gastos",
+        "usted": "Mis gastos"
+      },
+      "intro": {
+        "tu": "Lo que pagas y cada cuánto. Si cambias algo, tu asesor ve el antes y después.",
+        "usted": "Lo que paga y cada cuánto. Si cambia algo, su asesor ve el antes y después."
+      },
+      "back": "Mis datos",
+      "add": "Agregar gasto",
+      "empty": {
+        "tu": "Todavía no tienes gastos registrados.",
+        "usted": "Todavía no tiene gastos registrados."
+      },
+      "payers": {
+        "cliente": "Yo",
+        "familia": "Mi familia",
+        "tercero": "Otra persona"
+      },
+      "amountHint": {
+        "tu": "Lo que pagas cada vez.",
+        "usted": "Lo que paga cada vez."
+      },
+      "payerLabelHint": "Por ejemplo, mis padres.",
+      "essentialHint": {
+        "tu": "No lo puedes dejar de pagar aunque baje tu ingreso.",
+        "usted": "No lo puede dejar de pagar aunque baje su ingreso."
+      }
+    }
+  },
+  "myData": {
+    "title": "Mis datos",
+    "intro": {
+      "tu": "Lo que registraste para tu plan. Si cambias algo, tu asesor ve el antes y después.",
+      "usted": "Lo que registró para su plan. Si cambia algo, su asesor ve el antes y después."
+    },
+    "back": "Inicio",
+    "expenses": "Gastos",
+    "expensesSummary": "{count} partidas · {amount} al mes",
+    "noExpenses": "Sin gastos registrados",
+    "incomes": "Ingresos",
+    "incomesSummary": "{count} ingresos · {amount} al año",
+    "noIncomes": "Sin ingresos registrados",
+    "link": "Mis datos"
   }
 }

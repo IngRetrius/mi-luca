@@ -155,7 +155,17 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Ficha de continuidad | `continuitySheet` | |
 | Plan entregado | `planDelivery` | Versión fija |
 | Cifras clave | `keyFigures` | |
-| Antes y después | `changeImpact` | |
+| Antes y después | `changeImpact` / `change_impacts` | Registro de los cambios que movieron cifras clave |
+| Registrar el antes y después | `withImpact`, `record_change_impact` | Envoltura de cada guardado y función de Postgres que escribe el registro |
+| Caché de cifras clave | `client_key_figures` | Las últimas cifras calculadas de cada cliente |
+| Cálculo del caso | `compute` / `CaseInput`, `CaseResult` | Función pública del motor |
+| Diferencias de cifras clave | `diffKeyFigures` / `KeyFigureDelta` | |
+| Cambio del cliente | `cambio_del_cliente` | Tipo de aviso al asesor |
+| Mis datos | `/mis-datos` | P-C06 |
+| Mis gastos | `/mis-datos/gastos` | P-C06 y P-C07 |
+| Quien edita los datos del cliente | `requireCaseEditor` / `CaseEditor` | Asesor (RLS decide) o dueño del perfil |
+| Umbrales fiscales que aplican | `fiscal_threshold_keys` | Columna de `case_settings` |
+| Importe escrito | `parseAmount`, `amountToText` | Punto de miles y coma decimal |
 | Historial de cambios | `auditLog` | |
 | Control de calidad | `qualityChecks` | |
 | Modo compatible, modo nativo | `compatible`, `native` | Opción del motor |

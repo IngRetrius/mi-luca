@@ -70,6 +70,8 @@ features/budget/
 └── hooks/              Estado de cliente del módulo, por ejemplo la vista previa del impacto
 ```
 
+En el código, los módulos de F1 y F2 usan archivos planos (`queries.ts`, `actions.ts`, `validation.ts` y los componentes) en lugar de las subcarpetas de arriba. Un módulo puede tener, además de `index.ts`, un `client.ts`: su API pública para componentes de cliente, sin nada que importe `server-only`, porque un barril que mezcla las dos cosas rompe el build al importarse desde el navegador. La regla de lint de importación lo permite (`apps/web/eslint.config.mjs`).
+
 ### 2.2 Estructura interna de un módulo del motor
 
 ```
@@ -108,7 +110,7 @@ flowchart BT
 | `ui` | React y primitivas accesibles | `domain`, `engine`, Supabase |
 | `db` | Cliente de Supabase | `engine`, `ui` |
 | `exporters` | `engine`, `domain`, `i18n` | Supabase, `apps/web` |
-| `apps/web` | Todos | Módulos internos de otro `feature` (solo su `index.ts`) |
+| `apps/web` | Todos | Módulos internos de otro `feature` (solo su `index.ts`, o su `client.ts` desde un componente de cliente) |
 
 Estas reglas se hacen cumplir con reglas de lint de importación en `packages/config` y fallan en CI.
 

@@ -1,4 +1,8 @@
 export { ENGINE_VERSION } from './version';
+export { compute } from './compute';
+export type { CaseInput, CaseResult, ComputeOptions, EngineMode, SummaryFigures } from './compute';
+export { diffKeyFigures, KEY_FIGURES, keyFigures } from './key-figures';
+export type { KeyFigureDelta, KeyFigureId, KeyFigureKind, KeyFigures } from './key-figures';
 export * from './currency';
 export * from './budget';
 export * from './cost-of-living';
