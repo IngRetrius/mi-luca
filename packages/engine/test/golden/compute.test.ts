@@ -1,37 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
-import type { GoalInput } from '../../src/goals';
-import { compute, type CaseInput } from '../../src/compute';
+import { compute } from '../../src/compute';
 import { diffKeyFigures, keyFigures } from '../../src/key-figures';
-import {
-  budgetInput,
-  debtsInput,
-  fxContext,
-  goalsInput,
-  incomesInput,
-  insuranceInput,
-  socialSecurityFlags,
-} from './adapters';
-import { cell, excelN, goldenCases, type GoldenCase } from './cases';
+import { caseInput } from './adapters';
+import { cell, excelN, goldenCases } from './cases';
 import { expectCell } from './expect-cell';
 
 // Tolerancia de razones (04-motor, 7.1).
 const RATIO_TOLERANCE = 0.000001;
-
-/** El caso completo como lo recibe `compute`: las partidas del cliente sin las filas automáticas. */
-function caseInput(golden: GoldenCase): CaseInput {
-  return {
-    cutoffDate: golden.cutoffDate,
-    fx: fxContext(golden),
-    incomes: incomesInput(golden),
-    socialSecurityMonths: socialSecurityFlags(golden),
-    budgetItems: budgetInput(golden).slice(7),
-    goals: goalsInput(golden).filter((goal): goal is GoalInput => goal !== null),
-    insurances: insuranceInput(golden),
-    debts: debtsInput(golden),
-    fiscalThresholds: [],
-  };
-}
 
 describe.each(goldenCases)('caso de oro $case: compute y el Resumen', (golden) => {
   const result = compute(caseInput(golden), { mode: 'compatible' });
@@ -81,5 +57,15 @@ describe('cifras clave y antes y después', () => {
     expect(changed).toContain('annualSurplus');
     expect(changed).not.toContain('annualIncome');
     expect(changed).not.toContain('programmedSavings');
+  });
+
+  it('un antes guardado sin las cifras nuevas no inventa cambios: lo ausente vale como vacío', () => {
+    const missing = new Set(['debtLoad', 'noIncomeShortfall', 'ownSavingsRate']);
+    const older = Object.fromEntries(Object.entries(before).filter(([id]) => !missing.has(id)));
+    const deltas = diffKeyFigures(older, before);
+    // Solo aparece lo que ahora tiene valor (de vacío a un número); lo que sigue vacío no cambia.
+    const expected = [...missing].filter((id) => before[id as keyof typeof before] !== null);
+    expect(deltas.map((delta) => delta.id).sort()).toEqual(expected.sort());
+    expect(deltas.every((delta) => delta.before === null)).toBe(true);
   });
 });

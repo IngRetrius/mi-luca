@@ -18,7 +18,7 @@ const valid = {
   essential: 'on',
   payer: 'cliente',
 };
-const options = { currencies: ['COP', 'USD'], advisor: false };
+const options = { currencies: ['COP', 'USD'], advisor: false, pocketIds: ['p-1'] };
 
 describe('parseBudgetItem', () => {
   it('un gasto completo queda listo para guardar', () => {
@@ -107,5 +107,14 @@ describe('parseBudgetItem', () => {
       scope: 'referencia_familiar',
       is_temporary: true,
     });
+  });
+
+  it('el bolsillo es uno de los del cliente; vacío es sin bolsillo', () => {
+    const own = parseBudgetItem(form({ ...valid, pocket: 'p-1' }), options);
+    expect(own.ok && own.record.pocket_id).toBe('p-1');
+    const none = parseBudgetItem(form(valid), options);
+    expect(none.ok && none.record.pocket_id).toBeNull();
+    const other = parseBudgetItem(form({ ...valid, pocket: 'p-2' }), options);
+    expect(!other.ok && other.errors.pocket).toBe('invalidPocket');
   });
 });

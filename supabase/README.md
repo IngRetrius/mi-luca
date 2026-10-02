@@ -103,6 +103,8 @@ Después de subir, el asesor de seguridad del panel (o `get_advisors` del MCP) m
 - Protección de contraseñas filtradas desactivada y pocas opciones de MFA: la primera requiere el plan Pro, que se contrata antes del primer cliente real (ADR 0009); el segundo factor es una mejora futura (`docs/02-arquitectura.md`, 5.5).
 - `public.rls_auto_enable()` (lints 0028 y 0029): la creó Supabase con el proyecto remoto para el disparador de eventos `ensure_rls`, que activa RLS en cada tabla nueva de `public`. No existe en local ni está en las migraciones. Una función de disparador de eventos no se puede ejecutar desde la API.
 
+El asesor de rendimiento marca índices sin uso (lint 0005) mientras la base tiene pocos datos: no se borran, son los que usan RLS y las llaves foráneas cuando haya clientes. Una llave foránea sin índice que la cubra (lint 0001) sí se corrige con una migración, como `pocket_fk_indexes` para las llaves compuestas de bolsillos y bancos.
+
 La migración `unclaimed_account_cleanup` activa `pg_cron` y programa `delete-unclaimed-accounts` (todos los días a las 08:00 UTC). Para revisar sus ejecuciones: `select * from cron.job_run_details order by start_time desc limit 10;` en el editor SQL.
 
 Cuando exista el proyecto de staging, las migraciones pasan primero por allí y a producción desde CI con aprobación manual (`docs/02-arquitectura.md`, sección 8).

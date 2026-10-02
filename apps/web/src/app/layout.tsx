@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from 'next';
 import { Livvic } from 'next/font/google';
 
+import { messages } from '@miluca/i18n';
 import { darkTheme, lightTheme, themeToCssVariables } from '@miluca/ui';
+
+import { ErrorTextProvider } from '@/components/error-text';
 
 import './globals.css';
 
@@ -46,7 +49,9 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       <head>
         <style>{themeCss}</style>
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ErrorTextProvider text={messages.es.common.error}>{children}</ErrorTextProvider>
+      </body>
     </html>
   );
 }

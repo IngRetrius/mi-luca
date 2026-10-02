@@ -12,6 +12,7 @@ const item = (partial: Partial<BudgetItemInput>): BudgetItemInput => ({
   payer: 'cliente',
   basicAmount: null,
   isTemporary: false,
+  pocket: null,
   ...partial,
 });
 

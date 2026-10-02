@@ -57,7 +57,8 @@ gantt
 | F0 | 80 h, hasta mediados de noviembre de 2026 | Terminada salvo tareas del asesor: dominio y verificación de marca en Google, y la revisión del caso C1 (A11) |
 | F1 | 120 h, hasta mediados de enero de 2027 | Terminada salvo el alta con Google en un navegador real, el correo de la invitación (C14) y exportar y borrar en P-C11 (F7) |
 | F2 | 160 h, hasta comienzos de abril de 2027 | Terminada en el código; pendientes que no bloquean: C6 y C20 |
-| F3 a F8 | 760 h | Sin empezar |
+| F3 | 160 h, hasta finales de junio de 2027 | En curso: motor, base de datos y pantallas del asesor hechos; faltan pantallas del cliente y entrega mínima |
+| F4 a F8 | 600 h | Sin empezar |
 
 Con el agente de código, F0 a F2 avanzaron mucho más rápido que la estimación a 14 horas por semana, que suponía empezar el 5 de octubre de 2026. **Supuesto:** el calendario de arriba se mantiene como techo y se reestima al cerrar F3, con lo que tome realmente una fase que mezcla motor, base de datos y pantallas. Las horas del resto no cambian hasta entonces.
 
@@ -108,7 +109,7 @@ Avance al 28/09/2026 (PR #1 a #4 unidos):
 - [x] Configuración de Auth aplicada al remoto con `supabase config push` (contraseña de 8, código de 6 dígitos, sin TOTP, URL de retorno local).
 - [x] Proyecto de Google Cloud (`miluca-510102`) y cliente de OAuth web; Google activo en el Supabase local, verificado hasta la pantalla de inicio de sesión de Google [F37].
 - [x] Google activo en el proyecto remoto (`supabase config push`).
-- [ ] Proyecto en Vercel (`mi-luca`, plan Hobby) creado y conectado al repositorio el 28/09/2026; `vercel.json` con `cle1`. Dominio de producción: `mi-luca.vercel.app`, ya declarado en `[remotes.production.auth]` de `supabase/config.toml`. Falta: en el panel, Root Directory `apps/web` y variables de entorno (`apps/web/README.md`, "Despliegue en Vercel"); y `pnpm supabase config push` para llevar el dominio a Supabase Auth.
+- [x] Proyecto en Vercel (`mi-luca`, plan Hobby) conectado al repositorio el 28/09/2026, con `vercel.json` en `cle1`, Root Directory `apps/web` y las variables de Supabase. Dominio de producción: `mi-luca.vercel.app`, declarado en `[remotes.production.auth]` de `supabase/config.toml`. Comprobado el 02/10/2026: `/entrar` muestra el acceso y `/auth/start` envía a Supabase con el retorno a `mi-luca.vercel.app`; la prueba en el iPhone del 29/09 entró de punta a punta.
 - [ ] Dominio y verificación de marca en Google (requiere al asesor).
 - [x] Prueba de la app publicada (`mi-luca.vercel.app`) en el iPhone del asesor, el 29/09/2026: funciona. Quedan por comprobar, cuando haga falta, los criterios de largo plazo (sesión tras 14 días sin abrir) y Android.
 - [x] Herramientas de casos de oro: `recalc.py` (recálculo en Excel, validado celda a celda) y `golden.py` (extracción con verificación de privacidad).
@@ -206,6 +207,17 @@ Criterios de aceptación:
 - No se puede entregar un plan con controles bloqueantes.
 - Un plan entregado no cambia aunque cambien los datos vivos; la vista "Comparar con hoy" muestra las diferencias.
 - **MVP:** un cliente real sin deudas se atiende de principio a fin en la plataforma.
+
+Avance:
+
+- [x] Motor: `receivables`, `cashflow` (flujo mes a mes, meses sin ingreso con aporte igual o proporcional, destino del sobrante y de los abonos), `reality-check`, deuda cara y carga de deuda, saldo líquido, `emergency-fund` (escenarios, metas y avance frente a la meta completa y la vigente), `pockets` (metas, aportes, saldos y reparto del saldo actual) y, en modo nativo, el aporte de terceros como ingreso "otro" (ADR 0010) y el plan de ahorro secuencial (ADR 0008). `edate`, `monthIndex` y `roundUp` probados contra Excel. Cifras clave nuevas: carga y total de deuda, meta y avance del fondo, faltante de meses sin ingreso e inversión del año. `ENGINE_VERSION` 0.7.0.
+- [x] Pruebas de oro de Flujo anual, Bolsillos, Fondo de emergencia, cobros, prueba de realidad y `Resumen!C14:C26` (salvo `C19`, de F4) y `C35` en C1, C2, C3, C7 y los casos sintéticos nuevos C6 (ingreso variable, aporte proporcional, deuda cara, cobros) y C8 (sin deudas, prueba "Revisar gastos", saldos que superan lo disponible). Hallazgos nuevos H-26 y H-27; preguntas B14 y B15.
+- [x] Base de datos: supuestos del plan en `case_settings`, parámetros de la metodología, `banks`, `pockets`, `budget_items.pocket_id`, `receivables`, `reality_check` y `assets`, con RLS, historial y pgTAP. La app ya calcula el caso completo con estas tablas.
+- [x] Pantallas del asesor: Flujo, Fondo y Bolsillos (P-A10, solo lectura, con el reparto del saldo de hoy), bancos y bolsillos generales, Cobros (P-A10), Patrimonio (activos y saldo líquido), Prueba de realidad (P-A08) y Supuestos del plan; bolsillo en el formulario del presupuesto. Accesos desde la ficha y cifras nuevas en ella. Verificado de punta a punta contra Supabase local (390 y 320 px, sin errores de consola) y revisado con `web-design-guidelines`.
+- [x] Revisión del 02/10/2026: índices de las llaves compuestas (migración `pocket_fk_indexes`, por el asesor de rendimiento), metodología vigente hoy cuando el corte es anterior a su primera versión (antes la ficha no cargaba), esqueleto de carga propio de la ficha, página de error en español, cifras clave ausentes en un "antes" guardado tratadas como vacías, aviso en el presupuesto de las partidas tipo bolsillo sin bolsillo (H-02) y pruebas e2e de invitación que dependen de si hay Supabase.
+- [ ] Pantallas del cliente en Mis datos: bancos y bolsillos, cobros (sin el % a inversión), patrimonio y prueba de realidad (la matriz de permisos se los deja editar).
+- [ ] Bolsillos del fondo y de meses sin ingreso con su banco (hoy el motor los arma y la pantalla no deja asignarles banco).
+- [ ] Entrega mínima: control de calidad, plan entregado inmutable y P-C05 sin PDF.
 
 ### F4. Deudas y créditos (160 horas)
 

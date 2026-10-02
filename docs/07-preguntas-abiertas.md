@@ -49,6 +49,8 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 | B11 | ¿Quién puede cambiar la tasa de cambio de una moneda? | El cliente y el asesor (es la tasa que el cliente recibe); el historial registra quién la cambió y el asesor ve el antes y después | F2 |
 | B12 | ¿Una deuda en otra moneda se simula en su moneda o en la moneda base? | En su moneda, y se convierte con la tasa vigente para los totales; la sensibilidad muestra el riesgo cambiario | F4 |
 | B13 | En la calculadora de viaje, ¿cómo sabe el motor qué concepto es el alojamiento? La plantilla cobra los impuestos del alojamiento sobre una fila fija (`Metas!E16`); `goal_cost_items` tiene el tipo `porcentaje_sobre_alojamiento`, pero ningún concepto se marca como alojamiento | Agregar el tipo `alojamiento` a `goal_cost_items.kind` al crear la tabla en F5. **Supuesto** aplicado en el motor: cada concepto lleva `isLodging` (`TripCostItem`) | F5 |
+| B14 | En el plan de ahorro secuencial (ADR 0008), ¿desde qué mes se cuenta? El flujo proyecta el año siguiente al de corte, pero entre la fecha de corte y enero también hay sobrante | **Supuesto** aplicado en el motor: el plan empieza en enero del año del flujo y, si el fondo no se completa en ese año, repite el sobrante mes a mes. Recomendación: confirmar con el asesor; la alternativa es empezar el mes siguiente al corte, como la simulación de deudas (`Deudas!C11`) | F3 |
+| B15 | Un ingreso sin tipo suma al ingreso anual pero no entra al flujo (H-26). ¿Es un pendiente del caso? | Sí: agregarlo a los pendientes del Resumen junto a las partidas sin frecuencia o tipo, y exigir el tipo en la plataforma (hoy la base ya lo exige en `incomes.kind`) | F3 |
 
 ## C. Cliente y datos
 

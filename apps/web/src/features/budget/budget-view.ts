@@ -19,6 +19,7 @@ export interface BudgetRowData {
   readonly payer: string;
   readonly scope: string;
   readonly is_temporary: boolean;
+  readonly pocket_id: string | null;
 }
 
 export interface BudgetViewItem {
@@ -35,6 +36,8 @@ export interface BudgetViewItem {
   readonly familyReference: boolean;
   /** Con valor pero sin frecuencia o sin tipo: no suma hasta completarla (RN-029). */
   readonly incomplete: boolean;
+  /** Tipo bolsillo sin bolsillo: suma, pero no llega a ningún bolsillo y bloquea la entrega (H-02). */
+  readonly withoutPocket: boolean;
 }
 
 export interface BudgetViewGroup {
@@ -97,6 +100,7 @@ export function budgetView(
         !familyReference &&
         (row.amount ?? 0) > 0 &&
         (row.frequency === null || row.expense_type === null),
+      withoutPocket: !familyReference && row.expense_type === 'bolsillo' && row.pocket_id === null,
     };
     const group = groups.get(row.category);
     if (group) group.push(item);

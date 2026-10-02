@@ -10,6 +10,10 @@ export interface AutomaticRowsInput {
   readonly newInsurancePremiums: number;
   /** Aporte mensual de cada meta, en orden. @excel Metas!K6:K10 */
   readonly goalContributions: readonly number[];
+  /** Bolsillo de cada meta, en el mismo orden; null si no tiene. @excel Presupuesto!K8:K12 */
+  readonly goalPockets: readonly (string | null)[];
+  /** Bolsillo de las primas de seguros nuevos. @excel Presupuesto!K7 */
+  readonly insurancePocket: string | null;
 }
 
 /**
@@ -28,6 +32,7 @@ export function automaticRows(
     frequency: 'mensual' | 'anual',
     expenseType: 'deuda' | 'bolsillo',
     essential: boolean,
+    pocket: string | null,
   ): BudgetItemInput => ({
     amount: { amount, currency: baseCurrency },
     frequency,
@@ -37,12 +42,13 @@ export function automaticRows(
     payer: 'cliente',
     basicAmount: null,
     isTemporary: false,
+    pocket,
   });
   return [
-    row(input.debtMinPayments, 'mensual', 'deuda', true),
-    row(input.newInsurancePremiums, 'anual', 'bolsillo', true),
-    ...input.goalContributions.map((contribution) =>
-      row(contribution, 'mensual', 'bolsillo', false),
+    row(input.debtMinPayments, 'mensual', 'deuda', true, null),
+    row(input.newInsurancePremiums, 'anual', 'bolsillo', true, input.insurancePocket),
+    ...input.goalContributions.map((contribution, index) =>
+      row(contribution, 'mensual', 'bolsillo', false, input.goalPockets[index] ?? null),
     ),
   ];
 }

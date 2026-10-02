@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { amountToText, parseAmount, parseDecimal } from './amount';
+import { amountToText, parseAmount, parseDecimal, parsePercent, percentToText } from './amount';
 
 describe('parseAmount', () => {
   it.each([
@@ -46,5 +46,21 @@ describe('parseDecimal', () => {
     expect(parseDecimal('0,870312345', 8)).toBeNaN();
     expect(parseAmount(amountToText(0.87031234, 'es-ES', 8))).toBeNaN();
     expect(parseDecimal(amountToText(0.87031234, 'es-ES', 8), 8)).toBe(0.87031234);
+  });
+});
+
+describe('parsePercent y percentToText', () => {
+  it('lee de 0 a 100 con coma decimal y devuelve la razón', () => {
+    expect(parsePercent('70')).toBe(0.7);
+    expect(parsePercent('12,5 %')).toBe(0.125);
+    expect(parsePercent('')).toBeNull();
+    expect(parsePercent('101')).toBeNaN();
+    expect(parsePercent('-5')).toBeNaN();
+  });
+
+  it('muestra la razón como se escribe', () => {
+    expect(percentToText(0.7, 'es-CO')).toBe('70');
+    expect(percentToText(0.125, 'es-CO')).toBe('12,5');
+    expect(percentToText(null, 'es-CO')).toBe('');
   });
 });

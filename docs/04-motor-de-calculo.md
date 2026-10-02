@@ -27,7 +27,7 @@ interface ComputeOptions {
 }
 ```
 
-- **Estado (F2):** existen `compute(input, { mode })`, `keyFigures` y `diffKeyFigures`, con los módulos hasta F2 (ingresos, deudas, metas y seguros mínimos, presupuesto con filas automáticas, costo de vida y Resumen `C11:C15`). Los parámetros llegan ya resueltos dentro de `CaseInput` (por ahora, los umbrales fiscales); `ResolvedParameters` y `qualityChecks` llegan con los módulos que los usan.
+- **Estado (F3):** existen `compute(input, { mode })`, `keyFigures` y `diffKeyFigures`, con los módulos hasta F3: ingresos, deudas (totales y deuda cara), metas y seguros mínimos, presupuesto con filas automáticas, costo de vida, cuentas por cobrar, flujo anual, prueba de realidad, destino del sobrante, saldo líquido, fondo de emergencia, bolsillos, plan secuencial (nativo) y Resumen `C11:C26` (salvo `C19`, que necesita la simulación de deudas de F4) y `C35`. Los parámetros llegan ya resueltos dentro de `CaseInput`: `parameters` (`PlanParameters`: meses de fondo, umbral de deuda cara, porcentajes y colchón, con el valor del asesor o el de la metodología) y los umbrales fiscales. `qualityChecks` llega con la entrega del plan.
 - `CaseInput`: las entradas vivas del cliente (tablas de la sección 3.4 de `03-modelo-de-datos.md`) más `case_settings`, sin identificadores personales innecesarios (el motor no necesita el nombre).
 - `ResolvedParameters`: los parámetros vigentes en la fecha de corte, ya resueltos (país y metodología), con el id de cada versión para guardarlo en el plan entregado.
 - `CaseResult`: un objeto por módulo (sección 3) más `summary`, `pending` y `trace` (versión del motor y parámetros usados).
@@ -36,7 +36,7 @@ interface ComputeOptions {
 
 | Módulo | Función | Entradas | Salidas | Reproduce |
 |---|---|---|---|---|
-| `excel` | `edate`, `datedifYears`, `datedifMonths`, `nper`, `pmt`, `roundUp`, `effectiveToMonthly` | Números y fechas (`IsoDate`, "AAAA-MM-DD") | Números y fechas; null donde Excel da #NUM! | Funciones de Excel |
+| `excel` | `edate`, `datedifYears`, `datedifMonths`, `monthIndex`, `nper`, `pmt`, `roundUp`, `effectiveToMonthly` | Números y fechas (`IsoDate`, "AAAA-MM-DD") | Números y fechas; null donde Excel da #NUM!. Existen `edate`, `datedifMonths`, `monthIndex` y `roundUp` | Funciones de Excel |
 | `currency` | `toBase(money, rates)`, `missingRates(input)`, `exposureByCurrency(result)` | Importe con moneda y tasas del cliente | Importe en moneda base; monedas sin tasa; exposición por moneda | `Ingresos!F`, `Inversión!F`, `Patrimonio!F` (RN-010, RN-017) |
 | `normalization` | `timesPerYear(frequency, durationDays, ssMonthsCount)` | Frecuencia | Veces al año | `Presupuesto!G`, `Listas!C:D` (RN-020, RN-021) |
 | `incomes` | `computeIncomes(incomes, fxRates, baseCurrency)` | Ingresos | Por fila: valor en moneda base, pagos del año, total, promedio. Totales por mes y por tipo; ingreso anual en moneda extranjera | `Ingresos!F:U`, filas 14 y 20 a 25 (RN-010, RN-011) |
@@ -45,22 +45,24 @@ interface ComputeOptions {
 | `budget` | `automaticRows({ debtMinPayments, newInsurancePremiums, goalContributions }, baseCurrency)` | Cuotas mínimas, primas nuevas y aporte de cada meta, en moneda base | Filas automáticas, antes de las partidas del cliente | `Presupuesto!6:12` (RN-028) |
 | `budget` | `computeBudget(items, ssMonths, fx)` | Partidas (las automáticas primero), con pagador | Por fila: veces al año, total, promedio. Totales por tipo, esencial, seguridad social por pago, filas incompletas, filas bolsillo sin bolsillo; gasto y ahorro por pagador | `Presupuesto!G:I`, filas 89 a 97 (RN-020 a RN-029) |
 | `cost-of-living` | `computeCostOfLiving(items, budget, fx, { thresholds, ownIncome })` | Partidas con nivel básico, pagador y marca de temporal; umbrales fiscales que aplican a ese cliente | Por partida y por nivel (esencial, básico, actual): anual, mensual, por pagador, sin temporales; ingreso propio y cada nivel frente a cada umbral | Hoja Costo de vida del caso C2 (RN-030 a RN-032) |
-| `cashflow` | `monthlyFlow(incomes, budget, ssMonths, flowYear)` | Ingresos y presupuesto | 12 meses: entradas por tipo, salidas por tipo, balance | `Flujo anual!E7:Q19` (RN-040) |
+| `cashflow` | `monthlyFlow(incomes, incomesResult, budget, ssMonths, extraOtherIncome)` | Ingresos y presupuesto; en modo nativo, lo que pagan terceros (`thirdPartyByMonth`) | 12 meses: entradas por tipo, salidas por tipo, balance. Los ingresos y las partidas sin tipo no entran (H-26) | `Flujo anual!E7:Q19` (RN-040) |
 | `cashflow` | `noIncomeMonths(balances)` | Balances | Faltante, suma y cantidad de positivos, menor positivo, aporte igual, método, cobertura, uso y aporte por mes, sobrante por mes | `Flujo anual!E20:Q22`, `T20:T27` (RN-041, RN-042) |
-| `cashflow` | `surplusDestination(surplus, hasExpensiveDebt, pctInvest, pctDebt, receivablesByMonth)` | Sobrante | A deudas, a inversión, margen, cobros por destino | `Flujo anual!E24:Q34` (RN-043, RN-044) |
-| `reality-check` | `realityCheck(inputs, annualSurplus, programmedSavings, params)` | Saldos y flujo | Ahorro real, esperado, diferencia, estado, % a inversión aplicado | `Supuestos!C38:C42` (RN-050 a RN-053) |
-| `receivables` | `computeReceivables(rows, cutoffDate)` | Cobros | Cuotas, último pago, saldo pendiente hoy, abonos por mes | `Supuestos!F46:K49` (RN-060 a RN-062) |
-| `emergency-fund` | `emergencyScenarios(essentialMonthly, incomesByKind, months, hasExpensiveDebt)` | Presupuesto e ingresos | Escenarios A, B, C; meta por peor caso, mínimo, completa, vigente; regla de 6 meses | `Fondo emergencia!C6:C23` (RN-080 a RN-084) |
-| `pockets` | `computePockets(pockets, budgetRows, fund, noIncome, liquid, cushion, hasExpensiveDebt, params)` | Bolsillos y resultados previos | Meta y aporte por bolsillo; saldos sugeridos; reparto del saldo; alertas de límite y sobreasignación | `Bolsillos!D6:G18`, `C21:C30` (RN-070 a RN-074) |
-| `emergency-fund` | `emergencyProgress(assigned, fullGoal, currentGoal)` | Saldo asignado | Avance frente a meta completa y vigente | `Fondo emergencia!C24:C25`, H-11 |
-| `savings-plan` | `sequentialSavingsPlan(monthlySaving, fundGap, pctInvest)` | Capacidad de ahorro y faltante del fondo | Meses hasta completar el fondo y reparto posterior | Nuevo, modo nativo (H-01, RN-014) |
+| `cashflow` | `surplusDestination({ surplus, hasExpensiveDebt, pctToDebt, pctToInvestment, receivables })` | Sobrante (en modo nativo, el que queda después del fondo) | A deudas, a inversión, margen, cobros por destino | `Flujo anual!E24:Q34` (RN-043, RN-044) |
+| `reality-check` | `realityCheck(inputs, annualSurplus, programmedSavings, params)` | Saldos en moneda base y flujo | Ahorro real, esperado, diferencia, estado, % a inversión aplicado | `Supuestos!C38:C42` (RN-050 a RN-053) |
+| `receivables` | `computeReceivables(rows, cutoffDate, flowYear, fx)` | Cobros | Cuotas, último pago, saldo pendiente en la fecha de corte, abonos por mes del flujo | `Supuestos!F46:K49`, `Flujo anual!E28:P30` (RN-060 a RN-062, H-27) |
+| `emergency-fund` | `emergencyFund({ totalMonthlyExpenses, essentialMonthly, monthlyIncomeByKind, months, hasExpensiveDebt })` | Presupuesto e ingresos; en modo nativo el aporte de terceros cuenta como "otro" | Escenarios A, B, C; meta por peor caso, mínimo, completa, vigente; regla de 6 meses | `Fondo emergencia!C6:E23` (RN-080 a RN-084) |
+| `pockets` | `computePockets({ pockets, budgetItems, budget, emergencyCurrentGoal, noIncomeShortfall, noIncomeContribution, liquidAssets, operatingCushion, hasExpensiveDebt, pctToDebt, pctExcessToInvestment }, fx)` | Bolsillos generales y resultados previos | Meta, aporte y saldo por bolsillo; reparto del saldo; bolsillos con aporte; alerta de sobreasignación | `Bolsillos!D6:G18`, `C21:C30` (RN-070 a RN-074) |
+| `emergency-fund` | `emergencyProgress(assigned, fund)` | Saldo asignado | Avance frente a meta completa y vigente | `Fondo emergencia!C24:C25`, H-11 |
+| `savings-plan` | `sequentialSavingsPlan(surplus, fundGoal, fundBalance, flowYear)` | Sobrante de cada mes y faltante del fondo | Aporte al fondo por mes, sobrante que queda, meses hasta completarlo y mes en que se completa | Nuevo, modo nativo (H-01, ADR 0008, pregunta B14) |
 | `debts` | `debtTotals(debts, fx)` | Saldo y cuota mínima de cada deuda | Saldo total y cuotas mínimas en moneda base | `Deudas!D21`, `F21` |
-| `debts` | `classifyDebts(debts, threshold, method)` | Inventario | Tasa mensual, deuda cara, orden, totales, carga | `Deudas!I:K`, `C21:C26` (RN-090, RN-091) |
+| `debts` | `expensiveDebt(debts, threshold, fx)`, `debtLoad(minPayments, monthlyIncome)` | Saldo y tasa de cada deuda | Deuda cara por deuda, saldo caro, si existe; carga de deuda | `Deudas!J13:J20`, `C22:C24` (RN-090) |
+| `debts` | `classifyDebts(debts, threshold, method)` | Inventario | Tasa mensual, orden, totales | `Deudas!I:K`, `C25:C26` (RN-091) |
 | `debts` | `simulateDebts(debts, plan)` | Deudas, pago total, abono único, horizonte | Por deuda: meses, fecha de salida, intereses con plan y solo cuota; calendario mes a mes | `Deudas!E29:DT80`, `E86:F93`, `L:O` (RN-092 a RN-097) |
 | `credits` | `amortizationSchedule(credit, marks, cutoffDate)` | Crédito y marcas de pago | 360 cuotas con interés, seguros, FRECH, cuota, extra, capital, saldo, lo que paga, estado | Plantilla de créditos, hojas Crédito (RN-095, RN-096, RN-099) |
 | `credits` | `creditsPanel(schedules, incomes, plan)` | Tablas | Deuda total, próximo pago, calendario, tramos del mes, hitos, deuda por año, abono sugerido, puente hacia Deudas | Plantilla de créditos, Panel y Plan de pago |
 | `goals` | `computeGoals(goals, cutoffDate, fx)`, `tripCost(trip, fx)` | Metas; cada una con su calculadora de viaje o sin ella | Valor usado, meses, aporte; costo del viaje con impuestos del alojamiento y colchón | `Metas!F:K`, `E15:E30` (RN-100, RN-101) |
 | `insurance` | `computeInsurance(rows, fx)`, `lifeInsuranceSum(inputs)` | Seguros | Primas nuevas, suma asegurada orientativa | `Seguros!I6:I16`, `C20:C24` (RN-102, RN-103) |
+| `net-worth` | `liquidAssets(assets, fx)` | Activos | Saldo líquido: lo que se reparte en bolsillos | `Patrimonio!C33` (RN-110) |
 | `net-worth` | `computeNetWorth(assets, investments, receivables, debts, fx)` | Activos | Totales, neto, composición, concentración | `Patrimonio!F6:F30`, `C33:D39` (RN-110) |
 | `investment` | `riskProfile(answers, conditions, hasExpensiveDebt)` | Respuestas y condiciones | Disposición, capacidad, perfil final | `Inversión!D18:E32` (RN-112) |
 | `investment` | `growthAllocation(age, profile, position, horizon, table)` | Perfil y edad | Rango, % crecimiento y estabilidad, mensaje | `Inversión!C41:C47` (RN-113, RN-114) |
@@ -102,8 +104,8 @@ Tiempo objetivo: menos de 50 ms por cálculo completo en un teléfono de gama me
 
 | Tema | Modo compatible (plantilla 2.2) | Modo nativo (propuesto) | Hallazgo |
 |---|---|---|---|
-| Pagador de cada gasto | Hay que registrar el aporte del tercero como ingreso | Pagador por partida y aporte implícito del tercero; indicadores personales aparte (ADR 0010) | H-12, RN-015 |
-| Aporte para completar el fondo | Informativo, no se descuenta | Plan secuencial: primero el fondo, luego el reparto | H-01 |
+| Pagador de cada gasto | Hay que registrar el aporte del tercero como ingreso | Pagador por partida y aporte implícito del tercero, que en el flujo y en el fondo es un ingreso "otro"; indicadores personales aparte (ADR 0010). Hecho | H-12, RN-015 |
+| Aporte para completar el fondo | Informativo, no se descuenta | Plan secuencial: primero el fondo, luego el reparto (ADR 0008). Hecho | H-01 |
 | Bolsillo en partidas tipo bolsillo | Opcional | Obligatorio | H-02 |
 | Cuotas de deuda en el flujo | 12 meses iguales | Hasta el mes de fin de cada deuda | H-03 |
 | Seguros en la cuota | No se separan | Se separan | H-05 |
@@ -115,6 +117,8 @@ Tiempo objetivo: menos de 50 ms por cálculo completo en un teléfono de gama me
 | Condición de ingresos variables | Solo por tipo de cliente | Sugerida por tipo, editable | H-16 |
 
 Qué correcciones entran al modo nativo lo decide el asesor (ver [07-preguntas-abiertas.md](07-preguntas-abiertas.md)). Cada corrección aprobada lleva un ADR. Las pruebas de oro corren siempre en modo compatible; el modo nativo tiene sus propias pruebas con valores esperados revisados por el asesor.
+
+El sobrante del Resumen (`C14`) sale del flujo, como en la plantilla, y no de restar gasto y ahorro al ingreso: si hay ingresos o partidas sin tipo, las dos cifras difieren (H-26) y el control de calidad lo detecta.
 
 Los indicadores del Resumen se calculan igual que la plantilla en los dos modos (así la prueba de oro del caso España compara, por ejemplo, un ingreso anual de 15.710,46 EUR que incluye el aporte implícito de los padres). El modo nativo agrega indicadores personales: ingreso propio, gasto propio, aporte de terceros y tasa de ahorro sobre el ingreso propio.
 
@@ -165,7 +169,8 @@ Además se verifican los valores intermedios de Ingresos y Presupuesto, para loc
 | C3. Plantilla vacía | `Plantilla_Asesoria_Financiera.xlsx` con fecha de corte fija (28/09/2026) | Valores por defecto, pendientes, divisiones entre cero | **Listo** (535 entradas, 5.738 fórmulas, sin errores) |
 | C4. Deudas | Plantilla oficial con 6 a 8 deudas sintéticas inspiradas en el caso 15.1 del protocolo (FRECH, préstamo familiar a 0 %, ingreso en USD, carga de 64 %) | Deuda cara, avalancha, bola de nieve, restricciones de abono, más de 120 meses | Por construir |
 | C5. Créditos | Plantilla de créditos con los mismos créditos de C4 y marcas de pago | 360 cuotas, FRECH, seguros, cuotas vencidas, panel, puente a Deudas | Por construir |
-| C6. Ingreso variable y déficit | Plantilla oficial sintética | Ingreso base, aporte proporcional, alerta de déficit | Por construir |
+| C6. Ingreso variable y déficit | Plantilla oficial sintética (`c6-ingreso-variable/cambios.json`) | Meses sin ingreso con aporte proporcional, ingreso en USD por meses, ingreso y partida sin tipo (H-26), deuda cara con abonos de cobros y abono único a deudas, prueba de realidad confirmada, cobro sin saldo (H-27), saldo líquido en USD | **Listo** (600 entradas, 5.738 fórmulas) |
+| C8. Saldos y cobros | Plantilla oficial sintética (`c8-saldos-cobros/cambios.json`) | Sin deudas: prueba de realidad "Revisar gastos", cobro que empieza después del corte con 60 % a inversión, pensión en los escenarios del fondo, meses de fondo fijados, colchón, dos pagos en un mes y saldos que superan lo disponible | **Listo** (577 entradas, 5.738 fórmulas) |
 | C7. Metas, seguros y cuotas | Plantilla oficial sintética (`c7-metas-seguros/cambios.json`) | Metas con fecha, vencida, cubierta y repetida; calculadora de viaje; seguros nuevos, cotizando y que ya tiene; dos deudas; filas automáticas del presupuesto | **Listo** (591 entradas, 5.738 fórmulas, sin errores) |
 
 Los casos son ejemplos de prueba, no perfiles de país: C2 prueba el pagador y el costo de vida porque esa clienta los tiene, y C1 prueba la pensión porque se activó para ese cliente. El motor nunca decide por el país quién paga ni si se calcula la pensión; lo lee de los datos del cliente (`payer`, `pension_enabled`).
@@ -206,8 +211,8 @@ El mismo mapa sirve después para la exportación a Excel (en sentido inverso, p
 
 | Tipo | Qué verifica |
 |---|---|
-| Modo nativo (`test/native/`) | Correcciones del modo nativo con datos de los casos de oro y valores revisados por el asesor. Hoy: pagador por gasto con los datos de C2 (ingreso anual de 15.710,46 EUR y tasa personal de 100 %) |
-| Compatibilidad Excel (`test/excel-compat/`) | `EDATE` con fin de mes, `DATEDIF` en años y meses, `NPER` y `PMT` con tasa cero, `ROUNDUP` con negativos |
+| Modo nativo (`test/native/`) | Correcciones del modo nativo con datos de los casos de oro y valores revisados por el asesor. Hoy, con los datos de C2: pagador por gasto (ingreso anual de 15.710,46 EUR y tasa personal de 100 %), aporte de la familia como ingreso "otro" en el flujo y el fondo (todo igual que la plantilla) y plan secuencial (el fondo se completa en marzo y se invierte la mitad de lo que queda); los valores del plan secuencial esperan la revisión del asesor |
+| Compatibilidad Excel (`test/excel-compat/`) | `EDATE` con fin de mes y meses fraccionarios, `DATEDIF` en meses, `ROUNDUP` con negativos y decimales (hechos); `DATEDIF` en años, `NPER` y `PMT` con tasa cero (con sus módulos) |
 | Propiedades (`test/properties/`, con fast-check) | Invariantes del control de calidad: sobrante = ingreso - gasto - ahorro; saldos de deuda nunca negativos; el reparto nunca supera lo disponible; el % en crecimiento siempre dentro del rango; resultados iguales con la misma entrada (determinismo) |
 | Unitarias por módulo | Casos borde: frecuencia sin días, todos los meses en rojo, deuda que no acepta abonos, tasa 0 %, perfil sin responder |
 | Rendimiento | Cálculo completo por debajo del objetivo de la sección 4 |

@@ -14,6 +14,7 @@ Los valores quedan a nivel de celda. `adapters.ts` traduce las celdas a las entr
 | `incomes-budget.test.ts` | Ingresos (F:U de las filas 6 a 13, fila 14, `T20:U25`, `S17`, `E30:E32`), Presupuesto (G:I de las filas 6 a 87 y los totales de las filas 89 a 97) y `Resumen!C11:C13` |
 | `compute.test.ts` | `compute` con el caso entero: `Resumen!C11:C15` en todos los casos, determinismo, y cifras clave antes y después |
 | `c2-cost-of-living.test.ts` | Hoja "Costo de vida" de C2 (no está en la plantilla): niveles de cada partida, totales, lo que paga la familia, costo sin matrícula, umbral fiscal y control contra el presupuesto (filas 6 a 39) |
+| `cashflow-pockets.test.ts` | Flujo anual completo (filas 7 a 34, `T20:T27`, `B36`), cobros (`Supuestos!F46:I49`), prueba de realidad (`C38:C42`), deuda cara y carga (`Deudas!C22:C24`), saldo líquido (`Patrimonio!C33`), Fondo de emergencia (`C6:E25`), Bolsillos (`D6:G18`, `C21:C30`) y `Resumen!C14:C26` (salvo `C19`) y `C35` |
 | `goals-insurance-debts.test.ts` | Metas (F, J y K de las filas 6 a 10, `K11` y la calculadora `E17:E30`), Seguros (`I6:I16`, `H16`), Deudas (`D21`, `F21`) y el valor de las filas automáticas `Presupuesto!D6:D12` |
 
 | Caso | Contenido | Estado |
@@ -21,11 +22,13 @@ Los valores quedan a nivel de celda. `adapters.ts` traduce las celdas a las entr
 | `c3-plantilla-vacia` | Plantilla oficial sin datos, fecha de corte 28/09/2026 | Listo |
 | `c2-espana` | Caso real de España anonimizado (nombre, fecha de nacimiento con la misma edad, entidad, ocupación, salud y terceros), corte 28/09/2026 | Listo, revisado por el asesor el 28/09/2026 |
 | `c7-metas-seguros` | Sintético sobre la plantilla oficial, corte 28/09/2026: los cambios están en `cambios.json` (metas con fecha, vencida, ya cubierta y repetida; calculadora de viaje con tasa de 4.000; seguros nuevos, cotizando, sin responder y que ya tiene; dos deudas). Sin ingresos ni partidas del cliente | Listo |
+| `c6-ingreso-variable` | Sintético sobre la plantilla oficial, corte 28/09/2026 (`cambios.json`): ingreso variable con meses en cero y aporte proporcional a meses sin ingreso, ingreso en USD solo unos meses, un ingreso y una partida sin tipo (H-26), deuda cara, tres cobros (uno sin saldo, H-27), prueba de realidad confirmada y saldo líquido en USD | Listo |
+| `c8-saldos-cobros` | Sintético sobre la plantilla oficial, corte 28/09/2026 (`cambios.json`): sin deudas, prueba de realidad "Revisar gastos", cobro que empieza después del corte, pensión, meses de fondo fijados, colchón, dos pagos en un mes y saldos que superan lo disponible | Listo |
 | `c1-colombia` | Caso real de Colombia (contratista con arriendos, sin deudas) llevado a la plantilla oficial y anonimizado (nombre, día de nacimiento, entidades, inmuebles, familiares, mascota, destino del viaje y conceptos de salud), corte 28/09/2026 | Construido el 28/09/2026; pendiente de revisión del asesor (pregunta A11) |
 
 Criterio de aceptación: diferencia absoluta máxima de 0,01 en importes; tolerancias de porcentajes, fechas y textos en `docs/04-motor-de-calculo.md`.
 
-Para regenerar C7: `recalc.py` con `--edits packages/engine/test/golden/c7-metas-seguros/cambios.json` y luego `golden.py` (sin `--forbid`: no tiene datos de clientes).
+Para regenerar un caso sintético (C6, C7, C8): `recalc.py` con `--edits packages/engine/test/golden/<caso>/cambios.json` y luego `golden.py` (sin `--forbid`: no tienen datos de clientes).
 
 Solo se admiten casos anonimizados. Los libros originales de clientes quedan en `referencia/casos/`, fuera de git. Para agregar un caso: genera la carpeta y regístrala en `cases.ts`.
 

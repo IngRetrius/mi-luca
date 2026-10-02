@@ -3,13 +3,15 @@ import type { Money } from '@miluca/domain';
 import { toBaseCompat, type FxContext } from '../currency';
 
 /**
- * Lo que necesitan los totales de una deuda del inventario. La clasificación y la simulación
- * (tasa, orden, abonos) llegan con el resto del módulo en F4.
+ * Lo que necesitan los totales y la marca de deuda cara de una deuda del inventario. El orden y la
+ * simulación (abonos, plazos) llegan con el resto del módulo en F4.
  */
 export interface DebtInput {
   readonly balance: Money;
   /** Cuota mínima mensual; null si aún no se escribe. */
   readonly minPayment: Money | null;
+  /** Tasa efectiva anual (0,28 es 28 %); null si aún no se escribe. @excel Deudas!E13:E20 */
+  readonly annualRate: number | null;
 }
 
 export interface DebtTotals {

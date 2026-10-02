@@ -5,7 +5,13 @@ import { computeBudget } from './compute-budget';
 
 describe('automaticRows', () => {
   const rows = automaticRows(
-    { debtMinPayments: 100, newInsurancePremiums: 1200, goalContributions: [50, 0] },
+    {
+      debtMinPayments: 100,
+      newInsurancePremiums: 1200,
+      goalContributions: [50, 0],
+      goalPockets: ['viaje', null],
+      insurancePocket: 'seguros',
+    },
     'COP',
   );
 
@@ -18,6 +24,10 @@ describe('automaticRows', () => {
       [50, 'mensual', 'bolsillo', false],
       [0, 'mensual', 'bolsillo', false],
     ]);
+  });
+
+  it('seguros y metas van a su bolsillo; la cuota de deudas, a ninguno', () => {
+    expect(rows.map((row) => row.pocket)).toEqual([null, 'seguros', 'viaje', null]);
   });
 
   it('entran al presupuesto: cuotas en deudas, seguros y metas en bolsillos', () => {

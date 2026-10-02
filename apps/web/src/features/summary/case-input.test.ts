@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { compute, keyFigures } from '@miluca/engine';
 
-import { toCaseInput, type CaseRows } from './case-input';
+import { toCaseInput, toMethodology, type CaseRows } from './case-input';
 
 const item = (
   overrides: Partial<CaseRows['budgetItems'][number]> = {},
@@ -17,12 +17,39 @@ const item = (
   scope: 'presupuesto',
   is_temporary: false,
   basic_amount: null,
+  pocket_id: null,
+  ...overrides,
+});
+
+const methodology = toMethodology({
+  emergencyMonthsByClientType: { empleado: 3, independiente_variable: 6 },
+  expensiveDebtThreshold: 0.2,
+  pctSurplusInvestConfirmed: 0.7,
+  pctSurplusInvestPending: 0.5,
+  pctSurplusToDebt: 0.9,
+  pctExcessToInvest: 0.5,
+});
+
+/** Supuestos con todo vacío salvo lo que cada prueba fija. */
+const settings = (overrides: Partial<NonNullable<CaseRows['settings']>>) => ({
+  cutoff_date: null,
+  flow_year: null,
+  compatibility_mode: false,
+  fiscal_threshold_keys: [],
+  emergency_months_override: null,
+  expensive_debt_threshold: null,
+  pct_surplus_invest_confirmed: null,
+  pct_surplus_invest_pending: null,
+  pct_surplus_to_debt: null,
+  pct_excess_to_invest: null,
+  operating_cushion: 0,
   ...overrides,
 });
 
 const rows: CaseRows = {
-  client: { base_currency: 'EUR', country_code: 'ES' },
+  client: { base_currency: 'EUR', country_code: 'ES', client_type: 'empleado' },
   settings: null,
+  methodology,
   fxRates: [{ currency: 'USD', rate_to_base: 0.9 }],
   incomes: [
     {
@@ -38,6 +65,10 @@ const rows: CaseRows = {
     item({ scope: 'referencia_familiar', amount: 5000 }),
     item({ currency: 'USD', amount: 10, basic_amount: 5, essential: false }),
   ],
+  pockets: [],
+  receivables: [],
+  realityCheck: null,
+  assets: [],
   thresholds: [{ key: 'tax.dependent_income_limit', value: 8000, unit: 'EUR' }],
 };
 
@@ -62,11 +93,11 @@ describe('toCaseInput', () => {
     const { input, mode } = toCaseInput(
       {
         ...rows,
-        settings: {
+        settings: settings({
           cutoff_date: '2026-09-28',
           compatibility_mode: true,
           fiscal_threshold_keys: ['tax.dependent_income_limit'],
-        },
+        }),
       },
       '2026-10-01',
     );
@@ -78,18 +109,14 @@ describe('toCaseInput', () => {
   });
 
   it('un umbral en otra moneda pasa a la base con la tasa del cliente; sin tasa no se compara', () => {
-    const settings = {
-      cutoff_date: null,
-      compatibility_mode: false,
-      fiscal_threshold_keys: ['limite'],
-    };
+    const marked = settings({ fiscal_threshold_keys: ['limite'] });
     const withRate = toCaseInput(
-      { ...rows, settings, thresholds: [{ key: 'limite', value: 1000, unit: 'USD' }] },
+      { ...rows, settings: marked, thresholds: [{ key: 'limite', value: 1000, unit: 'USD' }] },
       '2026-10-01',
     );
     expect(withRate.input.fiscalThresholds).toEqual([{ code: 'limite', annualLimit: 900 }]);
     const withoutRate = toCaseInput(
-      { ...rows, settings, thresholds: [{ key: 'limite', value: 1000, unit: 'COP' }] },
+      { ...rows, settings: marked, thresholds: [{ key: 'limite', value: 1000, unit: 'COP' }] },
       '2026-10-01',
     );
     expect(withoutRate.input.fiscalThresholds).toEqual([]);
@@ -101,6 +128,99 @@ describe('toCaseInput', () => {
     expect(figures.annualIncome).toBeCloseTo(4800 + 1200, 6);
     expect(figures.annualExpenses).toBeCloseTo(1200 + 108, 6);
     expect(figures.ownSavingsRate).toBeCloseTo((4800 - 108) / 4800, 9);
+  });
+
+  it('sin supuestos del plan valen los de la metodología y los meses del tipo de cliente', () => {
+    const { input } = toCaseInput(rows, '2026-10-01');
+    expect(input.flowYear).toBeNull();
+    expect(input.parameters).toEqual({
+      emergencyMonths: 3,
+      expensiveDebtThreshold: 0.2,
+      pctInvestConfirmed: 0.7,
+      pctInvestPending: 0.5,
+      pctSurplusToDebt: 0.9,
+      pctExcessToInvestment: 0.5,
+      operatingCushion: { amount: 0, currency: 'EUR' },
+    });
+    const withoutType = toCaseInput(
+      { ...rows, client: { ...rows.client, client_type: null } },
+      '2026-10-01',
+    );
+    expect(withoutType.input.parameters.emergencyMonths).toBe(3);
+  });
+
+  it('lo que fija el asesor gana sobre la metodología', () => {
+    const { input } = toCaseInput(
+      {
+        ...rows,
+        settings: settings({
+          flow_year: 2028,
+          emergency_months_override: 4.5,
+          pct_surplus_invest_pending: 0.4,
+          operating_cushion: 300,
+        }),
+      },
+      '2026-10-01',
+    );
+    expect(input.flowYear).toBe(2028);
+    expect(input.parameters.emergencyMonths).toBe(4.5);
+    expect(input.parameters.pctInvestPending).toBe(0.4);
+    expect(input.parameters.operatingCushion).toEqual({ amount: 300, currency: 'EUR' });
+  });
+
+  it('bolsillos generales, partidas con bolsillo, cobros, activos y prueba de realidad', () => {
+    const { input } = toCaseInput(
+      {
+        ...rows,
+        budgetItems: [item({ expense_type: 'bolsillo', pocket_id: 'p-viajes' })],
+        pockets: [
+          { id: 'p-fondo', kind: 'emergencia', currency: 'EUR', initial_balance: null },
+          { id: 'p-viajes', kind: 'general', currency: 'USD', initial_balance: 100 },
+        ],
+        receivables: [
+          {
+            currency: 'EUR',
+            balance: 1000,
+            monthly_payment: 100,
+            first_payment_date: '2026-11-01',
+            pct_to_investment: 0.6,
+          },
+        ],
+        assets: [{ asset_type: 'liquido', currency: 'USD', value: 1000 }],
+        realityCheck: { currency: 'USD', savings_n_ago: 1000, n_months: 6, savings_today: 2000 },
+      },
+      '2026-10-01',
+    );
+    expect(input.budgetItems[0]?.pocket).toBe('p-viajes');
+    // El fondo y los meses sin ingreso los arma el motor; solo llegan los generales.
+    expect(input.pockets).toEqual([
+      { key: 'p-viajes', initialBalance: { amount: 100, currency: 'USD' } },
+    ]);
+    expect(input.receivables[0]).toEqual({
+      balance: { amount: 1000, currency: 'EUR' },
+      monthlyPayment: { amount: 100, currency: 'EUR' },
+      firstPaymentDate: '2026-11-01',
+      pctToInvestment: 0.6,
+    });
+    expect(input.assets).toEqual([
+      { assetType: 'liquido', value: { amount: 1000, currency: 'USD' } },
+    ]);
+    // Los saldos de la prueba de realidad pasan a la moneda base con la tasa del cliente.
+    expect(input.realityCheck.savingsMonthsAgo).toBeCloseTo(900, 9);
+    expect(input.realityCheck.savingsToday).toBeCloseTo(1800, 9);
+    expect(input.realityCheck.months).toBe(6);
+  });
+
+  it('sin un parámetro de la metodología el caso no se calcula', () => {
+    expect(() =>
+      toMethodology({
+        emergencyMonthsByClientType: {},
+        expensiveDebtThreshold: 0.2,
+        pctSurplusInvestConfirmed: 0.7,
+        pctSurplusInvestPending: 0.5,
+        pctSurplusToDebt: 0.9,
+      }),
+    ).toThrow('method.pct_excess_to_invest');
   });
 
   it('una etiqueta fuera del catálogo es un error, no un dato perdido', () => {

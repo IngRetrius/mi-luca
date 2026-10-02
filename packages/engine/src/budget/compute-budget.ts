@@ -22,6 +22,8 @@ export interface BudgetItemInput {
   readonly basicAmount: Money | null;
   /** Gasto temporal, como la matrícula: el costo de vida se calcula también sin él (RN-026). */
   readonly isTemporary: boolean;
+  /** Bolsillo que la financia (`PocketInput.key`); null si no tiene. @excel Presupuesto!K6:K87 */
+  readonly pocket: string | null;
 }
 
 export interface BudgetRowResult {

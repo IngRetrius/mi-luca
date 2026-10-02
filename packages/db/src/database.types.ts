@@ -69,6 +69,66 @@ export type Database = {
         };
         Relationships: [];
       };
+      assets: {
+        Row: {
+          asset_type: string;
+          client_id: string;
+          currency: string;
+          generates_income: boolean;
+          id: string;
+          name: string;
+          note: string | null;
+          pocket_id: string | null;
+          sort_order: number;
+          updated_at: string;
+          updated_by: string | null;
+          value: number;
+        };
+        Insert: {
+          asset_type: string;
+          client_id: string;
+          currency: string;
+          generates_income?: boolean;
+          id?: string;
+          name: string;
+          note?: string | null;
+          pocket_id?: string | null;
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+          value: number;
+        };
+        Update: {
+          asset_type?: string;
+          client_id?: string;
+          currency?: string;
+          generates_income?: boolean;
+          id?: string;
+          name?: string;
+          note?: string | null;
+          pocket_id?: string | null;
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+          value?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'assets_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'assets_pocket_id_client_id_fkey';
+            columns: ['pocket_id', 'client_id'];
+            isOneToOne: false;
+            referencedRelation: 'pockets';
+            referencedColumns: ['id', 'client_id'];
+          },
+        ];
+      };
       audit_log: {
         Row: {
           action: string;
@@ -111,6 +171,50 @@ export type Database = {
         };
         Relationships: [];
       };
+      banks: {
+        Row: {
+          client_id: string;
+          id: string;
+          is_remunerated: boolean;
+          max_pockets: number | null;
+          name: string;
+          note: string | null;
+          sort_order: number;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          client_id: string;
+          id?: string;
+          is_remunerated?: boolean;
+          max_pockets?: number | null;
+          name: string;
+          note?: string | null;
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          client_id?: string;
+          id?: string;
+          is_remunerated?: boolean;
+          max_pockets?: number | null;
+          name?: string;
+          note?: string | null;
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'banks_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       budget_items: {
         Row: {
           amount: number | null;
@@ -129,6 +233,7 @@ export type Database = {
           note: string | null;
           payer: string;
           payer_label: string | null;
+          pocket_id: string | null;
           scope: string;
           sort_order: number;
           updated_at: string;
@@ -151,6 +256,7 @@ export type Database = {
           note?: string | null;
           payer?: string;
           payer_label?: string | null;
+          pocket_id?: string | null;
           scope?: string;
           sort_order?: number;
           updated_at?: string;
@@ -173,6 +279,7 @@ export type Database = {
           note?: string | null;
           payer?: string;
           payer_label?: string | null;
+          pocket_id?: string | null;
           scope?: string;
           sort_order?: number;
           updated_at?: string;
@@ -186,6 +293,13 @@ export type Database = {
             referencedRelation: 'clients';
             referencedColumns: ['id'];
           },
+          {
+            foreignKeyName: 'budget_items_pocket_id_client_id_fkey';
+            columns: ['pocket_id', 'client_id'];
+            isOneToOne: false;
+            referencedRelation: 'pockets';
+            referencedColumns: ['id', 'client_id'];
+          },
         ];
       };
       case_settings: {
@@ -193,8 +307,15 @@ export type Database = {
           client_id: string;
           compatibility_mode: boolean;
           cutoff_date: string | null;
+          emergency_months_override: number | null;
+          expensive_debt_threshold: number | null;
           fiscal_threshold_keys: string[];
           flow_year: number | null;
+          operating_cushion: number;
+          pct_excess_to_invest: number | null;
+          pct_surplus_invest_confirmed: number | null;
+          pct_surplus_invest_pending: number | null;
+          pct_surplus_to_debt: number | null;
           pension_enabled: boolean;
           updated_at: string;
           updated_by: string | null;
@@ -203,8 +324,15 @@ export type Database = {
           client_id: string;
           compatibility_mode?: boolean;
           cutoff_date?: string | null;
+          emergency_months_override?: number | null;
+          expensive_debt_threshold?: number | null;
           fiscal_threshold_keys?: string[];
           flow_year?: number | null;
+          operating_cushion?: number;
+          pct_excess_to_invest?: number | null;
+          pct_surplus_invest_confirmed?: number | null;
+          pct_surplus_invest_pending?: number | null;
+          pct_surplus_to_debt?: number | null;
           pension_enabled?: boolean;
           updated_at?: string;
           updated_by?: string | null;
@@ -213,8 +341,15 @@ export type Database = {
           client_id?: string;
           compatibility_mode?: boolean;
           cutoff_date?: string | null;
+          emergency_months_override?: number | null;
+          expensive_debt_threshold?: number | null;
           fiscal_threshold_keys?: string[];
           flow_year?: number | null;
+          operating_cushion?: number;
+          pct_excess_to_invest?: number | null;
+          pct_surplus_invest_confirmed?: number | null;
+          pct_surplus_invest_pending?: number | null;
+          pct_surplus_to_debt?: number | null;
           pension_enabled?: boolean;
           updated_at?: string;
           updated_by?: string | null;
@@ -736,6 +871,157 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: 'notifications_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      pockets: {
+        Row: {
+          bank_id: string | null;
+          client_id: string;
+          currency: string;
+          id: string;
+          initial_balance: number | null;
+          kind: string;
+          name: string;
+          purpose: string | null;
+          sort_order: number;
+          updated_at: string;
+          updated_by: string | null;
+          when_used: string | null;
+        };
+        Insert: {
+          bank_id?: string | null;
+          client_id: string;
+          currency: string;
+          id?: string;
+          initial_balance?: number | null;
+          kind?: string;
+          name: string;
+          purpose?: string | null;
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+          when_used?: string | null;
+        };
+        Update: {
+          bank_id?: string | null;
+          client_id?: string;
+          currency?: string;
+          id?: string;
+          initial_balance?: number | null;
+          kind?: string;
+          name?: string;
+          purpose?: string | null;
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+          when_used?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'pockets_bank_id_client_id_fkey';
+            columns: ['bank_id', 'client_id'];
+            isOneToOne: false;
+            referencedRelation: 'banks';
+            referencedColumns: ['id', 'client_id'];
+          },
+          {
+            foreignKeyName: 'pockets_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      reality_check: {
+        Row: {
+          client_id: string;
+          currency: string;
+          n_months: number | null;
+          savings_n_ago: number | null;
+          savings_today: number | null;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          client_id: string;
+          currency: string;
+          n_months?: number | null;
+          savings_n_ago?: number | null;
+          savings_today?: number | null;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          client_id?: string;
+          currency?: string;
+          n_months?: number | null;
+          savings_n_ago?: number | null;
+          savings_today?: number | null;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'reality_check_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: true;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      receivables: {
+        Row: {
+          balance: number;
+          client_id: string;
+          currency: string;
+          debtor_label: string;
+          first_payment_date: string | null;
+          id: string;
+          monthly_payment: number;
+          note: string | null;
+          pct_to_investment: number;
+          sort_order: number;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          balance: number;
+          client_id: string;
+          currency: string;
+          debtor_label: string;
+          first_payment_date?: string | null;
+          id?: string;
+          monthly_payment: number;
+          note?: string | null;
+          pct_to_investment?: number;
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          balance?: number;
+          client_id?: string;
+          currency?: string;
+          debtor_label?: string;
+          first_payment_date?: string | null;
+          id?: string;
+          monthly_payment?: number;
+          note?: string | null;
+          pct_to_investment?: number;
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'receivables_client_id_fkey';
             columns: ['client_id'];
             isOneToOne: false;
             referencedRelation: 'clients';

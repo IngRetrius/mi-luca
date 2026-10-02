@@ -1,0 +1,61 @@
+{
+  "excel": "16.113.3",
+  "generated": "2026-10-02",
+  "results": [
+    {
+      "id": "entero",
+      "formula": "=ROUNDUP(56,0)",
+      "value": 56
+    },
+    {
+      "id": "division-exacta",
+      "formula": "=ROUNDUP(28000000/500000,0)",
+      "value": 56
+    },
+    {
+      "id": "sube",
+      "formula": "=ROUNDUP(2.1,0)",
+      "value": 3
+    },
+    {
+      "id": "negativo",
+      "formula": "=ROUNDUP(-2.1,0)",
+      "value": -3
+    },
+    {
+      "id": "casi-entero",
+      "formula": "=ROUNDUP(0.1*3*10,0)",
+      "value": 3
+    },
+    {
+      "id": "dos-decimales",
+      "formula": "=ROUNDUP(1.234,2)",
+      "value": 1.24
+    },
+    {
+      "id": "cero",
+      "formula": "=ROUNDUP(0,0)",
+      "value": 0
+    },
+    {
+      "id": "division-periodica",
+      "formula": "=ROUNDUP(10/3,0)",
+      "value": 4
+    },
+    {
+      "id": "grande",
+      "formula": "=ROUNDUP(123456789.0001,0)",
+      "value": 123456790
+    },
+    {
+      "id": "negativo-decimales",
+      "formula": "=ROUNDUP(-1.231,2)",
+      "value": -1.24
+    },
+    {
+      "id": "decimales-negativos",
+      "formula": "=ROUNDUP(1234,-2)",
+      "value": 1300
+    }
+  ]
+}

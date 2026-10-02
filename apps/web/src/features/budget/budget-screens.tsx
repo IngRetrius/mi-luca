@@ -192,6 +192,9 @@ export async function BudgetItemScreen({
         role={viewer.role}
         initial={row ? budgetValuesFromRow(row, locale) : emptyBudgetValues(client.base_currency)}
         currencies={currencies}
+        pockets={computed.rows.pockets
+          .filter((pocket) => pocket.kind === 'general')
+          .map((pocket) => ({ id: pocket.id, name: pocket.name }))}
         action={saveBudgetItem.bind(null, clientId, itemId)}
         deleteAction={itemId ? deleteBudgetItem.bind(null, clientId, itemId) : null}
         cancelHref={paths.list}

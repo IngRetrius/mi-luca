@@ -1,6 +1,9 @@
 import { expect, test } from '@playwright/test';
 
-// Sin Supabase (CI): las pantallas del flujo de invitación explican por qué no se puede seguir. El
+import { supabaseConfigured } from '../supabase-env';
+
+// Sin Supabase (CI) o con él (local, con apps/web/.env.local): las pantallas del flujo de invitación
+// explican por qué no se puede seguir. El
 // flujo completo (enlace del asesor, P-C01, P-C02, P-C12 con contraseña, aceptación, enlace anulado
 // y enlace usado) se verificó contra Supabase local (ver apps/web/README.md).
 
@@ -20,12 +23,21 @@ test('la invitación no deja el token en el Referer ni en buscadores', async ({ 
 });
 
 test('sin servicio, la invitación ofrece reintentar en la misma ruta', async ({ page }) => {
+  test.skip(supabaseConfigured, 'La app de esta corrida tiene Supabase: el servicio sí responde.');
   await page.goto(`/invitacion/${WELL_FORMED_TOKEN}`);
   await expect(page.getByRole('heading', { level: 1, name: 'No pudimos continuar' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Intentar de nuevo' })).toHaveAttribute(
     'href',
     `/invitacion/${WELL_FORMED_TOKEN}`,
   );
+});
+
+test('con servicio, un token que no existe explica que el enlace no sirve', async ({ page }) => {
+  test.skip(!supabaseConfigured, 'Sin Supabase (CI) la invitación no se puede buscar.');
+  await page.goto(`/invitacion/${WELL_FORMED_TOKEN}`);
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Este enlace de invitación no sirve' }),
+  ).toBeVisible();
 });
 
 for (const path of ['/invitacion/consentimiento', '/invitacion/acceso']) {

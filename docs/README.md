@@ -1,6 +1,6 @@
 # Documentación de MiLuca
 
-Plan de trabajo de la primera etapa (planificación, sin código de la aplicación). Fecha de corte de la investigación: 28 de septiembre de 2026.
+Plan, diseño y decisiones del proyecto. La investigación inicial tiene fecha de corte del 28 de septiembre de 2026; los documentos se actualizan con cada fase. El avance real está en [06-plan-de-trabajo.md](06-plan-de-trabajo.md), sección 2.1.
 
 ## Documentos principales
 

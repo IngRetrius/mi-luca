@@ -22,14 +22,16 @@ export type BudgetItemField =
   | 'durationDays'
   | 'payerLabel'
   | 'note'
-  | 'basicAmount';
+  | 'basicAmount'
+  | 'pocket';
 export type BudgetItemFieldError =
   | 'missingCategory'
   | 'missingConcept'
   | 'tooLong'
   | 'invalidAmount'
   | 'missingDays'
-  | 'invalidCurrency';
+  | 'invalidCurrency'
+  | 'invalidPocket';
 
 /** Lo escrito en el formulario, tal cual, para volver a mostrarlo si hay errores. */
 export interface BudgetItemValues {
@@ -40,6 +42,8 @@ export interface BudgetItemValues {
   readonly frequency: Frequency | '';
   readonly durationDays: string;
   readonly expenseType: ExpenseType | '';
+  /** Id del bolsillo que la financia, o vacío. */
+  readonly pocket: string;
   readonly essential: boolean;
   readonly payer: Payer;
   readonly payerLabel: string;
@@ -59,6 +63,7 @@ export interface BudgetItemRecord {
   readonly frequency: Frequency | null;
   readonly duration_days: number | null;
   readonly expense_type: ExpenseType | null;
+  readonly pocket_id: string | null;
   readonly essential: boolean;
   readonly payer: Payer;
   readonly payer_label: string | null;
@@ -80,6 +85,8 @@ export interface BudgetItemParseOptions {
   readonly currencies: readonly string[];
   /** Solo el asesor escribe el nivel básico y la marca de propuesto; del cliente se ignoran. */
   readonly advisor: boolean;
+  /** Bolsillos generales del cliente (RN-027). */
+  readonly pocketIds: readonly string[];
 }
 
 function text(formData: FormData, name: string): string {
@@ -97,7 +104,7 @@ function checked(formData: FormData, name: string): boolean {
  */
 export function parseBudgetItem(
   formData: FormData,
-  { currencies, advisor }: BudgetItemParseOptions,
+  { currencies, advisor, pocketIds }: BudgetItemParseOptions,
 ): BudgetItemParse {
   const frequency = frequencySchema.safeParse(formData.get('frequency'));
   const expenseType = expenseTypeSchema.safeParse(formData.get('expenseType'));
@@ -110,6 +117,7 @@ export function parseBudgetItem(
     frequency: frequency.success ? frequency.data : '',
     durationDays: text(formData, 'durationDays'),
     expenseType: expenseType.success ? expenseType.data : '',
+    pocket: text(formData, 'pocket'),
     essential: checked(formData, 'essential'),
     payer: payer.success ? payer.data : 'cliente',
     payerLabel: text(formData, 'payerLabel'),
@@ -137,6 +145,7 @@ export function parseBudgetItem(
       errors.durationDays = 'missingDays';
     }
   }
+  if (values.pocket && !pocketIds.includes(values.pocket)) errors.pocket = 'invalidPocket';
   if (values.payerLabel.length > PAYER_LABEL_MAX) errors.payerLabel = 'tooLong';
   if (values.note.length > NOTE_MAX) errors.note = 'tooLong';
 
@@ -152,6 +161,7 @@ export function parseBudgetItem(
       frequency: values.frequency || null,
       duration_days: durationDays,
       expense_type: values.expenseType || null,
+      pocket_id: values.pocket || null,
       essential: values.essential,
       payer: values.payer,
       payer_label: values.payer === 'cliente' ? null : values.payerLabel || null,

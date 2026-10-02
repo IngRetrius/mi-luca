@@ -15,6 +15,7 @@ function goal(overrides: Partial<GoalInput>): GoalInput {
     alreadySaved: null,
     repeatEveryYears: null,
     targetDate: null,
+    pocket: null,
     ...overrides,
   };
 }

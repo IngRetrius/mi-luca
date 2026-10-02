@@ -1,0 +1,8 @@
+{
+  "case": "c6-ingreso-variable",
+  "template": "Plantilla_Asesoria_Financiera.xlsx",
+  "cutoffCell": "Supuestos!C12",
+  "cutoffDate": "2026-09-28",
+  "inputCells": 600,
+  "formulaCells": 5738
+}

@@ -3,8 +3,9 @@ import { expect, test } from '@playwright/test';
 // Sin Supabase (CI): las pantallas del asesor y P-G02 exigen sesión y vuelven a la ruta pedida.
 // El flujo con sesión (lista vacía, crear perfil, ficha, P-G02; en F2, presupuesto con filtros,
 // alta y edición con vista previa, ingresos, seguridad social, ingreso base, monedas, perfil y
-// supuestos, costo de vida, cifras de la ficha y aviso con el antes y después) se verificó contra
-// Supabase local.
+// supuestos, costo de vida, cifras de la ficha y aviso con el antes y después; en F3, flujo, fondo,
+// bolsillos y bancos, bolsillo de cada gasto, cobros, patrimonio, prueba de realidad y supuestos del
+// plan, con sus errores y el foco en el primero) se verificó contra Supabase local.
 
 const CLIENT = '00000000-0000-4000-8000-000000000001';
 
@@ -25,6 +26,22 @@ for (const path of [
   `/clientes/${CLIENT}/monedas/USD`,
   `/clientes/${CLIENT}/perfil`,
   `/clientes/${CLIENT}/costo-de-vida`,
+  `/clientes/${CLIENT}/supuestos`,
+  `/clientes/${CLIENT}/flujo`,
+  `/clientes/${CLIENT}/fondo`,
+  `/clientes/${CLIENT}/bolsillos`,
+  `/clientes/${CLIENT}/bolsillos/nuevo`,
+  `/clientes/${CLIENT}/bolsillos/${CLIENT}`,
+  `/clientes/${CLIENT}/bolsillos/bancos`,
+  `/clientes/${CLIENT}/bolsillos/bancos/nuevo`,
+  `/clientes/${CLIENT}/bolsillos/bancos/${CLIENT}`,
+  `/clientes/${CLIENT}/cobros`,
+  `/clientes/${CLIENT}/cobros/nuevo`,
+  `/clientes/${CLIENT}/cobros/${CLIENT}`,
+  `/clientes/${CLIENT}/patrimonio`,
+  `/clientes/${CLIENT}/patrimonio/nuevo`,
+  `/clientes/${CLIENT}/patrimonio/${CLIENT}`,
+  `/clientes/${CLIENT}/prueba-de-realidad`,
 ]) {
   test(`${path} sin sesión lleva a Entrar con la ruta de retorno`, async ({ page }) => {
     await page.goto(path);

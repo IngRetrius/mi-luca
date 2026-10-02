@@ -1,0 +1,417 @@
+[
+  {
+    "sheet": "Supuestos",
+    "cell": "C7",
+    "value": "Caso sintético C6"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C10",
+    "value": "Independiente variable"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C17",
+    "value": 4000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C32",
+    "value": 500000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C35",
+    "value": 20000000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C36",
+    "value": 6
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C37",
+    "value": 27000000
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "B6",
+    "value": "Honorarios"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "C6",
+    "value": "Laboral"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "E6",
+    "value": 5500000
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "G6",
+    "value": 0
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "J6",
+    "value": 0
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "R6",
+    "value": 2
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "B7",
+    "value": "Arriendo"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "C7",
+    "value": "Renta"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "E7",
+    "value": 1200000
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "B8",
+    "value": "Asesoría en dólares"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "C8",
+    "value": "Laboral"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "D8",
+    "value": "USD"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "E8",
+    "value": 300
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "G8",
+    "value": 0
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "H8",
+    "value": 0
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "I8",
+    "value": 0
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "J8",
+    "value": 0
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "K8",
+    "value": 0
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "B9",
+    "value": "Ingreso sin tipo"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "E9",
+    "value": 100000
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "G17",
+    "value": 0
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "J17",
+    "value": 0
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D13",
+    "value": 900000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D14",
+    "value": 2500000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D15",
+    "value": 300000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D21",
+    "value": 250000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D48",
+    "value": 3000000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D50",
+    "value": 1500000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D54",
+    "value": 400000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "B56",
+    "value": "Varios"
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "C56",
+    "value": "Partida sin tipo"
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D56",
+    "value": 50000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "E56",
+    "value": "Mensual"
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "B57",
+    "value": "Salud y bienestar"
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "C57",
+    "value": "Gimnasio"
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D57",
+    "value": 120000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "E57",
+    "value": "Mensual"
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "J57",
+    "value": "Directo"
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "K57",
+    "value": "Salud y cuidado"
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "L57",
+    "value": "No"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "B13",
+    "value": "Tarjeta"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "C13",
+    "value": "Tarjeta de crédito"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "D13",
+    "value": 4000000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "E13",
+    "value": 0.3
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "F13",
+    "value": 200000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "B14",
+    "value": "Vehículo"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "C14",
+    "value": "Vehículo"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "D14",
+    "value": 15000000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "E14",
+    "value": 0.14
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "F14",
+    "value": 450000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "B46",
+    "value": "Amigo"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C46",
+    "value": 3000000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "D46",
+    "value": 250000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "E46",
+    "date": "2026-06-01"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "H46",
+    "value": 1
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "B47",
+    "value": "Familiar"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "D47",
+    "value": 100000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "E47",
+    "date": "2027-03-01"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "H47",
+    "value": 0.5
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "B48",
+    "value": "Vecino"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C48",
+    "value": 1000000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "D48",
+    "value": 300000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "E48",
+    "date": "2025-01-15"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "H48",
+    "value": 0.5
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "B8",
+    "value": "Cuenta de ahorros"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "C8",
+    "value": "Líquido"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "E8",
+    "value": 12000000
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "B9",
+    "value": "Dólares"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "C9",
+    "value": "Líquido"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "D9",
+    "value": "USD"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "E9",
+    "value": 1000
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "B10",
+    "value": "Apartamento"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "C10",
+    "value": "Inmueble"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "E10",
+    "value": 200000000
+  },
+  {
+    "sheet": "Bolsillos",
+    "cell": "G8",
+    "value": 500000
+  },
+  {
+    "sheet": "Bolsillos",
+    "cell": "G9",
+    "value": 300000
+  }
+]

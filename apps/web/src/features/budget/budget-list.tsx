@@ -93,6 +93,12 @@ function ItemSummary({
           {text.incomplete}
         </span>
       ) : null}
+      {item.withoutPocket ? (
+        <span className="flex items-center gap-1 text-sm">
+          <span className="text-status-warning">{warningIcon}</span>
+          {text.withoutPocket}
+        </span>
+      ) : null}
     </span>
   );
 }

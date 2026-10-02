@@ -7,6 +7,7 @@ import { withImpact } from '@/features/summary';
 import { createClient } from '@/lib/supabase/server';
 import { requireCaseEditor } from '@/server/case-access';
 
+import { parsePlanSettings, type PlanErrors, type PlanValues } from './plan-settings-validation';
 import { loadProfile } from './queries';
 import { parseProfile, type ProfileErrors, type ProfileValues } from './validation';
 
@@ -55,6 +56,55 @@ export async function saveProfile(
         .from('case_settings')
         .insert({ ...parsed.record.settings, client_id: clientId });
       return error;
+    },
+    (outcome) => outcome === null,
+  );
+  if (error) {
+    const formError = error.code === '42501' ? 'notAllowed' : 'unavailable';
+    return { values: parsed.values, errors: {}, formError };
+  }
+  revalidatePath(`/clientes/${clientId}`);
+  redirect(`/clientes/${clientId}`);
+}
+
+export interface PlanSettingsState {
+  readonly values: PlanValues;
+  readonly errors: PlanErrors;
+  readonly formError: 'notAllowed' | 'unavailable' | null;
+}
+
+/**
+ * Supuestos del plan: meses de fondo, umbral de deuda cara, porcentajes y colchón. Criterio del
+ * asesor (matriz de permisos; RLS lo vuelve a exigir). Cambian las cifras: antes y después.
+ */
+export async function savePlanSettings(
+  clientId: string,
+  _previous: PlanSettingsState | null,
+  formData: FormData,
+): Promise<PlanSettingsState> {
+  const path = `/clientes/${clientId}/supuestos`;
+  const viewer = await requireCaseEditor(clientId, path);
+  const parsed = parsePlanSettings(formData);
+  if (viewer.role !== 'advisor') {
+    return { values: parsed.values, errors: {}, formError: 'notAllowed' };
+  }
+  if (!parsed.ok) return { values: parsed.values, errors: parsed.errors, formError: null };
+
+  const supabase = await createClient();
+  const { value: error } = await withImpact(
+    clientId,
+    async () => {
+      // Sin upsert: la API no puede escribir `client_id` en una actualización (privilegios por columna).
+      const updated = await supabase
+        .from('case_settings')
+        .update(parsed.record)
+        .eq('client_id', clientId)
+        .select('client_id');
+      if (updated.error || updated.data.length > 0) return updated.error;
+      const { error: insertError } = await supabase
+        .from('case_settings')
+        .insert({ ...parsed.record, client_id: clientId });
+      return insertError;
     },
     (outcome) => outcome === null,
   );

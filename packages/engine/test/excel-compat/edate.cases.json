@@ -1,0 +1,80 @@
+[
+  {
+    "id": "ene-31-mas-1",
+    "start": "2026-01-31",
+    "months": 1,
+    "formula": "=TEXT(EDATE(DATE(2026,1,31),1),\"yyyy-mm-dd\")"
+  },
+  {
+    "id": "ene-31-mas-1-bisiesto",
+    "start": "2024-01-31",
+    "months": 1,
+    "formula": "=TEXT(EDATE(DATE(2024,1,31),1),\"yyyy-mm-dd\")"
+  },
+  {
+    "id": "ago-31-mas-1",
+    "start": "2026-08-31",
+    "months": 1,
+    "formula": "=TEXT(EDATE(DATE(2026,8,31),1),\"yyyy-mm-dd\")"
+  },
+  {
+    "id": "dic-a-ene",
+    "start": "2026-12-15",
+    "months": 1,
+    "formula": "=TEXT(EDATE(DATE(2026,12,15),1),\"yyyy-mm-dd\")"
+  },
+  {
+    "id": "mas-12",
+    "start": "2026-10-01",
+    "months": 12,
+    "formula": "=TEXT(EDATE(DATE(2026,10,1),12),\"yyyy-mm-dd\")"
+  },
+  {
+    "id": "mas-55",
+    "start": "2026-10-01",
+    "months": 55,
+    "formula": "=TEXT(EDATE(DATE(2026,10,1),55),\"yyyy-mm-dd\")"
+  },
+  {
+    "id": "menos-1",
+    "start": "2026-03-31",
+    "months": -1,
+    "formula": "=TEXT(EDATE(DATE(2026,3,31),-1),\"yyyy-mm-dd\")"
+  },
+  {
+    "id": "menos-13",
+    "start": "2026-01-15",
+    "months": -13,
+    "formula": "=TEXT(EDATE(DATE(2026,1,15),-13),\"yyyy-mm-dd\")"
+  },
+  {
+    "id": "cero",
+    "start": "2026-09-28",
+    "months": 0,
+    "formula": "=TEXT(EDATE(DATE(2026,9,28),0),\"yyyy-mm-dd\")"
+  },
+  {
+    "id": "fraccion-trunca",
+    "start": "2026-09-28",
+    "months": 1.9,
+    "formula": "=TEXT(EDATE(DATE(2026,9,28),1.9),\"yyyy-mm-dd\")"
+  },
+  {
+    "id": "fraccion-negativa",
+    "start": "2026-09-28",
+    "months": -1.9,
+    "formula": "=TEXT(EDATE(DATE(2026,9,28),-1.9),\"yyyy-mm-dd\")"
+  },
+  {
+    "id": "feb-29-mas-12",
+    "start": "2024-02-29",
+    "months": 12,
+    "formula": "=TEXT(EDATE(DATE(2024,2,29),12),\"yyyy-mm-dd\")"
+  },
+  {
+    "id": "feb-29-mas-48",
+    "start": "2024-02-29",
+    "months": 48,
+    "formula": "=TEXT(EDATE(DATE(2024,2,29),48),\"yyyy-mm-dd\")"
+  }
+]

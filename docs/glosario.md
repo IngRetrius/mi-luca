@@ -49,9 +49,20 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Fecha de corte | `cutoffDate` | Fecha a la que se refieren los cálculos |
 | Fecha | `IsoDate` | Texto "AAAA-MM-DD", sin hora ni zona |
 | Meses completos entre fechas | `datedifMonths` | `DATEDIF(inicio, fin, "m")` de Excel |
+| Sumar meses a una fecha | `edate` | `EDATE` de Excel |
+| Índice del mes | `monthIndex` | `AÑO*12 + MES`, como compara meses la plantilla |
+| Redondeo hacia afuera | `roundUp` | `ROUNDUP` de Excel |
 | Año del flujo | `flowYear` | |
 | Tipo de cliente | `clientType` | empleado, contratista, independiente_variable, pensionado, rentista, mixto |
 | Supuestos del caso | `caseSettings` | Criterio del asesor |
+| Supuestos del plan, pantalla | `/clientes/[id]/supuestos`, `PlanSettingsScreen` | Criterio del asesor (`case_settings`) |
+| Flujo, fondo, bolsillos, cobros, patrimonio, prueba de realidad (rutas) | `/flujo`, `/fondo`, `/bolsillos`, `/cobros`, `/patrimonio`, `/prueba-de-realidad` | Dentro de `/clientes/[id]` |
+| Semáforo | `StatusLabel` (`ok`, `warning`, `alert`) | Icono, color y texto: Bien, Atención, Alerta |
+| Lista de cifras | `FigureList` | Etiqueta y valor alineado a la derecha |
+| Parece un número de cuenta | `looksLikeAccountNumber` | Ocho cifras seguidas o más; no se guardan (regla 9) |
+| Porcentaje escrito | `parsePercent`, `percentToText` | De 0 a 100 en el campo; razón de 0 a 1 en la base |
+| Parámetros del plan | `PlanParameters` | Meses de fondo, umbral de deuda cara, porcentajes y colchón ya resueltos para el caso |
+| Metodología | `Methodology` / `method.*` | Parámetros comunes de `country_parameters`; valen si el asesor no fija otro |
 | Parámetros por país | `countryParameters` | Versionados, con fuente |
 | Moneda base | `baseCurrency` | |
 | Tasa de cambio | `fxRate` | Unidades de moneda base por una unidad extranjera |
@@ -84,28 +95,46 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Nivel esencial, básico, actual | `CostLevel`: `essential`, `basic`, `current` | Niveles del costo de vida |
 | Valor del nivel básico | `basicAmount` / `basic_amount` | Valor por pago, con la frecuencia y la moneda de la partida; lo propone el asesor |
 | Umbral fiscal | `FiscalThreshold` | Parámetro del país; cuáles aplican se decide por cliente |
-| Flujo anual | `cashflow` | |
-| Balance del mes | `monthBalance` | |
-| Meses sin ingreso | `noIncomeMonths` | |
+| Flujo anual | `cashflow` / `monthlyFlow` | Entradas y salidas de cada mes del año del flujo (`Flujo anual!E7:Q19`) |
+| Valores por mes, fila del flujo | `MonthValues`, `FlowRow` | Doce valores de enero a diciembre; la fila lleva además el total del año |
+| Balance del mes | `balance` | Entradas menos salidas (`Flujo anual!E19:P19`) |
+| Meses sin ingreso | `noIncomeMonths` | Bolsillo que cubre los meses en rojo con lo que se guarda en los positivos |
+| Aporte igual, aporte proporcional | `aporte_igual`, `aporte_proporcional` (`NoIncomeMethod`) | Método del aporte a meses sin ingreso; `no_aplica` sin meses en rojo |
+| Cobertura del faltante | `coverage` | De 0 a 1 (`Flujo anual!T27`) |
+| Alerta de déficit | `deficitAlert` | El año cierra en rojo (`Flujo anual!B36`) |
 | Faltante | `shortfall` | |
 | Sobrante | `surplus` | |
 | Margen libre | `freeMargin` | |
+| Destino del sobrante | `surplusDestination` | A deudas, a inversión y margen; también los abonos de cobros |
 | Ahorro programado | `programmedSavings` | Cooperativas, fondos, pensión voluntaria |
-| Prueba de realidad | `realityCheck` | |
+| Prueba de realidad | `realityCheck` / `reality_check` | |
+| Estado de la prueba de realidad | `RealityCheckStatus` | pendiente, confirmada, revisar_gastos |
 | Cuenta por cobrar | `receivable` | |
+| Saldo pendiente en la fecha de corte | `pendingAtCutoff` | `Supuestos!I46:I48` |
+| Abonos recibidos | `receivablesReceived` | Abonos de cobros en cada mes del flujo |
+| % del cobro a inversión | `pctToInvestment` / `pct_to_investment` | Lo decide el asesor |
 | Banco | `bank` | Solo el nombre de la entidad |
 | Bolsillo | `pocket` | |
+| Tipo de bolsillo | `kind` | emergencia, meses_sin_ingreso, general |
+| Límite de bolsillos del banco | `max_pockets` | RN-073 |
+| Bolsillos con aporte | `withContribution` | Para comparar con el límite del banco (`Bolsillos!C29`) |
 | Cuenta operativa | `operatingAccount` | |
 | Colchón operativo | `operatingCushion` | |
-| Reparto del saldo | `balanceAllocation` | |
+| Reparto del saldo | `computePockets` | Fondo, meses sin ingreso, saldos escritos y excedente (`Bolsillos!C21:C28`) |
+| Disponible para repartir | `available` | Saldo líquido menos el colchón |
+| Saldos que superan lo disponible | `overAllocated` | `Bolsillos!C30` |
 | Excedente | `excess` | |
 | Aporte único | `lumpSum` | |
 | Fondo de emergencia | `emergencyFund` | |
-| Escenario A, B, C | `scenarioA`, `scenarioB`, `scenarioC` | |
+| Escenario A, B, C | `scenarios.a`, `scenarios.b`, `scenarios.c` (`EmergencyScenarioId`) | Pierde el ingreso laboral, las rentas o los dos |
+| Regla de 6 meses | `sixMonthRule` | Comparación con 6 meses de gasto total |
+| Avance del fondo | `emergencyProgress` (`vsFullGoal`, `vsCurrentGoal`) | Frente a la meta completa y a la vigente (H-11) |
 | Meta completa, meta vigente | `fullGoal`, `currentGoal` | |
-| Plan de ahorro secuencial | `sequentialSavingsPlan` | Modo nativo (H-01) |
+| Plan de ahorro secuencial | `sequentialSavingsPlan` | Modo nativo (H-01, ADR 0008) |
+| Meses hasta completar el fondo | `monthsToComplete`, `completionMonth` | |
 | Deuda | `debt` | |
-| Deuda cara | `expensiveDebt` | |
+| Deuda cara | `expensiveDebt` | Con saldo y tasa en el umbral o más (RN-090) |
+| Umbral de deuda cara | `expensiveDebtThreshold` / `expensive_debt_threshold` | |
 | Tasa efectiva anual | `annualRate` | |
 | Cuota mínima | `minPayment` | |
 | Totales de deudas | `debtTotals` | Saldo y cuotas mínimas (`Deudas!D21`, `F21`) |
@@ -132,6 +161,8 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Suma asegurada | `sumInsured` | |
 | Patrimonio | `netWorth` | |
 | Activo | `asset` | |
+| Tipo de activo | `assetType` / `asset_type` | liquido, inmueble, vehiculo, otro |
+| Saldo líquido | `liquidAssets` | Cuentas, bolsillos y efectivo (`Patrimonio!C33`) |
 | Concentración | `concentration` | Inmuebles y vehículos sobre activos |
 | Inversión | `investment` | |
 | Perfil de riesgo | `riskProfile` | |

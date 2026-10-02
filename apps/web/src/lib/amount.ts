@@ -33,3 +33,18 @@ export function amountToText(value: number | null, locale: string, maxDecimals =
     useGrouping: true,
   }).format(value);
 }
+
+/**
+ * Lee un porcentaje escrito de 0 a 100 ("70", "12,5") y lo devuelve como razón (0,7; 0,125).
+ * Vacío es null; fuera de rango o mal escrito es NaN.
+ */
+export function parsePercent(text: string): number | null {
+  const value = parseDecimal(text.replace('%', ''), 2);
+  if (value === null || Number.isNaN(value)) return value;
+  return value <= 100 ? value / 100 : Number.NaN;
+}
+
+/** Una razón guardada (0,7) como porcentaje para un campo ("70"). */
+export function percentToText(ratio: number | null, locale: string): string {
+  return ratio === null ? '' : amountToText(Math.round(ratio * 10_000) / 100, locale);
+}

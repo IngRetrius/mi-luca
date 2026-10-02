@@ -2,7 +2,7 @@
 
 Plataforma web de planificación financiera personal, pensada para el celular. La usa un asesor para acompañar a sus clientes (hoy en Colombia y en España, preparada para cualquier país y para clientes con varias monedas), y reemplaza la plantilla de Excel de la asesoría como herramienta principal.
 
-Estado: **etapa de planificación**. Todavía no hay código de la aplicación. El plan completo está en [docs/](docs/README.md).
+Estado al 02/10/2026: **fase 3 de 8 en curso**. Terminadas las fundaciones (F0), la autenticación con clientes y permisos (F1) y el motor núcleo con ingresos, presupuesto y costo de vida (F2). En F3 ya están el flujo anual, el fondo de emergencia, los bolsillos, los cobros y la prueba de realidad para el asesor; faltan las mismas pantallas para el cliente y la entrega del plan. El avance detallado está en [docs/06-plan-de-trabajo.md](docs/06-plan-de-trabajo.md) y el plan completo en [docs/](docs/README.md).
 
 ## Qué hace
 
@@ -23,7 +23,11 @@ pnpm typecheck
 pnpm test         # pruebas unitarias (motor, dominio, tokens, formatos)
 pnpm test:e2e     # extremo a extremo en iPhone y Android simulados
 pnpm build
+pnpm format:check # formato con Prettier
+pnpm test:db      # pruebas pgTAP de la base (requiere Supabase local: pnpm supabase start)
 ```
+
+Supabase local, migraciones y despliegue de la base: [supabase/README.md](supabase/README.md).
 
 ## Estructura del repositorio
 

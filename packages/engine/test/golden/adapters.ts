@@ -4,6 +4,7 @@
  * error, para que ningún dato se pierda en silencio.
  */
 import type {
+  AssetType,
   ExpenseType,
   Frequency,
   IncomeKind,
@@ -14,11 +15,16 @@ import type {
 } from '@miluca/domain';
 
 import { automaticRows, type BudgetItemInput } from '../../src/budget';
+import type { CaseInput, PlanParameters } from '../../src/compute';
 import type { FxContext } from '../../src/currency';
 import { debtTotals, type DebtInput } from '../../src/debts';
 import { computeGoals, type GoalInput, type TripCostInput } from '../../src/goals';
 import type { IncomeInput } from '../../src/incomes';
 import { computeInsurance, type InsuranceInput } from '../../src/insurance';
+import type { AssetInput } from '../../src/net-worth';
+import type { PocketInput } from '../../src/pockets';
+import type { RealityCheckInput } from '../../src/reality-check';
+import type { ReceivableInput } from '../../src/receivables';
 import { cell, excelN, type CellValue, type GoldenCase } from './cases';
 
 export const MONTH_COLUMNS = ['G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'] as const;
@@ -32,6 +38,13 @@ const DEBT_ROWS = [13, 14, 15, 16, 17, 18, 19, 20] as const;
 /** Conceptos de la calculadora de viaje; la fila 16 es el alojamiento y la 17 sus impuestos. */
 const TRIP_ITEM_ROWS = [15, 16, 18, 19, 20, 21, 22] as const;
 const TRIP_LODGING_ROW = 16;
+/** Bolsillos generales; los nombres salen de `Listas!F2:F11`. */
+export const POCKET_ROWS = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17] as const;
+export const RECEIVABLE_ROWS = [46, 47, 48] as const;
+const ASSET_ROWS = Array.from({ length: 20 }, (_, i) => i + 8); // 8 a 27
+/** Bolsillo fijo de la fila automática de seguros (`Presupuesto!K7`) y el de las metas sin bolsillo. */
+const INSURANCE_POCKET = 'Seguros';
+const DEFAULT_GOAL_POCKET = 'Metas';
 
 const FREQUENCIES: Readonly<Record<string, Frequency>> = {
   Semanal: 'semanal',
@@ -59,6 +72,13 @@ export const INCOME_KINDS: Readonly<Record<string, IncomeKind>> = {
   Laboral: 'laboral',
   Renta: 'renta',
   Pensión: 'pension',
+  Otro: 'otro',
+};
+
+const ASSET_TYPES: Readonly<Record<string, AssetType>> = {
+  Líquido: 'liquido',
+  Inmueble: 'inmueble',
+  Vehículo: 'vehiculo',
   Otro: 'otro',
 };
 
@@ -125,6 +145,18 @@ function baseMoney(golden: GoldenCase, ref: string): Money | null {
     : null;
 }
 
+/** Texto de la celda, o null si está vacía. */
+function text(golden: GoldenCase, ref: string): string | null {
+  const value = cell(golden, ref);
+  return value === undefined || value === null || value === '' ? null : String(value);
+}
+
+/** Número de la celda, o null si está vacía. */
+function numberOrNull(golden: GoldenCase, ref: string): number | null {
+  const value = cell(golden, ref);
+  return typeof value === 'number' ? value : null;
+}
+
 /** Fecha "AAAA-MM-DD" de la celda, o null si está vacía. */
 function isoDate(golden: GoldenCase, ref: string): string | null {
   const value = cell(golden, ref);
@@ -162,6 +194,7 @@ export function goalsInput(golden: GoldenCase): (GoalInput | null)[] {
       alreadySaved: baseMoney(golden, `Metas!G${row}`),
       repeatEveryYears: repeat > 0 ? repeat : null,
       targetDate: isoDate(golden, `Metas!I${row}`),
+      pocket: text(golden, `Metas!C${row}`) ?? DEFAULT_GOAL_POCKET,
     };
   });
 }
@@ -180,7 +213,13 @@ export function debtsInput(golden: GoldenCase): DebtInput[] {
     const balance = baseMoney(golden, `Deudas!D${row}`);
     const minPayment = baseMoney(golden, `Deudas!F${row}`);
     if (!balance && !minPayment) return [];
-    return [{ balance: balance ?? { amount: 0, currency: baseCurrency }, minPayment }];
+    return [
+      {
+        balance: balance ?? { amount: 0, currency: baseCurrency },
+        minPayment,
+        annualRate: numberOrNull(golden, `Deudas!E${row}`),
+      },
+    ];
   });
 }
 
@@ -205,6 +244,8 @@ export function automaticBudgetInput(golden: GoldenCase): BudgetItemInput[] {
       debtMinPayments: debtTotals(debtsInput(golden), fx).minPayment,
       newInsurancePremiums: computeInsurance(insuranceInput(golden), fx).newPremiumsAnnual,
       goalContributions,
+      goalPockets: goals.map((goal) => goal?.pocket ?? null),
+      insurancePocket: INSURANCE_POCKET,
     },
     fx.baseCurrency,
   );
@@ -253,7 +294,83 @@ export function budgetInput(
       payer: payer(row),
       basicAmount: basicPerPayment(golden, row, basicAnnual(row)),
       isTemporary: temporary(row),
+      pocket: text(golden, `Presupuesto!K${row}`),
     };
   });
   return [...automaticBudgetInput(golden), ...manual];
+}
+
+/** Supuestos!C21:C32 ya resueltos, como los recibe el motor. */
+export function planParameters(golden: GoldenCase): PlanParameters {
+  return {
+    emergencyMonths: excelN(cell(golden, 'Supuestos!C21')),
+    expensiveDebtThreshold: excelN(cell(golden, 'Supuestos!C22')),
+    pctInvestConfirmed: excelN(cell(golden, 'Supuestos!C23')),
+    pctInvestPending: excelN(cell(golden, 'Supuestos!C24')),
+    pctSurplusToDebt: excelN(cell(golden, 'Supuestos!C25')),
+    pctExcessToInvestment: excelN(cell(golden, 'Supuestos!C26')),
+    operatingCushion: {
+      amount: excelN(cell(golden, 'Supuestos!C32')),
+      currency: fxContext(golden).baseCurrency,
+    },
+  };
+}
+
+export function realityCheckInput(golden: GoldenCase): RealityCheckInput {
+  return {
+    savingsMonthsAgo: numberOrNull(golden, 'Supuestos!C35'),
+    months: numberOrNull(golden, 'Supuestos!C36'),
+    savingsToday: numberOrNull(golden, 'Supuestos!C37'),
+  };
+}
+
+export function receivablesInput(golden: GoldenCase): ReceivableInput[] {
+  return RECEIVABLE_ROWS.map((row) => ({
+    balance: baseMoney(golden, `Supuestos!C${row}`),
+    monthlyPayment: baseMoney(golden, `Supuestos!D${row}`),
+    firstPaymentDate: isoDate(golden, `Supuestos!E${row}`),
+    pctToInvestment: excelN(cell(golden, `Supuestos!H${row}`)),
+  }));
+}
+
+/** Activos de Patrimonio con tipo y valor (filas 8 a 27). */
+export function assetsInput(golden: GoldenCase): AssetInput[] {
+  const { baseCurrency } = fxContext(golden);
+  return ASSET_ROWS.flatMap((row) => {
+    const assetType = label(cell(golden, `Patrimonio!C${row}`), ASSET_TYPES, `Patrimonio!C${row}`);
+    const value = numberOrNull(golden, `Patrimonio!E${row}`);
+    if (assetType === null || value === null) return [];
+    const currency = text(golden, `Patrimonio!D${row}`) ?? baseCurrency;
+    return [{ assetType, value: { amount: value, currency } }];
+  });
+}
+
+/** Bolsillos generales con nombre, en orden; la llave es el nombre, como en la columna Bolsillo. */
+export function pocketsInput(golden: GoldenCase): PocketInput[] {
+  return POCKET_ROWS.flatMap((row) => {
+    const key = text(golden, `Bolsillos!B${row}`);
+    return key === null ? [] : [{ key, initialBalance: baseMoney(golden, `Bolsillos!G${row}`) }];
+  });
+}
+
+/** El caso completo como lo recibe `compute`: las partidas del cliente sin las filas automáticas. */
+export function caseInput(golden: GoldenCase, options: BudgetInputOptions = {}): CaseInput {
+  return {
+    cutoffDate: golden.cutoffDate,
+    flowYear: excelN(cell(golden, 'Supuestos!C14')),
+    fx: fxContext(golden),
+    parameters: planParameters(golden),
+    incomes: incomesInput(golden),
+    socialSecurityMonths: socialSecurityFlags(golden),
+    budgetItems: budgetInput(golden, options).slice(7),
+    goals: goalsInput(golden).filter((goal): goal is GoalInput => goal !== null),
+    insurances: insuranceInput(golden),
+    insurancePocket: INSURANCE_POCKET,
+    debts: debtsInput(golden),
+    receivables: receivablesInput(golden),
+    realityCheck: realityCheckInput(golden),
+    assets: assetsInput(golden),
+    pockets: pocketsInput(golden),
+    fiscalThresholds: [],
+  };
 }

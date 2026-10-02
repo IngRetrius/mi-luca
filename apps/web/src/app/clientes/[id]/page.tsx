@@ -109,13 +109,17 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
   );
 }
 
-// Cifras de la ficha: las del Resumen que ya existen en F2.
+// Cifras de la ficha: las del Resumen que ya calcula el motor.
 const PROFILE_FIGURES: readonly KeyFigureId[] = [
   'annualIncome',
   'annualExpenses',
   'programmedSavings',
   'annualSurplus',
   'savingsRate',
+  'emergencyGoal',
+  'emergencyProgress',
+  'noIncomeShortfall',
+  'annualInvestment',
 ];
 
 /** Datos del caso y cifras del plan calculadas por el motor con lo registrado hoy. */
@@ -174,6 +178,32 @@ function CaseData({ clientId, computed }: { clientId: string; computed: Computed
       ),
     },
     {
+      href: `${base}/supuestos`,
+      title: text.planSettings,
+      summary: text.planSettingsSummary,
+    },
+    {
+      href: `${base}/patrimonio`,
+      title: text.assets,
+      summary: text.assetsSummary.replace('{amount}', money(computed.result.liquidAssets)),
+    },
+    {
+      href: `${base}/cobros`,
+      title: text.receivables,
+      summary:
+        computed.rows.receivables.length === 0
+          ? text.receivablesNone
+          : text.receivablesSummary.replace(
+              '{amount}',
+              money(computed.result.receivables.totalPending),
+            ),
+    },
+    {
+      href: `${base}/prueba-de-realidad`,
+      title: text.realityCheck,
+      summary: t.realityCheck.status[computed.result.realityCheck.status],
+    },
+    {
       href: `${base}/monedas`,
       title: text.currencies,
       summary:
@@ -184,6 +214,26 @@ function CaseData({ clientId, computed }: { clientId: string; computed: Computed
               .replace('{base}', client.base_currency),
     },
   ];
+  const { cashflow, emergencyFund, pockets } = computed.result;
+  const analysis = [
+    {
+      href: `${base}/flujo`,
+      title: text.cashflow,
+      summary: text.cashflowSummary
+        .replace('{amount}', money(computed.result.summary.annualSurplus))
+        .replace('{year}', String(cashflow.year)),
+    },
+    {
+      href: `${base}/fondo`,
+      title: text.emergencyFund,
+      summary: text.emergencyFundSummary.replace('{amount}', money(emergencyFund.currentGoal)),
+    },
+    {
+      href: `${base}/bolsillos`,
+      title: text.pockets,
+      summary: text.pocketsSummary.replace('{count}', String(pockets.withContribution)),
+    },
+  ];
   return (
     <>
       <section aria-labelledby="case-title" className="flex flex-col gap-2">
@@ -192,6 +242,18 @@ function CaseData({ clientId, computed }: { clientId: string; computed: Computed
         </h2>
         <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
           {modules.map((module) => (
+            <li key={module.href}>
+              <ModuleLink {...module} />
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section aria-labelledby="analysis-title" className="flex flex-col gap-2">
+        <h2 id="analysis-title" className="font-semibold">
+          {text.analysisTitle}
+        </h2>
+        <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
+          {analysis.map((module) => (
             <li key={module.href}>
               <ModuleLink {...module} />
             </li>

@@ -1,0 +1,292 @@
+[
+  {
+    "sheet": "Supuestos",
+    "cell": "C7",
+    "value": "Caso sintético C8"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C10",
+    "value": "Empleado"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C17",
+    "value": 4000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C20",
+    "value": 4
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C32",
+    "value": 1000000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C35",
+    "value": 10000000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C36",
+    "value": 12
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C37",
+    "value": 14000000
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "B6",
+    "value": "Salario"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "C6",
+    "value": "Laboral"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "E6",
+    "value": 8000000
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "L6",
+    "value": 2
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "R6",
+    "value": 2
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "B7",
+    "value": "Pensión de sobreviviente"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "C7",
+    "value": "Pensión"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "E7",
+    "value": 1000000
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "B8",
+    "value": "Aporte familiar"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "C8",
+    "value": "Otro"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "E8",
+    "value": 500000
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "B9",
+    "value": "Dividendos en dólares"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "C9",
+    "value": "Renta"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "D9",
+    "value": "USD"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "E9",
+    "value": 100
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "G9",
+    "value": 0
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "H9",
+    "value": 0
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "J9",
+    "value": 0
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "K9",
+    "value": 0
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "M9",
+    "value": 0
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "N9",
+    "value": 0
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "P9",
+    "value": 0
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "Q9",
+    "value": 0
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D14",
+    "value": 3000000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D15",
+    "value": 400000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D21",
+    "value": 300000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D48",
+    "value": 4000000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D50",
+    "value": 2000000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D53",
+    "value": 1200000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D54",
+    "value": 1000000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "B46",
+    "value": "Hermano"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C46",
+    "value": 5000000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "D46",
+    "value": 500000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "E46",
+    "date": "2027-01-01"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "H46",
+    "value": 0.6
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "B8",
+    "value": "Cuenta de nómina"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "C8",
+    "value": "Líquido"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "E8",
+    "value": 3000000
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "B9",
+    "value": "Casa"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "C9",
+    "value": "Inmueble"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "E9",
+    "value": 300000000
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "B10",
+    "value": "Carro"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "C10",
+    "value": "Vehículo"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "E10",
+    "value": 60000000
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "B11",
+    "value": "Aportes en cooperativa"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "C11",
+    "value": "Otro"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "E11",
+    "value": 8000000
+  },
+  {
+    "sheet": "Bolsillos",
+    "cell": "G8",
+    "value": 2000000
+  },
+  {
+    "sheet": "Bolsillos",
+    "cell": "G9",
+    "value": 1000000
+  },
+  {
+    "sheet": "Bolsillos",
+    "cell": "G13",
+    "value": 500000
+  }
+]

@@ -2,6 +2,7 @@ import 'server-only';
 
 import type { Database } from '@miluca/db';
 
+import { emergencyMonthsByType, METHODOLOGY_KEYS } from '@/features/summary';
 import { todayIn } from '@/lib/dates';
 import { createClient } from '@/lib/supabase/server';
 
@@ -56,14 +57,13 @@ export async function loadProfile(clientId: string): Promise<ProfileData | null>
       .order('key'),
     supabase.rpc('parameter_at', {
       p_country: country,
-      p_key: 'method.emergency_months_by_client_type',
+      p_key: METHODOLOGY_KEYS.emergencyMonthsByClientType,
       p_on: today,
     }),
   ]);
   if (thresholds.error || months.error) return null;
 
   const { country: countryRow, ...profile } = client.data;
-  const monthsValue = months.data?.value;
   return {
     client: profile,
     countryName: countryRow.name,
@@ -72,12 +72,7 @@ export async function loadProfile(clientId: string): Promise<ProfileData | null>
     thresholds: thresholds.data.flatMap((row) =>
       typeof row.value === 'number' ? [{ key: row.key, value: row.value, unit: row.unit }] : [],
     ),
-    emergencyMonths:
-      monthsValue && typeof monthsValue === 'object' && !Array.isArray(monthsValue)
-        ? (Object.fromEntries(
-            Object.entries(monthsValue).filter(([, value]) => typeof value === 'number'),
-          ) as Record<string, number>)
-        : {},
+    emergencyMonths: emergencyMonthsByType(months.data?.value),
     today,
   };
 }

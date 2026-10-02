@@ -1,0 +1,71 @@
+{
+  "excel": "16.113.3",
+  "generated": "2026-10-02",
+  "results": [
+    {
+      "id": "ene-31-mas-1",
+      "formula": "=TEXT(EDATE(DATE(2026,1,31),1),\"yyyy-mm-dd\")",
+      "value": "2026-02-28"
+    },
+    {
+      "id": "ene-31-mas-1-bisiesto",
+      "formula": "=TEXT(EDATE(DATE(2024,1,31),1),\"yyyy-mm-dd\")",
+      "value": "2024-02-29"
+    },
+    {
+      "id": "ago-31-mas-1",
+      "formula": "=TEXT(EDATE(DATE(2026,8,31),1),\"yyyy-mm-dd\")",
+      "value": "2026-09-30"
+    },
+    {
+      "id": "dic-a-ene",
+      "formula": "=TEXT(EDATE(DATE(2026,12,15),1),\"yyyy-mm-dd\")",
+      "value": "2027-01-15"
+    },
+    {
+      "id": "mas-12",
+      "formula": "=TEXT(EDATE(DATE(2026,10,1),12),\"yyyy-mm-dd\")",
+      "value": "2027-10-01"
+    },
+    {
+      "id": "mas-55",
+      "formula": "=TEXT(EDATE(DATE(2026,10,1),55),\"yyyy-mm-dd\")",
+      "value": "2031-05-01"
+    },
+    {
+      "id": "menos-1",
+      "formula": "=TEXT(EDATE(DATE(2026,3,31),-1),\"yyyy-mm-dd\")",
+      "value": "2026-02-28"
+    },
+    {
+      "id": "menos-13",
+      "formula": "=TEXT(EDATE(DATE(2026,1,15),-13),\"yyyy-mm-dd\")",
+      "value": "2024-12-15"
+    },
+    {
+      "id": "cero",
+      "formula": "=TEXT(EDATE(DATE(2026,9,28),0),\"yyyy-mm-dd\")",
+      "value": "2026-09-28"
+    },
+    {
+      "id": "fraccion-trunca",
+      "formula": "=TEXT(EDATE(DATE(2026,9,28),1.9),\"yyyy-mm-dd\")",
+      "value": "2026-10-28"
+    },
+    {
+      "id": "fraccion-negativa",
+      "formula": "=TEXT(EDATE(DATE(2026,9,28),-1.9),\"yyyy-mm-dd\")",
+      "value": "2026-08-28"
+    },
+    {
+      "id": "feb-29-mas-12",
+      "formula": "=TEXT(EDATE(DATE(2024,2,29),12),\"yyyy-mm-dd\")",
+      "value": "2025-02-28"
+    },
+    {
+      "id": "feb-29-mas-48",
+      "formula": "=TEXT(EDATE(DATE(2024,2,29),48),\"yyyy-mm-dd\")",
+      "value": "2028-02-29"
+    }
+  ]
+}

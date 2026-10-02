@@ -1,0 +1,79 @@
+[
+  {
+    "id": "entero",
+    "expression": "56",
+    "value": 56,
+    "digits": 0,
+    "formula": "=ROUNDUP(56,0)"
+  },
+  {
+    "id": "division-exacta",
+    "expression": "28000000/500000",
+    "value": 56,
+    "digits": 0,
+    "formula": "=ROUNDUP(28000000/500000,0)"
+  },
+  {
+    "id": "sube",
+    "expression": "2.1",
+    "value": 2.1,
+    "digits": 0,
+    "formula": "=ROUNDUP(2.1,0)"
+  },
+  {
+    "id": "negativo",
+    "expression": "-2.1",
+    "value": -2.1,
+    "digits": 0,
+    "formula": "=ROUNDUP(-2.1,0)"
+  },
+  {
+    "id": "casi-entero",
+    "expression": "0.1*3*10",
+    "value": 3.0000000000000004,
+    "digits": 0,
+    "formula": "=ROUNDUP(0.1*3*10,0)"
+  },
+  {
+    "id": "dos-decimales",
+    "expression": "1.234",
+    "value": 1.234,
+    "digits": 2,
+    "formula": "=ROUNDUP(1.234,2)"
+  },
+  {
+    "id": "cero",
+    "expression": "0",
+    "value": 0,
+    "digits": 0,
+    "formula": "=ROUNDUP(0,0)"
+  },
+  {
+    "id": "division-periodica",
+    "expression": "10/3",
+    "value": 3.3333333333333335,
+    "digits": 0,
+    "formula": "=ROUNDUP(10/3,0)"
+  },
+  {
+    "id": "grande",
+    "expression": "123456789.0001",
+    "value": 123456789.0001,
+    "digits": 0,
+    "formula": "=ROUNDUP(123456789.0001,0)"
+  },
+  {
+    "id": "negativo-decimales",
+    "expression": "-1.231",
+    "value": -1.231,
+    "digits": 2,
+    "formula": "=ROUNDUP(-1.231,2)"
+  },
+  {
+    "id": "decimales-negativos",
+    "expression": "1234",
+    "value": 1234,
+    "digits": -2,
+    "formula": "=ROUNDUP(1234,-2)"
+  }
+]

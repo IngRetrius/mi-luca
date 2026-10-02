@@ -61,9 +61,17 @@ export async function saveBudgetItem(
   const paths = budgetPaths(viewer.role, clientId);
   const advisor = viewer.role === 'advisor';
 
-  const currencies = await allowedCurrencies(clientId);
-  const parsed = parseBudgetItem(formData, { currencies: currencies ?? [], advisor });
-  if (!currencies) {
+  const supabase = await createClient();
+  const [currencies, pockets] = await Promise.all([
+    allowedCurrencies(clientId),
+    supabase.from('pockets').select('id').eq('client_id', clientId).eq('kind', 'general'),
+  ]);
+  const parsed = parseBudgetItem(formData, {
+    currencies: currencies ?? [],
+    advisor,
+    pocketIds: pockets.data?.map((pocket) => pocket.id) ?? [],
+  });
+  if (!currencies || pockets.error) {
     return { values: parsed.values, errors: {}, formError: 'unavailable' };
   }
   if (!parsed.ok) return { values: parsed.values, errors: parsed.errors, formError: null };
@@ -72,7 +80,6 @@ export async function saveBudgetItem(
   }
 
   const record = advisor ? parsed.record : withoutAdvisorColumns(parsed.record);
-  const supabase = await createClient();
   const { value: result } = await withImpact<WriteResult>(
     clientId,
     async () => {

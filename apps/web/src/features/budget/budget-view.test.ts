@@ -14,6 +14,7 @@ const row = (overrides: Partial<BudgetRowData>): BudgetRowData => ({
   payer: 'cliente',
   scope: 'presupuesto',
   is_temporary: false,
+  pocket_id: null,
   ...overrides,
 });
 
@@ -47,6 +48,19 @@ describe('budgetView', () => {
       incomplete: false,
     });
     expect(vivienda.items[1]).toMatchObject({ incomplete: true });
+  });
+
+  it('marca la partida tipo bolsillo que no tiene bolsillo (H-02)', () => {
+    const items = budgetView(
+      [
+        row({ id: 'p', expense_type: 'bolsillo' }),
+        row({ id: 'q', expense_type: 'bolsillo', pocket_id: 'viajes' }),
+        row({ id: 'r', expense_type: 'bolsillo', scope: 'referencia_familiar' }),
+      ],
+      monthly,
+      none,
+    )[0]!.items;
+    expect(items.map((item) => item.withoutPocket)).toEqual([true, false, false]);
   });
 
   it('filtra por pagador y por esencial', () => {

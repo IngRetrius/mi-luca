@@ -1,3 +1,5 @@
+export { assetTypeSchema } from './asset';
+export type { AssetType } from './asset';
 export { expenseTypeSchema, frequencySchema, incomeKindSchema, payerSchema } from './budget';
 export type { ExpenseType, Frequency, IncomeKind, MonthFlags, Payer } from './budget';
 export { isoDateSchema } from './date';

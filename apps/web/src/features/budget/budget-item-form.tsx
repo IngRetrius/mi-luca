@@ -75,6 +75,8 @@ export interface BudgetItemFormProps {
   readonly role: 'advisor' | 'client';
   readonly initial: BudgetItemValues;
   readonly currencies: readonly string[];
+  /** Bolsillos generales del cliente, para elegir el que financia la partida. */
+  readonly pockets: readonly { readonly id: string; readonly name: string }[];
   readonly action: (
     previous: BudgetItemState | null,
     formData: FormData,
@@ -93,6 +95,7 @@ const FIELD_ORDER: readonly BudgetItemField[] = [
   'currency',
   'durationDays',
   'payerLabel',
+  'pocket',
   'note',
   'basicAmount',
 ];
@@ -103,11 +106,13 @@ export function BudgetItemForm({
   role,
   initial,
   currencies,
+  pockets,
   action,
   deleteAction,
   cancelHref,
   preview,
 }: BudgetItemFormProps) {
+  const pocketIds = pockets.map((pocket) => pocket.id);
   const [state, formAction, pending] = useActionState(action, null);
   const values = state?.values ?? initial;
   const errors = state?.errors ?? {};
@@ -131,7 +136,11 @@ export function BudgetItemForm({
   function handleChange(event: FormEvent<HTMLFormElement>) {
     setDirty(true);
     const data = new FormData(event.currentTarget);
-    const parsed = parseBudgetItem(data, { currencies, advisor: role === 'advisor' });
+    const parsed = parseBudgetItem(data, {
+      currencies,
+      advisor: role === 'advisor',
+      pocketIds,
+    });
     if (!parsed.ok) return setDraft(null);
     const basicAmount =
       role === 'advisor' ? parsed.record.basic_amount : (preview?.keptBasicAmount ?? null);
@@ -303,6 +312,29 @@ export function BudgetItemForm({
           </label>
         ))}
       </ChoiceGroup>
+
+      <Field
+        id={fieldId('pocket')}
+        label={text.form.pocket}
+        hint={pockets.length === 0 ? text.form.pocketNone : text.form.pocketHint}
+        error={errors.pocket ? text.form.errors[errors.pocket] : null}
+      >
+        <select
+          id={fieldId('pocket')}
+          name="pocket"
+          defaultValue={values.pocket}
+          aria-invalid={errors.pocket ? true : false}
+          aria-describedby={describe('pocket', true)}
+          className={textField}
+        >
+          <option value="">{text.form.noPocket}</option>
+          {pockets.map((pocket) => (
+            <option key={pocket.id} value={pocket.id}>
+              {pocket.name}
+            </option>
+          ))}
+        </select>
+      </Field>
 
       <ChoiceGroup legend={text.form.payer}>
         {payerSchema.options.map((option: Payer) => (

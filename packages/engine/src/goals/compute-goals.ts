@@ -16,6 +16,8 @@ export interface GoalInput {
   readonly repeatEveryYears: number | null;
   /** @excel Metas!I6:I10 */
   readonly targetDate: IsoDate | null;
+  /** Bolsillo donde se guarda su aporte (`PocketInput.key`); null si no tiene. @excel Metas!C6:C10 */
+  readonly pocket: string | null;
 }
 
 export interface GoalResult {
