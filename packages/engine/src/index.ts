@@ -26,5 +26,6 @@ export * from './normalization';
 export * from './pockets';
 export * from './reality-check';
 export * from './savings-plan';
+export * from './quality';
 export * from './receivables';
 export * from './summary';

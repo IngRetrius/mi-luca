@@ -65,7 +65,7 @@ El plan Hobby es solo para uso personal no comercial: antes de que un cliente re
 | `/auth/start` | Inicia Google con PKCE; guarda la ruta de retorno en una cookie de 10 minutos |
 | `/auth/callback` | Cambia el código por la sesión y sigue a la ruta de retorno |
 | `/auth/listo` | Fin de la ventana de Google abierta por la app instalada: avisa a la principal y se cierra |
-| `/` | Reparte según el rol (`getViewer`, `src/server/viewer.ts`): el asesor va a `/clientes`, la cuenta sin perfil a `/sin-invitacion`; el cliente ve aquí su inicio (P-C04, vacío hasta la entrega) |
+| `/` | Reparte según el rol (`getViewer`, `src/server/viewer.ts`): el asesor va a `/clientes`, la cuenta sin perfil a `/sin-invitacion`; el cliente ve aquí su inicio (P-C04): hasta la entrega, que el asesor prepara su plan; después, el enlace a Mi plan |
 | `/sin-invitacion` | P-G02: la cuenta existe pero no tiene perfil; cerrar sesión. Avisa que se borra a los 7 días |
 | `/recuperar` | P-G05: correo, código de 6 dígitos que llega por correo y contraseña nueva, en la misma pantalla y sin salir de la app. Responde igual exista o no la cuenta. En local, los correos se ven en Mailpit (`http://127.0.0.1:54324`) |
 
@@ -89,6 +89,8 @@ El plan Hobby es solo para uso personal no comercial: antes de que un cliente re
 | `/clientes/[id]/cobros` | P-A10, Cobros: cuentas por cobrar con cuotas, último pago y saldo pendiente en la fecha de corte; alta y edición en `/nuevo` y `/[receivableId]` con el % a inversión |
 | `/clientes/[id]/patrimonio` | Activos y saldo líquido (lo que se reparte en bolsillos); alta y edición en `/nuevo` y `/[assetId]` |
 | `/clientes/[id]/prueba-de-realidad` | P-A08: los tres datos, el resultado con semáforo y el % del sobrante que va a inversión |
+| `/clientes/[id]/entrega` | P-A12 y P-A14: control de calidad (bloquea, pide nota o avisa) y planes entregados; si nada bloquea, nombre de la versión, notas y "Entregar el plan". La acción recalcula el caso y el control en el servidor |
+| `/clientes/[id]/planes/[deliveryId]` | Un plan entregado, como lo ve el cliente, con "Comparar con hoy" |
 
 Los avisos de `/clientes` incluyen los cambios del cliente (`cambio_del_cliente`) con las cifras clave antes y después.
 
@@ -96,6 +98,7 @@ Los avisos de `/clientes` incluyen los cambios del cliente (`cambio_del_cliente`
 
 | Ruta | Qué hace |
 |---|---|
+| `/mi-plan` | P-C05: el plan entregado más reciente (o el de `?version=`) por secciones, con "Comparar con hoy" y la lista de versiones. Sin PDF todavía |
 | `/mis-datos` | P-C06: los módulos que el cliente edita, con su total: ingresos, gastos y monedas. Se llega desde el inicio |
 | `/mis-datos/ingresos` | Sus ingresos, con las mismas pantallas del asesor en su trato (alta, edición con vista previa, meses con seguridad social e ingreso base) |
 | `/mis-datos/monedas` | Las tasas que recibe, que también edita (es un dato de hecho) |

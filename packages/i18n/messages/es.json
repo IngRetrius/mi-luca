@@ -175,7 +175,10 @@
       "assetsSummary": "Saldo líquido de {amount}",
       "realityCheck": "Prueba de realidad",
       "planSettings": "Supuestos del plan",
-      "planSettingsSummary": "Porcentajes, umbral de deuda cara y colchón"
+      "planSettingsSummary": "Porcentajes, umbral de deuda cara y colchón",
+      "delivery": "Entregar el plan",
+      "deliverySummary": "{count} planes entregados",
+      "deliveryNone": "Control de calidad y entrega"
     }
   },
   "invitation": {
@@ -1311,5 +1314,141 @@
         "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
       }
     }
+  },
+  "quality": {
+    "severity": {
+      "ok": "Bien",
+      "blocking": "Bloquea la entrega",
+      "note": "Pide una nota",
+      "warning": "Aviso"
+    },
+    "checks": {
+      "surplus_balances": {
+        "ok": "Ingreso menos gasto y ahorro programado da el sobrante.",
+        "failed": "Ingreso menos gasto y ahorro programado no da el sobrante: hay {difference} de diferencia. Revisa ingresos y gastos sin tipo."
+      },
+      "pocket_contributions_match": {
+        "ok": "Lo que el presupuesto manda a bolsillos llega a sus bolsillos.",
+        "failed": "El presupuesto manda {budget} al mes a bolsillos, pero a los bolsillos llegan {pockets}. Revisa el bolsillo de cada gasto."
+      },
+      "allocation_within_available": {
+        "ok": "El reparto del saldo de hoy no supera lo disponible.",
+        "failed": "Los saldos de los bolsillos superan lo disponible en {excess}. Ajusta los saldos en Bolsillos."
+      },
+      "no_income_covered": {
+        "ok": "Los meses sin ingreso quedan cubiertos.",
+        "failed": "El año cierra en déficit: faltan {shortfall} y los meses con sobrante suman {positive}. Explica cómo se cubre."
+      },
+      "complete_items": {
+        "ok": "Todos los gastos tienen frecuencia y tipo.",
+        "failed": "Gastos con valor pero sin frecuencia o tipo: {count}. Complétalos en el presupuesto."
+      },
+      "items_have_pocket": {
+        "ok": "Cada gasto tipo bolsillo tiene su bolsillo.",
+        "failed": "Gastos tipo bolsillo sin bolsillo: {count}. Elígelo en el presupuesto."
+      },
+      "incomes_classified": {
+        "ok": "Todos los ingresos tienen tipo.",
+        "failed": "Ingresos sin tipo: {count}. No entran al flujo."
+      },
+      "missing_rates": {
+        "ok": "Todas las monedas tienen su tasa.",
+        "failed": "Falta la tasa de cambio de {currencies}. Regístrala en Monedas."
+      },
+      "no_investment_with_expensive_debt": {
+        "ok": "Con deuda cara no se invierte.",
+        "failed": "Hay deuda cara y el plan invierte. Revisa el destino del sobrante."
+      },
+      "reality_check_done": {
+        "ok": "La prueba de realidad está hecha.",
+        "failed": "La prueba de realidad está pendiente: se invierte un porcentaje menor."
+      },
+      "reality_check_confirms": {
+        "ok": "La prueba de realidad no muestra gastos sin registrar.",
+        "failed": "La prueba de realidad muestra gastos sin registrar ({difference} frente a lo esperado). Explica qué se revisó con el cliente."
+      },
+      "third_party_counted_once": {
+        "ok": "Lo que pagan otros no se cuenta dos veces.",
+        "failed": "Hay gastos que pagan otros y además un ingreso tipo otro. Revisa que el aporte no esté contado dos veces."
+      }
+    }
+  },
+  "delivery": {
+    "title": "Entregar el plan",
+    "intro": "Control de calidad antes de entregar. El plan entregado queda fijo con su fecha: después se compara con los datos de hoy.",
+    "back": "Ficha del cliente",
+    "checksTitle": "Control de calidad",
+    "allPassed": "Todo en orden.",
+    "blockedTitle": "Corrige esto antes de entregar",
+    "blockedBody": "El plan no se puede entregar mientras haya puntos que bloquean la entrega.",
+    "deliveredTitle": "Planes entregados",
+    "noneDelivered": "Todavía no hay planes entregados.",
+    "deliveredItem": "{date} · corte {cutoff}",
+    "form": {
+      "label": "Nombre de la versión",
+      "labelHint": "Por ejemplo, Plan inicial o Revisión a 90 días.",
+      "defaultFirst": "Plan inicial",
+      "defaultNext": "Revisión del {date}",
+      "notesTitle": "Notas para la entrega",
+      "notesHint": "Quedan con el plan entregado; el cliente no las ve.",
+      "noteFor": "Nota: {check}",
+      "submit": "Entregar el plan",
+      "submitting": "Entregando…",
+      "cancel": "Cancelar",
+      "errors": {
+        "missingLabel": "Escribe el nombre de la versión.",
+        "tooLong": "Es demasiado largo.",
+        "missingNote": "Escribe la nota que explica este punto.",
+        "blocked": "El plan cambió y ahora hay puntos que bloquean la entrega. Revisa el control de calidad.",
+        "notAllowed": "Solo el asesor entrega el plan.",
+        "unavailable": "No se pudo entregar. Intenta de nuevo en unos minutos."
+      }
+    }
+  },
+  "plan": {
+    "deliveredOn": "Entregado el {date} · cifras con corte al {cutoff}",
+    "currencyNote": "Cifras en {currency} de hoy. Ilustrativas, no garantizadas.",
+    "figuresTitle": "Cifras del plan",
+    "fundTitle": "Fondo de emergencia",
+    "fundGoal": "Meta",
+    "fundBalance": "Saldo asignado",
+    "fundMonthly": "Aporte al mes para completarlo",
+    "fundComplete": "Queda completo en {month}.",
+    "pocketsTitle": "Bolsillos",
+    "pocketMonthly": "{amount} al mes",
+    "pocketBalance": "Saldo: {amount}",
+    "emergency": "Fondo de emergencia",
+    "noIncome": "Meses sin ingreso",
+    "flowTitle": "El año {year}",
+    "annualSurplus": "Sobrante del año",
+    "redMonths": "Meses en rojo",
+    "noIncomeMonthly": "Aporte a meses sin ingreso, en los meses con sobrante",
+    "annualInvestment": "A inversión en el año",
+    "compareTitle": "Comparar con hoy",
+    "compareIntro": "Lo entregado frente a lo que calculan los datos de hoy.",
+    "delivered": "Entregado",
+    "today": "Hoy",
+    "noChanges": "Las cifras de hoy son iguales a las del plan entregado.",
+    "versions": "Versiones",
+    "scope": "Esta plataforma no recomienda productos ni entidades. Los temas de impuestos, pensión y sucesión se confirman con el profesional correspondiente."
+  },
+  "myPlan": {
+    "title": {
+      "tu": "Tu plan",
+      "usted": "Su plan"
+    },
+    "link": {
+      "tu": "Ver tu plan",
+      "usted": "Ver su plan"
+    },
+    "ready": {
+      "tu": "Tu plan está listo.",
+      "usted": "Su plan está listo."
+    },
+    "none": {
+      "tu": "Tu asesor todavía no ha entregado tu plan.",
+      "usted": "Su asesor todavía no ha entregado su plan."
+    },
+    "back": "Inicio"
   }
 }

@@ -878,6 +878,74 @@ export type Database = {
           },
         ];
       };
+      plan_deliveries: {
+        Row: {
+          client_id: string;
+          cutoff_date: string;
+          delivered_at: string;
+          delivered_by: string | null;
+          documents: NonNullable<Json>;
+          engine_version: string;
+          id: string;
+          inputs: NonNullable<Json>;
+          key_figures: NonNullable<Json>;
+          label: string;
+          labels: NonNullable<Json>;
+          mode: string;
+          parameter_ids: string[];
+          pdf_path: string | null;
+          qc_report: NonNullable<Json>;
+          results: NonNullable<Json>;
+          sha256: string;
+        };
+        Insert: {
+          client_id: string;
+          cutoff_date: string;
+          delivered_at?: string;
+          delivered_by?: string | null;
+          documents?: NonNullable<Json>;
+          engine_version: string;
+          id?: string;
+          inputs: NonNullable<Json>;
+          key_figures: NonNullable<Json>;
+          label: string;
+          labels?: NonNullable<Json>;
+          mode: string;
+          parameter_ids?: string[];
+          pdf_path?: string | null;
+          qc_report: NonNullable<Json>;
+          results: NonNullable<Json>;
+          sha256?: string;
+        };
+        Update: {
+          client_id?: string;
+          cutoff_date?: string;
+          delivered_at?: string;
+          delivered_by?: string | null;
+          documents?: NonNullable<Json>;
+          engine_version?: string;
+          id?: string;
+          inputs?: NonNullable<Json>;
+          key_figures?: NonNullable<Json>;
+          label?: string;
+          labels?: NonNullable<Json>;
+          mode?: string;
+          parameter_ids?: string[];
+          pdf_path?: string | null;
+          qc_report?: NonNullable<Json>;
+          results?: NonNullable<Json>;
+          sha256?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'plan_deliveries_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       pockets: {
         Row: {
           bank_id: string | null;

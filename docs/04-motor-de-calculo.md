@@ -27,7 +27,7 @@ interface ComputeOptions {
 }
 ```
 
-- **Estado (F3):** existen `compute(input, { mode })`, `keyFigures` y `diffKeyFigures`, con los módulos hasta F3: ingresos, deudas (totales y deuda cara), metas y seguros mínimos, presupuesto con filas automáticas, costo de vida, cuentas por cobrar, flujo anual, prueba de realidad, destino del sobrante, saldo líquido, fondo de emergencia, bolsillos, plan secuencial (nativo) y Resumen `C11:C26` (salvo `C19`, que necesita la simulación de deudas de F4) y `C35`. Los parámetros llegan ya resueltos dentro de `CaseInput`: `parameters` (`PlanParameters`: meses de fondo, umbral de deuda cara, porcentajes y colchón, con el valor del asesor o el de la metodología) y los umbrales fiscales. `qualityChecks` llega con la entrega del plan.
+- **Estado (F3):** existen `compute(input, { mode })`, `keyFigures` y `diffKeyFigures`, con los módulos hasta F3: ingresos, deudas (totales y deuda cara), metas y seguros mínimos, presupuesto con filas automáticas, costo de vida, cuentas por cobrar, flujo anual, prueba de realidad, destino del sobrante, saldo líquido, fondo de emergencia, bolsillos, plan secuencial (nativo) y Resumen `C11:C26` (salvo `C19`, que necesita la simulación de deudas de F4) y `C35`. Los parámetros llegan ya resueltos dentro de `CaseInput`: `parameters` (`PlanParameters`: meses de fondo, umbral de deuda cara, porcentajes y colchón, con el valor del asesor o el de la metodología) y los umbrales fiscales. `qualityChecks(input, result)` evalúa los controles numéricos de la sección 6 que ya se pueden verificar (los de inversión, perfil y carta llegan con sus módulos).
 - `CaseInput`: las entradas vivas del cliente (tablas de la sección 3.4 de `03-modelo-de-datos.md`) más `case_settings`, sin identificadores personales innecesarios (el motor no necesita el nombre).
 - `ResolvedParameters`: los parámetros vigentes en la fecha de corte, ya resueltos (país y metodología), con el id de cada versión para guardarlo en el plan entregado.
 - `CaseResult`: un objeto por módulo (sección 3) más `summary`, `pending` y `trace` (versión del motor y parámetros usados).
@@ -125,6 +125,8 @@ Los indicadores del Resumen se calculan igual que la plantilla en los dos modos 
 ## 6. Control de calidad automatizado
 
 Antes de entregar un plan, `qualityChecks` evalúa los puntos verificables de la sección 10 del protocolo. Los bloqueantes impiden entregar; las advertencias se muestran y se pueden justificar con una nota.
+
+Hay tres niveles: **bloqueante** (impide entregar), **pide nota** (se entrega solo si el asesor lo explica; así queda "meses sin ingreso con alerta de déficit con nota") y **advertencia** (se muestra; la nota es opcional). En F3 están los controles del sobrante, los aportes a bolsillos, el reparto del saldo, los meses sin ingreso, las partidas incompletas y sin bolsillo, los ingresos sin tipo, las monedas sin tasa, la inversión con deuda cara, la prueba de realidad (pendiente: advertencia; "revisar gastos": pide nota) y el aporte de terceros contado dos veces. Pruebas en `test/golden/quality-checks.test.ts`.
 
 | Control | Tipo |
 |---|---|

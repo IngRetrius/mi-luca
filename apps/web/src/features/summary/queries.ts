@@ -27,6 +27,8 @@ export interface LoadedCaseRows extends CaseRows {
   readonly receivables: readonly Row<'receivables'>[];
   readonly realityCheck: Row<'reality_check'> | null;
   readonly assets: readonly Row<'assets'>[];
+  /** Ids de las versiones de `country_parameters` que usó el cálculo: van en el plan entregado. */
+  readonly parameterIds: readonly string[];
 }
 
 export interface ComputedCase extends CaseForEngine {
@@ -164,6 +166,9 @@ export async function loadCaseRows(clientId: string): Promise<LoadedCaseRows | n
       .map((response) => response.data)
       // Sin versión vigente, la función devuelve una fila vacía: ese umbral no se compara.
       .flatMap((row) => (row?.key ? [{ key: row.key, value: row.value, unit: row.unit }] : [])),
+    parameterIds: [...thresholds, ...methodology].flatMap((response) =>
+      response?.data?.id ? [response.data.id] : [],
+    ),
   };
 }
 

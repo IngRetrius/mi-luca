@@ -55,6 +55,10 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Año del flujo | `flowYear` | |
 | Tipo de cliente | `clientType` | empleado, contratista, independiente_variable, pensionado, rentista, mixto |
 | Supuestos del caso | `caseSettings` | Criterio del asesor |
+| Control de calidad | `qualityChecks`, `QcReport`, `QcItem` | Antes de entregar; niveles `blocking`, `note`, `warning` |
+| Plan entregado | `plan_deliveries`, `Delivery` | Foto inmutable del caso el día de la entrega |
+| Entregar el plan, plan entregado, mi plan (rutas) | `/clientes/[id]/entrega`, `/clientes/[id]/planes/[deliveryId]`, `/mi-plan` | P-A12 y P-A14, vista del asesor, P-C05 |
+| Comparar con hoy | `PlanView` (`today`) | Cifras clave entregadas frente a las de hoy |
 | Supuestos del plan, pantalla | `/clientes/[id]/supuestos`, `PlanSettingsScreen` | Criterio del asesor (`case_settings`) |
 | Flujo, fondo, bolsillos, cobros, patrimonio, prueba de realidad (rutas) | `/flujo`, `/fondo`, `/bolsillos`, `/cobros`, `/patrimonio`, `/prueba-de-realidad` | Dentro de `/clientes/[id]` |
 | Semáforo | `StatusLabel` (`ok`, `warning`, `alert`) | Icono, color y texto: Bien, Atención, Alerta |

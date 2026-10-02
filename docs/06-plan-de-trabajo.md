@@ -57,7 +57,7 @@ gantt
 | F0 | 80 h, hasta mediados de noviembre de 2026 | Terminada salvo tareas del asesor: dominio y verificación de marca en Google, y la revisión del caso C1 (A11) |
 | F1 | 120 h, hasta mediados de enero de 2027 | Terminada salvo el alta con Google en un navegador real, el correo de la invitación (C14) y exportar y borrar en P-C11 (F7) |
 | F2 | 160 h, hasta comienzos de abril de 2027 | Terminada en el código; pendientes que no bloquean: C6 y C20 |
-| F3 | 160 h, hasta finales de junio de 2027 | En curso: motor, base de datos y pantallas del asesor hechos; faltan pantallas del cliente y entrega mínima |
+| F3 | 160 h, hasta finales de junio de 2027 | En curso: motor, base de datos, pantallas del asesor y entrega mínima hechos; faltan las pantallas del cliente en Mis datos y el banco de los bolsillos del fondo y de meses sin ingreso |
 | F4 a F8 | 600 h | Sin empezar |
 
 Con el agente de código, F0 a F2 avanzaron mucho más rápido que la estimación a 14 horas por semana, que suponía empezar el 5 de octubre de 2026. **Supuesto:** el calendario de arriba se mantiene como techo y se reestima al cerrar F3, con lo que tome realmente una fase que mezcla motor, base de datos y pantallas. Las horas del resto no cambian hasta entonces.
@@ -217,7 +217,7 @@ Avance:
 - [x] Revisión del 02/10/2026: índices de las llaves compuestas (migración `pocket_fk_indexes`, por el asesor de rendimiento), metodología vigente hoy cuando el corte es anterior a su primera versión (antes la ficha no cargaba), esqueleto de carga propio de la ficha, página de error en español, cifras clave ausentes en un "antes" guardado tratadas como vacías, aviso en el presupuesto de las partidas tipo bolsillo sin bolsillo (H-02) y pruebas e2e de invitación que dependen de si hay Supabase.
 - [ ] Pantallas del cliente en Mis datos: bancos y bolsillos, cobros (sin el % a inversión), patrimonio y prueba de realidad (la matriz de permisos se los deja editar).
 - [ ] Bolsillos del fondo y de meses sin ingreso con su banco (hoy el motor los arma y la pantalla no deja asignarles banco).
-- [ ] Entrega mínima: control de calidad, plan entregado inmutable y P-C05 sin PDF.
+- [x] Entrega mínima: control de calidad en el motor (`qualityChecks`, `ENGINE_VERSION` 0.8.0) con controles bloqueantes, que piden nota y de advertencia; P-A12 y P-A14 en una pantalla (`/clientes/[id]/entrega`) que recalcula en el servidor, exige las notas y guarda el plan; `plan_deliveries` inmutable y sellado; vista del plan entregado con "Comparar con hoy"; P-C05 Mi plan sin PDF, con versiones; el inicio del cliente lleva a su plan. Verificado de punta a punta contra Supabase local (asesora y cliente, 320 px, sin errores de consola).
 
 ### F4. Deudas y créditos (160 horas)
 

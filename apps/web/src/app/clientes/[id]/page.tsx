@@ -9,6 +9,7 @@ import { Screen } from '@/components/screen';
 import { ModuleLink } from '@/components/back-link';
 import { focusRing, linkButton, secondaryButton } from '@/components/ui-classes';
 import { ClientStatusBadge, getClientDetail } from '@/features/clients';
+import { listDeliveries } from '@/features/deliveries';
 import {
   countryDateFormat,
   createInvitationLink,
@@ -41,10 +42,11 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
   const { id } = await params;
   await requireAdvisor(`/clientes/${id}`);
   // Independientes: el perfil y su invitación abierta se piden a la vez.
-  const [client, openInvitation, computed] = await Promise.all([
+  const [client, openInvitation, computed, deliveries] = await Promise.all([
     getClientDetail(id),
     getOpenInvitation(id),
     loadComputedCase(id),
+    listDeliveries(id),
   ]);
   if (client === 'not-found') notFound();
   // Solo se invita a un perfil que nadie ha aceptado (RLS vuelve a exigirlo).
@@ -74,7 +76,11 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
             </p>
             <ClientStatusBadge status={client.status} label={t.clients.status[client.status]} />
           </div>
-          <CaseData clientId={client.id} computed={computed} />
+          <CaseData
+            clientId={client.id}
+            computed={computed}
+            deliveredCount={deliveries?.length ?? 0}
+          />
           <section
             aria-labelledby="invitation-title"
             className="flex flex-col gap-2 rounded-xl bg-surface p-4"
@@ -123,7 +129,15 @@ const PROFILE_FIGURES: readonly KeyFigureId[] = [
 ];
 
 /** Datos del caso y cifras del plan calculadas por el motor con lo registrado hoy. */
-function CaseData({ clientId, computed }: { clientId: string; computed: ComputedCase | null }) {
+function CaseData({
+  clientId,
+  computed,
+  deliveredCount,
+}: {
+  clientId: string;
+  computed: ComputedCase | null;
+  deliveredCount: number;
+}) {
   const text = t.clientProfile.caseData;
   if (!computed) {
     return (
@@ -232,6 +246,14 @@ function CaseData({ clientId, computed }: { clientId: string; computed: Computed
       href: `${base}/bolsillos`,
       title: text.pockets,
       summary: text.pocketsSummary.replace('{count}', String(pockets.withContribution)),
+    },
+    {
+      href: `${base}/entrega`,
+      title: text.delivery,
+      summary:
+        deliveredCount === 0
+          ? text.deliveryNone
+          : text.deliverySummary.replace('{count}', String(deliveredCount)),
     },
   ];
   return (

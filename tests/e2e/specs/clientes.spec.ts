@@ -42,6 +42,8 @@ for (const path of [
   `/clientes/${CLIENT}/patrimonio/nuevo`,
   `/clientes/${CLIENT}/patrimonio/${CLIENT}`,
   `/clientes/${CLIENT}/prueba-de-realidad`,
+  `/clientes/${CLIENT}/entrega`,
+  `/clientes/${CLIENT}/planes/${CLIENT}`,
 ]) {
   test(`${path} sin sesión lleva a Entrar con la ruta de retorno`, async ({ page }) => {
     await page.goto(path);
