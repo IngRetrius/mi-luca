@@ -131,7 +131,7 @@ flowchart TD
 | P-A07 | Aclaraciones | Campos por confirmar y preguntas sugeridas; "Copiar mensaje" |
 | P-A08 | Prueba de realidad | Tres campos, resultado y efecto en el % a inversión |
 | P-A09 | Diagnóstico | Indicadores con semáforo; campos de fortalezas y puntos de atención |
-| P-A10 | Análisis | Pestañas: Flujo, Bolsillos, Fondo, Deudas, Metas, Seguros, Pensión, Inversión, Cobros, Profesionales |
+| P-A10 | Análisis | Pestañas: Flujo, Bolsillos, Fondo, Deudas, Metas, Seguros, Pensión, Inversión, Cobros, Profesionales. Pensión muestra "No incluida en este caso" y el botón para activarla mientras el asesor no la active para el cliente |
 | P-A11 | Costo de vida | Tres niveles por partida; el asesor edita el básico; totales por pagador y sin temporales; umbrales fiscales |
 | P-A12 | Control de calidad | Resultado de `qualityChecks`: bloqueantes, advertencias, nota por advertencia |
 | P-A13 | Notas y carta | Editor por secciones; botón "Insertar cifra"; vista como el cliente; publicar notas |

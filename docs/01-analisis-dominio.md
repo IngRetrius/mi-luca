@@ -176,7 +176,7 @@ El subsidio FRECH se calcula como `saldo x (tasa mensual - tasa mensual sin los 
 
 ### 3.5 Adaptaciones del caso de España
 
-La comparación celda a celda con la plantilla muestra cómo se resolvió el caso sin cambiar la estructura:
+La comparación celda a celda con la plantilla muestra cómo se resolvió el caso sin cambiar la estructura. Son necesidades de esa clienta, no de España: cualquier cliente puede tenerlas o no, sea del país que sea.
 
 | Necesidad | Solución en el Excel | Consecuencia |
 |---|---|---|
@@ -213,7 +213,7 @@ Numeradas para citarlas desde el código, las pruebas y los ADR. "P" indica secc
 - **RN-015** Los gastos pagados por un tercero generan un **aporte implícito del tercero** del mismo valor, que en el flujo y en los escenarios del fondo se trata como ingreso tipo "otro". Los indicadores personales (ingreso propio, tasa de ahorro sobre ingreso propio) lo excluyen. Así el cálculo coincide con el Excel del caso de España y los indicadores dejan de distorsionarse (ver H-12).
 - **RN-016** Abonos de deudas que le pagan al cliente no son ingreso; van a cuentas por cobrar (P0.2, P5.3).
 - **RN-017** Cada moneda distinta de la base necesita una tasa del cliente con fecha. Sin tasa no se puede guardar el importe (base de datos) ni entregar un plan (control de calidad). Todas las conversiones usan la tasa vigente del cliente (moneda de hoy); el riesgo cambiario se muestra con la sensibilidad (RN-132).
-- **RN-018** El país del cliente define moneda base, formato y parámetros. Cualquier país se puede habilitar; los módulos con reglas propias de un país (pensión, umbrales fiscales) solo aparecen donde existen.
+- **RN-018** El país del cliente define moneda base, formato y parámetros. Cualquier país se puede habilitar; los módulos con reglas propias de un país (pensión, umbrales fiscales) solo aparecen donde existen. El país no decide nada más del caso: quién paga cada gasto, si se analiza la pensión, el tipo de cliente o los niveles de costo de vida se marcan cliente por cliente.
 
 ### 4.3 Presupuesto
 
@@ -305,7 +305,7 @@ Numeradas para citarlas desde el código, las pruebas y los ADR. "P" indica secc
 
 ### 4.13 Pensión
 
-- **RN-120** El módulo de pensión es por país y se puede desactivar por cliente.
+- **RN-120** El país decide qué reglas de pensión se usan; el asesor decide si se analiza la pensión de cada cliente. Está apagado por defecto (decisión del 01/10/2026): un cliente de Colombia no tiene análisis pensional hasta que el asesor lo activa.
 - **RN-121** Colombia: reglas de la sección 3.2; resultados "confirmar con la administradora" (P8.6).
 - **RN-122** España: módulo informativo en el MVP (edad ordinaria de referencia como parámetro, remisión a la Seguridad Social), sin estimación de pensión (ver pregunta abierta).
 

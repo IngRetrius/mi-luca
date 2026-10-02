@@ -10,6 +10,7 @@ import type {
   InsuranceStatus,
   Money,
   MonthFlags,
+  Payer,
 } from '@miluca/domain';
 
 import { automaticRows, type BudgetItemInput } from '../../src/budget';
@@ -90,9 +91,12 @@ export function fxContext(golden: GoldenCase): FxContext {
   return { baseCurrency, ratesToBase: rate > 0 ? { USD: rate } : {} };
 }
 
-export function incomesInput(golden: GoldenCase): IncomeInput[] {
+export function incomesInput(
+  golden: GoldenCase,
+  rows: readonly number[] = INCOME_ROWS,
+): IncomeInput[] {
   const { baseCurrency } = fxContext(golden);
-  return INCOME_ROWS.map((row) => ({
+  return rows.map((row) => ({
     kind: label(cell(golden, `Ingresos!C${row}`), INCOME_KINDS, `Ingresos!C${row}`),
     monthlyAmount: {
       amount: excelN(cell(golden, `Ingresos!E${row}`)),
@@ -206,8 +210,36 @@ export function automaticBudgetInput(golden: GoldenCase): BudgetItemInput[] {
   );
 }
 
-/** Las 82 partidas del presupuesto: las 7 automáticas y las del cliente (filas 13 a 87). */
-export function budgetInput(golden: GoldenCase): BudgetItemInput[] {
+/** El nivel básico se escribe por año en la hoja; el motor lo recibe por pago, como el valor. */
+function basicPerPayment(golden: GoldenCase, row: number, annual: number | null): Money | null {
+  if (annual === null) return null;
+  const times = excelN(cell(golden, `Presupuesto!G${row}`));
+  const amount = annual === 0 || times === 0 ? 0 : annual / times;
+  return { amount, currency: fxContext(golden).baseCurrency };
+}
+
+/** Datos de cada fila que la plantilla no tiene; cada prueba dice de dónde salen en su caso. */
+export interface BudgetInputOptions {
+  /** Quién paga la fila; por defecto, el cliente. */
+  readonly payer?: (row: number) => Payer;
+  /** Costo anual de la fila en el nivel básico; null si es igual al actual. */
+  readonly basicAnnual?: (row: number) => number | null;
+  /** ¿Es un gasto temporal? */
+  readonly temporary?: (row: number) => boolean;
+}
+
+/**
+ * Las 82 partidas del presupuesto: las 7 automáticas y las del cliente (filas 13 a 87). Sin
+ * opciones, todo lo paga el cliente, no hay nivel básico propio ni gastos temporales.
+ */
+export function budgetInput(
+  golden: GoldenCase,
+  {
+    payer = () => 'cliente',
+    basicAnnual = () => null,
+    temporary = () => false,
+  }: BudgetInputOptions = {},
+): BudgetItemInput[] {
   const { baseCurrency } = fxContext(golden);
   const manual = MANUAL_BUDGET_ROWS.map((row): BudgetItemInput => {
     const amount = cell(golden, `Presupuesto!D${row}`);
@@ -218,6 +250,9 @@ export function budgetInput(golden: GoldenCase): BudgetItemInput[] {
       durationDays: typeof days === 'number' ? days : null,
       expenseType: label(cell(golden, `Presupuesto!J${row}`), EXPENSE_TYPES, `Presupuesto!J${row}`),
       essential: cell(golden, `Presupuesto!L${row}`) === 'Sí',
+      payer: payer(row),
+      basicAmount: basicPerPayment(golden, row, basicAnnual(row)),
+      isTemporary: temporary(row),
     };
   });
   return [...automaticBudgetInput(golden), ...manual];

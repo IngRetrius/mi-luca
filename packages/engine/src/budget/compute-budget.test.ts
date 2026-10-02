@@ -9,6 +9,9 @@ const item = (partial: Partial<BudgetItemInput>): BudgetItemInput => ({
   durationDays: null,
   expenseType: 'directo',
   essential: false,
+  payer: 'cliente',
+  basicAmount: null,
+  isTemporary: false,
   ...partial,
 });
 

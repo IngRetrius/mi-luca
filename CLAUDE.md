@@ -6,6 +6,8 @@ Este archivo lo leen Claude Code y otros agentes antes de trabajar en el reposit
 
 MiLuca es una plataforma de planificación financiera personal para un asesor y sus clientes (Colombia y España). La metodología está en `referencia/Protocolo_Asesoria_Financiera.md` y los cálculos en `referencia/Plantilla_Asesoria_Financiera.xlsx`. Lee `docs/README.md` antes de proponer cambios de alcance.
 
+Cada caso es diferente. El país del cliente solo fija la moneda base, el formato, los parámetros y qué reglas existen (por ejemplo, las de pensión de Colombia). Nada del caso se deduce del país ni de los casos de prueba: quién paga cada gasto, si se analiza la pensión o el tipo de cliente se marcan cliente por cliente.
+
 ## Reglas
 
 1. **Idioma.** Textos del producto y documentación en español, sin emojis. Identificadores de código en inglés según `docs/glosario.md`. Si falta un término, agrégalo al glosario en el mismo cambio.

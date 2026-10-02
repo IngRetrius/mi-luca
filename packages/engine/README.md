@@ -18,6 +18,7 @@ Motor de cálculo puro. Recibe los datos de un cliente y los parámetros de su p
 | `src/incomes/` a `src/monthly-control/` | Un submódulo por hoja o bloque del dominio. |
 | `src/pension/co/`, `src/pension/es/` | Un módulo de pensión por país. España arranca como módulo informativo. |
 | `test/golden/` | Pruebas de oro: casos anonimizados extraídos de Excel con sus valores esperados. |
+| `test/native/` | Pruebas del modo nativo con datos de los casos de oro y valores revisados por el asesor. |
 | `test/excel-compat/` | Pruebas de las funciones de `src/excel/` contra resultados de Excel. |
 | `test/properties/` | Pruebas de propiedades (invariantes del control de calidad del protocolo). |
 
@@ -30,10 +31,13 @@ El orden de cálculo y el catálogo de funciones están en `docs/04-motor-de-cal
 | `excel` | `datedifMonths`, `parseIsoDate` | Contra Excel en `test/excel-compat/` |
 | `currency` | `toBase`, `toBaseCompat`, `missingRates` | `Ingresos!F6:F13` |
 | `normalization` | `timesPerYear` | `Presupuesto!G6:G87` |
-| `incomes` | `computeIncomes`, `socialSecurityPayments`, `baseIncome` | Hoja Ingresos y `Resumen!C11` |
-| `budget` | `computeBudget`, `automaticRows` | Hoja Presupuesto (con las filas 6 a 12 calculadas) y `Resumen!C12:C13` |
+| `incomes` | `computeIncomes`, `socialSecurityPayments`, `baseIncome`, `impliedThirdPartyIncome` (nativo) | Hoja Ingresos y `Resumen!C11` |
+| `budget` | `computeBudget` (con totales por pagador), `automaticRows` | Hoja Presupuesto (con las filas 6 a 12 calculadas) y `Resumen!C12:C13` |
+| `cost-of-living` | `computeCostOfLiving` (nuevo, no está en la plantilla) | Hoja Costo de vida de C2 |
 | `debts` | `debtTotals` (la clasificación y la simulación llegan en F4) | `Deudas!D21`, `F21` |
 | `goals` | `computeGoals`, `tripCost` | `Metas!F6:K11`, `E17:E30` |
 | `insurance` | `computeInsurance` (la suma asegurada de vida llega en F5) | `Seguros!I6:I16`, `H16` |
 
-Todo en modo compatible con la plantilla 2.2.
+| `summary` | `personalIndicators` (nativo, ADR 0010) | Modo nativo con los datos de C2: `Resumen!C11` y tasa personal de 100 % |
+
+Lo marcado "nativo" no existe en la plantilla; el resto, en modo compatible con la plantilla 2.2.

@@ -13,5 +13,6 @@ Cada decisión que cambia la arquitectura, el modelo de datos o un resultado del
 | [0007](0007-modo-compatible-y-nativo.md) | Modo compatible con la plantilla y modo nativo | Propuesta |
 | [0008](0008-plan-de-ahorro-secuencial.md) | Plan de ahorro secuencial para completar el fondo de emergencia | Aceptada |
 | [0009](0009-google-y-correo-con-contrasena.md) | Inicio de sesión con Google y con correo y contraseña; Apple aplazado | Aceptada |
+| [0010](0010-pagador-por-gasto.md) | Pagador por gasto y aporte implícito de terceros (modo nativo, H-12) | Propuesta |
 
 Plantilla: [plantilla.md](plantilla.md).

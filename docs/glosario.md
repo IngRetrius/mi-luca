@@ -62,7 +62,11 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Pagos por mes | `paymentsByMonth` / `MonthFlags` | Doce marcas, de enero a diciembre |
 | Meses con seguridad social | `socialSecurityPayments` | `Ingresos!S17` |
 | Ingreso base (variable) | `baseIncome` | |
-| Aporte implícito de terceros | `impliedThirdPartyIncome` | RN-015 |
+| Aporte implícito de terceros | `impliedThirdPartyIncome` | RN-015; pagadores `ThirdPartyPayer` (familia, tercero) |
+| Indicadores personales | `personalIndicators` | Modo nativo (ADR 0010) |
+| Ingreso propio, aporte de terceros, ingreso total | `ownIncome`, `thirdPartyContribution`, `totalIncome` | |
+| Gasto propio, ahorro propio | `ownExpenses`, `ownProgrammedSavings` | |
+| Tasa de ahorro sobre el ingreso propio | `ownSavingsRate` | |
 | Presupuesto | `budget` | |
 | Partida del presupuesto | `budgetItem` | |
 | Filas automáticas del presupuesto | `automaticRows` | Cuotas de deudas, seguros nuevos y aportes a metas (RN-028) |
@@ -71,10 +75,13 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Tipo de gasto | `expenseType` | directo, bolsillo, seg_social, deuda, ahorro |
 | Esencial | `essential` | |
 | Pagador | `payer` | cliente, familia, tercero |
+| Totales por pagador | `byPayer` / `PayerTotals` | Gasto sin ahorro y ahorro programado de cada pagador |
 | Referencia familiar | `scope = 'referencia_familiar'` | No suma en cálculos |
 | Gasto temporal | `isTemporary` | Por ejemplo, la matrícula |
 | Costo de vida | `costOfLiving` | |
-| Nivel esencial, básico, actual | `essentialLevel`, `basicLevel`, `currentLevel` | |
+| Nivel esencial, básico, actual | `CostLevel`: `essential`, `basic`, `current` | Niveles del costo de vida |
+| Valor del nivel básico | `basicAmount` / `basic_amount` | Valor por pago, con la frecuencia y la moneda de la partida; lo propone el asesor |
+| Umbral fiscal | `FiscalThreshold` | Parámetro del país; cuáles aplican se decide por cliente |
 | Flujo anual | `cashflow` | |
 | Balance del mes | `monthBalance` | |
 | Meses sin ingreso | `noIncomeMonths` | |
@@ -132,6 +139,7 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Posición en el rango | `rangePosition` | |
 | Proyección ilustrativa | `projection` | |
 | Pensión | `pension` | |
+| Analizar la pensión de este cliente | `pension_enabled` / `pensionEnabled` | Apagado por defecto; lo activa el asesor (RN-120) |
 | Semanas cotizadas | `contributedWeeks` | |
 | IBL | `ibl` | Ingreso base de liquidación (Colombia) |
 | Mesada | `monthlyPension` | |

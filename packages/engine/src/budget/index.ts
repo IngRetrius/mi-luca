@@ -6,4 +6,5 @@ export type {
   BudgetItemInput,
   BudgetResult,
   BudgetRowResult,
+  PayerTotals,
 } from './compute-budget';

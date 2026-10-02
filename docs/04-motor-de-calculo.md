@@ -40,10 +40,10 @@ interface ComputeOptions {
 | `normalization` | `timesPerYear(frequency, durationDays, ssMonthsCount)` | Frecuencia | Veces al año | `Presupuesto!G`, `Listas!C:D` (RN-020, RN-021) |
 | `incomes` | `computeIncomes(incomes, fxRates, baseCurrency)` | Ingresos | Por fila: valor en moneda base, pagos del año, total, promedio. Totales por mes y por tipo; ingreso anual en moneda extranjera | `Ingresos!F:U`, filas 14 y 20 a 25 (RN-010, RN-011) |
 | `incomes` | `baseIncome(history)` | 12 valores | Promedio, promedio de los 3 más bajos, sugerido | `Ingresos!E30:E32` (RN-013) |
-| `incomes` | `impliedThirdPartyIncome(budgetRows)` | Filas pagadas por terceros | Ingreso implícito por pagador | Nuevo (RN-015) |
+| `incomes` | `impliedThirdPartyIncome(budget)` | Totales del presupuesto por pagador | Aporte implícito de la familia y de otros terceros, anual y mensual | Nuevo, modo nativo (RN-015, ADR 0010) |
 | `budget` | `automaticRows({ debtMinPayments, newInsurancePremiums, goalContributions }, baseCurrency)` | Cuotas mínimas, primas nuevas y aporte de cada meta, en moneda base | Filas automáticas, antes de las partidas del cliente | `Presupuesto!6:12` (RN-028) |
-| `budget` | `computeBudget(items, automaticRows, ssMonths)` | Partidas | Por fila: veces al año, total, promedio. Totales por tipo, esencial, seguridad social por pago, filas incompletas, filas bolsillo sin bolsillo | `Presupuesto!G:I`, filas 89 a 97 (RN-020 a RN-029) |
-| `cost-of-living` | `computeCostOfLiving(items, thresholds)` | Partidas y umbrales del país | Por nivel: anual, mensual, por pagador, sin temporales; comparación con umbrales | Hoja Costo de vida del caso España (RN-030 a RN-032) |
+| `budget` | `computeBudget(items, ssMonths, fx)` | Partidas (las automáticas primero), con pagador | Por fila: veces al año, total, promedio. Totales por tipo, esencial, seguridad social por pago, filas incompletas, filas bolsillo sin bolsillo; gasto y ahorro por pagador | `Presupuesto!G:I`, filas 89 a 97 (RN-020 a RN-029) |
+| `cost-of-living` | `computeCostOfLiving(items, budget, fx, { thresholds, ownIncome })` | Partidas con nivel básico, pagador y marca de temporal; umbrales fiscales que aplican a ese cliente | Por partida y por nivel (esencial, básico, actual): anual, mensual, por pagador, sin temporales; ingreso propio y cada nivel frente a cada umbral | Hoja Costo de vida del caso C2 (RN-030 a RN-032) |
 | `cashflow` | `monthlyFlow(incomes, budget, ssMonths, flowYear)` | Ingresos y presupuesto | 12 meses: entradas por tipo, salidas por tipo, balance | `Flujo anual!E7:Q19` (RN-040) |
 | `cashflow` | `noIncomeMonths(balances)` | Balances | Faltante, suma y cantidad de positivos, menor positivo, aporte igual, método, cobertura, uso y aporte por mes, sobrante por mes | `Flujo anual!E20:Q22`, `T20:T27` (RN-041, RN-042) |
 | `cashflow` | `surplusDestination(surplus, hasExpensiveDebt, pctInvest, pctDebt, receivablesByMonth)` | Sobrante | A deudas, a inversión, margen, cobros por destino | `Flujo anual!E24:Q34` (RN-043, RN-044) |
@@ -67,6 +67,7 @@ interface ComputeOptions {
 | `investment` | `projection(years, ...)` | Todo lo anterior | Tabla de 10 años con glide path | `Inversión!B61:J71` (RN-115, RN-116) |
 | `pension/co` | `projectWeeks`, `requiredWeeks`, `pensionScenarios`, `postRetirementFlow`, `pensionGap` | Datos de pensión y flujo | Semanas, requisito, faltantes, mesadas, flujos, brecha | `Pensión!C9:C25`, `B43:F54`, `C58:E78` (RN-121) |
 | `pension/es` | `informativePension(params)` | Parámetros | Edad de referencia y textos de remisión | Nuevo (RN-122) |
+| `summary` | `personalIndicators(incomes, budget)` | Ingresos y presupuesto con pagador | Ingreso propio, aporte de terceros, ingreso total, gasto y ahorro propios, tasa de ahorro sobre el ingreso propio | Nuevo, modo nativo (H-12, ADR 0010) |
 | `summary` | `summaryIndicators(result, thresholds)`, `pendingItems(input, result)`, `fxSensitivity(currency, ...)` | Todo | Indicadores con estado, pendientes, sensibilidad por cada moneda extranjera | `Resumen!C11:D35`, `B38:B47`, `B51:E60` (RN-130 a RN-132) |
 | `monthly-control` | `monthlyControl(budgetByCategory, entries, threshold)` | Presupuesto y gasto real | Por categoría: presupuesto, promedio real, diferencia, desviación, alerta | `Control mensual!C6:S24` (RN-133) |
 
@@ -100,7 +101,7 @@ Tiempo objetivo: menos de 50 ms por cálculo completo en un teléfono de gama me
 
 | Tema | Modo compatible (plantilla 2.2) | Modo nativo (propuesto) | Hallazgo |
 |---|---|---|---|
-| Pagador de cada gasto | Hay que registrar el aporte del tercero como ingreso | Pagador por partida y aporte implícito del tercero; indicadores personales aparte | H-12, RN-015 |
+| Pagador de cada gasto | Hay que registrar el aporte del tercero como ingreso | Pagador por partida y aporte implícito del tercero; indicadores personales aparte (ADR 0010) | H-12, RN-015 |
 | Aporte para completar el fondo | Informativo, no se descuenta | Plan secuencial: primero el fondo, luego el reparto | H-01 |
 | Bolsillo en partidas tipo bolsillo | Opcional | Obligatorio | H-02 |
 | Cuotas de deuda en el flujo | 12 meses iguales | Hasta el mes de fin de cada deuda | H-03 |
@@ -129,6 +130,7 @@ Antes de entregar un plan, `qualityChecks` evalúa los puntos verificables de la
 | Ninguna partida con valor sin frecuencia, tipo o bolsillo | Bloqueante |
 | Lista de pendientes vacía o cada punto con nota | Bloqueante |
 | Deudas con restricción de abono marcadas cuando el tipo lo sugiere (hipotecario con FRECH, informal) | Advertencia |
+| Partidas pagadas por terceros y, a la vez, un ingreso tipo "otro" (posible aporte contado dos veces, ADR 0010) | Advertencia |
 | Ningún dinero a menos de 3 años en crecimiento | Bloqueante |
 | Perfil final = mínimo entre disposición y capacidad; % dentro del rango de su edad | Bloqueante |
 | Sin inversión con deuda cara | Bloqueante |
@@ -164,6 +166,8 @@ Además se verifican los valores intermedios de Ingresos y Presupuesto, para loc
 | C5. Créditos | Plantilla de créditos con los mismos créditos de C4 y marcas de pago | 360 cuotas, FRECH, seguros, cuotas vencidas, panel, puente a Deudas | Por construir |
 | C6. Ingreso variable y déficit | Plantilla oficial sintética | Ingreso base, aporte proporcional, alerta de déficit | Por construir |
 | C7. Metas, seguros y cuotas | Plantilla oficial sintética (`c7-metas-seguros/cambios.json`) | Metas con fecha, vencida, cubierta y repetida; calculadora de viaje; seguros nuevos, cotizando y que ya tiene; dos deudas; filas automáticas del presupuesto | **Listo** (591 entradas, 5.738 fórmulas, sin errores) |
+
+Los casos son ejemplos de prueba, no perfiles de país: C2 prueba el pagador y el costo de vida porque esa clienta los tiene, y C1 prueba la pensión porque se activó para ese cliente. El motor nunca decide por el país quién paga ni si se calcula la pensión; lo lee de los datos del cliente (`payer`, `pension_enabled`).
 
 Ninguno de los dos casos reales tiene deudas, por eso C4 y C5 son necesarios para cubrir los módulos de deudas y créditos. C7 tiene dos deudas solo para las cuotas mínimas; no reemplaza a C4.
 
@@ -201,6 +205,7 @@ El mismo mapa sirve después para la exportación a Excel (en sentido inverso, p
 
 | Tipo | Qué verifica |
 |---|---|
+| Modo nativo (`test/native/`) | Correcciones del modo nativo con datos de los casos de oro y valores revisados por el asesor. Hoy: pagador por gasto con los datos de C2 (ingreso anual de 15.710,46 EUR y tasa personal de 100 %) |
 | Compatibilidad Excel (`test/excel-compat/`) | `EDATE` con fin de mes, `DATEDIF` en años y meses, `NPER` y `PMT` con tasa cero, `ROUNDUP` con negativos |
 | Propiedades (`test/properties/`, con fast-check) | Invariantes del control de calidad: sobrante = ingreso - gasto - ahorro; saldos de deuda nunca negativos; el reparto nunca supera lo disponible; el % en crecimiento siempre dentro del rango; resultados iguales con la misma entrada (determinismo) |
 | Unitarias por módulo | Casos borde: frecuencia sin días, todos los meses en rojo, deuda que no acepta abonos, tasa 0 %, perfil sin responder |

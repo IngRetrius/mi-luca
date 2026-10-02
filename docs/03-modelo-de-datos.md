@@ -13,6 +13,7 @@ Borrador para Postgres en Supabase. Es una propuesta para revisar, no una migrac
 7. **Importes** en `numeric(18,2)`, tasas en `numeric(12,8)`, monedas ISO 4217 en `char(3)`. El motor los convierte a `number` al calcular.
 8. **Multimoneda en todo** (decisión del 28/09/2026). Cada campo de dinero va acompañado de su moneda (columna `currency`, o `<campo>_currency` si la fila tiene varios importes). Por defecto es la moneda base del cliente y la interfaz muestra un selector. Las tasas viven en `client_fx_rates`; un disparador rechaza una moneda distinta de la base que no tenga tasa registrada.
 9. **Países de forma general.** Cualquier país se puede habilitar con su moneda, formato y parámetros. Los módulos que dependen de reglas de un país (pensión, umbrales fiscales) solo existen donde se programaron; en los demás países, el módulo se muestra como "no disponible para este país" y el resto de la plataforma funciona igual.
+10. **Cada caso es diferente** (decisión del 01/10/2026). Del país solo salen valores por defecto (moneda, formato, parámetros) y qué reglas existen. Lo que describe al cliente se guarda en sus propias filas y nunca se infiere del país: el pagador de cada gasto (`budget_items.payer`), si se analiza la pensión (`case_settings.pension_enabled`, apagado por defecto) y el tipo de cliente.
 
 ## 2. Diagrama de entidades (resumen)
 
@@ -255,7 +256,7 @@ create table public.case_settings (
   growth_floor                  numeric(12,8),
   operating_cushion             numeric(18,2) not null default 0,   -- en moneda base
   compatibility_mode            boolean not null default false, -- true = reproduce la plantilla 2.2 sin correcciones
-  pension_enabled               boolean not null default true,
+  pension_enabled               boolean not null default false, -- lo activa el asesor por cliente; el país no lo decide
   updated_at                    timestamptz not null default now(),
   updated_by                    uuid references auth.users(id)
 );
@@ -336,7 +337,7 @@ create table public.budget_items (
   payer_label     text,                             -- por ejemplo "sus padres"
   scope           text not null default 'presupuesto' check (scope in ('presupuesto', 'referencia_familiar')),
   is_temporary    boolean not null default false,   -- por ejemplo, la matrícula
-  basic_amount    numeric(18,2),                    -- nivel básico: solo el asesor (guarda por disparador)
+  basic_amount    numeric(18,2),                    -- nivel básico, por pago, misma frecuencia y moneda; nulo = igual al actual; solo el asesor (guarda por disparador)
   is_proposed     boolean not null default false,   -- valor propuesto por el asesor (P5.3)
   note            text,
   sort_order      int not null default 0,

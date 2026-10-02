@@ -18,7 +18,7 @@
 | F3. Bolsillos, fondo, flujo anual, prueba de realidad, cobros y entrega mínima | Bancos y bolsillos, fondo de emergencia, plan de ahorro secuencial, flujo anual, meses sin ingreso, prueba de realidad, cuentas por cobrar, activos líquidos, plan entregado sin PDF, vista "Mi plan" | 160 | 520 | finales de junio de 2027 | F2 |
 | F4. Deudas y créditos | Motor único de deudas, simulación, créditos cuota a cuota, marcas de pago, panel | 160 | 680 | comienzos de septiembre de 2027 | F3 |
 | F5. Inversión, patrimonio, metas y seguros | Perfil de riesgo, rangos, distribución, proyección, patrimonio completo, metas y calculadora de viaje, seguros | 120 | 800 | comienzos de noviembre de 2027 | F3 (F4 para deuda cara) |
-| F6. Pensión por país | Módulo de Colombia completo, módulo informativo de España, activación por cliente | 80 | 880 | mediados de diciembre de 2027 | F3 |
+| F6. Pensión por país | Módulo de Colombia completo, módulo informativo de España, activación por cliente (apagada por defecto) | 80 | 880 | mediados de diciembre de 2027 | F3 |
 | F7. Entregables y seguimiento | Notas y carta con cifras enlazadas, PDF, ficha de continuidad, Excel compatible, control mensual, plan de acción, comparación con el plan entregado, avisos por correo, exportación y borrado | 160 | 1.040 | comienzos de marzo de 2028 | F4, F5, F6 |
 | F8. Endurecimiento y lanzamiento | Accesibilidad, rendimiento, seguridad, textos legales finales, restauración de copias, planes pagados, migración de clientes actuales | 80 | 1.120 | mediados de abril de 2028 | F7 |
 | Margen (15 %) | | 168 | **1.288** | **comienzos de julio de 2028** | |
@@ -161,7 +161,7 @@ Tareas: `excel`, `normalization`, `incomes`, `budget`, `cost-of-living`, resumen
 Criterios de aceptación:
 
 - Pruebas de oro de C1, C2 y C3 en verde para los valores de Ingresos y Presupuesto y para `Resumen!C11:C13`.
-- Caso España: el costo de vida por niveles coincide con la hoja "Costo de vida" del Excel; con los gastos marcados "paga la familia", el ingreso anual del resumen coincide con el del Excel (15.710,46 EUR) y el indicador nativo de tasa de ahorro sobre ingreso propio es 100 %.
+- Caso de oro C2 (la clienta de España cuyos gastos de vida paga su familia; es un ejemplo, no una regla del país): el costo de vida por niveles coincide con la hoja "Costo de vida" del Excel; con sus gastos marcados "paga la familia", el ingreso anual del resumen coincide con el del Excel (15.710,46 EUR) y el indicador nativo de tasa de ahorro sobre ingreso propio es 100 %.
 - El cliente edita un gasto en el celular, ve el impacto antes de guardar y el asesor recibe el antes y después.
 
 Avance:
@@ -169,8 +169,8 @@ Avance:
 - [x] Motor: `normalization` (`timesPerYear`, con la tabla `Listas!C2:D10`), `incomes` (`computeIncomes`, `socialSecurityPayments`, `baseIncome`) y `budget` (`computeBudget`), en modo compatible. Tipos compartidos en `packages/domain` (`Frequency`, `ExpenseType`, `IncomeKind`, `Payer`, `MonthFlags`) con los mismos códigos que el modelo de datos. `ENGINE_VERSION` 0.2.0.
 - [x] Pruebas de oro de C1, C2 y C3 en verde para Ingresos (F:U de cada fila, fila 14, totales por tipo, USD, S17 y la calculadora de ingreso base), Presupuesto (G:I de las 82 partidas y las filas 89 a 97) y `Resumen!C11:C13`. Adaptador de celdas en `test/golden/adapters.ts`; se comprobó que las pruebas fallan con un error provocado.
 - [x] Filas automáticas del presupuesto (6 a 12) calculadas desde Deudas, Seguros y Metas (`automaticRows`), con lo mínimo de cada módulo: `debtTotals` (`Deudas!D21`, `F21`), `computeInsurance` (`Seguros!I6:I16`), `computeGoals` y `tripCost` (`Metas!F:K`, `E17:E30`) y `datedifMonths` en `excel`, probado contra Excel. Caso sintético C7 (metas con fecha, vencida, cubierta y repetida, calculadora de viaje, seguros nuevos y dos deudas). `ENGINE_VERSION` 0.3.0. La clasificación y la simulación de deudas quedan para F4; la suma asegurada de vida, para F5.
-- [ ] Modo nativo: pagador y aporte implícito de terceros (RN-015), indicadores personales y caso España con los gastos de la familia.
-- [ ] `cost-of-living` y la hoja "Costo de vida" del caso España.
+- [x] Modo nativo: pagador por gasto (`BudgetItemInput.payer`, totales `byPayer`), aporte implícito de terceros (`impliedThirdPartyIncome`, RN-015) e indicadores personales (`personalIndicators`), ADR 0010 propuesto. Con los datos de C2 y sus partidas marcadas "paga la familia", el ingreso anual da 15.710,46 EUR y la tasa personal 100 % (`test/native/c2-payer.test.ts`). `ENGINE_VERSION` 0.4.0. El uso del aporte en el flujo y en el fondo queda para F3.
+- [x] `cost-of-living` (para cualquier cliente): niveles esencial, básico y actual, por pagador, sin temporales y frente a los umbrales que apliquen a cada cliente. Partidas con `basicAmount` (por pago) e `isTemporary`. La hoja "Costo de vida" de C2 se reproduce completa (filas 6 a 39, `test/golden/c2-cost-of-living.test.ts`). `ENGINE_VERSION` 0.5.0. Con esto, el segundo criterio de F2 se cumple en el motor; faltan las pantallas.
 - [ ] Parámetros por país con fuente y fecha; tablas `incomes`, `budget_items`, `client_fx_rates`; pantallas P-A04 a P-A06, P-A11, P-C06 y P-C07; registro de impacto.
 
 ### F3. Bolsillos, fondo, flujo, prueba de realidad, cobros y entrega mínima (160 horas)

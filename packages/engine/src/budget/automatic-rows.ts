@@ -15,7 +15,7 @@ export interface AutomaticRowsInput {
 /**
  * Filas automáticas del presupuesto (RN-028): cuotas de deudas (mensual, deuda, esencial),
  * seguros nuevos (anual, bolsillo, esencial) y una fila por meta (mensual, bolsillo, no
- * esencial). Van antes de las partidas del cliente y no se editan en el presupuesto.
+ * esencial). Las paga el cliente. Van antes de las partidas del cliente y no se editan en el presupuesto.
  *
  * @excel Presupuesto!D6:L12
  */
@@ -34,6 +34,9 @@ export function automaticRows(
     durationDays: null,
     expenseType,
     essential,
+    payer: 'cliente',
+    basicAmount: null,
+    isTemporary: false,
   });
   return [
     row(input.debtMinPayments, 'mensual', 'deuda', true),

@@ -1,4 +1,4 @@
-import type { ExpenseType, Frequency, Money } from '@miluca/domain';
+import type { ExpenseType, Frequency, Money, Payer } from '@miluca/domain';
 
 import { toBaseCompat, type FxContext } from '../currency';
 import { timesPerYear } from '../normalization';
@@ -13,6 +13,15 @@ export interface BudgetItemInput {
   /** Null si no se clasificó: cuenta como gasto (no es ahorro), pero en ningún tipo. */
   readonly expenseType: ExpenseType | null;
   readonly essential: boolean;
+  /** Quién la paga (RN-024). La plantilla no lo tiene: en modo compatible todo es del cliente. */
+  readonly payer: Payer;
+  /**
+   * Valor por pago en el nivel básico del costo de vida, con la misma frecuencia (RN-030). Lo
+   * propone el asesor; null si es igual al actual.
+   */
+  readonly basicAmount: Money | null;
+  /** Gasto temporal, como la matrícula: el costo de vida se calcula también sin él (RN-026). */
+  readonly isTemporary: boolean;
 }
 
 export interface BudgetRowResult {
@@ -28,6 +37,12 @@ export interface BudgetRowResult {
 export interface AnnualAndMonthly {
   readonly annual: number;
   readonly monthly: number;
+}
+
+/** Lo que paga cada pagador: gasto sin ahorro y ahorro programado. */
+export interface PayerTotals {
+  readonly expensesWithoutSavings: AnnualAndMonthly;
+  readonly programmedSavings: AnnualAndMonthly;
 }
 
 export interface BudgetResult {
@@ -50,7 +65,11 @@ export interface BudgetResult {
   readonly socialSecurityPerPayment: number;
   /** Partidas con valor pero sin frecuencia o sin tipo; deben ser 0. @excel Presupuesto!I97 */
   readonly incompleteRows: number;
+  /** Los mismos totales separados por pagador (RN-024); la suma de los tres da los de arriba. */
+  readonly byPayer: Readonly<Record<Payer, PayerTotals>>;
 }
+
+const PAYERS: readonly Payer[] = ['cliente', 'familia', 'tercero'];
 
 function total(
   rows: readonly BudgetRowResult[],
@@ -83,6 +102,7 @@ export function computeBudget(
     return { timesPerYear: times, annual, monthlyAverage: annual / 12 };
   });
   const type = (index: number) => items[index]?.expenseType ?? null;
+  const payer = (index: number) => items[index]?.payer;
 
   let socialSecurityPerPayment = 0;
   let incompleteRows = 0;
@@ -103,5 +123,14 @@ export function computeBudget(
     essential: total(rows, (i) => items[i]?.essential === true && type(i) !== 'ahorro'),
     socialSecurityPerPayment,
     incompleteRows,
+    byPayer: Object.fromEntries(
+      PAYERS.map((who) => [
+        who,
+        {
+          expensesWithoutSavings: total(rows, (i) => payer(i) === who && type(i) !== 'ahorro'),
+          programmedSavings: total(rows, (i) => payer(i) === who && type(i) === 'ahorro'),
+        },
+      ]),
+    ) as Record<Payer, PayerTotals>,
   };
 }
