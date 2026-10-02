@@ -1,0 +1,347 @@
+[
+  {
+    "sheet": "Supuestos",
+    "cell": "C7",
+    "value": "Caso sintético C7"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C17",
+    "value": 4000
+  },
+  {
+    "sheet": "Metas",
+    "cell": "B6",
+    "value": "Meta con fecha"
+  },
+  {
+    "sheet": "Metas",
+    "cell": "D6",
+    "value": 12000000
+  },
+  {
+    "sheet": "Metas",
+    "cell": "G6",
+    "value": 2000000
+  },
+  {
+    "sheet": "Metas",
+    "cell": "I6",
+    "date": "2027-03-15"
+  },
+  {
+    "sheet": "Metas",
+    "cell": "B7",
+    "value": "Meta vencida"
+  },
+  {
+    "sheet": "Metas",
+    "cell": "D7",
+    "value": 3000000
+  },
+  {
+    "sheet": "Metas",
+    "cell": "I7",
+    "date": "2026-08-01"
+  },
+  {
+    "sheet": "Metas",
+    "cell": "B8",
+    "value": "Meta ya cubierta"
+  },
+  {
+    "sheet": "Metas",
+    "cell": "C8",
+    "value": "Ropa"
+  },
+  {
+    "sheet": "Metas",
+    "cell": "D8",
+    "value": 1000000
+  },
+  {
+    "sheet": "Metas",
+    "cell": "G8",
+    "value": 1500000
+  },
+  {
+    "sheet": "Metas",
+    "cell": "I8",
+    "date": "2027-12-31"
+  },
+  {
+    "sheet": "Metas",
+    "cell": "B9",
+    "value": "Meta que se repite"
+  },
+  {
+    "sheet": "Metas",
+    "cell": "C9",
+    "value": "Temporada"
+  },
+  {
+    "sheet": "Metas",
+    "cell": "D9",
+    "value": 6000000
+  },
+  {
+    "sheet": "Metas",
+    "cell": "G9",
+    "value": 500000
+  },
+  {
+    "sheet": "Metas",
+    "cell": "H9",
+    "value": 1.5
+  },
+  {
+    "sheet": "Metas",
+    "cell": "I9",
+    "date": "2028-01-31"
+  },
+  {
+    "sheet": "Metas",
+    "cell": "B10",
+    "value": "Viaje con calculadora"
+  },
+  {
+    "sheet": "Metas",
+    "cell": "C10",
+    "value": "Viajes"
+  },
+  {
+    "sheet": "Metas",
+    "cell": "D10",
+    "value": 999
+  },
+  {
+    "sheet": "Metas",
+    "cell": "E10",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Metas",
+    "cell": "G10",
+    "value": 1000000
+  },
+  {
+    "sheet": "Metas",
+    "cell": "I10",
+    "date": "2027-06-30"
+  },
+  {
+    "sheet": "Metas",
+    "cell": "C15",
+    "value": 800
+  },
+  {
+    "sheet": "Metas",
+    "cell": "D15",
+    "value": 1
+  },
+  {
+    "sheet": "Metas",
+    "cell": "C16",
+    "value": 120
+  },
+  {
+    "sheet": "Metas",
+    "cell": "D16",
+    "value": 5
+  },
+  {
+    "sheet": "Metas",
+    "cell": "C17",
+    "value": 0.1
+  },
+  {
+    "sheet": "Metas",
+    "cell": "C18",
+    "value": 50
+  },
+  {
+    "sheet": "Metas",
+    "cell": "D18",
+    "value": 6
+  },
+  {
+    "sheet": "Metas",
+    "cell": "C19",
+    "value": 30
+  },
+  {
+    "sheet": "Metas",
+    "cell": "D19",
+    "value": 2
+  },
+  {
+    "sheet": "Metas",
+    "cell": "C20",
+    "value": 100
+  },
+  {
+    "sheet": "Metas",
+    "cell": "D20",
+    "value": 1
+  },
+  {
+    "sheet": "Metas",
+    "cell": "C21",
+    "value": 40
+  },
+  {
+    "sheet": "Metas",
+    "cell": "D21",
+    "value": 1
+  },
+  {
+    "sheet": "Metas",
+    "cell": "C22",
+    "value": 75.5
+  },
+  {
+    "sheet": "Metas",
+    "cell": "D22",
+    "value": 1
+  },
+  {
+    "sheet": "Metas",
+    "cell": "C24",
+    "value": 0.07
+  },
+  {
+    "sheet": "Metas",
+    "cell": "E28",
+    "value": 300000
+  },
+  {
+    "sheet": "Metas",
+    "cell": "E29",
+    "value": 150000
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "F6",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "H6",
+    "value": 900000
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "F7",
+    "value": "No"
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "H7",
+    "value": 1200000
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "H8",
+    "value": 600000
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "F9",
+    "value": "Cotizando"
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "H9",
+    "value": 450000
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "F10",
+    "value": "No"
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "B14",
+    "value": "Seguro adicional"
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "F14",
+    "value": "No"
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "H14",
+    "value": 350000
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "B15",
+    "value": "Seguro que ya tiene"
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "F15",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "H15",
+    "value": 100000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "B13",
+    "value": "Tarjeta"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "C13",
+    "value": "Tarjeta de crédito"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "D13",
+    "value": 5000000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "E13",
+    "value": 0.28
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "F13",
+    "value": 250000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "B14",
+    "value": "Vehículo"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "C14",
+    "value": "Vehículo"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "D14",
+    "value": 20000000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "E14",
+    "value": 0.15
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "F14",
+    "value": 600000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "G14",
+    "value": "No"
+  }
+]

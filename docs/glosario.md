@@ -47,6 +47,8 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Sesión | `session` | Usuario de la sesión: `SessionUser` |
 | Ruta de retorno | `next` | Ruta interna a la que se vuelve después de entrar; se valida con `safeNextPath` |
 | Fecha de corte | `cutoffDate` | Fecha a la que se refieren los cálculos |
+| Fecha | `IsoDate` | Texto "AAAA-MM-DD", sin hora ni zona |
+| Meses completos entre fechas | `datedifMonths` | `DATEDIF(inicio, fin, "m")` de Excel |
 | Año del flujo | `flowYear` | |
 | Tipo de cliente | `clientType` | empleado, contratista, independiente_variable, pensionado, rentista, mixto |
 | Supuestos del caso | `caseSettings` | Criterio del asesor |
@@ -63,6 +65,7 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Aporte implícito de terceros | `impliedThirdPartyIncome` | RN-015 |
 | Presupuesto | `budget` | |
 | Partida del presupuesto | `budgetItem` | |
+| Filas automáticas del presupuesto | `automaticRows` | Cuotas de deudas, seguros nuevos y aportes a metas (RN-028) |
 | Frecuencia | `frequency` | semanal, quincenal, mensual, bimestral, trimestral, cada_4_meses, semestral, anual, cada_2_anos, por_duracion, meses_seguridad_social |
 | Veces al año | `timesPerYear` | |
 | Tipo de gasto | `expenseType` | directo, bolsillo, seg_social, deuda, ahorro |
@@ -96,6 +99,7 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Deuda cara | `expensiveDebt` | |
 | Tasa efectiva anual | `annualRate` | |
 | Cuota mínima | `minPayment` | |
+| Totales de deudas | `debtTotals` | Saldo y cuotas mínimas (`Deudas!D21`, `F21`) |
 | Abono extra | `extraPayment` | |
 | Avalancha, bola de nieve, orden manual | `avalancha`, `bola_de_nieve`, `manual` | Valores de catálogo |
 | Carga de deuda | `debtLoad` | Cuotas / ingreso mensual |
@@ -103,8 +107,19 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Cuota | `installment` | |
 | Subsidio FRECH | `frechSubsidy` | Cobertura de tasa del gobierno de Colombia |
 | Meta | `goal` | |
-| Calculadora de viaje | `tripCalculator` | |
+| Valor usado de la meta | `usedAmount` | El escrito o el de la calculadora de viaje, en moneda base (`Metas!F`) |
+| Ya ahorrado | `alreadySaved` | |
+| Se repite cada (años) | `repeatEveryYears` | |
+| Fecha objetivo | `targetDate` | |
+| Meses restantes | `monthsRemaining` | Al menos 1 (`Metas!J`) |
+| Aporte mensual a la meta | `monthlyContribution` | `Metas!K` |
+| Calculadora de viaje | `tripCalculator` / `tripCost` | |
+| Impuestos del alojamiento | `lodgingTaxRate`, `isLodging` | |
+| Colchón por tasa de cambio y comisiones | `cushionRate` | 5 % por defecto (RN-101) |
 | Seguro | `insurance` | |
+| ¿Lo tiene? (seguro) | `status` / `InsuranceStatus` | si, no, cotizando |
+| Prima anual cotizada | `annualPremiumQuoted` | |
+| Primas de seguros nuevos | `newPremiumsAnnual` | `Seguros!H16` |
 | Suma asegurada | `sumInsured` | |
 | Patrimonio | `netWorth` | |
 | Activo | `asset` | |

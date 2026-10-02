@@ -3,16 +3,34 @@
  * Las etiquetas de la plantilla pasan a los códigos del modelo; una etiqueta desconocida es un
  * error, para que ningún dato se pierda en silencio.
  */
-import type { ExpenseType, Frequency, IncomeKind, MonthFlags } from '@miluca/domain';
+import type {
+  ExpenseType,
+  Frequency,
+  IncomeKind,
+  InsuranceStatus,
+  Money,
+  MonthFlags,
+} from '@miluca/domain';
 
+import { automaticRows, type BudgetItemInput } from '../../src/budget';
 import type { FxContext } from '../../src/currency';
-import type { BudgetItemInput } from '../../src/budget';
+import { debtTotals, type DebtInput } from '../../src/debts';
+import { computeGoals, type GoalInput, type TripCostInput } from '../../src/goals';
 import type { IncomeInput } from '../../src/incomes';
+import { computeInsurance, type InsuranceInput } from '../../src/insurance';
 import { cell, excelN, type CellValue, type GoldenCase } from './cases';
 
 export const MONTH_COLUMNS = ['G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'] as const;
 export const INCOME_ROWS = [6, 7, 8, 9, 10, 11, 12, 13] as const;
 export const BUDGET_ROWS = Array.from({ length: 82 }, (_, i) => i + 6); // 6 a 87
+/** Partidas del cliente; las filas 6 a 12 son automáticas (deudas, seguros y metas). */
+const MANUAL_BUDGET_ROWS = BUDGET_ROWS.filter((row) => row >= 13);
+export const GOAL_ROWS = [6, 7, 8, 9, 10] as const;
+export const INSURANCE_ROWS = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15] as const;
+const DEBT_ROWS = [13, 14, 15, 16, 17, 18, 19, 20] as const;
+/** Conceptos de la calculadora de viaje; la fila 16 es el alojamiento y la 17 sus impuestos. */
+const TRIP_ITEM_ROWS = [15, 16, 18, 19, 20, 21, 22] as const;
+const TRIP_LODGING_ROW = 16;
 
 const FREQUENCIES: Readonly<Record<string, Frequency>> = {
   Semanal: 'semanal',
@@ -43,18 +61,10 @@ export const INCOME_KINDS: Readonly<Record<string, IncomeKind>> = {
   Otro: 'otro',
 };
 
-/**
- * Filas automáticas del presupuesto (6 a 12): frecuencia, tipo y esencial son fijos en la
- * plantilla, así que no están en los casos. El valor sí (viene de Deudas, Seguros y Metas).
- */
-const AUTOMATIC_ROWS: Readonly<Record<number, { e: string; j: string; l: string }>> = {
-  6: { e: 'Mensual', j: 'Deuda', l: 'Sí' },
-  7: { e: 'Anual', j: 'Bolsillo', l: 'Sí' },
-  8: { e: 'Mensual', j: 'Bolsillo', l: 'No' },
-  9: { e: 'Mensual', j: 'Bolsillo', l: 'No' },
-  10: { e: 'Mensual', j: 'Bolsillo', l: 'No' },
-  11: { e: 'Mensual', j: 'Bolsillo', l: 'No' },
-  12: { e: 'Mensual', j: 'Bolsillo', l: 'No' },
+const INSURANCE_STATUSES: Readonly<Record<string, InsuranceStatus>> = {
+  Sí: 'si',
+  No: 'no',
+  Cotizando: 'cotizando',
 };
 
 function label<T>(
@@ -103,21 +113,112 @@ export function variableIncomeHistory(golden: GoldenCase): (number | null)[] {
   });
 }
 
+/** Importe en moneda base si la celda tiene un número; si no, null. */
+function baseMoney(golden: GoldenCase, ref: string): Money | null {
+  const value = cell(golden, ref);
+  return typeof value === 'number'
+    ? { amount: value, currency: fxContext(golden).baseCurrency }
+    : null;
+}
+
+/** Fecha "AAAA-MM-DD" de la celda, o null si está vacía. */
+function isoDate(golden: GoldenCase, ref: string): string | null {
+  const value = cell(golden, ref);
+  if (value === undefined || value === null || value === '') return null;
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    throw new Error(`${ref} no es una fecha: ${String(value)}`);
+  }
+  return value;
+}
+
+/** La calculadora de viaje de la plantilla: una sola, en USD, para todas las metas que la usan. */
+export function tripInput(golden: GoldenCase): TripCostInput {
+  return {
+    currency: 'USD',
+    items: TRIP_ITEM_ROWS.map((row) => ({
+      unitValue: excelN(cell(golden, `Metas!C${row}`)),
+      quantity: excelN(cell(golden, `Metas!D${row}`)),
+      isLodging: row === TRIP_LODGING_ROW,
+    })),
+    lodgingTaxRate: excelN(cell(golden, 'Metas!C17')),
+    cushionRate: excelN(cell(golden, 'Metas!C24')),
+    baseCurrencyCosts: [excelN(cell(golden, 'Metas!E28')), excelN(cell(golden, 'Metas!E29'))],
+  };
+}
+
+/** Una meta por fila de Metas, en orden; null si la fila no tiene nombre (la plantilla la ignora). */
+export function goalsInput(golden: GoldenCase): (GoalInput | null)[] {
+  return GOAL_ROWS.map((row) => {
+    const name = cell(golden, `Metas!B${row}`);
+    if (name === undefined || name === null || name === '') return null;
+    const repeat = excelN(cell(golden, `Metas!H${row}`));
+    return {
+      amount: baseMoney(golden, `Metas!D${row}`),
+      trip: cell(golden, `Metas!E${row}`) === 'Sí' ? tripInput(golden) : null,
+      alreadySaved: baseMoney(golden, `Metas!G${row}`),
+      repeatEveryYears: repeat > 0 ? repeat : null,
+      targetDate: isoDate(golden, `Metas!I${row}`),
+    };
+  });
+}
+
+export function insuranceInput(golden: GoldenCase): InsuranceInput[] {
+  return INSURANCE_ROWS.map((row) => ({
+    status: label(cell(golden, `Seguros!F${row}`), INSURANCE_STATUSES, `Seguros!F${row}`),
+    annualPremiumQuoted: baseMoney(golden, `Seguros!H${row}`),
+  }));
+}
+
+/** Filas de Deudas con saldo o cuota; la plantilla no tiene moneda por deuda. */
+export function debtsInput(golden: GoldenCase): DebtInput[] {
+  const { baseCurrency } = fxContext(golden);
+  return DEBT_ROWS.flatMap((row) => {
+    const balance = baseMoney(golden, `Deudas!D${row}`);
+    const minPayment = baseMoney(golden, `Deudas!F${row}`);
+    if (!balance && !minPayment) return [];
+    return [{ balance: balance ?? { amount: 0, currency: baseCurrency }, minPayment }];
+  });
+}
+
+/**
+ * Filas 6 a 12 del presupuesto calculadas con los módulos de deudas, seguros y metas, en el orden
+ * de la plantilla: una fila por cada fila de Metas, con 0 en las metas sin nombre.
+ */
+export function automaticBudgetInput(golden: GoldenCase): BudgetItemInput[] {
+  const fx = fxContext(golden);
+  const goals = goalsInput(golden);
+  const computed = computeGoals(
+    goals.filter((goal): goal is GoalInput => goal !== null),
+    golden.cutoffDate,
+    fx,
+  ).rows;
+  let next = 0;
+  const goalContributions = goals.map((goal) =>
+    goal === null ? 0 : (computed[next++]?.monthlyContribution ?? 0),
+  );
+  return automaticRows(
+    {
+      debtMinPayments: debtTotals(debtsInput(golden), fx).minPayment,
+      newInsurancePremiums: computeInsurance(insuranceInput(golden), fx).newPremiumsAnnual,
+      goalContributions,
+    },
+    fx.baseCurrency,
+  );
+}
+
+/** Las 82 partidas del presupuesto: las 7 automáticas y las del cliente (filas 13 a 87). */
 export function budgetInput(golden: GoldenCase): BudgetItemInput[] {
   const { baseCurrency } = fxContext(golden);
-  return BUDGET_ROWS.map((row) => {
-    const fixed = AUTOMATIC_ROWS[row];
-    const frequency = fixed?.e ?? cell(golden, `Presupuesto!E${row}`);
-    const type = fixed?.j ?? cell(golden, `Presupuesto!J${row}`);
-    const essential = fixed?.l ?? cell(golden, `Presupuesto!L${row}`);
+  const manual = MANUAL_BUDGET_ROWS.map((row): BudgetItemInput => {
     const amount = cell(golden, `Presupuesto!D${row}`);
     const days = cell(golden, `Presupuesto!F${row}`);
     return {
       amount: typeof amount === 'number' ? { amount, currency: baseCurrency } : null,
-      frequency: label(frequency, FREQUENCIES, `Presupuesto!E${row}`),
+      frequency: label(cell(golden, `Presupuesto!E${row}`), FREQUENCIES, `Presupuesto!E${row}`),
       durationDays: typeof days === 'number' ? days : null,
-      expenseType: label(type, EXPENSE_TYPES, `Presupuesto!J${row}`),
-      essential: essential === 'Sí',
+      expenseType: label(cell(golden, `Presupuesto!J${row}`), EXPENSE_TYPES, `Presupuesto!J${row}`),
+      essential: cell(golden, `Presupuesto!L${row}`) === 'Sí',
     };
   });
+  return [...automaticBudgetInput(golden), ...manual];
 }

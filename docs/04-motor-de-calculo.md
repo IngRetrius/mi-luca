@@ -35,13 +35,13 @@ interface ComputeOptions {
 
 | Módulo | Función | Entradas | Salidas | Reproduce |
 |---|---|---|---|---|
-| `excel` | `edate`, `datedifYears`, `datedifMonths`, `nper`, `pmt`, `roundUp`, `effectiveToMonthly` | Números y fechas | Números y fechas | Funciones de Excel |
+| `excel` | `edate`, `datedifYears`, `datedifMonths`, `nper`, `pmt`, `roundUp`, `effectiveToMonthly` | Números y fechas (`IsoDate`, "AAAA-MM-DD") | Números y fechas; null donde Excel da #NUM! | Funciones de Excel |
 | `currency` | `toBase(money, rates)`, `missingRates(input)`, `exposureByCurrency(result)` | Importe con moneda y tasas del cliente | Importe en moneda base; monedas sin tasa; exposición por moneda | `Ingresos!F`, `Inversión!F`, `Patrimonio!F` (RN-010, RN-017) |
 | `normalization` | `timesPerYear(frequency, durationDays, ssMonthsCount)` | Frecuencia | Veces al año | `Presupuesto!G`, `Listas!C:D` (RN-020, RN-021) |
 | `incomes` | `computeIncomes(incomes, fxRates, baseCurrency)` | Ingresos | Por fila: valor en moneda base, pagos del año, total, promedio. Totales por mes y por tipo; ingreso anual en moneda extranjera | `Ingresos!F:U`, filas 14 y 20 a 25 (RN-010, RN-011) |
 | `incomes` | `baseIncome(history)` | 12 valores | Promedio, promedio de los 3 más bajos, sugerido | `Ingresos!E30:E32` (RN-013) |
 | `incomes` | `impliedThirdPartyIncome(budgetRows)` | Filas pagadas por terceros | Ingreso implícito por pagador | Nuevo (RN-015) |
-| `budget` | `automaticRows(debts, insurance, goals)` | Resultados de esos módulos | Filas automáticas | `Presupuesto!6:12` (RN-028) |
+| `budget` | `automaticRows({ debtMinPayments, newInsurancePremiums, goalContributions }, baseCurrency)` | Cuotas mínimas, primas nuevas y aporte de cada meta, en moneda base | Filas automáticas, antes de las partidas del cliente | `Presupuesto!6:12` (RN-028) |
 | `budget` | `computeBudget(items, automaticRows, ssMonths)` | Partidas | Por fila: veces al año, total, promedio. Totales por tipo, esencial, seguridad social por pago, filas incompletas, filas bolsillo sin bolsillo | `Presupuesto!G:I`, filas 89 a 97 (RN-020 a RN-029) |
 | `cost-of-living` | `computeCostOfLiving(items, thresholds)` | Partidas y umbrales del país | Por nivel: anual, mensual, por pagador, sin temporales; comparación con umbrales | Hoja Costo de vida del caso España (RN-030 a RN-032) |
 | `cashflow` | `monthlyFlow(incomes, budget, ssMonths, flowYear)` | Ingresos y presupuesto | 12 meses: entradas por tipo, salidas por tipo, balance | `Flujo anual!E7:Q19` (RN-040) |
@@ -53,12 +53,13 @@ interface ComputeOptions {
 | `pockets` | `computePockets(pockets, budgetRows, fund, noIncome, liquid, cushion, hasExpensiveDebt, params)` | Bolsillos y resultados previos | Meta y aporte por bolsillo; saldos sugeridos; reparto del saldo; alertas de límite y sobreasignación | `Bolsillos!D6:G18`, `C21:C30` (RN-070 a RN-074) |
 | `emergency-fund` | `emergencyProgress(assigned, fullGoal, currentGoal)` | Saldo asignado | Avance frente a meta completa y vigente | `Fondo emergencia!C24:C25`, H-11 |
 | `savings-plan` | `sequentialSavingsPlan(monthlySaving, fundGap, pctInvest)` | Capacidad de ahorro y faltante del fondo | Meses hasta completar el fondo y reparto posterior | Nuevo, modo nativo (H-01, RN-014) |
+| `debts` | `debtTotals(debts, fx)` | Saldo y cuota mínima de cada deuda | Saldo total y cuotas mínimas en moneda base | `Deudas!D21`, `F21` |
 | `debts` | `classifyDebts(debts, threshold, method)` | Inventario | Tasa mensual, deuda cara, orden, totales, carga | `Deudas!I:K`, `C21:C26` (RN-090, RN-091) |
 | `debts` | `simulateDebts(debts, plan)` | Deudas, pago total, abono único, horizonte | Por deuda: meses, fecha de salida, intereses con plan y solo cuota; calendario mes a mes | `Deudas!E29:DT80`, `E86:F93`, `L:O` (RN-092 a RN-097) |
 | `credits` | `amortizationSchedule(credit, marks, cutoffDate)` | Crédito y marcas de pago | 360 cuotas con interés, seguros, FRECH, cuota, extra, capital, saldo, lo que paga, estado | Plantilla de créditos, hojas Crédito (RN-095, RN-096, RN-099) |
 | `credits` | `creditsPanel(schedules, incomes, plan)` | Tablas | Deuda total, próximo pago, calendario, tramos del mes, hitos, deuda por año, abono sugerido, puente hacia Deudas | Plantilla de créditos, Panel y Plan de pago |
-| `goals` | `computeGoals(goals, cutoffDate)`, `tripCost(items, fx, cushion)` | Metas | Valor usado, meses, aporte | `Metas!F:K`, `E15:E30` (RN-100, RN-101) |
-| `insurance` | `computeInsurance(rows)`, `lifeInsuranceSum(inputs)` | Seguros | Primas nuevas, suma asegurada orientativa | `Seguros!I6:I16`, `C20:C24` (RN-102, RN-103) |
+| `goals` | `computeGoals(goals, cutoffDate, fx)`, `tripCost(trip, fx)` | Metas; cada una con su calculadora de viaje o sin ella | Valor usado, meses, aporte; costo del viaje con impuestos del alojamiento y colchón | `Metas!F:K`, `E15:E30` (RN-100, RN-101) |
+| `insurance` | `computeInsurance(rows, fx)`, `lifeInsuranceSum(inputs)` | Seguros | Primas nuevas, suma asegurada orientativa | `Seguros!I6:I16`, `C20:C24` (RN-102, RN-103) |
 | `net-worth` | `computeNetWorth(assets, investments, receivables, debts, fx)` | Activos | Totales, neto, composición, concentración | `Patrimonio!F6:F30`, `C33:D39` (RN-110) |
 | `investment` | `riskProfile(answers, conditions, hasExpensiveDebt)` | Respuestas y condiciones | Disposición, capacidad, perfil final | `Inversión!D18:E32` (RN-112) |
 | `investment` | `growthAllocation(age, profile, position, horizon, table)` | Perfil y edad | Rango, % crecimiento y estabilidad, mensaje | `Inversión!C41:C47` (RN-113, RN-114) |
@@ -162,8 +163,9 @@ Además se verifican los valores intermedios de Ingresos y Presupuesto, para loc
 | C4. Deudas | Plantilla oficial con 6 a 8 deudas sintéticas inspiradas en el caso 15.1 del protocolo (FRECH, préstamo familiar a 0 %, ingreso en USD, carga de 64 %) | Deuda cara, avalancha, bola de nieve, restricciones de abono, más de 120 meses | Por construir |
 | C5. Créditos | Plantilla de créditos con los mismos créditos de C4 y marcas de pago | 360 cuotas, FRECH, seguros, cuotas vencidas, panel, puente a Deudas | Por construir |
 | C6. Ingreso variable y déficit | Plantilla oficial sintética | Ingreso base, aporte proporcional, alerta de déficit | Por construir |
+| C7. Metas, seguros y cuotas | Plantilla oficial sintética (`c7-metas-seguros/cambios.json`) | Metas con fecha, vencida, cubierta y repetida; calculadora de viaje; seguros nuevos, cotizando y que ya tiene; dos deudas; filas automáticas del presupuesto | **Listo** (591 entradas, 5.738 fórmulas, sin errores) |
 
-Ninguno de los dos casos reales tiene deudas, por eso C4 y C5 son necesarios para cubrir los módulos de deudas y créditos.
+Ninguno de los dos casos reales tiene deudas, por eso C4 y C5 son necesarios para cubrir los módulos de deudas y créditos. C7 tiene dos deudas solo para las cuotas mínimas; no reemplaza a C4.
 
 ### 7.3 Procedimiento para cada caso
 

@@ -27,9 +27,13 @@ El orden de cálculo y el catálogo de funciones están en `docs/04-motor-de-cal
 
 | Módulo | Qué hay | Pruebas de oro |
 |---|---|---|
+| `excel` | `datedifMonths`, `parseIsoDate` | Contra Excel en `test/excel-compat/` |
 | `currency` | `toBase`, `toBaseCompat`, `missingRates` | `Ingresos!F6:F13` |
 | `normalization` | `timesPerYear` | `Presupuesto!G6:G87` |
 | `incomes` | `computeIncomes`, `socialSecurityPayments`, `baseIncome` | Hoja Ingresos y `Resumen!C11` |
-| `budget` | `computeBudget` | Hoja Presupuesto y `Resumen!C12:C13` |
+| `budget` | `computeBudget`, `automaticRows` | Hoja Presupuesto (con las filas 6 a 12 calculadas) y `Resumen!C12:C13` |
+| `debts` | `debtTotals` (la clasificación y la simulación llegan en F4) | `Deudas!D21`, `F21` |
+| `goals` | `computeGoals`, `tripCost` | `Metas!F6:K11`, `E17:E30` |
+| `insurance` | `computeInsurance` (la suma asegurada de vida llega en F5) | `Seguros!I6:I16`, `H16` |
 
 Todo en modo compatible con la plantilla 2.2.

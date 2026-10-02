@@ -1,0 +1,110 @@
+[
+  {
+    "id": "mismo-dia",
+    "start": "2026-09-28",
+    "end": "2026-09-28",
+    "formula": "=DATEDIF(DATE(2026,9,28),DATE(2026,9,28),\"m\")"
+  },
+  {
+    "id": "un-dia-antes-del-mes",
+    "start": "2026-09-28",
+    "end": "2026-10-27",
+    "formula": "=DATEDIF(DATE(2026,9,28),DATE(2026,10,27),\"m\")"
+  },
+  {
+    "id": "mes-exacto",
+    "start": "2026-09-28",
+    "end": "2026-10-28",
+    "formula": "=DATEDIF(DATE(2026,9,28),DATE(2026,10,28),\"m\")"
+  },
+  {
+    "id": "31-ene-a-28-feb",
+    "start": "2026-01-31",
+    "end": "2026-02-28",
+    "formula": "=DATEDIF(DATE(2026,1,31),DATE(2026,2,28),\"m\")"
+  },
+  {
+    "id": "31-ene-a-1-mar",
+    "start": "2026-01-31",
+    "end": "2026-03-01",
+    "formula": "=DATEDIF(DATE(2026,1,31),DATE(2026,3,1),\"m\")"
+  },
+  {
+    "id": "31-ene-a-31-mar",
+    "start": "2026-01-31",
+    "end": "2026-03-31",
+    "formula": "=DATEDIF(DATE(2026,1,31),DATE(2026,3,31),\"m\")"
+  },
+  {
+    "id": "31-mar-a-30-abr",
+    "start": "2026-03-31",
+    "end": "2026-04-30",
+    "formula": "=DATEDIF(DATE(2026,3,31),DATE(2026,4,30),\"m\")"
+  },
+  {
+    "id": "31-ago-a-30-sep",
+    "start": "2026-08-31",
+    "end": "2026-09-30",
+    "formula": "=DATEDIF(DATE(2026,8,31),DATE(2026,9,30),\"m\")"
+  },
+  {
+    "id": "bisiesto-29-feb-a-28-feb",
+    "start": "2024-02-29",
+    "end": "2025-02-28",
+    "formula": "=DATEDIF(DATE(2024,2,29),DATE(2025,2,28),\"m\")"
+  },
+  {
+    "id": "bisiesto-29-feb-a-1-mar",
+    "start": "2024-02-29",
+    "end": "2025-03-01",
+    "formula": "=DATEDIF(DATE(2024,2,29),DATE(2025,3,1),\"m\")"
+  },
+  {
+    "id": "28-feb-a-29-feb-bisiesto",
+    "start": "2023-02-28",
+    "end": "2024-02-29",
+    "formula": "=DATEDIF(DATE(2023,2,28),DATE(2024,2,29),\"m\")"
+  },
+  {
+    "id": "cambio-de-ano-incompleto",
+    "start": "2026-12-15",
+    "end": "2027-01-14",
+    "formula": "=DATEDIF(DATE(2026,12,15),DATE(2027,1,14),\"m\")"
+  },
+  {
+    "id": "cambio-de-ano-completo",
+    "start": "2026-12-15",
+    "end": "2027-01-15",
+    "formula": "=DATEDIF(DATE(2026,12,15),DATE(2027,1,15),\"m\")"
+  },
+  {
+    "id": "un-ano",
+    "start": "2026-09-28",
+    "end": "2027-09-28",
+    "formula": "=DATEDIF(DATE(2026,9,28),DATE(2027,9,28),\"m\")"
+  },
+  {
+    "id": "varios-anos",
+    "start": "2026-09-28",
+    "end": "2030-12-31",
+    "formula": "=DATEDIF(DATE(2026,9,28),DATE(2030,12,31),\"m\")"
+  },
+  {
+    "id": "fin-a-inicio-de-siglo",
+    "start": "1999-12-31",
+    "end": "2000-02-29",
+    "formula": "=DATEDIF(DATE(1999,12,31),DATE(2000,2,29),\"m\")"
+  },
+  {
+    "id": "fecha-final-anterior",
+    "start": "2026-09-28",
+    "end": "2026-09-27",
+    "formula": "=DATEDIF(DATE(2026,9,28),DATE(2026,9,27),\"m\")"
+  },
+  {
+    "id": "fecha-final-mes-anterior",
+    "start": "2026-09-28",
+    "end": "2026-08-01",
+    "formula": "=DATEDIF(DATE(2026,9,28),DATE(2026,8,1),\"m\")"
+  }
+]

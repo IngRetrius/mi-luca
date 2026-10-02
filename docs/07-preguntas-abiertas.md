@@ -47,6 +47,7 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 | B10 | ¿Qué parámetros de Colombia hay que verificar con fuente oficial antes de F6? | Salario mínimo 2026, reglas de semanas de Colpensiones y fondos privados, salud del pensionado, aportes de independientes. Hoy vienen del protocolo (sección 14) y necesitan fuente primaria | F6 |
 | B11 | ¿Quién puede cambiar la tasa de cambio de una moneda? | El cliente y el asesor (es la tasa que el cliente recibe); el historial registra quién la cambió y el asesor ve el antes y después | F2 |
 | B12 | ¿Una deuda en otra moneda se simula en su moneda o en la moneda base? | En su moneda, y se convierte con la tasa vigente para los totales; la sensibilidad muestra el riesgo cambiario | F4 |
+| B13 | En la calculadora de viaje, ¿cómo sabe el motor qué concepto es el alojamiento? La plantilla cobra los impuestos del alojamiento sobre una fila fija (`Metas!E16`); `goal_cost_items` tiene el tipo `porcentaje_sobre_alojamiento`, pero ningún concepto se marca como alojamiento | Agregar el tipo `alojamiento` a `goal_cost_items.kind` al crear la tabla en F5. **Supuesto** aplicado en el motor: cada concepto lleva `isLodging` (`TripCostItem`) | F5 |
 
 ## C. Cliente y datos
 

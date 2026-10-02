@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, it } from 'vitest';
 
 import { computeBudget } from '../../src/budget';
 import { baseIncome, computeIncomes, socialSecurityPayments } from '../../src/incomes';
@@ -13,25 +13,8 @@ import {
   socialSecurityFlags,
   variableIncomeHistory,
 } from './adapters';
-import { cell, goldenCases, type GoldenCase } from './cases';
-
-// Tolerancia de importes y conteos (04-motor, 7.1).
-const TOLERANCE = 0.01;
-
-/** El motor devuelve null donde Excel deja la celda vacía (""); lo demás son números. */
-function expectCell(golden: GoldenCase, ref: string, actual: number | null): void {
-  const expected = cell(golden, ref);
-  if (expected === '' || expected === undefined || expected === null) {
-    expect(actual, ref).toBeNull();
-    return;
-  }
-  if (typeof expected !== 'number') throw new Error(`${ref} no es numérica: ${String(expected)}`);
-  expect(actual, ref).not.toBeNull();
-  expect(
-    Math.abs((actual ?? 0) - expected),
-    `${ref}: motor ${actual}, Excel ${expected}`,
-  ).toBeLessThanOrEqual(TOLERANCE);
-}
+import { goldenCases } from './cases';
+import { expectCell } from './expect-cell';
 
 describe.each(goldenCases)('caso de oro $case: Ingresos', (golden) => {
   const result = computeIncomes(incomesInput(golden), fxContext(golden));

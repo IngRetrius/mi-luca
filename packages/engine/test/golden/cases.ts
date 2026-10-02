@@ -12,6 +12,9 @@ import c2Inputs from './c2-espana/inputs.json' with { type: 'json' };
 import c3Case from './c3-plantilla-vacia/case.json' with { type: 'json' };
 import c3Expected from './c3-plantilla-vacia/expected.json' with { type: 'json' };
 import c3Inputs from './c3-plantilla-vacia/inputs.json' with { type: 'json' };
+import c7Case from './c7-metas-seguros/case.json' with { type: 'json' };
+import c7Expected from './c7-metas-seguros/expected.json' with { type: 'json' };
+import c7Inputs from './c7-metas-seguros/inputs.json' with { type: 'json' };
 
 export type CellValue = string | number | boolean | null;
 export type Sheets = Readonly<Record<string, Readonly<Record<string, CellValue>>>>;
@@ -31,6 +34,7 @@ export const goldenCases: readonly GoldenCase[] = [
   { ...c1Case, inputs: c1Inputs as Sheets, expected: c1Expected as Sheets },
   { ...c2Case, inputs: c2Inputs as Sheets, expected: c2Expected as Sheets },
   { ...c3Case, inputs: c3Inputs as Sheets, expected: c3Expected as Sheets },
+  { ...c7Case, inputs: c7Inputs as Sheets, expected: c7Expected as Sheets },
 ];
 
 /** Valor de una celda del caso: primero en las entradas y luego en las fórmulas. Vacía es undefined. */

@@ -6,22 +6,24 @@ Cada caso vive en su carpeta, generada con `tools/excel-extractor/` (`recalc.py`
 - `inputs.json`: celdas de entrada (crema o ámbar) con valor, más las entradas del perfil de la plantilla (por ejemplo, la moneda base en `Listas!M2`), por hoja y celda.
 - `expected.json`: todas las celdas con fórmula y el valor que calculó Excel, por hoja y celda.
 
-Los valores quedan a nivel de celda. `adapters.ts` traduce las celdas a las entradas del motor: etiquetas de la plantilla a códigos del modelo (una etiqueta desconocida es un error) y los valores fijos de las filas automáticas del presupuesto (6 a 12), que no están en los casos por no ser fórmulas ni entradas.
+Los valores quedan a nivel de celda. `adapters.ts` traduce las celdas a las entradas del motor: etiquetas de la plantilla a códigos del modelo (una etiqueta desconocida es un error). Las filas automáticas del presupuesto (6 a 12) no se leen de la plantilla: se calculan con los módulos de deudas, seguros y metas, en el orden de la hoja (una fila por cada fila de Metas, con 0 si la meta no tiene nombre).
 
 | Prueba | Qué compara con Excel |
 |---|---|
 | `golden.test.ts` | Conteos de cada caso y conversión a moneda base de `Ingresos!F6:F13` |
 | `incomes-budget.test.ts` | Ingresos (F:U de las filas 6 a 13, fila 14, `T20:U25`, `S17`, `E30:E32`), Presupuesto (G:I de las filas 6 a 87 y los totales de las filas 89 a 97) y `Resumen!C11:C13` |
-
-Las filas automáticas del presupuesto toman por ahora su valor de la plantilla; cuando existan Deudas, Seguros y Metas en el motor, se calcularán.
+| `goals-insurance-debts.test.ts` | Metas (F, J y K de las filas 6 a 10, `K11` y la calculadora `E17:E30`), Seguros (`I6:I16`, `H16`), Deudas (`D21`, `F21`) y el valor de las filas automáticas `Presupuesto!D6:D12` |
 
 | Caso | Contenido | Estado |
 |---|---|---|
 | `c3-plantilla-vacia` | Plantilla oficial sin datos, fecha de corte 28/09/2026 | Listo |
 | `c2-espana` | Caso real de España anonimizado (nombre, fecha de nacimiento con la misma edad, entidad, ocupación, salud y terceros), corte 28/09/2026 | Listo, revisado por el asesor el 28/09/2026 |
+| `c7-metas-seguros` | Sintético sobre la plantilla oficial, corte 28/09/2026: los cambios están en `cambios.json` (metas con fecha, vencida, ya cubierta y repetida; calculadora de viaje con tasa de 4.000; seguros nuevos, cotizando, sin responder y que ya tiene; dos deudas). Sin ingresos ni partidas del cliente | Listo |
 | `c1-colombia` | Caso real de Colombia (contratista con arriendos, sin deudas) llevado a la plantilla oficial y anonimizado (nombre, día de nacimiento, entidades, inmuebles, familiares, mascota, destino del viaje y conceptos de salud), corte 28/09/2026 | Construido el 28/09/2026; pendiente de revisión del asesor (pregunta A11) |
 
 Criterio de aceptación: diferencia absoluta máxima de 0,01 en importes; tolerancias de porcentajes, fechas y textos en `docs/04-motor-de-calculo.md`.
+
+Para regenerar C7: `recalc.py` con `--edits packages/engine/test/golden/c7-metas-seguros/cambios.json` y luego `golden.py` (sin `--forbid`: no tiene datos de clientes).
 
 Solo se admiten casos anonimizados. Los libros originales de clientes quedan en `referencia/casos/`, fuera de git. Para agregar un caso: genera la carpeta y regístrala en `cases.ts`.
 

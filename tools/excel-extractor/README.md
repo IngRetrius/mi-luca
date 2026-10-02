@@ -8,6 +8,7 @@ Herramientas para leer las plantillas de Excel y generar los casos de prueba de 
 | `inventory.py` | Inventario compacto de fórmulas por hoja (el de `docs/anexos/inventario-formulas/`) |
 | `recalc.py` | Aplica cambios a una copia del libro, fija la fecha de corte y la recalcula en Microsoft Excel para macOS |
 | `golden.py` | Extrae de un libro recalculado las entradas y los valores esperados de un caso de oro |
+| `compat.py` | Evalúa fórmulas sueltas en Excel para las pruebas de `packages/engine/test/excel-compat/` |
 
 ## Casos de prueba de oro
 
