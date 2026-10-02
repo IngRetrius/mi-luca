@@ -1,4 +1,4 @@
-import type { IsoDate, Money, MonthFlags } from '@miluca/domain';
+import type { IncomeScenario, IsoDate, Money, MonthFlags } from '@miluca/domain';
 
 import { automaticRows, computeBudget, type BudgetItemInput, type BudgetResult } from './budget';
 import {
@@ -25,6 +25,7 @@ import {
   type ExpensiveDebt,
 } from './debts';
 import {
+  DEFAULT_LOSS_BY_KIND,
   emergencyFund,
   emergencyProgress,
   type EmergencyFund,
@@ -240,16 +241,23 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
   });
 
   const liquid = liquidAssets(input.assets, fx);
-  const monthlyIncomeByKind = {
-    laboral: incomes.annualByKind.laboral / 12,
-    renta: incomes.annualByKind.renta / 12,
-    pension: incomes.annualByKind.pension / 12,
-    otro: incomes.annualByKind.otro / 12 + (implied?.monthly ?? 0),
-  };
+  // Ingresos de los escenarios del fondo: la regla de la plantilla por tipo y, en modo nativo, la
+  // marca de cada ingreso (H-07). Lo que pagan terceros es un ingreso "otro" (ADR 0010).
+  const lossAnnual = new Map<IncomeScenario, number>();
+  input.incomes.forEach((income, index) => {
+    if (income.kind === null) return; // sin tipo no entra a los escenarios, como en la plantilla
+    const lost = (native ? income.lostInScenario : null) ?? DEFAULT_LOSS_BY_KIND[income.kind];
+    lossAnnual.set(lost, (lossAnnual.get(lost) ?? 0) + (incomes.rows[index]?.annual ?? 0));
+  });
+  const incomeLosses = [...lossAnnual].map(([lostIn, annual]) => ({
+    lostIn,
+    monthly: annual / 12,
+  }));
+  if (implied) incomeLosses.push({ lostIn: 'c', monthly: implied.monthly });
   const fund = emergencyFund({
     totalMonthlyExpenses: budget.expensesWithoutSavings.monthly,
     essentialMonthly: budget.essential.monthly,
-    monthlyIncomeByKind,
+    incomes: incomeLosses,
     months: parameters.emergencyMonths,
     hasExpensiveDebt: expensive.exists,
   });
@@ -278,6 +286,7 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
         fund.currentGoal,
         pockets.emergency.balance,
         flowYear,
+        input.cutoffDate,
       )
     : null;
   const destination = surplusDestination({

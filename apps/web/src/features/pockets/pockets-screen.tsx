@@ -10,8 +10,10 @@ import { Screen, ScreenActions } from '@/components/screen';
 import { StatusLabel } from '@/components/status';
 import { focusRing, linkButton, primaryButton } from '@/components/ui-classes';
 import { loadComputedCase } from '@/features/summary';
+import { withAddress } from '@/lib/address';
+import type { CaseEditor } from '@/server/case-access';
 
-import { pocketPaths } from './paths';
+import { pocketPaths, type SpecialPocketKind } from './paths';
 
 const t = messages.es;
 const text = t.pockets;
@@ -21,15 +23,25 @@ const text = t.pockets;
  * reparto del saldo líquido de hoy (RN-070 a RN-074). Los saldos del fondo y de meses sin ingreso
  * los sugiere el motor; los de los generales los escribe el asesor o el cliente.
  */
-export async function PocketsScreen({ clientId }: { clientId: string }) {
-  const back = `/clientes/${clientId}`;
+export async function PocketsScreen({
+  viewer,
+  clientId,
+}: {
+  viewer: CaseEditor;
+  clientId: string;
+}) {
+  const paths = pocketPaths(viewer.role, clientId);
+  const local =
+    viewer.role === 'advisor'
+      ? { back: text.back, intro: text.intro }
+      : withAddress(text.client, viewer.formOfAddress);
   const computed = await loadComputedCase(clientId);
   const header = (
     <>
-      <BackLink href={back} label={text.back} />
+      <BackLink href={paths.back} label={local.back} />
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold text-balance">{text.title}</h1>
-        <p className="text-text-muted">{text.intro}</p>
+        <p className="text-text-muted">{local.intro}</p>
       </div>
     </>
   );
@@ -40,7 +52,7 @@ export async function PocketsScreen({ clientId }: { clientId: string }) {
         <LoadError
           message={t.common.loadError}
           retryLabel={t.common.retry}
-          retryHref={`${back}/bolsillos`}
+          retryHref={paths.list}
         />
       </Screen>
     );
@@ -50,33 +62,40 @@ export async function PocketsScreen({ clientId }: { clientId: string }) {
   const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
   const money = (amount: number) => formatMoney(amount, client.base_currency, locale);
   const { pockets } = computed.result;
-  const paths = pocketPaths(clientId);
   const general = computed.rows.pockets.filter((pocket) => pocket.kind === 'general');
   const bankName = new Map(computed.rows.banks.map((bank) => [bank.id, bank.name]));
+  const bankDetail = (bankId: string | null | undefined) => {
+    const bank = bankId ? bankName.get(bankId) : undefined;
+    return bank ? text.bankOf.replace('{bank}', bank) : text.noBank;
+  };
+  // El fondo y meses sin ingreso: meta y saldo del motor; el banco lo elige quien edita.
+  const special = (kind: SpecialPocketKind, name: string, row: PocketRow) => ({
+    key: kind,
+    name,
+    row,
+    href: paths.special(kind),
+    suggested: true,
+    detail: bankDetail(computed.rows.pockets.find((pocket) => pocket.kind === kind)?.bank_id),
+  });
   const rows: {
     key: string;
     name: string;
     row: PocketRow;
     href: string | null;
+    suggested: boolean;
     detail: string | null;
   }[] = [
-    { key: 'emergencia', name: text.emergency, row: pockets.emergency, href: null, detail: null },
-    {
-      key: 'meses_sin_ingreso',
-      name: text.noIncome,
-      row: pockets.noIncome,
-      href: null,
-      detail: null,
-    },
+    special('emergencia', text.emergency, pockets.emergency),
+    special('meses_sin_ingreso', text.noIncome, pockets.noIncome),
     ...pockets.general.map((row, index) => {
       const pocket = general[index];
-      const bank = pocket?.bank_id ? bankName.get(pocket.bank_id) : undefined;
       return {
         key: pocket?.id ?? String(index),
         name: pocket?.name ?? text.unnamed,
         row,
         href: pocket ? paths.item(pocket.id) : null,
-        detail: bank ? text.bankOf.replace('{bank}', bank) : text.noBank,
+        suggested: false,
+        detail: bankDetail(pocket?.bank_id),
       };
     }),
   ];
@@ -93,7 +112,7 @@ export async function PocketsScreen({ clientId }: { clientId: string }) {
           {text.title}
         </h2>
         <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
-          {rows.map(({ key, name, row, href, detail }) => (
+          {rows.map(({ key, name, row, href, suggested, detail }) => (
             <li key={key} className="flex flex-col gap-2 p-4">
               <div className="flex flex-wrap items-baseline justify-between gap-x-3">
                 <h3 className="font-medium wrap-anywhere">{name}</h3>
@@ -113,7 +132,7 @@ export async function PocketsScreen({ clientId }: { clientId: string }) {
                   { label: text.annualGoal, value: money(row.annualGoal) },
                   { label: text.monthly, value: money(row.monthlyContribution) },
                   {
-                    label: href ? text.balance : `${text.balance} (${text.suggested})`,
+                    label: suggested ? `${text.balance} (${text.suggested})` : text.balance,
                     value: money(row.balance),
                   },
                 ]}

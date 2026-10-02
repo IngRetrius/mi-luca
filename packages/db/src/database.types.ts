@@ -228,6 +228,7 @@ export type Database = {
           expense_type: string | null;
           frequency: string | null;
           id: string;
+          is_health: boolean;
           is_proposed: boolean;
           is_temporary: boolean;
           note: string | null;
@@ -251,6 +252,7 @@ export type Database = {
           expense_type?: string | null;
           frequency?: string | null;
           id?: string;
+          is_health?: boolean;
           is_proposed?: boolean;
           is_temporary?: boolean;
           note?: string | null;
@@ -274,6 +276,7 @@ export type Database = {
           expense_type?: string | null;
           frequency?: string | null;
           id?: string;
+          is_health?: boolean;
           is_proposed?: boolean;
           is_temporary?: boolean;
           note?: string | null;

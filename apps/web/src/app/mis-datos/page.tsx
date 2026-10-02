@@ -15,8 +15,8 @@ const t = messages.es;
 export const metadata: Metadata = { title: 'Mis datos | MiLuca' };
 
 /**
- * P-C06 Mis datos: los módulos que el cliente puede editar, con su total. Los demás módulos se
- * suman a la lista cuando existan.
+ * P-C06 Mis datos: los módulos que el cliente puede editar, con su total. Después de la asesoría
+ * el cliente mantiene sus datos y el plan se recalcula; los demás módulos se suman cuando existan.
  */
 export default async function MyDataPage() {
   const viewer = await requireClient('/mis-datos');
@@ -61,9 +61,33 @@ export default async function MyDataPage() {
           .replace('{count}', String(budgetItems.length))
           .replace('{amount}', formatMoney(monthly, client.base_currency, locale));
 
+  const { result } = computed;
   const modules = [
     { href: '/mis-datos/ingresos', title: text.incomes, summary: incomes },
     { href: '/mis-datos/gastos', title: text.expenses, summary: expenses },
+    {
+      href: '/mis-datos/bolsillos',
+      title: text.pockets,
+      summary: text.pocketsSummary.replace('{count}', String(result.pockets.withContribution)),
+    },
+    {
+      href: '/mis-datos/patrimonio',
+      title: text.assets,
+      summary: text.assetsSummary.replace('{amount}', money(result.liquidAssets)),
+    },
+    {
+      href: '/mis-datos/cobros',
+      title: text.receivables,
+      summary:
+        computed.rows.receivables.length === 0
+          ? text.receivablesNone
+          : text.receivablesSummary.replace('{amount}', money(result.receivables.totalPending)),
+    },
+    {
+      href: '/mis-datos/prueba-de-realidad',
+      title: text.realityCheck,
+      summary: t.realityCheck.status[result.realityCheck.status],
+    },
     { href: '/mis-datos/monedas', title: text.currencies, summary: currencies },
   ];
 

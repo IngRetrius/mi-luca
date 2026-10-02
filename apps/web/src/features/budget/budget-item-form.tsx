@@ -387,6 +387,12 @@ export function BudgetItemForm({
           defaultChecked={values.isTemporary}
         />
         <Checkbox
+          name="isHealth"
+          label={text.form.health}
+          hint={text.form.healthHint}
+          defaultChecked={values.isHealth}
+        />
+        <Checkbox
           name="familyReference"
           label={text.form.familyReference}
           hint={text.form.familyReferenceHint}

@@ -8,12 +8,15 @@ import { Screen, ScreenActions } from '@/components/screen';
 import { StatusLabel } from '@/components/status';
 import { focusRing, linkButton, primaryButton } from '@/components/ui-classes';
 import { loadCaseRows } from '@/features/summary';
+import { withAddress } from '@/lib/address';
 import { amountToText } from '@/lib/amount';
+import type { CaseEditor } from '@/server/case-access';
 
-import { deleteBank, deletePocket, saveBank, savePocket } from './actions';
+import { deleteBank, deletePocket, saveBank, savePocket, saveSpecialPocket } from './actions';
 import { BankForm } from './bank-form';
-import { pocketPaths } from './paths';
+import { pocketPaths, type SpecialPocketKind } from './paths';
 import { PocketForm } from './pocket-form';
+import { SpecialPocketForm } from './special-pocket-form';
 
 const t = messages.es;
 
@@ -25,14 +28,22 @@ function loadError(retryHref: string) {
 
 /** Crear (`pocketId` null) o editar un bolsillo general. */
 export async function PocketFormScreen({
+  viewer,
   clientId,
   pocketId,
 }: {
+  viewer: CaseEditor;
   clientId: string;
   pocketId: string | null;
 }) {
-  const text = t.pockets.form;
-  const paths = pocketPaths(clientId);
+  const text =
+    viewer.role === 'advisor'
+      ? t.pockets.form
+      : {
+          ...t.pockets.form,
+          balanceHint: withAddress(t.pockets.client.balanceHint, viewer.formOfAddress),
+        };
+  const paths = pocketPaths(viewer.role, clientId);
   const title = pocketId ? text.editTitle : text.newTitle;
   const rows = await loadCaseRows(clientId);
   if (!rows) {
@@ -75,9 +86,9 @@ export async function PocketFormScreen({
 }
 
 /** Bancos del cliente con cuántos bolsillos tiene cada uno frente a su límite (RN-073). */
-export async function BanksScreen({ clientId }: { clientId: string }) {
+export async function BanksScreen({ viewer, clientId }: { viewer: CaseEditor; clientId: string }) {
   const text = t.banks;
-  const paths = pocketPaths(clientId);
+  const paths = pocketPaths(viewer.role, clientId);
   const rows = await loadCaseRows(clientId);
   const header = (
     <>
@@ -153,14 +164,16 @@ export async function BanksScreen({ clientId }: { clientId: string }) {
 
 /** Crear (`bankId` null) o editar un banco. */
 export async function BankFormScreen({
+  viewer,
   clientId,
   bankId,
 }: {
+  viewer: CaseEditor;
   clientId: string;
   bankId: string | null;
 }) {
   const text = t.banks.form;
-  const paths = pocketPaths(clientId);
+  const paths = pocketPaths(viewer.role, clientId);
   const title = bankId ? text.editTitle : text.newTitle;
   const rows = bankId ? await loadCaseRows(clientId) : null;
   if (bankId && !rows) {
@@ -189,6 +202,61 @@ export async function BankFormScreen({
         action={saveBank.bind(null, clientId, bankId)}
         deleteAction={bankId ? deleteBank.bind(null, clientId, bankId) : null}
         cancelHref={paths.banks}
+      />
+    </Screen>
+  );
+}
+
+/** El banco del bolsillo del fondo de emergencia o de meses sin ingreso. */
+export async function SpecialPocketScreen({
+  viewer,
+  clientId,
+  kind,
+}: {
+  viewer: CaseEditor;
+  clientId: string;
+  kind: SpecialPocketKind;
+}) {
+  const paths = pocketPaths(viewer.role, clientId);
+  const name = kind === 'emergencia' ? t.pockets.emergency : t.pockets.noIncome;
+  const title = t.pockets.special.title.replace('{name}', name);
+  const rows = await loadCaseRows(clientId);
+  if (!rows) {
+    return (
+      <Screen>
+        <h1 className="text-2xl font-semibold text-balance">{title}</h1>
+        {loadError(paths.special(kind))}
+      </Screen>
+    );
+  }
+  const pocket = rows.pockets.find((row) => row.kind === kind);
+  const form = t.pockets.form;
+  return (
+    <Screen>
+      <BackLink href={paths.list} label={t.pockets.title} />
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-semibold text-balance">{title}</h1>
+        <p className="text-text-muted">{t.pockets.special.intro}</p>
+      </div>
+      <SpecialPocketForm
+        text={{
+          bank: form.bank,
+          bankHint: form.bankHint,
+          noBank: form.noBank,
+          submit: form.submit,
+          submitting: form.submitting,
+          cancel: form.cancel,
+          errors: {
+            invalidBank: form.errors.invalidBank,
+            nameTaken: t.pockets.special.nameTaken,
+            notAllowed: form.errors.notAllowed,
+            unavailable: form.errors.unavailable,
+          },
+        }}
+        initialBank={pocket?.bank_id ?? ''}
+        banks={rows.banks.map((bank) => ({ id: bank.id, name: bank.name }))}
+        action={saveSpecialPocket.bind(null, clientId, kind)}
+        cancelHref={paths.list}
       />
     </Screen>
   );

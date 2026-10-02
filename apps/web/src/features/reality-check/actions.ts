@@ -8,6 +8,7 @@ import { withImpact } from '@/features/summary';
 import { createClient } from '@/lib/supabase/server';
 import { requireCaseEditor } from '@/server/case-access';
 
+import { realityCheckPath } from './paths';
 import { parseRealityCheck, type RealityErrors, type RealityValues } from './validation';
 
 export interface RealityState {
@@ -25,8 +26,8 @@ export async function saveRealityCheck(
   _previous: RealityState | null,
   formData: FormData,
 ): Promise<RealityState> {
-  await requireCaseEditor(clientId, '/');
-  const path = `/clientes/${clientId}/prueba-de-realidad`;
+  const viewer = await requireCaseEditor(clientId, '/');
+  const path = realityCheckPath(viewer.role, clientId);
   const currencies = await allowedCurrencies(clientId);
   const parsed = parseRealityCheck(formData, { currencies: currencies ?? [] });
   if (!currencies) return { values: parsed.values, errors: {}, formError: 'unavailable' };

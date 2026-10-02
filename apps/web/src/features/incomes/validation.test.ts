@@ -36,6 +36,7 @@ describe('parseIncome', () => {
       is_net: true,
       payments_by_month: [1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1],
       allocation: 'general',
+      lost_in_scenario: null,
       note: null,
     });
   });
@@ -69,6 +70,22 @@ describe('parseIncome', () => {
       options,
     );
     expect(parsed.ok && parsed.record.allocation).toBe('ahorro_total');
+  });
+
+  it('el escenario en que se pierde es del catálogo; vacío es según el tipo (H-07)', () => {
+    const base = {
+      name: 'Aporte',
+      kind: 'otro',
+      currency: 'USD',
+      amount: '400',
+      ...months(twelve),
+    };
+    const stable = parseIncome(form({ ...base, lostIn: 'ninguno' }), options);
+    expect(stable.ok && stable.record.lost_in_scenario).toBe('ninguno');
+    const byKind = parseIncome(form({ ...base, lostIn: '' }), options);
+    expect(byKind.ok && byKind.record.lost_in_scenario).toBeNull();
+    const unknown = parseIncome(form({ ...base, lostIn: 'z' }), options);
+    expect(unknown.ok && unknown.record.lost_in_scenario).toBeNull();
   });
 });
 

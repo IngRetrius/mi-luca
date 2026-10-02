@@ -13,6 +13,6 @@ export default async function AdvisorBanksPage({
   const { id } = await params;
   const path = `/clientes/${id}/bolsillos/bancos`;
   await requireAdvisor(path);
-  await requireCaseEditor(id, path);
-  return <BanksScreen clientId={id} />;
+  const viewer = await requireCaseEditor(id, path);
+  return <BanksScreen viewer={viewer} clientId={id} />;
 }

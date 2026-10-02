@@ -13,6 +13,6 @@ export default async function AdvisorAssetsPage({
   const { id } = await params;
   const path = `/clientes/${id}/patrimonio`;
   await requireAdvisor(path);
-  await requireCaseEditor(id, path);
-  return <AssetsScreen clientId={id} />;
+  const viewer = await requireCaseEditor(id, path);
+  return <AssetsScreen viewer={viewer} clientId={id} />;
 }

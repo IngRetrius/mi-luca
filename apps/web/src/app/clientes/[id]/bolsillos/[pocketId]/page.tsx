@@ -13,6 +13,6 @@ export default async function AdvisorPocketPage({
   const { id, pocketId } = await params;
   const path = `/clientes/${id}/bolsillos/${pocketId}`;
   await requireAdvisor(path);
-  await requireCaseEditor(id, path);
-  return <PocketFormScreen clientId={id} pocketId={pocketId} />;
+  const viewer = await requireCaseEditor(id, path);
+  return <PocketFormScreen viewer={viewer} clientId={id} pocketId={pocketId} />;
 }

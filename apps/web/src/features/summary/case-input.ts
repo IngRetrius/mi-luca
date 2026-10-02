@@ -4,6 +4,7 @@ import {
   expenseTypeSchema,
   frequencySchema,
   incomeKindSchema,
+  incomeScenarioSchema,
   payerSchema,
   type IsoDate,
   type MonthFlags,
@@ -57,7 +58,7 @@ export interface CaseRows {
   readonly fxRates: readonly Pick<Row<'client_fx_rates'>, 'currency' | 'rate_to_base'>[];
   readonly incomes: readonly Pick<
     Row<'incomes'>,
-    'kind' | 'currency' | 'amount' | 'payments_by_month'
+    'kind' | 'currency' | 'amount' | 'payments_by_month' | 'lost_in_scenario'
   >[];
   readonly socialSecurity: Pick<Row<'social_security_months'>, 'payments_by_month'> | null;
   readonly budgetItems: readonly Pick<
@@ -165,6 +166,8 @@ export function toIncomeInput(income: CaseRows['incomes'][number]): IncomeInput 
     kind: incomeKindSchema.parse(income.kind),
     monthlyAmount: { amount: income.amount, currency: income.currency },
     paymentsByMonth: monthFlags(income.payments_by_month),
+    lostInScenario:
+      income.lost_in_scenario === null ? null : incomeScenarioSchema.parse(income.lost_in_scenario),
   };
 }
 

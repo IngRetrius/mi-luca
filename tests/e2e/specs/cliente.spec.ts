@@ -22,6 +22,18 @@ for (const path of [
   '/mis-datos/monedas/nueva',
   '/mis-datos/monedas/USD',
   '/mi-plan',
+  '/mis-datos/bolsillos',
+  '/mis-datos/bolsillos/nuevo',
+  '/mis-datos/bolsillos/00000000-0000-4000-8000-000000000001',
+  '/mis-datos/bolsillos/fondo',
+  '/mis-datos/bolsillos/meses-sin-ingreso',
+  '/mis-datos/bolsillos/bancos',
+  '/mis-datos/bolsillos/bancos/nuevo',
+  '/mis-datos/cobros',
+  '/mis-datos/cobros/nuevo',
+  '/mis-datos/patrimonio',
+  '/mis-datos/patrimonio/nuevo',
+  '/mis-datos/prueba-de-realidad',
 ]) {
   test(`${path} sin sesión lleva a Entrar con la ruta de retorno`, async ({ page }) => {
     await page.goto(path);

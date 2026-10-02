@@ -1,4 +1,4 @@
-import type { IncomeKind } from '@miluca/domain';
+import type { IncomeKind, IncomeScenario } from '@miluca/domain';
 
 /** Escenarios del fondo de emergencia (RN-080): qué ingreso se pierde. */
 export type EmergencyScenarioId = 'a' | 'b' | 'c';
@@ -15,13 +15,46 @@ export interface EmergencyScenario {
   readonly monthsCovered: number | null;
 }
 
+/** Un ingreso mensual y el escenario en que se pierde (`ninguno`: se mantiene siempre). */
+export interface IncomeLoss {
+  readonly monthly: number;
+  readonly lostIn: IncomeScenario;
+}
+
+/** La regla de la plantilla por tipo de ingreso (H-07): laboral en A, rentas en B, otros solo en C. */
+export const DEFAULT_LOSS_BY_KIND: Readonly<Record<IncomeKind, IncomeScenario>> = {
+  laboral: 'a',
+  renta: 'b',
+  otro: 'c',
+  pension: 'ninguno',
+};
+
+/** Los ingresos por tipo con la regla de la plantilla. @excel Fondo emergencia!C14:C16 */
+export function incomeLossesByKind(
+  monthlyByKind: Readonly<Record<IncomeKind, number>>,
+): IncomeLoss[] {
+  return (Object.keys(DEFAULT_LOSS_BY_KIND) as IncomeKind[]).map((kind) => ({
+    monthly: monthlyByKind[kind],
+    lostIn: DEFAULT_LOSS_BY_KIND[kind],
+  }));
+}
+
+/** ¿Se pierde este ingreso en el escenario? En C (peor caso) se pierde todo lo que no es `ninguno`. */
+function lostIn(scenario: EmergencyScenarioId, loss: IncomeScenario): boolean {
+  if (loss === 'ninguno') return false;
+  return scenario === 'c' || loss === scenario;
+}
+
 export interface EmergencyFundInput {
   /** @excel Presupuesto!I89 */
   readonly totalMonthlyExpenses: number;
   /** @excel Presupuesto!I95 */
   readonly essentialMonthly: number;
-  /** Ingreso mensual promedio por tipo. @excel Ingresos!U20:U23 */
-  readonly monthlyIncomeByKind: Readonly<Record<IncomeKind, number>>;
+  /**
+   * Ingresos mensuales promedio con el escenario en que se pierde cada uno. Con la regla de la
+   * plantilla (`incomeLossesByKind`) son los de `Ingresos!U20:U23`.
+   */
+  readonly incomes: readonly IncomeLoss[];
   /** Meses de fondo efectivos del caso. @excel Supuestos!C21 */
   readonly months: number;
   /** @excel Deudas!C23 */
@@ -53,14 +86,18 @@ export interface EmergencyFund {
  * un mes de lo esencial.
  */
 export function emergencyFund(input: EmergencyFundInput): EmergencyFund {
-  const { laboral, renta, pension, otro } = input.monthlyIncomeByKind;
   const essential = input.essentialMonthly;
   const shortfall = (kept: number) => Math.max(0, essential - kept);
 
+  const kept = (scenario: EmergencyScenarioId) =>
+    input.incomes.reduce(
+      (sum, income) => (lostIn(scenario, income.lostIn) ? sum : sum + income.monthly),
+      0,
+    );
   const keptIncome: Record<EmergencyScenarioId, number> = {
-    a: renta + pension + otro,
-    b: laboral + pension + otro,
-    c: pension,
+    a: kept('a'),
+    b: kept('b'),
+    c: kept('c'),
   };
   const worstCaseGoal = input.months * shortfall(keptIncome.c);
   const minimumGoal = essential;

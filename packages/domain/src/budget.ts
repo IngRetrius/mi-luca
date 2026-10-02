@@ -28,6 +28,14 @@ export type ExpenseType = z.infer<typeof expenseTypeSchema>;
 export const incomeKindSchema = z.enum(['laboral', 'renta', 'pension', 'otro']);
 export type IncomeKind = z.infer<typeof incomeKindSchema>;
 
+/**
+ * En qué escenario del fondo de emergencia se pierde un ingreso (`incomes.lost_in_scenario`,
+ * H-07): `a` si pierde el ingreso laboral, `b` si pierde las rentas, `c` solo en el peor caso y
+ * `ninguno` si se mantiene siempre. Sin marca vale la regla de la plantilla según el tipo.
+ */
+export const incomeScenarioSchema = z.enum(['a', 'b', 'c', 'ninguno']);
+export type IncomeScenario = z.infer<typeof incomeScenarioSchema>;
+
 /** Quién paga una partida (`budget_items.payer`, RN-015). */
 export const payerSchema = z.enum(['cliente', 'familia', 'tercero']);
 export type Payer = z.infer<typeof payerSchema>;

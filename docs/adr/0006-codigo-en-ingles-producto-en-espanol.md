@@ -1,6 +1,6 @@
 # 0006. Código en inglés, producto y documentación en español
 
-- Estado: Propuesta (pendiente de la pregunta E1)
+- Estado: Aceptada el 02/10/2026 (el asesor delegó la decisión; implementada y en uso)
 - Fecha: 2026-09-28
 
 ## Contexto

@@ -69,3 +69,27 @@ describe('cifras clave y antes y después', () => {
     expect(deltas.every((delta) => delta.before === null)).toBe(true);
   });
 });
+
+describe('escenarios del fondo por ingreso (H-07)', () => {
+  const c1 = goldenCases.find((golden) => golden.case === 'c1-colombia')!;
+  const input = caseInput(c1);
+  // En C1 las rentas (arriendos) se marcan como estables: no se pierden en ningún escenario.
+  const marked = {
+    ...input,
+    incomes: input.incomes.map((income) =>
+      income.kind === 'renta' ? { ...income, lostInScenario: 'ninguno' as const } : income,
+    ),
+  };
+
+  it('en modo compatible la marca no cuenta: el fondo es el de la plantilla', () => {
+    const result = compute(marked, { mode: 'compatible' });
+    expect(result.emergencyFund).toEqual(compute(input, { mode: 'compatible' }).emergencyFund);
+  });
+
+  it('en modo nativo las rentas estables cubren lo esencial y bajan la meta', () => {
+    const before = compute(input, { mode: 'native' }).emergencyFund;
+    const after = compute(marked, { mode: 'native' }).emergencyFund;
+    expect(after.scenarios.c.keptIncome).toBeGreaterThan(before.scenarios.c.keptIncome);
+    expect(after.fullGoal).toBeLessThan(before.fullGoal);
+  });
+});

@@ -85,7 +85,7 @@ El plan Hobby es solo para uso personal no comercial: antes de que un cliente re
 | `/clientes/[id]/supuestos` | Supuestos del plan (criterio del asesor): meses de fondo, umbral de deuda cara, porcentajes del sobrante y del excedente y colchón de la cuenta operativa. Vacío usa la metodología, que cada campo muestra |
 | `/clientes/[id]/flujo` | P-A10, Flujo: el año del flujo mes a mes, meses sin ingreso (faltante, método, aporte, alerta de déficit), destino del sobrante (en modo nativo, primero el fondo) y abonos de cobros. Solo lectura |
 | `/clientes/[id]/fondo` | P-A10, Fondo: meta vigente y completa, avance con semáforo, escenarios A, B y C y comparación con la regla de 6 meses. Solo lectura |
-| `/clientes/[id]/bolsillos` | P-A10, Bolsillos: meta, aporte y saldo de cada bolsillo y reparto del saldo líquido de hoy. Alta y edición de bolsillos generales en `/nuevo` y `/[pocketId]`; bancos en `/bancos` (cuántos bolsillos tiene cada uno frente a su límite), `/bancos/nuevo` y `/bancos/[bankId]`. Un nombre o nota con 8 cifras seguidas se rechaza: parece un número de cuenta |
+| `/clientes/[id]/bolsillos` | P-A10, Bolsillos: meta, aporte y saldo de cada bolsillo y reparto del saldo líquido de hoy. Alta y edición de bolsillos generales en `/nuevo` y `/[pocketId]`; banco del fondo y de meses sin ingreso en `/fondo` y `/meses-sin-ingreso`; bancos en `/bancos` (cuántos bolsillos tiene cada uno frente a su límite), `/bancos/nuevo` y `/bancos/[bankId]`. Un nombre o nota con 8 cifras seguidas se rechaza: parece un número de cuenta |
 | `/clientes/[id]/cobros` | P-A10, Cobros: cuentas por cobrar con cuotas, último pago y saldo pendiente en la fecha de corte; alta y edición en `/nuevo` y `/[receivableId]` con el % a inversión |
 | `/clientes/[id]/patrimonio` | Activos y saldo líquido (lo que se reparte en bolsillos); alta y edición en `/nuevo` y `/[assetId]` |
 | `/clientes/[id]/prueba-de-realidad` | P-A08: los tres datos, el resultado con semáforo y el % del sobrante que va a inversión |
@@ -99,11 +99,13 @@ Los avisos de `/clientes` incluyen los cambios del cliente (`cambio_del_cliente`
 | Ruta | Qué hace |
 |---|---|
 | `/mi-plan` | P-C05: el plan entregado más reciente (o el de `?version=`) por secciones, con "Comparar con hoy" y la lista de versiones. Sin PDF todavía |
-| `/mis-datos` | P-C06: los módulos que el cliente edita, con su total: ingresos, gastos y monedas. Se llega desde el inicio |
+| `/mis-datos` | P-C06: los módulos que el cliente edita, con su total: ingresos, gastos, bancos y bolsillos, lo que tiene, lo que le deben, prueba de realidad y monedas. Se llega desde el inicio |
 | `/mis-datos/ingresos` | Sus ingresos, con las mismas pantallas del asesor en su trato (alta, edición con vista previa, meses con seguridad social e ingreso base) |
 | `/mis-datos/monedas` | Las tasas que recibe, que también edita (es un dato de hecho) |
 | `/mis-datos/gastos` | Lista de gastos por categoría, en el trato del cliente |
 | `/mis-datos/gastos/nuevo`, `/[itemId]` | P-C07: alta y edición de un gasto ("¿Quién lo paga? Yo, Mi familia, Otra persona") con "Así cambia tu plan" calculado en el teléfono antes de guardar |
+| `/mis-datos/bolsillos` | Los bolsillos del cliente con lo que su plan calcula hoy (meta, aporte y saldo) y el reparto del saldo; alta y edición de bolsillos (`/nuevo`, `/[pocketId]`), banco del fondo y de meses sin ingreso (`/fondo`, `/meses-sin-ingreso`) y bancos (`/bancos`) |
+| `/mis-datos/cobros`, `/mis-datos/patrimonio`, `/mis-datos/prueba-de-realidad` | Lo que le deben (sin el % a inversión, que decide el asesor), lo que tiene y la prueba de realidad, en el trato del cliente |
 
 Cada guardado pasa por `withImpact` (`features/summary/impact.ts`): calcula el caso antes y después y llama a `record_change_impact`, que actualiza la caché de cifras, agrupa los cambios de 10 minutos y avisa al asesor si cambió algo el cliente. Para ver las pantallas del cliente en local, crea su usuario con la API de administración y un perfil con `owner_user_id` y acceso del asesor (solo en la base local).
 

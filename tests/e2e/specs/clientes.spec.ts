@@ -32,6 +32,8 @@ for (const path of [
   `/clientes/${CLIENT}/bolsillos`,
   `/clientes/${CLIENT}/bolsillos/nuevo`,
   `/clientes/${CLIENT}/bolsillos/${CLIENT}`,
+  `/clientes/${CLIENT}/bolsillos/fondo`,
+  `/clientes/${CLIENT}/bolsillos/meses-sin-ingreso`,
   `/clientes/${CLIENT}/bolsillos/bancos`,
   `/clientes/${CLIENT}/bolsillos/bancos/nuevo`,
   `/clientes/${CLIENT}/bolsillos/bancos/${CLIENT}`,

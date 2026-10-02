@@ -48,6 +48,8 @@ export interface BudgetItemValues {
   readonly payer: Payer;
   readonly payerLabel: string;
   readonly isTemporary: boolean;
+  /** Gasto con datos de salud (C5, C20). */
+  readonly isHealth: boolean;
   readonly familyReference: boolean;
   readonly note: string;
   readonly basicAmount: string;
@@ -69,6 +71,7 @@ export interface BudgetItemRecord {
   readonly payer_label: string | null;
   readonly scope: 'presupuesto' | 'referencia_familiar';
   readonly is_temporary: boolean;
+  readonly is_health: boolean;
   readonly note: string | null;
   readonly basic_amount: number | null;
   readonly is_proposed: boolean;
@@ -122,6 +125,7 @@ export function parseBudgetItem(
     payer: payer.success ? payer.data : 'cliente',
     payerLabel: text(formData, 'payerLabel'),
     isTemporary: checked(formData, 'isTemporary'),
+    isHealth: checked(formData, 'isHealth'),
     familyReference: checked(formData, 'familyReference'),
     note: typeof formData.get('note') === 'string' ? String(formData.get('note')).trim() : '',
     basicAmount: advisor ? text(formData, 'basicAmount') : '',
@@ -167,6 +171,7 @@ export function parseBudgetItem(
       payer_label: values.payer === 'cliente' ? null : values.payerLabel || null,
       scope: values.familyReference ? 'referencia_familiar' : 'presupuesto',
       is_temporary: values.isTemporary,
+      is_health: values.isHealth,
       note: values.note || null,
       basic_amount: basicAmount,
       is_proposed: values.isProposed,

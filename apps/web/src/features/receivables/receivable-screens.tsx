@@ -8,7 +8,9 @@ import { FigureList } from '@/components/figure-list';
 import { Screen, ScreenActions } from '@/components/screen';
 import { focusRing, linkButton, primaryButton } from '@/components/ui-classes';
 import { loadComputedCase } from '@/features/summary';
+import { withAddress } from '@/lib/address';
 import { amountToText, percentToText } from '@/lib/amount';
+import type { CaseEditor } from '@/server/case-access';
 
 import { deleteReceivable, saveReceivable } from './actions';
 import { receivablePaths } from './paths';
@@ -17,6 +19,29 @@ import { ReceivableForm } from './receivable-form';
 const t = messages.es;
 const text = t.receivables;
 
+/** Textos según quién mira: el asesor habla del cliente; el cliente, en su trato. */
+function localText(viewer: CaseEditor) {
+  if (viewer.role === 'advisor') {
+    return {
+      title: text.title,
+      intro: text.intro,
+      back: text.back,
+      empty: text.empty,
+      form: text.form,
+      pctNote: null,
+    };
+  }
+  const client = withAddress(text.client, viewer.formOfAddress);
+  return {
+    title: client.title,
+    intro: client.intro,
+    back: client.back,
+    empty: client.empty,
+    form: { ...text.form, debtor: client.debtor, balance: client.balance },
+    pctNote: client.pctNote,
+  };
+}
+
 function loadError(retryHref: string) {
   return (
     <LoadError message={t.common.loadError} retryLabel={t.common.retry} retryHref={retryHref} />
@@ -24,15 +49,22 @@ function loadError(retryHref: string) {
 }
 
 /** Cuentas por cobrar (P-A10, pestaña Cobros): cuotas, último pago y saldo pendiente hoy. */
-export async function ReceivablesScreen({ clientId }: { clientId: string }) {
-  const paths = receivablePaths(clientId);
+export async function ReceivablesScreen({
+  viewer,
+  clientId,
+}: {
+  viewer: CaseEditor;
+  clientId: string;
+}) {
+  const paths = receivablePaths(viewer.role, clientId);
+  const local = localText(viewer);
   const computed = await loadComputedCase(clientId);
   const header = (
     <>
-      <BackLink href={`/clientes/${clientId}`} label={text.back} />
+      <BackLink href={paths.back} label={local.back} />
       <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-semibold text-balance">{text.title}</h1>
-        <p className="text-text-muted">{text.intro}</p>
+        <h1 className="text-2xl font-semibold text-balance">{local.title}</h1>
+        <p className="text-text-muted">{local.intro}</p>
       </div>
     </>
   );
@@ -54,7 +86,7 @@ export async function ReceivablesScreen({ clientId }: { clientId: string }) {
     <Screen>
       {header}
       {computed.rows.receivables.length === 0 ? (
-        <p className="text-text-muted">{text.empty}</p>
+        <p className="text-text-muted">{local.empty}</p>
       ) : (
         <>
           <FigureList
@@ -111,13 +143,16 @@ export async function ReceivablesScreen({ clientId }: { clientId: string }) {
 
 /** Crear (`receivableId` null) o editar un cobro. */
 export async function ReceivableFormScreen({
+  viewer,
   clientId,
   receivableId,
 }: {
+  viewer: CaseEditor;
   clientId: string;
   receivableId: string | null;
 }) {
-  const paths = receivablePaths(clientId);
+  const paths = receivablePaths(viewer.role, clientId);
+  const local = localText(viewer);
   const title = receivableId ? text.form.editTitle : text.form.newTitle;
   const computed = await loadComputedCase(clientId);
   if (!computed) {
@@ -137,10 +172,11 @@ export async function ReceivableFormScreen({
 
   return (
     <Screen>
-      <BackLink href={paths.list} label={text.title} />
+      <BackLink href={paths.list} label={local.title} />
       <h1 className="text-2xl font-semibold text-balance">{title}</h1>
+      {local.pctNote ? <p className="-mt-4 text-sm text-text-muted">{local.pctNote}</p> : null}
       <ReceivableForm
-        text={text.form}
+        text={local.form}
         initial={{
           debtor: row?.debtor_label ?? '',
           balance: amountToText(row?.balance ?? null, locale),
@@ -151,7 +187,7 @@ export async function ReceivableFormScreen({
           note: row?.note ?? '',
         }}
         currencies={[client.base_currency, ...fxRates.map((rate) => rate.currency)]}
-        advisor
+        advisor={viewer.role === 'advisor'}
         action={saveReceivable.bind(null, clientId, receivableId)}
         deleteAction={receivableId ? deleteReceivable.bind(null, clientId, receivableId) : null}
         cancelHref={paths.list}

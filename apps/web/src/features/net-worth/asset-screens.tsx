@@ -9,7 +9,9 @@ import { FigureList } from '@/components/figure-list';
 import { Screen, ScreenActions } from '@/components/screen';
 import { focusRing, linkButton, primaryButton } from '@/components/ui-classes';
 import { loadComputedCase } from '@/features/summary';
+import { withAddress } from '@/lib/address';
 import { amountToText } from '@/lib/amount';
+import type { CaseEditor } from '@/server/case-access';
 
 import { deleteAsset, saveAsset } from './actions';
 import { AssetForm } from './asset-form';
@@ -18,6 +20,14 @@ import { assetPaths } from './paths';
 const t = messages.es;
 const text = t.assets;
 
+/** Textos según quién mira: el asesor habla del cliente; el cliente, en su trato. */
+function localText(viewer: CaseEditor) {
+  if (viewer.role === 'advisor') {
+    return { title: text.title, intro: text.intro, back: text.back, empty: text.empty };
+  }
+  return withAddress(text.client, viewer.formOfAddress);
+}
+
 function loadError(retryHref: string) {
   return (
     <LoadError message={t.common.loadError} retryLabel={t.common.retry} retryHref={retryHref} />
@@ -25,15 +35,16 @@ function loadError(retryHref: string) {
 }
 
 /** Patrimonio (activos) con el saldo líquido que se reparte en los bolsillos (`Patrimonio!C33`). */
-export async function AssetsScreen({ clientId }: { clientId: string }) {
-  const paths = assetPaths(clientId);
+export async function AssetsScreen({ viewer, clientId }: { viewer: CaseEditor; clientId: string }) {
+  const paths = assetPaths(viewer.role, clientId);
+  const local = localText(viewer);
   const computed = await loadComputedCase(clientId);
   const header = (
     <>
-      <BackLink href={`/clientes/${clientId}`} label={text.back} />
+      <BackLink href={paths.back} label={local.back} />
       <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-semibold text-balance">{text.title}</h1>
-        <p className="text-text-muted">{text.intro}</p>
+        <h1 className="text-2xl font-semibold text-balance">{local.title}</h1>
+        <p className="text-text-muted">{local.intro}</p>
       </div>
     </>
   );
@@ -54,7 +65,7 @@ export async function AssetsScreen({ clientId }: { clientId: string }) {
     <Screen>
       {header}
       {computed.rows.assets.length === 0 ? (
-        <p className="text-text-muted">{text.empty}</p>
+        <p className="text-text-muted">{local.empty}</p>
       ) : (
         <>
           <FigureList
@@ -98,13 +109,16 @@ export async function AssetsScreen({ clientId }: { clientId: string }) {
 
 /** Crear (`assetId` null) o editar un activo. */
 export async function AssetFormScreen({
+  viewer,
   clientId,
   assetId,
 }: {
+  viewer: CaseEditor;
   clientId: string;
   assetId: string | null;
 }) {
-  const paths = assetPaths(clientId);
+  const paths = assetPaths(viewer.role, clientId);
+  const local = localText(viewer);
   const title = assetId ? text.form.editTitle : text.form.newTitle;
   const computed = await loadComputedCase(clientId);
   if (!computed) {
@@ -122,7 +136,7 @@ export async function AssetFormScreen({
 
   return (
     <Screen>
-      <BackLink href={paths.list} label={text.title} />
+      <BackLink href={paths.list} label={local.title} />
       <h1 className="text-2xl font-semibold text-balance">{title}</h1>
       <AssetForm
         text={text.form}

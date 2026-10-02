@@ -277,7 +277,7 @@ create table public.incomes (
   payments_by_month  smallint[] not null default '{1,1,1,1,1,1,1,1,1,1,1,1}'
                        check (array_length(payments_by_month, 1) = 12),
   allocation         text not null default 'general' check (allocation in ('general', 'ahorro_total')),
-  lost_in_scenario   text check (lost_in_scenario in ('a', 'b', 'c')),   -- modo nativo (H-07)
+  lost_in_scenario   text check (lost_in_scenario in ('a', 'b', 'c', 'ninguno')),   -- modo nativo (H-07, ADR 0011)
   note               text,
   sort_order         int not null default 0,
   updated_at         timestamptz not null default now(),
@@ -846,6 +846,7 @@ Las secciones 3 a 10 siguen siendo el diseño de referencia. Lo que ya existe co
 | `20261002150000_pockets_cashflow.sql` | Supuestos del plan en `case_settings`; parámetros comunes de la metodología (umbral de deuda cara y porcentajes del sobrante y del excedente); `banks`, `pockets`, `budget_items.pocket_id`, `receivables`, `reality_check` y `assets`, con RLS e historial (puntos 26 a 30) |
 | `20261002170000_pocket_fk_indexes.sql` | Índices que cubren las llaves compuestas `(bank_id, client_id)` y `(pocket_id, client_id)` (lint 0001 del asesor de rendimiento) |
 | `20261002180000_plan_deliveries.sql` | `plan_deliveries`: el plan entregado, inmutable y sellado con sha256; solo lo crea el asesor (punto 31) |
+| `20261002190000_income_scenarios_health_items.sql` | `incomes.lost_in_scenario` admite `ninguno`; `budget_items.is_health` y los disparadores que quitan el detalle de salud al retirar ese consentimiento (punto 32, ADR 0011) |
 
 Diferencias con el borrador de las secciones 3.1, 4 y 5:
 
@@ -884,4 +885,5 @@ Diferencias con el borrador de las secciones 3.1, 4 y 5:
 29. **Cuentas por cobrar.** Saldo y cuota obligatorios y mayores que 0 (con eso no se da H-27). El % a inversión lo decide el asesor: guarda propia `private.guard_receivable_advisor_columns()`, porque la columna tiene valor por defecto (1) y la guarda genérica rechazaría el alta del cliente.
 30. **Prueba de realidad y activos.** `reality_check` con N de 1 a 120 meses y los dos saldos en una moneda. `assets` solo con los tipos líquido, inmueble, vehículo y otro: inversiones y cobros tienen sus tablas. La tasa de una moneda usada en bolsillos, cobros, prueba de realidad o activos no se borra (`private.guard_fx_rate`).
 31. **Planes entregados.** `plan_deliveries` guarda la entrada del motor (`inputs`), los nombres que muestran las pantallas (`labels`, hoy los de los bolsillos generales en el orden de los resultados), los resultados, las cifras clave, el control de calidad con las notas del asesor (`qc_report`), la versión del motor, el modo y los ids de los parámetros usados. La base pone `delivered_at`, `delivered_by` y `sha256` (de entradas, nombres, resultados y documentos) y rechaza todo cambio, también con la clave secreta. Sin privilegios de actualizar ni borrar: la entrega se va solo con el perfil. El historial registra la entrega sin copiar las fotos. Sin llave foránea en `delivered_by`, como el historial. `documents` y `pdf_path` quedan para F7.
+32. **Datos de salud (C20, ADR 0011).** `budget_items.is_health` lo marcan el cliente o el asesor. `private.health_consent_refused` mira el último consentimiento de datos de salud del cliente (sin consentimientos, como en un borrador, no se toca nada). Mientras esté retirado o negado, un disparador guarda los gastos de salud con categoría "Salud y bienestar", concepto "Salud" y sin nota; al retirarlo, otro disparador aplica eso a los existentes y quita la categoría, el concepto y la nota de sus filas del historial. El importe se conserva: es un dato económico que el plan necesita.
 Sin pendientes de F1 en el modelo de datos.

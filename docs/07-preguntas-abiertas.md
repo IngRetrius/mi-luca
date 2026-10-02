@@ -25,66 +25,27 @@ Cada punto pendiente tiene una recomendación. Si estás de acuerdo con todas, b
 | A7c | **Correo con Gmail, no con Resend:** mientras no haya dominio propio, Supabase Auth envía los correos (por ahora, el código de recuperación) desde retrius2001@gmail.com por `smtp.gmail.com` con una contraseña de aplicación [F42][F44]. Hasta 500 correos al día [F43]. Resend queda para cuando haya dominio. Se descarta pedir una sesión reciente antes de retirar el acceso del asesor (`02-arquitectura.md`, 5.6): no hace falta en un servicio informal | 29/09/2026 | `supabase/config.toml`; ADR 0009 |
 | Nueva | **Cada caso es diferente:** los casos de España y Colombia son ejemplos de prueba, no perfiles de país. El país no decide quién paga los gastos ni si se analiza la pensión; se marca por cliente. El análisis de pensión empieza apagado y lo activa el asesor | 01/10/2026 | `CLAUDE.md`; RN-018, RN-120; `03-modelo-de-datos.md` (principio 10, `case_settings.pension_enabled`); `04-motor-de-calculo.md`, 7.2 |
 | Nueva | **Prueba de la app publicada en iPhone:** el asesor la probó en su iPhone y funciona | 29/09/2026 | `06-plan-de-trabajo.md`, F0 |
+| A6 | **Uso comercial:** se supone que la asesoría se cobra o se podrá cobrar; por eso Vercel Pro y Supabase Pro antes del primer cliente real (plan, sección 6) | 02/10/2026 | `06-plan-de-trabajo.md` |
+| A8 | **Tolerancias de las pruebas de oro:** importes ±0,01; razones ±0,000001; fechas y textos iguales | 02/10/2026 | `04-motor-de-calculo.md`, 7.1 |
+| A11 | **Caso de oro C1 aprobado** con sus seis supuestos: reproduce todas las cifras de la sección 15 del protocolo salvo la inversión anual, que se explica por la prueba de realidad pendiente | 02/10/2026 | `packages/engine/test/golden/README.md` |
+| B2 | **Fondo de emergencia sobre el gasto esencial total**, también lo que pagan terceros, que cuenta como ingreso que se pierde en el peor escenario | 02/10/2026 | ADR 0010, ADR 0011 |
+| B3 | **Correcciones del modo nativo:** la tabla por hallazgo está en ADR 0011 | 02/10/2026 | ADR 0011 |
+| B4, B5, B9, B11 | **Ya aplicadas:** modo nativo por defecto; varios pagos en un mes; umbrales del semáforo iguales para todos los países, como parámetros; el cliente y el asesor cambian la tasa de cambio, con historial | 02/10/2026 | Código de F2 |
+| B7, B8, B12, B13 | **Se aceptan las recomendaciones:** condiciones de capacidad sugeridas y editables por el asesor; pensión de España informativa; una deuda en otra moneda se simula en su moneda; el alojamiento como tipo de concepto de la calculadora de viaje | 02/10/2026 | Se aplican en F4 a F6 |
+| B14 | **Plan de ahorro secuencial desde el mes siguiente a la fecha de corte** | 02/10/2026 | ADR 0011 |
+| B15 | **Ingreso sin tipo:** la base exige el tipo y el control de calidad bloquea la entrega | 02/10/2026 | ADR 0011 |
+| C1 a C14 | **Se aceptan las recomendaciones** de la sección C (sin registro libre en el MVP; nada se conserva tras el borrado salvo obligación legal; 7 días de gracia; invitación de 7 días; consentimiento aparte para salud; aviso en la app y correo diario cuando haya correo; el cliente no cambia país ni moneda base; migración en F8; sin edición sin conexión; control mensual por categoría; una cuenta de asesor no acepta invitaciones; el asesor borra solo perfiles sin dueño; el idioma va con el país; el enlace de invitación se envía a mano mientras no haya correo) | 02/10/2026 | Matriz de permisos y código de F1 |
+| C20 | **Datos de salud al retirar el consentimiento:** los gastos marcados de salud conservan el importe y pierden el detalle (también en el historial y en los que se registren después) | 02/10/2026 | ADR 0011, migración `income_scenarios_health_items` |
+| D2, D5 | **Excel exportado** con la estructura de la plantilla y la marca MiLuca; **nombre "MiLuca"** en la pantalla de Google con verificación de marca, cuando exista el dominio | 02/10/2026 | F7 y D3 |
+| E1 a E4 | **Técnicas confirmadas:** código en inglés y producto en español; Next.js en Vercel (Pro antes del uso comercial); segundo factor del asesor después del lanzamiento; parámetros de la metodología en `country_parameters` | 02/10/2026 | ADR 0002, 0006; migraciones de F2 y F3 |
+| Nueva | **El cliente mantiene su plan:** terminada la asesoría, edita ingresos, gastos, bancos y bolsillos, lo que le deben, lo que tiene y la prueba de realidad; el plan se recalcula y el asesor ve el antes y después. El criterio profesional sigue siendo del asesor | 02/10/2026 | ADR 0011 |
 
-## A. Antes de empezar la fase 0
+## Pendientes
 
-| N.º | Pregunta | Contexto | Recomendación | Cuándo |
-|---|---|---|---|---|
-| A6 | ¿Cobras honorarios por la asesoría? | Confirma que el uso es comercial (Vercel Pro) y afecta el texto de alcance | Asumo que sí o que podrías hacerlo; por eso el plan usa Vercel Pro | F0 |
-| A11 | ¿Apruebas el caso de oro C1 (Colombia)? | Construido en la plantilla oficial con seis supuestos, entre ellos seguridad social en 11 pagos (enero sí, febrero no) como en la sección 15 del protocolo, aunque la tabla del libro original marca 12. Reproduce todas las cifras de la sección 15 salvo la inversión anual (15,7 frente a 19,5 millones), porque la prueba de realidad está pendiente y la plantilla invierte el 50 % | Revisar los supuestos y el contraste en `packages/engine/test/golden/README.md` y los datos en `c1-colombia/inputs.json`; aprobar o indicar qué cambiar | F0 |
-| A8 | Tolerancia de la prueba de oro para porcentajes | 0,01 sobre una razón es un punto porcentual | Importes ±0,01; razones ±0,000001; fechas y textos iguales | F0 |
+Lo que sigue abierto depende de una acción del responsable o de una verificación que se hace en su fase.
 
-## B. Reglas del cálculo (antes de F2 y F3)
-
-| N.º | Pregunta | Recomendación | Cuándo |
+| N.º | Pendiente | Qué hace falta | Cuándo |
 |---|---|---|---|
-| B2 | Si un tercero paga los gastos del cliente, ¿el fondo de emergencia se calcula sobre el gasto esencial total o solo sobre lo que paga el cliente? | Sobre el total, con el escenario "el tercero deja de pagar" (así se hizo en el caso de España) | F3 |
-| B3 | ¿Qué hallazgos se corrigen en modo nativo? | Corregir H-01 (decidido), H-02, H-05, H-06, H-10, H-11, H-12, H-14, H-15 (decidido), H-16 y H-22. Documentar sin cambiar H-03, H-04, H-09, H-17, H-19, H-21. Decidir H-07, H-13, H-18, H-20, H-23 y H-24 contigo en F2. H-12 ya está calculado en el motor (ADR 0010, propuesto): falta tu visto bueno | F2 |
-| B4 | ¿Modo por defecto de un cliente nuevo? | Nativo. El modo compatible queda para las pruebas de oro y para comparar con un Excel antiguo | F2 |
-| B5 | ¿Se permiten 2 o más pagos de un ingreso en un mes (por ejemplo, la prima)? (H-22) | Sí, con ayuda que lo explique | F2 |
-| B7 | ¿Las condiciones de capacidad del perfil de riesgo son automáticas o las decide el asesor? (H-16) | Sugeridas automáticamente y editables solo por el asesor, con registro | F5 |
-| B8 | ¿Qué hace el módulo de pensión de España? | Informativo en el MVP: edad de referencia con fuente y remisión a la Seguridad Social; sin estimar la pensión | F6 |
-| B9 | ¿Los umbrales del semáforo cambian por país? | Iguales para todos los países por ahora, guardados como parámetros para poder cambiarlos | F2 |
-| B10 | ¿Qué parámetros de Colombia hay que verificar con fuente oficial antes de F6? | Salario mínimo 2026, reglas de semanas de Colpensiones y fondos privados, salud del pensionado, aportes de independientes. Hoy vienen del protocolo (sección 14) y necesitan fuente primaria | F6 |
-| B11 | ¿Quién puede cambiar la tasa de cambio de una moneda? | El cliente y el asesor (es la tasa que el cliente recibe); el historial registra quién la cambió y el asesor ve el antes y después | F2 |
-| B12 | ¿Una deuda en otra moneda se simula en su moneda o en la moneda base? | En su moneda, y se convierte con la tasa vigente para los totales; la sensibilidad muestra el riesgo cambiario | F4 |
-| B13 | En la calculadora de viaje, ¿cómo sabe el motor qué concepto es el alojamiento? La plantilla cobra los impuestos del alojamiento sobre una fila fija (`Metas!E16`); `goal_cost_items` tiene el tipo `porcentaje_sobre_alojamiento`, pero ningún concepto se marca como alojamiento | Agregar el tipo `alojamiento` a `goal_cost_items.kind` al crear la tabla en F5. **Supuesto** aplicado en el motor: cada concepto lleva `isLodging` (`TripCostItem`) | F5 |
-| B14 | En el plan de ahorro secuencial (ADR 0008), ¿desde qué mes se cuenta? El flujo proyecta el año siguiente al de corte, pero entre la fecha de corte y enero también hay sobrante | **Supuesto** aplicado en el motor: el plan empieza en enero del año del flujo y, si el fondo no se completa en ese año, repite el sobrante mes a mes. Recomendación: confirmar con el asesor; la alternativa es empezar el mes siguiente al corte, como la simulación de deudas (`Deudas!C11`) | F3 |
-| B15 | Un ingreso sin tipo suma al ingreso anual pero no entra al flujo (H-26). ¿Es un pendiente del caso? | Sí: agregarlo a los pendientes del Resumen junto a las partidas sin frecuencia o tipo, y exigir el tipo en la plataforma (hoy la base ya lo exige en `incomes.kind`) | F3 |
-
-## C. Cliente y datos
-
-| N.º | Pregunta | Recomendación | Cuándo |
-|---|---|---|---|
-| C1 | ¿Se permite el registro libre en el futuro? | No en el MVP. El modelo ya lo soporta (cliente sin asesor), pero abre temas de soporte, abuso y alcance legal sin acompañamiento | Después del lanzamiento |
-| C2 | ¿Qué conserva el asesor si el cliente revoca su acceso o pide el borrado? | Nada dentro de la plataforma, salvo una obligación de conservación que decida el responsable (`legal/README.md`, sección 4, punto 4) | F7 |
-| C3 | ¿Plazo de gracia antes de borrar definitivamente? | 7 días para poder cancelar, dentro del plazo legal de cada país (`legal/README.md`, sección 4, punto 5) | F7 |
-| C4 | ¿Cuánto dura una invitación? | 7 días, reenviable | F1 |
-| C5 | ¿Cómo tratamos los datos de salud que aparecen en el presupuesto (terapias, medicamentos, lentes)? | Consentimiento explícito aparte y sugerencia de nombres genéricos ("Salud"). Son datos sensibles en Colombia y categoría especial en el RGPD [F28][F29] | F1 |
-| C6 | ¿Cómo avisamos al asesor de los cambios del cliente? | Aviso dentro de la app al momento (hecho en F2, con el antes y después) y un correo resumen como máximo una vez al día (pendiente: la app aún no envía correos; hoy solo los envía Supabase Auth, A7c) | F2 |
-| C7 | ¿El cliente puede cambiar su país, su moneda base o su tipo de cliente? | No: cambian reglas y módulos, lo hace el asesor. Sí puede usar cualquier moneda en sus importes | F1 |
-| C8 | ¿Cómo migramos a los clientes actuales? | En F8, uno por uno, con invitación y consentimiento nuevos; los datos se cargan desde su Excel con el extractor | F8 |
-| C9 | ¿Sin conexión basta con leer el último plan? | Sí. Editar sin conexión obliga a resolver conflictos entre asesor y cliente | F1 |
-| C10 | ¿El cliente registra el control mensual por categoría o movimiento por movimiento? | Por categoría, como la plantilla. Movimientos más adelante, si hace falta | F7 |
-| C11 | ¿Una cuenta de asesor puede aceptar una invitación de cliente? | No. **Supuesto** aplicado en `accept_invitation`: evita que la misma cuenta sea asesor y dueño de un perfil, lo que confundiría la pantalla de inicio. Para probar el flujo de cliente, el asesor usa otra cuenta | F1 |
-| C12 | ¿El asesor puede borrar un perfil de cliente? | Solo mientras nadie lo haya aceptado (borradores e invitaciones sin usar). **Supuesto** aplicado en RLS. Un perfil con dueño se borra solo por la solicitud del cliente (sección 9 del modelo de datos) | F1 |
-| C13 | ¿El cliente puede cambiar el idioma y formato (`locale`) de su perfil? | No por ahora: va con el país y lo cambia el asesor. **Supuesto**; la matriz de permisos no lo menciona. Se puede abrir sin migrar datos | F1 |
-| C14 | Mientras la app no envíe correos (Resend), ¿cómo llega la invitación? | El asesor copia el enlace en la ficha (P-A03) y lo envía por el medio que use con la persona. **Supuesto** aplicado. Consecuencia: la cuenta con contraseña se crea con el correo que escribió el asesor sin que el enlace haya pasado por ese buzón (ADR 0009 da por hecho que sí). P-C12 muestra el correo y pide una invitación nueva si no es el de la persona. Con Resend, el enlace va a ese correo y el supuesto desaparece | F1 (antes de clientes reales) |
-| C20 | ¿Qué pasa con los datos de salud si el cliente retira ese consentimiento? | Desde F2, el presupuesto marca las partidas de salud; al retirarlo, la app pide renombrarlas con un nombre genérico ("Salud") y deja de mostrar el detalle al asesor. Hoy solo se registra el retiro (P-C11) | F2 |
-
-## D. Producto y marca
-
-| N.º | Pregunta | Recomendación | Cuándo |
-|---|---|---|---|
-| D2 | ¿El Excel exportado conserva la marca Petróleo y Oro? | Estructura, hojas y celdas idénticas a la plantilla (es lo que da la compatibilidad), con la marca MiLuca y las mismas convenciones de color de celdas (crema = editable) | F7 |
-| D3 | Dominio | Comprar el dominio de MiLuca antes de configurar Google (la pantalla de consentimiento pide el dominio) y Resend (verifica el dominio desde el que se envían los correos). No verifiqué disponibilidad | F0 |
-| D5 | ¿Nombre visible "MiLuca" en la pantalla de consentimiento de Google? | Sí, con verificación de marca (2 a 3 días hábiles) [F27] | F0 |
-
-## E. Técnicas (confirmar)
-
-| N.º | Pregunta | Recomendación | Cuándo |
-|---|---|---|---|
-| E1 | Identificadores de código en inglés y producto en español | Sí (ADR 0006), con glosario | F0 |
-| E2 | Next.js en Vercel Pro | Sí (ADR 0002) | F0 |
-| E3 | Segundo factor para el asesor | Fuera por ahora, como decidiste. Diseño listo para activarlo sin rehacer (02, 5.5). Sugiero reconsiderarlo antes de tener más de 20 clientes, porque la cuenta del asesor ve los datos de todos. Con contraseñas (ADR 0009), mientras tanto el asesor entra con Google y con la verificación en dos pasos de su cuenta de Google | Después del lanzamiento |
-| E4 | ¿Dónde viven los parámetros de la metodología (70 %, 50 %, 90 %, umbrales)? | En `country_parameters` con país vacío (comunes) y versionados, igual que los del país | F2 |
+| D3 | Dominio propio | Comprarlo; luego se configuran la marca en Google (D5) y el correo de la app | Antes de clientes reales |
+| B10 | Parámetros de pensión de Colombia | Verificar con fuente oficial salario mínimo, semanas de Colpensiones y fondos privados, salud del pensionado y aportes de independientes | F6 |
+| A7 | Transferencia de datos de clientes de España a Estados Unidos | Decisión del responsable antes del primer cliente de España (`legal/README.md`) | Antes del primer cliente de España |

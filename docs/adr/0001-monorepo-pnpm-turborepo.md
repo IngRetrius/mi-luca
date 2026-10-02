@@ -1,6 +1,6 @@
 # 0001. Monorepo con pnpm y Turborepo
 
-- Estado: Propuesta
+- Estado: Aceptada el 02/10/2026 (el asesor delegó la decisión; implementada y en uso)
 - Fecha: 2026-09-28
 
 ## Contexto

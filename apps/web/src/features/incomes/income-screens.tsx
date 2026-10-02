@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { incomeKindSchema } from '@miluca/domain';
+import { incomeKindSchema, incomeScenarioSchema } from '@miluca/domain';
 import { baseIncome } from '@miluca/engine';
 import { COUNTRY_LOCALES, formatMoney, messages } from '@miluca/i18n';
 
@@ -203,6 +203,7 @@ function emptyIncome(baseCurrency: string): IncomeValues {
     payments: ALL_MONTHS.map(String),
     isNet: true,
     savingsOnly: false,
+    lostIn: '',
     note: '',
   };
 }
@@ -254,6 +255,7 @@ export async function IncomeScreen({
         payments: row.payments_by_month.map(String),
         isNet: row.is_net,
         savingsOnly: row.allocation === 'ahorro_total',
+        lostIn: incomeScenarioSchema.safeParse(row.lost_in_scenario).data ?? '',
         note: row.note ?? '',
       }
     : emptyIncome(client.base_currency);

@@ -1,6 +1,6 @@
 # 0007. Modo compatible con la plantilla y modo nativo
 
-- Estado: Propuesta (pendiente de las preguntas B1 a B4)
+- Estado: Aceptada el 02/10/2026 (el asesor delegó la decisión; implementada y en uso)
 - Fecha: 2026-09-28
 
 ## Contexto

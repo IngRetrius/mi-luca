@@ -57,6 +57,7 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Supuestos del caso | `caseSettings` | Criterio del asesor |
 | Control de calidad | `qualityChecks`, `QcReport`, `QcItem` | Antes de entregar; niveles `blocking`, `note`, `warning` |
 | Plan entregado | `plan_deliveries`, `Delivery` | Foto inmutable del caso el día de la entrega |
+| Mis datos: bolsillos, cobros, patrimonio, prueba de realidad (rutas del cliente) | `/mis-datos/bolsillos`, `/mis-datos/cobros`, `/mis-datos/patrimonio`, `/mis-datos/prueba-de-realidad` | El cliente mantiene su plan (ADR 0011) |
 | Entregar el plan, plan entregado, mi plan (rutas) | `/clientes/[id]/entrega`, `/clientes/[id]/planes/[deliveryId]`, `/mi-plan` | P-A12 y P-A14, vista del asesor, P-C05 |
 | Comparar con hoy | `PlanView` (`today`) | Cifras clave entregadas frente a las de hoy |
 | Supuestos del plan, pantalla | `/clientes/[id]/supuestos`, `PlanSettingsScreen` | Criterio del asesor (`case_settings`) |
@@ -78,6 +79,8 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Meses con seguridad social | `socialSecurityPayments` | `Ingresos!S17` |
 | Ingreso base (variable) | `baseIncome` / `variable_income_history` | Calculadora en `/ingresos/ingreso-base` |
 | Va todo a ahorro | `allocation = 'ahorro_total'` | RN-014 |
+| Escenario en que se pierde un ingreso | `lostInScenario` / `lost_in_scenario` (`IncomeScenario`) | a, b, c, ninguno; sin marca, según el tipo (H-07) |
+| Ingreso estable | `ninguno` | No se pierde en ningún escenario del fondo |
 | Pagos en cada mes | `payments_by_month` | De 0 a 9 por mes |
 | Aporte implícito de terceros | `impliedThirdPartyIncome` | RN-015; pagadores `ThirdPartyPayer` (familia, tercero) |
 | Indicadores personales | `personalIndicators` | Modo nativo (ADR 0010) |
@@ -95,6 +98,7 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Totales por pagador | `byPayer` / `PayerTotals` | Gasto sin ahorro y ahorro programado de cada pagador |
 | Referencia familiar | `scope = 'referencia_familiar'` | No suma en cálculos |
 | Gasto temporal | `isTemporary` | Por ejemplo, la matrícula |
+| Gasto de salud | `isHealth` / `is_health` | Pierde el detalle si se retira el consentimiento de datos de salud (C20) |
 | Costo de vida | `costOfLiving` | |
 | Nivel esencial, básico, actual | `CostLevel`: `essential`, `basic`, `current` | Niveles del costo de vida |
 | Valor del nivel básico | `basicAmount` / `basic_amount` | Valor por pago, con la frecuencia y la moneda de la partida; lo propone el asesor |
@@ -120,6 +124,7 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Banco | `bank` | Solo el nombre de la entidad |
 | Bolsillo | `pocket` | |
 | Tipo de bolsillo | `kind` | emergencia, meses_sin_ingreso, general |
+| Bolsillo del fondo o de meses sin ingreso | `SpecialPocketKind`, `/bolsillos/fondo`, `/bolsillos/meses-sin-ingreso` | Meta y saldo del motor; se elige su banco |
 | Límite de bolsillos del banco | `max_pockets` | RN-073 |
 | Bolsillos con aporte | `withContribution` | Para comparar con el límite del banco (`Bolsillos!C29`) |
 | Cuenta operativa | `operatingAccount` | |

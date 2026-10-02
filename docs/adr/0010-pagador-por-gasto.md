@@ -1,6 +1,6 @@
 # 0010. Pagador por gasto y aporte implícito de terceros
 
-- Estado: Propuesta (corrección H-12, incluida en la recomendación de la pregunta B3)
+- Estado: Aceptada el 02/10/2026 (el asesor delegó la decisión; implementada y en uso)
 - Fecha: 2026-10-01
 
 ## Contexto

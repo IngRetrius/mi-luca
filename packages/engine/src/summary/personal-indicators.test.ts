@@ -24,6 +24,7 @@ const salary = (amount: number) =>
         kind: 'laboral',
         monthlyAmount: { amount, currency: 'COP' },
         paymentsByMonth: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        lostInScenario: null,
       },
     ],
     fx,

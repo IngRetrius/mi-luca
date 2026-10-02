@@ -1,4 +1,4 @@
-import type { CurrencyCode, IncomeKind, Money, MonthFlags } from '@miluca/domain';
+import type { CurrencyCode, IncomeKind, IncomeScenario, Money, MonthFlags } from '@miluca/domain';
 
 import { toBaseCompat, type FxContext } from '../currency';
 
@@ -8,6 +8,11 @@ export interface IncomeInput {
   readonly kind: IncomeKind | null;
   readonly monthlyAmount: Money;
   readonly paymentsByMonth: MonthFlags;
+  /**
+   * En qué escenario del fondo se pierde (H-07, solo modo nativo); null es la regla de la
+   * plantilla por tipo: laboral en A, rentas en B, otros solo en C y pensión nunca.
+   */
+  readonly lostInScenario: IncomeScenario | null;
 }
 
 export interface IncomeRowResult {

@@ -57,6 +57,7 @@ const rows: CaseRows = {
       currency: 'EUR',
       amount: 400,
       payments_by_month: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      lost_in_scenario: null,
     },
   ],
   socialSecurity: null,

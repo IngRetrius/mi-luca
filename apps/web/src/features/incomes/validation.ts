@@ -1,4 +1,9 @@
-import { incomeKindSchema, type IncomeKind } from '@miluca/domain';
+import {
+  incomeKindSchema,
+  incomeScenarioSchema,
+  type IncomeKind,
+  type IncomeScenario,
+} from '@miluca/domain';
 
 import { parseAmount } from '@/lib/amount';
 
@@ -24,6 +29,8 @@ export interface IncomeValues {
   readonly payments: readonly string[];
   readonly isNet: boolean;
   readonly savingsOnly: boolean;
+  /** En qué escenario del fondo se pierde; vacío es según el tipo (H-07). */
+  readonly lostIn: IncomeScenario | '';
   readonly note: string;
 }
 
@@ -36,6 +43,7 @@ export interface IncomeRecord {
   readonly is_net: boolean;
   readonly payments_by_month: number[];
   readonly allocation: 'general' | 'ahorro_total';
+  readonly lost_in_scenario: IncomeScenario | null;
   readonly note: string | null;
 }
 
@@ -64,6 +72,7 @@ export function parseIncome(
   { currencies }: { readonly currencies: readonly string[] },
 ): IncomeParse {
   const kind = incomeKindSchema.safeParse(formData.get('kind'));
+  const lostIn = incomeScenarioSchema.safeParse(formData.get('lostIn'));
   const values: IncomeValues = {
     name: text(formData, 'name'),
     kind: kind.success ? kind.data : 'laboral',
@@ -72,6 +81,7 @@ export function parseIncome(
     payments: Array.from({ length: MONTHS }, (_, month) => text(formData, `payment-${month}`)),
     isNet: formData.get('isNet') === 'on',
     savingsOnly: formData.get('savingsOnly') === 'on',
+    lostIn: lostIn.success ? lostIn.data : '',
     note: typeof formData.get('note') === 'string' ? String(formData.get('note')).trim() : '',
   };
 
@@ -98,6 +108,7 @@ export function parseIncome(
       is_net: values.isNet,
       payments_by_month: payments as number[],
       allocation: values.savingsOnly ? 'ahorro_total' : 'general',
+      lost_in_scenario: values.lostIn || null,
       note: values.note || null,
     },
   };

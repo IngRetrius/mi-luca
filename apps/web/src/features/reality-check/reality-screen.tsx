@@ -6,9 +6,12 @@ import { FigureList } from '@/components/figure-list';
 import { Screen } from '@/components/screen';
 import { StatusLabel, type Status } from '@/components/status';
 import { loadComputedCase } from '@/features/summary';
+import { withAddress } from '@/lib/address';
 import { amountToText } from '@/lib/amount';
+import type { CaseEditor } from '@/server/case-access';
 
 import { saveRealityCheck } from './actions';
+import { realityCheckPath } from './paths';
 import { RealityForm } from './reality-form';
 
 const t = messages.es;
@@ -22,16 +25,31 @@ const STATUS: Readonly<Record<RealityCheckStatus, Status>> = {
 };
 
 /** P-A08 Prueba de realidad: los saldos, el resultado y su efecto en el % a inversión (RN-050 a RN-053). */
-export async function RealityCheckScreen({ clientId }: { clientId: string }) {
-  const back = `/clientes/${clientId}`;
-  const path = `${back}/prueba-de-realidad`;
+export async function RealityCheckScreen({
+  viewer,
+  clientId,
+}: {
+  viewer: CaseEditor;
+  clientId: string;
+}) {
+  const path = realityCheckPath(viewer.role, clientId);
+  const back = viewer.role === 'advisor' ? `/clientes/${clientId}` : '/mis-datos';
+  const forClient =
+    viewer.role === 'client' ? withAddress(text.client, viewer.formOfAddress) : null;
+  const local = {
+    back: forClient?.back ?? text.back,
+    intro: forClient?.intro ?? text.intro,
+    statusHints: forClient
+      ? { ...text.statusHints, revisar_gastos: forClient.revisar_gastos }
+      : text.statusHints,
+  };
   const computed = await loadComputedCase(clientId);
   const header = (
     <>
-      <BackLink href={back} label={text.back} />
+      <BackLink href={back} label={local.back} />
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold text-balance">{text.title}</h1>
-        <p className="text-text-muted">{text.intro}</p>
+        <p className="text-text-muted">{local.intro}</p>
       </div>
     </>
   );
@@ -62,7 +80,7 @@ export async function RealityCheckScreen({ clientId }: { clientId: string }) {
           </h2>
           <StatusLabel status={status} label={text.status[result.status]} />
         </div>
-        <p className="text-sm">{text.statusHints[result.status]}</p>
+        <p className="text-sm">{local.statusHints[result.status]}</p>
         <FigureList
           figures={[
             {

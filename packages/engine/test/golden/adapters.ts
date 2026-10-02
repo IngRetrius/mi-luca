@@ -123,6 +123,7 @@ export function incomesInput(
       currency: String(cell(golden, `Ingresos!D${row}`) ?? baseCurrency),
     },
     paymentsByMonth: monthFlags(golden, 'Ingresos', row),
+    lostInScenario: null,
   }));
 }
 

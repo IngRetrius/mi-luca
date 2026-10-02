@@ -13,6 +13,6 @@ export default async function AdvisorRealityCheckPage({
   const { id } = await params;
   const path = `/clientes/${id}/prueba-de-realidad`;
   await requireAdvisor(path);
-  await requireCaseEditor(id, path);
-  return <RealityCheckScreen clientId={id} />;
+  const viewer = await requireCaseEditor(id, path);
+  return <RealityCheckScreen viewer={viewer} clientId={id} />;
 }

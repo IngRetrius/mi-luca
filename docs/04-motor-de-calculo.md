@@ -53,7 +53,7 @@ interface ComputeOptions {
 | `emergency-fund` | `emergencyFund({ totalMonthlyExpenses, essentialMonthly, monthlyIncomeByKind, months, hasExpensiveDebt })` | Presupuesto e ingresos; en modo nativo el aporte de terceros cuenta como "otro" | Escenarios A, B, C; meta por peor caso, mínimo, completa, vigente; regla de 6 meses | `Fondo emergencia!C6:E23` (RN-080 a RN-084) |
 | `pockets` | `computePockets({ pockets, budgetItems, budget, emergencyCurrentGoal, noIncomeShortfall, noIncomeContribution, liquidAssets, operatingCushion, hasExpensiveDebt, pctToDebt, pctExcessToInvestment }, fx)` | Bolsillos generales y resultados previos | Meta, aporte y saldo por bolsillo; reparto del saldo; bolsillos con aporte; alerta de sobreasignación | `Bolsillos!D6:G18`, `C21:C30` (RN-070 a RN-074) |
 | `emergency-fund` | `emergencyProgress(assigned, fund)` | Saldo asignado | Avance frente a meta completa y vigente | `Fondo emergencia!C24:C25`, H-11 |
-| `savings-plan` | `sequentialSavingsPlan(surplus, fundGoal, fundBalance, flowYear)` | Sobrante de cada mes y faltante del fondo | Aporte al fondo por mes, sobrante que queda, meses hasta completarlo y mes en que se completa | Nuevo, modo nativo (H-01, ADR 0008, pregunta B14) |
+| `savings-plan` | `sequentialSavingsPlan(surplus, fundGoal, fundBalance, flowYear, cutoffDate)` | Sobrante de cada mes y faltante del fondo | Aporte al fondo por mes, sobrante que queda, meses hasta completarlo y mes en que se completa | Nuevo, modo nativo (H-01, ADR 0008; empieza el mes siguiente al corte, ADR 0011) |
 | `debts` | `debtTotals(debts, fx)` | Saldo y cuota mínima de cada deuda | Saldo total y cuotas mínimas en moneda base | `Deudas!D21`, `F21` |
 | `debts` | `expensiveDebt(debts, threshold, fx)`, `debtLoad(minPayments, monthlyIncome)` | Saldo y tasa de cada deuda | Deuda cara por deuda, saldo caro, si existe; carga de deuda | `Deudas!J13:J20`, `C22:C24` (RN-090) |
 | `debts` | `classifyDebts(debts, threshold, method)` | Inventario | Tasa mensual, orden, totales | `Deudas!I:K`, `C25:C26` (RN-091) |
@@ -110,7 +110,7 @@ Tiempo objetivo: menos de 50 ms por cálculo completo en un teléfono de gama me
 | Cuotas de deuda en el flujo | 12 meses iguales | Hasta el mes de fin de cada deuda | H-03 |
 | Seguros en la cuota | No se separan | Se separan | H-05 |
 | Motor de deudas | 120 meses | Uno solo, horizonte configurable, FRECH y orden manual | H-06 |
-| Escenarios del fondo | "Otro" se pierde solo en C | Se pierde en el escenario marcado por ingreso | H-07 |
+| Escenarios del fondo | "Otro" se pierde solo en C | Se pierde en el escenario marcado por ingreso (`lostInScenario`: A, B, C o ninguno); sin marca, la regla de la plantilla. Hecho (ADR 0011) | H-07 |
 | Seguro de vida | 10 años fijos | Años y gasto editables | H-10 |
 | Avance del fondo | Frente a la meta completa | Frente a la completa y a la vigente | H-11 |
 | Monedas | Base más USD; sin tasa, el importe vale 0 | Cualquier moneda en cualquier importe; sin tasa, pendiente y bloqueo de entrega | H-15, RN-017 |
@@ -213,7 +213,7 @@ El mismo mapa sirve después para la exportación a Excel (en sentido inverso, p
 
 | Tipo | Qué verifica |
 |---|---|
-| Modo nativo (`test/native/`) | Correcciones del modo nativo con datos de los casos de oro y valores revisados por el asesor. Hoy, con los datos de C2: pagador por gasto (ingreso anual de 15.710,46 EUR y tasa personal de 100 %), aporte de la familia como ingreso "otro" en el flujo y el fondo (todo igual que la plantilla) y plan secuencial (el fondo se completa en marzo y se invierte la mitad de lo que queda); los valores del plan secuencial esperan la revisión del asesor |
+| Modo nativo (`test/native/`) | Correcciones del modo nativo con datos de los casos de oro y valores revisados por el asesor. Hoy, con los datos de C2: pagador por gasto (ingreso anual de 15.710,46 EUR y tasa personal de 100 %), aporte de la familia como ingreso "otro" en el flujo y el fondo (todo igual que la plantilla) y plan secuencial desde el mes siguiente al corte (el fondo se completa en diciembre de 2026 y en 2027 se invierte como en la plantilla, ADR 0011) |
 | Compatibilidad Excel (`test/excel-compat/`) | `EDATE` con fin de mes y meses fraccionarios, `DATEDIF` en meses, `ROUNDUP` con negativos y decimales (hechos); `DATEDIF` en años, `NPER` y `PMT` con tasa cero (con sus módulos) |
 | Propiedades (`test/properties/`, con fast-check) | Invariantes del control de calidad: sobrante = ingreso - gasto - ahorro; saldos de deuda nunca negativos; el reparto nunca supera lo disponible; el % en crecimiento siempre dentro del rango; resultados iguales con la misma entrada (determinismo) |
 | Unitarias por módulo | Casos borde: frecuencia sin días, todos los meses en rojo, deuda que no acepta abonos, tasa 0 %, perfil sin responder |

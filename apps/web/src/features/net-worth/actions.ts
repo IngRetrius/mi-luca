@@ -36,8 +36,8 @@ export async function saveAsset(
   _previous: AssetState | null,
   formData: FormData,
 ): Promise<AssetState> {
-  await requireCaseEditor(clientId, '/');
-  const paths = assetPaths(clientId);
+  const viewer = await requireCaseEditor(clientId, '/');
+  const paths = assetPaths(viewer.role, clientId);
   const currencies = await allowedCurrencies(clientId);
   const parsed = parseAsset(formData, { currencies: currencies ?? [] });
   if (!currencies) return { values: parsed.values, errors: {}, formError: 'unavailable' };
@@ -73,8 +73,8 @@ export async function saveAsset(
 
 /** Borra un activo y registra su antes y después. */
 export async function deleteAsset(clientId: string, assetId: string): Promise<void> {
-  await requireCaseEditor(clientId, '/');
-  const paths = assetPaths(clientId);
+  const viewer = await requireCaseEditor(clientId, '/');
+  const paths = assetPaths(viewer.role, clientId);
   if (isUuid(assetId)) {
     const supabase = await createClient();
     await withImpact(

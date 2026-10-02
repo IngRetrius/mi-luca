@@ -13,6 +13,6 @@ export default async function AdvisorReceivablesPage({
   const { id } = await params;
   const path = `/clientes/${id}/cobros`;
   await requireAdvisor(path);
-  await requireCaseEditor(id, path);
-  return <ReceivablesScreen clientId={id} />;
+  const viewer = await requireCaseEditor(id, path);
+  return <ReceivablesScreen viewer={viewer} clientId={id} />;
 }

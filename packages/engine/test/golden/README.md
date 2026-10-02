@@ -8,23 +8,23 @@ Cada caso vive en su carpeta, generada con `tools/excel-extractor/` (`recalc.py`
 
 Los valores quedan a nivel de celda. `adapters.ts` traduce las celdas a las entradas del motor: etiquetas de la plantilla a códigos del modelo (una etiqueta desconocida es un error). Las filas automáticas del presupuesto (6 a 12) no se leen de la plantilla: se calculan con los módulos de deudas, seguros y metas, en el orden de la hoja (una fila por cada fila de Metas, con 0 si la meta no tiene nombre).
 
-| Prueba | Qué compara con Excel |
-|---|---|
-| `golden.test.ts` | Conteos de cada caso y conversión a moneda base de `Ingresos!F6:F13` |
-| `incomes-budget.test.ts` | Ingresos (F:U de las filas 6 a 13, fila 14, `T20:U25`, `S17`, `E30:E32`), Presupuesto (G:I de las filas 6 a 87 y los totales de las filas 89 a 97) y `Resumen!C11:C13` |
-| `compute.test.ts` | `compute` con el caso entero: `Resumen!C11:C15` en todos los casos, determinismo, y cifras clave antes y después |
-| `c2-cost-of-living.test.ts` | Hoja "Costo de vida" de C2 (no está en la plantilla): niveles de cada partida, totales, lo que paga la familia, costo sin matrícula, umbral fiscal y control contra el presupuesto (filas 6 a 39) |
-| `cashflow-pockets.test.ts` | Flujo anual completo (filas 7 a 34, `T20:T27`, `B36`), cobros (`Supuestos!F46:I49`), prueba de realidad (`C38:C42`), deuda cara y carga (`Deudas!C22:C24`), saldo líquido (`Patrimonio!C33`), Fondo de emergencia (`C6:E25`), Bolsillos (`D6:G18`, `C21:C30`) y `Resumen!C14:C26` (salvo `C19`) y `C35` |
-| `goals-insurance-debts.test.ts` | Metas (F, J y K de las filas 6 a 10, `K11` y la calculadora `E17:E30`), Seguros (`I6:I16`, `H16`), Deudas (`D21`, `F21`) y el valor de las filas automáticas `Presupuesto!D6:D12` |
+| Prueba                          | Qué compara con Excel                                                                                                                                                                                                                                                                                   |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `golden.test.ts`                | Conteos de cada caso y conversión a moneda base de `Ingresos!F6:F13`                                                                                                                                                                                                                                    |
+| `incomes-budget.test.ts`        | Ingresos (F:U de las filas 6 a 13, fila 14, `T20:U25`, `S17`, `E30:E32`), Presupuesto (G:I de las filas 6 a 87 y los totales de las filas 89 a 97) y `Resumen!C11:C13`                                                                                                                                  |
+| `compute.test.ts`               | `compute` con el caso entero: `Resumen!C11:C15` en todos los casos, determinismo, y cifras clave antes y después                                                                                                                                                                                        |
+| `c2-cost-of-living.test.ts`     | Hoja "Costo de vida" de C2 (no está en la plantilla): niveles de cada partida, totales, lo que paga la familia, costo sin matrícula, umbral fiscal y control contra el presupuesto (filas 6 a 39)                                                                                                       |
+| `cashflow-pockets.test.ts`      | Flujo anual completo (filas 7 a 34, `T20:T27`, `B36`), cobros (`Supuestos!F46:I49`), prueba de realidad (`C38:C42`), deuda cara y carga (`Deudas!C22:C24`), saldo líquido (`Patrimonio!C33`), Fondo de emergencia (`C6:E25`), Bolsillos (`D6:G18`, `C21:C30`) y `Resumen!C14:C26` (salvo `C19`) y `C35` |
+| `goals-insurance-debts.test.ts` | Metas (F, J y K de las filas 6 a 10, `K11` y la calculadora `E17:E30`), Seguros (`I6:I16`, `H16`), Deudas (`D21`, `F21`) y el valor de las filas automáticas `Presupuesto!D6:D12`                                                                                                                       |
 
-| Caso | Contenido | Estado |
-|---|---|---|
-| `c3-plantilla-vacia` | Plantilla oficial sin datos, fecha de corte 28/09/2026 | Listo |
-| `c2-espana` | Caso real de España anonimizado (nombre, fecha de nacimiento con la misma edad, entidad, ocupación, salud y terceros), corte 28/09/2026 | Listo, revisado por el asesor el 28/09/2026 |
-| `c7-metas-seguros` | Sintético sobre la plantilla oficial, corte 28/09/2026: los cambios están en `cambios.json` (metas con fecha, vencida, ya cubierta y repetida; calculadora de viaje con tasa de 4.000; seguros nuevos, cotizando, sin responder y que ya tiene; dos deudas). Sin ingresos ni partidas del cliente | Listo |
-| `c6-ingreso-variable` | Sintético sobre la plantilla oficial, corte 28/09/2026 (`cambios.json`): ingreso variable con meses en cero y aporte proporcional a meses sin ingreso, ingreso en USD solo unos meses, un ingreso y una partida sin tipo (H-26), deuda cara, tres cobros (uno sin saldo, H-27), prueba de realidad confirmada y saldo líquido en USD | Listo |
-| `c8-saldos-cobros` | Sintético sobre la plantilla oficial, corte 28/09/2026 (`cambios.json`): sin deudas, prueba de realidad "Revisar gastos", cobro que empieza después del corte, pensión, meses de fondo fijados, colchón, dos pagos en un mes y saldos que superan lo disponible | Listo |
-| `c1-colombia` | Caso real de Colombia (contratista con arriendos, sin deudas) llevado a la plantilla oficial y anonimizado (nombre, día de nacimiento, entidades, inmuebles, familiares, mascota, destino del viaje y conceptos de salud), corte 28/09/2026 | Construido el 28/09/2026; pendiente de revisión del asesor (pregunta A11) |
+| Caso                  | Contenido                                                                                                                                                                                                                                                                                                                            | Estado                                                                    |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| `c3-plantilla-vacia`  | Plantilla oficial sin datos, fecha de corte 28/09/2026                                                                                                                                                                                                                                                                               | Listo                                                                     |
+| `c2-espana`           | Caso real de España anonimizado (nombre, fecha de nacimiento con la misma edad, entidad, ocupación, salud y terceros), corte 28/09/2026                                                                                                                                                                                              | Listo, revisado por el asesor el 28/09/2026                               |
+| `c7-metas-seguros`    | Sintético sobre la plantilla oficial, corte 28/09/2026: los cambios están en `cambios.json` (metas con fecha, vencida, ya cubierta y repetida; calculadora de viaje con tasa de 4.000; seguros nuevos, cotizando, sin responder y que ya tiene; dos deudas). Sin ingresos ni partidas del cliente                                    | Listo                                                                     |
+| `c6-ingreso-variable` | Sintético sobre la plantilla oficial, corte 28/09/2026 (`cambios.json`): ingreso variable con meses en cero y aporte proporcional a meses sin ingreso, ingreso en USD solo unos meses, un ingreso y una partida sin tipo (H-26), deuda cara, tres cobros (uno sin saldo, H-27), prueba de realidad confirmada y saldo líquido en USD | Listo                                                                     |
+| `c8-saldos-cobros`    | Sintético sobre la plantilla oficial, corte 28/09/2026 (`cambios.json`): sin deudas, prueba de realidad "Revisar gastos", cobro que empieza después del corte, pensión, meses de fondo fijados, colchón, dos pagos en un mes y saldos que superan lo disponible                                                                      | Listo                                                                     |
+| `c1-colombia`         | Caso real de Colombia (contratista con arriendos, sin deudas) llevado a la plantilla oficial y anonimizado (nombre, día de nacimiento, entidades, inmuebles, familiares, mascota, destino del viaje y conceptos de salud), corte 28/09/2026                                                                                          | Construido el 28/09/2026; aprobado el 02/10/2026 (A11, decisión delegada) |
 
 Criterio de aceptación: diferencia absoluta máxima de 0,01 en importes; tolerancias de porcentajes, fechas y textos en `docs/04-motor-de-calculo.md`.
 
@@ -47,21 +47,21 @@ Decisiones tomadas al pasarlo a la plantilla (**Supuestos** hasta que el asesor 
 
 ## Contraste de C1 con la sección 15 del protocolo
 
-| Cifra | Protocolo | C1 (Excel) | Celda |
-|---|---|---|---|
-| Ingreso anual | 90,8 millones | 90.800.000 | `Resumen!C11` |
-| Gasto anual con bolsillos | 63,7 millones | 63.704.439 | `Resumen!C12` |
-| Sobrante anual | 19,3 millones | 19.342.361 | `Resumen!C14` |
-| Tasa de ahorro | 30 % | 29,84 % | `Resumen!C15` |
-| Faltante de enero | 3,83 millones | 3.831.803,25 | `Resumen!C23` |
-| Aporte mensual al bolsillo de meses sin ingreso | 348.346 | 348.345,75 | `Resumen!C24` |
-| Fondo de emergencia | 8,64 millones | 8.642.900 | `Resumen!C21` |
-| Regla de 6 meses | 31,9 millones | 31.852.219,5 | `Fondo emergencia!C22` |
-| Viaje internacional | 4.290 USD (13,3 millones) | 4.289,88 USD (13.298.628) | `Metas!E25`, `Metas!E30` |
-| Inversión del año del flujo | 19,5 millones | 15.671.180,5 | `Resumen!C25` |
-| Semanas al cumplir 57 | unas 1.229 (requeridas 1.150) | 1.228,86 (requeridas 1.150) | `Resumen!C29`, `Pensión!C22` |
-| Mesada neta, escenario medio | 2 a 3 millones | 2.474.904,22 | `Resumen!C31` |
-| Patrimonio | 692 millones | 692.291.902 | `Resumen!C33` |
-| Concentración en inmuebles y carro | 91 % | 91,00 % | `Resumen!C34` |
+| Cifra                                           | Protocolo                     | C1 (Excel)                  | Celda                        |
+| ----------------------------------------------- | ----------------------------- | --------------------------- | ---------------------------- |
+| Ingreso anual                                   | 90,8 millones                 | 90.800.000                  | `Resumen!C11`                |
+| Gasto anual con bolsillos                       | 63,7 millones                 | 63.704.439                  | `Resumen!C12`                |
+| Sobrante anual                                  | 19,3 millones                 | 19.342.361                  | `Resumen!C14`                |
+| Tasa de ahorro                                  | 30 %                          | 29,84 %                     | `Resumen!C15`                |
+| Faltante de enero                               | 3,83 millones                 | 3.831.803,25                | `Resumen!C23`                |
+| Aporte mensual al bolsillo de meses sin ingreso | 348.346                       | 348.345,75                  | `Resumen!C24`                |
+| Fondo de emergencia                             | 8,64 millones                 | 8.642.900                   | `Resumen!C21`                |
+| Regla de 6 meses                                | 31,9 millones                 | 31.852.219,5                | `Fondo emergencia!C22`       |
+| Viaje internacional                             | 4.290 USD (13,3 millones)     | 4.289,88 USD (13.298.628)   | `Metas!E25`, `Metas!E30`     |
+| Inversión del año del flujo                     | 19,5 millones                 | 15.671.180,5                | `Resumen!C25`                |
+| Semanas al cumplir 57                           | unas 1.229 (requeridas 1.150) | 1.228,86 (requeridas 1.150) | `Resumen!C29`, `Pensión!C22` |
+| Mesada neta, escenario medio                    | 2 a 3 millones                | 2.474.904,22                | `Resumen!C31`                |
+| Patrimonio                                      | 692 millones                  | 692.291.902                 | `Resumen!C33`                |
+| Concentración en inmuebles y carro              | 91 %                          | 91,00 %                     | `Resumen!C34`                |
 
 Única diferencia: la inversión del año. El protocolo invierte el 70 % del sobrante; la plantilla actual invierte el 50 % mientras la prueba de realidad esté pendiente (sección 6.2 del protocolo), y en este caso lo está. Con el 70 % daría 19.539.652,7.

@@ -92,7 +92,7 @@ describe('modo nativo, caso C2: la familia paga sus gastos', () => {
     expect(result.personal?.ownSavingsRate).toBe(1);
   });
 
-  it('plan secuencial (ADR 0008): todo el sobrante va al fondo hasta completarlo y luego la mitad a inversión', () => {
+  it('plan secuencial (ADR 0008, B14): desde el mes siguiente al corte, todo el sobrante va al fondo hasta completarlo', () => {
     const input = caseInput(c2, { payer: (row) => (row >= 13 ? 'familia' : 'cliente') });
     const result = compute(
       {
@@ -105,19 +105,15 @@ describe('modo nativo, caso C2: la familia paga sus gastos', () => {
       { mode: 'native' },
     );
     const plan = result.savingsPlan!;
-    // Faltan 995,95 EUR (meta vigente menos el saldo de hoy) y sobran 400 EUR al mes.
+    // Faltan 995,95 EUR (meta vigente menos el saldo de hoy) y sobran 400 EUR al mes. Con corte el
+    // 28/09/2026, octubre, noviembre y diciembre completan el fondo antes del año del flujo.
     const gap = excelN(cell(c2, 'Fondo emergencia!C21')) - excelN(cell(c2, 'Bolsillos!G6'));
     expect(Math.abs(plan.fundGap - gap)).toBeLessThan(0.01);
+    expect(plan.startMonth).toBe('2026-10-01');
     expect(plan.monthsToComplete).toBe(3);
-    expect(plan.completionMonth).toBe('2027-03-01');
-    expect(plan.toFund.months.slice(0, 4)).toEqual([400, 400, gap - 800, 0]);
-    expect(Math.abs(plan.toFund.total - gap)).toBeLessThan(0.01);
-    // Se invierte el % de la prueba pendiente sobre lo que queda después del fondo.
-    const pct = excelN(cell(c2, 'Supuestos!C42'));
-    const annualSurplus = excelN(cell(c2, 'Flujo anual!Q22'));
-    expect(Math.abs(result.summary.annualInvestment - (annualSurplus - gap) * pct)).toBeLessThan(
-      0.01,
-    );
-    expect(result.summary.annualInvestment).toBeLessThan(excelN(cell(c2, 'Resumen!C25')));
+    expect(plan.completionMonth).toBe('2026-12-01');
+    expect(plan.toFund.total).toBe(0);
+    // En 2027 el fondo ya está completo: se invierte como en la plantilla.
+    expectCell(c2, 'Resumen!C25', result.summary.annualInvestment);
   });
 });

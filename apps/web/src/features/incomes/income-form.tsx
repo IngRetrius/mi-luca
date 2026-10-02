@@ -37,6 +37,8 @@ export interface IncomeFormText {
   readonly preview: ImpactPreviewText;
 }
 
+const LOST_IN_OPTIONS = ['', 'a', 'b', 'c', 'ninguno'] as const;
+
 const FIELD_ORDER: readonly IncomeField[] = ['name', 'amount', 'currency', 'payments', 'note'];
 
 /** El caso con el ingreso del formulario. */
@@ -238,6 +240,22 @@ export function IncomeForm({
           defaultChecked={values.savingsOnly}
         />
       </div>
+
+      <Field id={fieldId('lostIn')} label={text.form.lostIn} hint={text.form.lostInHint}>
+        <select
+          id={fieldId('lostIn')}
+          name="lostIn"
+          defaultValue={values.lostIn}
+          aria-describedby={describedBy(fieldId('lostIn'), true)}
+          className={textField}
+        >
+          {LOST_IN_OPTIONS.map((option) => (
+            <option key={option} value={option}>
+              {text.form.lostInOptions[option]}
+            </option>
+          ))}
+        </select>
+      </Field>
 
       <Field id={fieldId('note')} label={text.form.note} error={errorText('note')}>
         <textarea

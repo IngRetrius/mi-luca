@@ -54,10 +54,10 @@ gantt
 
 | Fase | Estimado | Estado al 02/10/2026 |
 |---|---|---|
-| F0 | 80 h, hasta mediados de noviembre de 2026 | Terminada salvo tareas del asesor: dominio y verificación de marca en Google, y la revisión del caso C1 (A11) |
+| F0 | 80 h, hasta mediados de noviembre de 2026 | Terminada salvo tareas del asesor: dominio y verificación de marca en Google (D3, D5) |
 | F1 | 120 h, hasta mediados de enero de 2027 | Terminada salvo el alta con Google en un navegador real, el correo de la invitación (C14) y exportar y borrar en P-C11 (F7) |
-| F2 | 160 h, hasta comienzos de abril de 2027 | Terminada en el código; pendientes que no bloquean: C6 y C20 |
-| F3 | 160 h, hasta finales de junio de 2027 | En curso: motor, base de datos, pantallas del asesor y entrega mínima hechos; faltan las pantallas del cliente en Mis datos y el banco de los bolsillos del fondo y de meses sin ingreso |
+| F2 | 160 h, hasta comienzos de abril de 2027 | Terminada; queda el correo diario de cambios (C6), que espera a que la app envíe correos |
+| F3 | 160 h, hasta finales de junio de 2027 | Terminada en el código; falta el piloto con un caso real (criterio MVP) |
 | F4 a F8 | 600 h | Sin empezar |
 
 Con el agente de código, F0 a F2 avanzaron mucho más rápido que la estimación a 14 horas por semana, que suponía empezar el 5 de octubre de 2026. **Supuesto:** el calendario de arriba se mantiene como techo y se reestima al cerrar F3, con lo que tome realmente una fase que mezcla motor, base de datos y pantallas. Las horas del resto no cambian hasta entonces.
@@ -116,7 +116,7 @@ Avance al 28/09/2026 (PR #1 a #4 unidos):
 - [x] Caso C3 (plantilla vacía) y primera prueba de oro del motor (conversión de moneda de Ingresos).
 - [x] Caso de oro C2 (España), anonimizado y revisado por el asesor.
 - [x] Caso de oro C1 (Colombia) llevado a la plantilla oficial y anonimizado; reproduce las cifras de la sección 15 del protocolo salvo la inversión anual.
-- [ ] Revisión del caso C1 por el asesor (pregunta A11).
+- [x] Caso C1 aprobado el 02/10/2026 por decisión delegada del asesor (A11, ADR 0011).
 
 Criterios de aceptación:
 
@@ -193,7 +193,7 @@ Avance:
 - [x] Costo de vida (P-A11): tres niveles por mes y por año, sin temporales, lo que paga cada uno, umbrales marcados (con remisión al contador o gestor) y cada partida con enlace a su nivel básico en el presupuesto.
 - [x] Ficha (P-A03) con todos los datos del caso y Mis datos (P-C06) con ingresos, gastos y monedas. Verificado de punta a punta contra Supabase local (asesora y cliente de prueba, 390 px), sin errores de consola.
 - [ ] Correo diario con los cambios del cliente (C6): cuando la app envíe correos. No bloquea: el aviso dentro de la app ya llega al momento.
-- [ ] Datos de salud al retirar ese consentimiento (C20): marcar las partidas de salud y pedir renombrarlas. Pendiente de la decisión del responsable.
+- [x] Datos de salud al retirar ese consentimiento (C20, ADR 0011): los gastos se marcan de salud; al retirarlo conservan el importe y pierden el detalle, también en el historial.
 
 Estado al 02/10/2026: **F2 terminada en el código**. Los tres criterios de aceptación se cumplen: pruebas de oro de Ingresos, Presupuesto y `Resumen!C11:C15` en C1, C2, C3 y C7; caso C2 con la hoja "Costo de vida" completa, 15.710,46 EUR y tasa personal de 100 % (`test/golden/c2-cost-of-living.test.ts`, `test/native/c2-payer.test.ts`); y el cliente edita un gasto o un ingreso en el celular, ve "Así cambia tu plan" antes de guardar y el asesor recibe el aviso con el antes y después (verificado contra Supabase local). Quedan dos tareas que no bloquean F3 (C6 y C20) y las decisiones abiertas del asesor (A11, ADR 0010, B13).
 
@@ -215,8 +215,8 @@ Avance:
 - [x] Base de datos: supuestos del plan en `case_settings`, parámetros de la metodología, `banks`, `pockets`, `budget_items.pocket_id`, `receivables`, `reality_check` y `assets`, con RLS, historial y pgTAP. La app ya calcula el caso completo con estas tablas.
 - [x] Pantallas del asesor: Flujo, Fondo y Bolsillos (P-A10, solo lectura, con el reparto del saldo de hoy), bancos y bolsillos generales, Cobros (P-A10), Patrimonio (activos y saldo líquido), Prueba de realidad (P-A08) y Supuestos del plan; bolsillo en el formulario del presupuesto. Accesos desde la ficha y cifras nuevas en ella. Verificado de punta a punta contra Supabase local (390 y 320 px, sin errores de consola) y revisado con `web-design-guidelines`.
 - [x] Revisión del 02/10/2026: índices de las llaves compuestas (migración `pocket_fk_indexes`, por el asesor de rendimiento), metodología vigente hoy cuando el corte es anterior a su primera versión (antes la ficha no cargaba), esqueleto de carga propio de la ficha, página de error en español, cifras clave ausentes en un "antes" guardado tratadas como vacías, aviso en el presupuesto de las partidas tipo bolsillo sin bolsillo (H-02) y pruebas e2e de invitación que dependen de si hay Supabase.
-- [ ] Pantallas del cliente en Mis datos: bancos y bolsillos, cobros (sin el % a inversión), patrimonio y prueba de realidad (la matriz de permisos se los deja editar).
-- [ ] Bolsillos del fondo y de meses sin ingreso con su banco (hoy el motor los arma y la pantalla no deja asignarles banco).
+- [x] Decisiones de criterio delegadas por el asesor (ADR 0011): plan secuencial desde el mes siguiente al corte (B14), escenario del fondo por ingreso (H-07), gastos de salud sin detalle al retirar el consentimiento (C20), tabla de correcciones del modo nativo (B3) y ADR propuestos aceptados. `ENGINE_VERSION` 0.9.0; migración `income_scenarios_health_items`.
+- [x] El cliente mantiene su plan: en Mis datos, bancos y bolsillos (también el banco del fondo y de meses sin ingreso), lo que le deben (sin el % a inversión), lo que tiene y la prueba de realidad; el plan se recalcula y el asesor ve el antes y después. Verificado como cliente contra Supabase local.
 - [x] Entrega mínima: control de calidad en el motor (`qualityChecks`, `ENGINE_VERSION` 0.8.0) con controles bloqueantes, que piden nota y de advertencia; P-A12 y P-A14 en una pantalla (`/clientes/[id]/entrega`) que recalcula en el servidor, exige las notas y guarda el plan; `plan_deliveries` inmutable y sellado; vista del plan entregado con "Comparar con hoy"; P-C05 Mi plan sin PDF, con versiones; el inicio del cliente lleva a su plan. Verificado de punta a punta contra Supabase local (asesora y cliente, 320 px, sin errores de consola).
 
 ### F4. Deudas y créditos (160 horas)
@@ -260,7 +260,7 @@ Criterios de aceptación:
 |---|---|---|---|
 | La sesión se pierde en la PWA de iOS | Media | Alto | Prueba en F0 con dispositivos reales; plan B con token de identidad (`signInWithIdToken`); la web en Safari siempre funciona |
 | El motor no reproduce a Excel en algún borde (fechas, redondeos) | Media | Alto | Funciones de Excel probadas aparte; comparación de valores intermedios; tolerancias definidas |
-| El caso de prueba de Colombia no existe en la plantilla oficial (H-25) | Resuelto | Medio | Construido en F0 el 28/09/2026 (`c1-colombia`), pendiente de revisión del asesor |
+| El caso de prueba de Colombia no existe en la plantilla oficial (H-25) | Resuelto | Medio | Construido en F0 el 28/09/2026 (`c1-colombia`) y aprobado el 02/10/2026 (A11) |
 | Ninguno de los casos reales tiene deudas | Cierta | Medio | Casos sintéticos C4 y C5 desde el caso 15.1 del protocolo |
 | La plataforma se interpreta como asesoramiento en inversiones regulado | Baja con buenos textos | Alto | Sin productos ni entidades; textos de alcance; puntos de `legal/README.md` decididos por el responsable (A7) |
 | Datos de salud en el presupuesto (terapias, medicamentos) | Alta | Medio | Consentimiento explícito aparte; guía para nombrar partidas de forma genérica |

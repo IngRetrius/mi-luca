@@ -37,7 +37,7 @@ export async function saveReceivable(
   formData: FormData,
 ): Promise<ReceivableState> {
   const viewer = await requireCaseEditor(clientId, '/');
-  const paths = receivablePaths(clientId);
+  const paths = receivablePaths(viewer.role, clientId);
   const currencies = await allowedCurrencies(clientId);
   const parsed = parseReceivable(formData, {
     currencies: currencies ?? [],
@@ -76,8 +76,8 @@ export async function saveReceivable(
 
 /** Borra un cobro y registra su antes y después. */
 export async function deleteReceivable(clientId: string, receivableId: string): Promise<void> {
-  await requireCaseEditor(clientId, '/');
-  const paths = receivablePaths(clientId);
+  const viewer = await requireCaseEditor(clientId, '/');
+  const paths = receivablePaths(viewer.role, clientId);
   if (isUuid(receivableId)) {
     const supabase = await createClient();
     await withImpact(

@@ -622,7 +622,9 @@
       "pocket": "Bolsillo",
       "pocketHint": "Para los gastos tipo bolsillo: dónde se guarda lo de este gasto.",
       "pocketNone": "Todavía no hay bolsillos. Se crean en Bolsillos.",
-      "noPocket": "Sin bolsillo"
+      "noPocket": "Sin bolsillo",
+      "health": "Es un gasto de salud",
+      "healthHint": "Terapias, medicamentos, lentes. Si se retira el consentimiento de datos de salud, queda solo como «Salud», sin detalle."
     },
     "preview": {
       "title": {
@@ -682,7 +684,21 @@
     "link": "Mis datos",
     "currencies": "Monedas",
     "currenciesSummary": "{count} además de {base}",
-    "currenciesNone": "Solo {base}"
+    "currenciesNone": "Solo {base}",
+    "pockets": "Bancos y bolsillos",
+    "pocketsSummary": "{count} bolsillos con aporte al mes",
+    "receivables": {
+      "tu": "Lo que te deben",
+      "usted": "Lo que le deben"
+    },
+    "receivablesSummary": "{amount} pendientes",
+    "receivablesNone": "Nadie",
+    "assets": {
+      "tu": "Lo que tienes",
+      "usted": "Lo que tiene"
+    },
+    "assetsSummary": "Saldo líquido de {amount}",
+    "realityCheck": "Prueba de realidad"
   },
   "currencies": {
     "title": "Monedas",
@@ -827,6 +843,15 @@
         "notAllowed": "No tienes permiso para cambiar este dato.",
         "notFound": "Este ingreso ya no existe.",
         "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      },
+      "lostIn": "En una emergencia, este ingreso…",
+      "lostInHint": "Para el fondo de emergencia. Por ejemplo, un aporte fijo de la familia o un arriendo seguro se mantienen siempre.",
+      "lostInOptions": {
+        "": "Depende del tipo de ingreso",
+        "a": "Se pierde si se pierde el trabajo",
+        "b": "Se pierde si se pierden las rentas",
+        "c": "Solo se pierde en el peor caso",
+        "ninguno": "Se mantiene siempre"
       }
     },
     "client": {
@@ -1105,7 +1130,24 @@
         "notFound": "Este bolsillo ya no existe."
       }
     },
-    "banksSummary": "{count} registrados"
+    "banksSummary": "{count} registrados",
+    "client": {
+      "back": "Mis datos",
+      "intro": {
+        "tu": "Para qué guardas cada peso: meta del año, aporte al mes y saldo de hoy. Si cambias algo, tu plan se recalcula y tu asesor lo ve.",
+        "usted": "Para qué guarda cada peso: meta del año, aporte al mes y saldo de hoy. Si cambia algo, su plan se recalcula y su asesor lo ve."
+      },
+      "balanceHint": {
+        "tu": "Lo que ya tienes en este bolsillo. Sale de tu saldo líquido.",
+        "usted": "Lo que ya tiene en este bolsillo. Sale de su saldo líquido."
+      }
+    },
+    "special": {
+      "title": "Bolsillo: {name}",
+      "intro": "La meta y el saldo los calcula el plan; aquí se elige en qué banco está.",
+      "nameTaken": "Ya hay un bolsillo general con este nombre. Cámbiale el nombre y vuelve a intentarlo."
+    },
+    "bankLabel": "Banco: {bank}"
   },
   "banks": {
     "title": "Bancos",
@@ -1189,6 +1231,30 @@
         "notFound": "Este cobro ya no existe.",
         "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
       }
+    },
+    "client": {
+      "back": "Mis datos",
+      "title": {
+        "tu": "Lo que te deben",
+        "usted": "Lo que le deben"
+      },
+      "intro": {
+        "tu": "Dinero que te deben y te pagan por cuotas. Los abonos no son ingreso del presupuesto: van a inversión o, si tienes deuda cara, a deudas.",
+        "usted": "Dinero que le deben y le pagan por cuotas. Los abonos no son ingreso del presupuesto: van a inversión o, si tiene deuda cara, a deudas."
+      },
+      "empty": {
+        "tu": "Nadie te debe dinero.",
+        "usted": "Nadie le debe dinero."
+      },
+      "debtor": {
+        "tu": "Quién te debe",
+        "usted": "Quién le debe"
+      },
+      "pctNote": "La parte de cada abono que va a inversión la decide el asesor.",
+      "balance": {
+        "tu": "Saldo que te deben",
+        "usted": "Saldo que le deben"
+      }
     }
   },
   "assets": {
@@ -1242,6 +1308,21 @@
         "notFound": "Este activo ya no existe.",
         "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
       }
+    },
+    "client": {
+      "back": "Mis datos",
+      "title": {
+        "tu": "Lo que tienes",
+        "usted": "Lo que tiene"
+      },
+      "intro": {
+        "tu": "Tus cuentas, bolsillos, efectivo, inmuebles y vehículos. Lo líquido es lo que se reparte en tus bolsillos.",
+        "usted": "Sus cuentas, bolsillos, efectivo, inmuebles y vehículos. Lo líquido es lo que se reparte en sus bolsillos."
+      },
+      "empty": {
+        "tu": "Todavía no registras lo que tienes.",
+        "usted": "Todavía no registra lo que tiene."
+      }
     }
   },
   "realityCheck": {
@@ -1283,6 +1364,17 @@
         "missingRate": "Falta la tasa de cambio de esa moneda. Regístrala en Monedas y vuelve a intentarlo.",
         "notAllowed": "No tienes permiso para cambiar este dato.",
         "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      }
+    },
+    "client": {
+      "back": "Mis datos",
+      "intro": {
+        "tu": "Compara lo que de verdad ahorraste con lo que tu plan dice que ahorras. Mientras no se confirme, se invierte un porcentaje menor.",
+        "usted": "Compara lo que de verdad ahorró con lo que su plan dice que ahorra. Mientras no se confirme, se invierte un porcentaje menor."
+      },
+      "revisar_gastos": {
+        "tu": "Hay gastos que no están en tu presupuesto: revísalo con tu asesor.",
+        "usted": "Hay gastos que no están en su presupuesto: revíselo con su asesor."
       }
     }
   },
