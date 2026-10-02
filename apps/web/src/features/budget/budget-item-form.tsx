@@ -1,16 +1,6 @@
 'use client';
 
-import Link from 'next/link';
-import {
-  useActionState,
-  useDeferredValue,
-  useEffect,
-  useId,
-  useMemo,
-  useState,
-  type FormEvent,
-  type ReactNode,
-} from 'react';
+import { useActionState, useEffect, useId, useState, type FormEvent } from 'react';
 
 import {
   expenseTypeSchema,
@@ -20,31 +10,23 @@ import {
   type Frequency,
   type Payer,
 } from '@miluca/domain';
-import {
-  compute,
-  keyFigures,
-  type CaseInput,
-  type EngineMode,
-  type KeyFigureId,
-  type KeyFigures,
-} from '@miluca/engine';
+import type { CaseInput } from '@miluca/engine';
 import type { Messages } from '@miluca/i18n';
 
-import { ScreenActions } from '@/components/screen';
+import { DeleteDisclosure, FormSubmitActions } from '@/components/form-actions';
+import { Checkbox, ChoiceGroup, describedBy, Field } from '@/components/form-field';
+import { choiceCard, choiceInput, textField } from '@/components/ui-classes';
+import { useUnsavedWarning } from '@/components/use-unsaved-warning';
 import {
-  choiceCard,
-  choiceInput,
-  focusRing,
-  linkButton,
-  primaryButton,
-  secondaryButton,
-  textButton,
-  textField,
-} from '@/components/ui-classes';
-import { toBudgetItemInput } from '@/features/summary/client';
+  ImpactPreview,
+  previewFigureIds,
+  toBudgetItemInput,
+  usePreviewFigures,
+  type ImpactPreviewText,
+  type PreviewCase,
+} from '@/features/summary/client';
 
 import type { BudgetItemState } from './actions';
-import { ImpactPreview, type ImpactPreviewText } from './impact-preview';
 import {
   CATEGORY_MAX,
   CONCEPT_MAX,
@@ -69,16 +51,23 @@ export interface BudgetFormText {
   readonly preview: ImpactPreviewText;
 }
 
-/** Lo necesario para recalcular el plan en el teléfono mientras se escribe (P-C07). */
-export interface BudgetPreviewData {
-  /** El caso sin la partida que se edita. */
-  readonly baseInput: CaseInput;
-  readonly mode: EngineMode;
-  readonly before: KeyFigures;
+/** El caso sin la partida que se edita, para recalcular el plan mientras se escribe (P-C07). */
+export interface BudgetPreviewData extends PreviewCase {
   /** Nivel básico guardado: el cliente no lo cambia, pero cuenta en el cálculo. */
   readonly keptBasicAmount: number | null;
-  readonly locale: string;
-  readonly baseCurrency: string;
+}
+
+/** Un borrador válido del formulario, con el nivel básico que vale para el cálculo. */
+interface BudgetDraft {
+  readonly record: BudgetItemRecord;
+  readonly basicAmount: number | null;
+}
+
+/** El caso con el borrador: una partida de referencia familiar no suma (RN-025). */
+function withDraft(input: CaseInput, draft: BudgetDraft): CaseInput {
+  if (draft.record.scope !== 'presupuesto') return input;
+  const item = toBudgetItemInput({ ...draft.record, basic_amount: draft.basicAmount });
+  return { ...input, budgetItems: [...input.budgetItems, item] };
 }
 
 export interface BudgetItemFormProps {
@@ -126,17 +115,9 @@ export function BudgetItemForm({
   const fieldId = (field: string) => `${formId}-${field}`;
   const [frequency, setFrequency] = useState<Frequency | ''>(values.frequency);
   const [payer, setPayer] = useState<Payer>(values.payer);
-  const [draft, setDraft] = useState<BudgetItemRecord | null>(null);
+  const [draft, setDraft] = useState<BudgetDraft | null>(null);
   const [dirty, setDirty] = useState(false);
-  const deferredDraft = useDeferredValue(draft);
-
-  // Con cambios sin guardar, el navegador pregunta antes de cerrar o recargar. Cancelar es explícito.
-  useEffect(() => {
-    if (!dirty || pending) return;
-    const warn = (event: BeforeUnloadEvent) => event.preventDefault();
-    window.addEventListener('beforeunload', warn);
-    return () => window.removeEventListener('beforeunload', warn);
-  }, [dirty, pending]);
+  useUnsavedWarning(dirty, pending);
 
   // Tras enviar, el foco va al primer campo que hay que corregir.
   useEffect(() => {
@@ -145,33 +126,19 @@ export function BudgetItemForm({
     if (first) document.getElementById(`${formId}-${first}`)?.focus();
   }, [state, formId]);
 
-  const after = useMemo(() => {
-    if (!preview || !deferredDraft) return preview?.before ?? null;
-    const item = toBudgetItemInput({
-      ...deferredDraft,
-      basic_amount: role === 'advisor' ? deferredDraft.basic_amount : preview.keptBasicAmount,
-    });
-    const budgetItems =
-      deferredDraft.scope === 'presupuesto'
-        ? [...preview.baseInput.budgetItems, item]
-        : preview.baseInput.budgetItems;
-    return keyFigures(compute({ ...preview.baseInput, budgetItems }, { mode: preview.mode }));
-  }, [preview, deferredDraft, role]);
-
-  const previewFigures: readonly KeyFigureId[] =
-    preview?.mode === 'native'
-      ? ['monthlyExpenses', 'annualSurplus', 'ownSavingsRate']
-      : ['monthlyExpenses', 'annualSurplus', 'savingsRate'];
+  const after = usePreviewFigures(preview, draft, withDraft);
 
   function handleChange(event: FormEvent<HTMLFormElement>) {
     setDirty(true);
     const data = new FormData(event.currentTarget);
     const parsed = parseBudgetItem(data, { currencies, advisor: role === 'advisor' });
-    setDraft(parsed.ok ? parsed.record : null);
+    if (!parsed.ok) return setDraft(null);
+    const basicAmount =
+      role === 'advisor' ? parsed.record.basic_amount : (preview?.keptBasicAmount ?? null);
+    setDraft({ record: parsed.record, basicAmount });
   }
 
-  const describe = (field: BudgetItemField, hint: boolean) =>
-    [hint ? `${fieldId(field)}-hint` : '', `${fieldId(field)}-error`].filter(Boolean).join(' ');
+  const describe = (field: BudgetItemField, hint: boolean) => describedBy(fieldId(field), hint);
   const errorText = (field: BudgetItemField) => {
     const error = errors[field];
     return error ? text.form.errors[error] : null;
@@ -261,7 +228,11 @@ export function BudgetItemForm({
             name="currency"
             defaultValue={values.currency || currencies[0]}
             aria-invalid={errors.currency ? true : false}
-            aria-describedby={`${describe('currency', false)}${currencies.length === 1 ? ` ${fieldId('currency')}-hint` : ''}`}
+            aria-describedby={describedBy(
+              fieldId('currency'),
+              false,
+              currencies.length === 1 ? `${fieldId('currency')}-hint` : '',
+            )}
             className={textField}
           >
             {currencies.map((currency) => (
@@ -436,7 +407,7 @@ export function BudgetItemForm({
 
       {preview && after ? (
         <ImpactPreview
-          figures={previewFigures}
+          figures={previewFigureIds(preview.mode)}
           before={preview.before}
           after={after}
           text={text.preview}
@@ -446,102 +417,21 @@ export function BudgetItemForm({
       ) : null}
 
       {deleteAction ? (
-        <details className="rounded-xl border border-border">
-          <summary
-            className={`min-h-12 cursor-pointer rounded-xl px-4 py-3 text-status-alert hover:underline ${focusRing}`}
-          >
-            {text.form.deleteToggle}
-          </summary>
-          <div className="flex flex-col items-start gap-2 px-4 pb-4">
-            <p className="text-sm text-text-muted">{text.form.deleteHint}</p>
-            <button
-              type="submit"
-              formAction={deleteAction}
-              formNoValidate
-              className={secondaryButton}
-            >
-              {text.form.deleteConfirm}
-            </button>
-          </div>
-        </details>
+        <DeleteDisclosure
+          toggle={text.form.deleteToggle}
+          hint={text.form.deleteHint}
+          confirm={text.form.deleteConfirm}
+          action={deleteAction}
+        />
       ) : null}
 
-      <ScreenActions>
-        <button type="submit" disabled={pending} className={`w-full ${primaryButton}`}>
-          {pending ? text.form.submitting : text.form.submit}
-        </button>
-        <Link href={cancelHref} className={`w-full ${textButton} ${linkButton}`}>
-          {text.form.cancel}
-        </Link>
-      </ScreenActions>
-    </form>
-  );
-}
-
-/** Etiqueta, ayuda y error de un campo. El error siempre está presente para que se anuncie. */
-function Field({
-  id,
-  label,
-  hint,
-  error,
-  children,
-}: {
-  id: string;
-  label: string;
-  hint?: string;
-  error?: string | null;
-  children: ReactNode;
-}) {
-  return (
-    <div className="flex min-w-0 flex-col gap-1">
-      <label htmlFor={id} className="font-medium">
-        {label}
-      </label>
-      {hint ? (
-        <p id={`${id}-hint`} className="text-sm text-text-muted">
-          {hint}
-        </p>
-      ) : null}
-      {children}
-      <p id={`${id}-error`} aria-live="polite" className="text-sm text-status-alert">
-        {error}
-      </p>
-    </div>
-  );
-}
-
-function ChoiceGroup({ legend, children }: { legend: string; children: ReactNode }) {
-  return (
-    <fieldset className="flex flex-col gap-2">
-      <legend className="mb-1 font-medium">{legend}</legend>
-      {children}
-    </fieldset>
-  );
-}
-
-function Checkbox({
-  name,
-  label,
-  hint,
-  defaultChecked,
-}: {
-  name: string;
-  label: string;
-  hint?: string;
-  defaultChecked: boolean;
-}) {
-  return (
-    <label className="flex min-h-12 cursor-pointer items-start gap-3 py-2">
-      <input
-        type="checkbox"
-        name={name}
-        defaultChecked={defaultChecked}
-        className="mt-0.5 size-5 shrink-0 accent-primary"
+      <FormSubmitActions
+        pending={pending}
+        submit={text.form.submit}
+        submitting={text.form.submitting}
+        cancel={text.form.cancel}
+        cancelHref={cancelHref}
       />
-      <span className="flex flex-col">
-        {label}
-        {hint ? <span className="text-sm text-text-muted">{hint}</span> : null}
-      </span>
-    </label>
+    </form>
   );
 }

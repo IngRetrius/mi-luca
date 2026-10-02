@@ -842,6 +842,7 @@ Las secciones 3 a 10 siguen siendo el diseño de referencia. Lo que ya existe co
 | `20261002034216_country_parameters_2026.sql` | Primeros parámetros con fuente: límite de rentas del descendiente en España (F30) y salario mínimo 2026 de Colombia (F45) |
 | `20261002034759_case_fiscal_thresholds.sql` | `case_settings.fiscal_threshold_keys`: qué umbrales fiscales aplican a cada cliente (punto 23) |
 | `20261002034955_change_impacts.sql` | `client_key_figures`, `change_impacts` y `record_change_impact`; aviso `cambio_del_cliente` (punto 24) |
+| `20261002043623_methodology_emergency_months.sql` | Parámetro común `method.emergency_months_by_client_type` (meses de fondo sugeridos por tipo de cliente, RN-004), con la plantilla y el protocolo como fuente interna |
 
 Diferencias con el borrador de las secciones 3.1, 4 y 5:
 
@@ -872,4 +873,5 @@ Diferencias con el borrador de las secciones 3.1, 4 y 5:
 23. **Umbrales fiscales por cliente.** `case_settings.fiscal_threshold_keys` lista las claves de parámetro que aplican a ese caso (hasta 10). El país publica el valor; el asesor decide a quién aplica (principio 10). Sin clave marcada, el costo de vida no se compara con ningún umbral.
 24. **Antes y después.** Nadie escribe `client_key_figures` ni `change_impacts` desde la API: solo `record_change_impact(cliente, marca del historial, versión del motor, modo, antes, después, diferencias, registro abierto)`, `security definer`, que exige acceso al cliente, saca de `auth.uid()` el autor y su rol, y del historial (`audit_log` del autor después de la marca) qué filas cambiaron. Sin filas cambiadas no crea registro; con un registro abierto del mismo autor en los últimos 10 minutos lo amplía (conserva el antes del primero); si el autor es el cliente, avisa a los asesores con acceso activo. Las cifras las calcula el motor en la app; quien llama podría enviar cifras falsas de su propio caso, pero el historial guarda los datos reales. Se prefirió a la clave secreta, que salta RLS y no se usa para datos de clientes (`apps/web/src/server/admin.ts`). `notified_at` del borrador queda para el correo diario (pregunta C6).
 
+25. **Sin `upsert` desde la API.** Las tablas con llave natural (`case_settings`, `social_security_months`, `variable_income_history`) no dejan escribir la llave al actualizar, y `upsert` de PostgREST la incluye en el `UPDATE`. La app actualiza y, si no hay fila, inserta; la historia de ingreso variable se reemplaza entera (borrar e insertar). No se amplían los privilegios: dejar cambiar `client_id` permitiría mover filas entre clientes.
 Sin pendientes de F1 en el modelo de datos.

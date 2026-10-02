@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { COUNTRY_LOCALES, formatMoney, messages } from '@miluca/i18n';
 
 import { Screen } from '@/components/screen';
+import { ModuleLink } from '@/components/back-link';
 import { focusRing, linkButton, secondaryButton } from '@/components/ui-classes';
 import { loadComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
@@ -13,22 +14,9 @@ const t = messages.es;
 
 export const metadata: Metadata = { title: 'Mis datos | MiLuca' };
 
-const chevron = (
-  <svg
-    aria-hidden="true"
-    viewBox="0 0 20 20"
-    className="size-5 shrink-0"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path d="M7.5 4.5 13 10l-5.5 5.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
 /**
- * P-C06 Mis datos: los módulos que el cliente puede editar, con su total. Por ahora sus gastos;
- * los demás módulos se suman a la lista cuando existan.
+ * P-C06 Mis datos: los módulos que el cliente puede editar, con su total. Los demás módulos se
+ * suman a la lista cuando existan.
  */
 export default async function MyDataPage() {
   const viewer = await requireClient('/mis-datos');
@@ -52,12 +40,32 @@ export default async function MyDataPage() {
   const { client, budgetItems } = computed.rows;
   const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
   const monthly = computed.result.budget.expensesWithoutSavings.monthly;
+  const money = (amount: number) => formatMoney(amount, client.base_currency, locale);
+  const { incomes: incomeRows, fxRates } = computed.rows;
+  const incomes =
+    incomeRows.length === 0
+      ? text.noIncomes
+      : text.incomesSummary
+          .replace('{count}', String(incomeRows.length))
+          .replace('{amount}', money(computed.result.incomes.annual));
+  const currencies =
+    fxRates.length === 0
+      ? text.currenciesNone.replace('{base}', client.base_currency)
+      : text.currenciesSummary
+          .replace('{count}', String(fxRates.length))
+          .replace('{base}', client.base_currency);
   const expenses =
     budgetItems.length === 0
       ? text.noExpenses
       : text.expensesSummary
           .replace('{count}', String(budgetItems.length))
           .replace('{amount}', formatMoney(monthly, client.base_currency, locale));
+
+  const modules = [
+    { href: '/mis-datos/ingresos', title: text.incomes, summary: incomes },
+    { href: '/mis-datos/gastos', title: text.expenses, summary: expenses },
+    { href: '/mis-datos/monedas', title: text.currencies, summary: currencies },
+  ];
 
   return (
     <Screen>
@@ -72,18 +80,11 @@ export default async function MyDataPage() {
         <p className="text-text-muted">{text.intro}</p>
       </div>
       <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
-        <li>
-          <Link
-            href="/mis-datos/gastos"
-            className={`flex min-h-12 items-center justify-between gap-3 rounded-xl p-4 hover:bg-surface ${focusRing}`}
-          >
-            <span className="flex flex-col">
-              <span className="font-medium">{text.expenses}</span>
-              <span className="text-sm text-text-muted">{expenses}</span>
-            </span>
-            {chevron}
-          </Link>
-        </li>
+        {modules.map((module) => (
+          <li key={module.href}>
+            <ModuleLink {...module} />
+          </li>
+        ))}
       </ul>
     </Screen>
   );

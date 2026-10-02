@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { amountToText, parseAmount } from './amount';
+import { amountToText, parseAmount, parseDecimal } from './amount';
 
 describe('parseAmount', () => {
   it.each([
@@ -36,5 +36,15 @@ describe('amountToText', () => {
       expect(parseAmount(amountToText(value, 'es-ES'))).toBe(value);
     }
     expect(amountToText(null, 'es-CO')).toBe('');
+  });
+});
+
+describe('parseDecimal', () => {
+  it('admite más decimales cuando se piden', () => {
+    expect(parseDecimal('0,87031234', 8)).toBe(0.87031234);
+    expect(parseDecimal('3.912,5', 8)).toBe(3912.5);
+    expect(parseDecimal('0,870312345', 8)).toBeNaN();
+    expect(parseAmount(amountToText(0.87031234, 'es-ES', 8))).toBeNaN();
+    expect(parseDecimal(amountToText(0.87031234, 'es-ES', 8), 8)).toBe(0.87031234);
   });
 });

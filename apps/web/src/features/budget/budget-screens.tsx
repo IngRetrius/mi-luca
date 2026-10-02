@@ -4,7 +4,8 @@ import { notFound } from 'next/navigation';
 import { COUNTRY_LOCALES, formatMoney, messages } from '@miluca/i18n';
 
 import { Screen, ScreenActions } from '@/components/screen';
-import { focusRing, linkButton, primaryButton, secondaryButton } from '@/components/ui-classes';
+import { BackLink, LoadError as SharedLoadError } from '@/components/back-link';
+import { linkButton, primaryButton } from '@/components/ui-classes';
 import { loadComputedCase, toCaseInput, type ComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
 import { todayIn } from '@/lib/dates';
@@ -21,39 +22,13 @@ import { budgetPaths } from './paths';
 
 const t = messages.es;
 
-const backIcon = (
-  <svg
-    aria-hidden="true"
-    viewBox="0 0 20 20"
-    className="size-5"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path d="M12.5 4.5 7 10l5.5 5.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-function BackLink({ href, label }: { href: string; label: string }) {
-  return (
-    <Link
-      href={href}
-      className={`-ml-2 inline-flex min-h-12 items-center gap-1 self-start rounded-xl px-2 text-link hover:underline ${focusRing}`}
-    >
-      {backIcon}
-      {label}
-    </Link>
-  );
-}
-
 function LoadError({ retryHref }: { retryHref: string }) {
   return (
-    <div className="flex flex-col items-start gap-3">
-      <p role="alert">{t.common.loadError}</p>
-      <Link href={retryHref} className={`${secondaryButton} ${linkButton}`}>
-        {t.common.retry}
-      </Link>
-    </div>
+    <SharedLoadError
+      message={t.common.loadError}
+      retryLabel={t.common.retry}
+      retryHref={retryHref}
+    />
   );
 }
 

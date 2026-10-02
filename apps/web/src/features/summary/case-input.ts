@@ -75,6 +75,15 @@ function threshold(row: CaseRows['thresholds'][number], fx: FxContext): FiscalTh
   return rate === undefined ? null : { code: row.key, annualLimit: row.value * rate };
 }
 
+/** Un ingreso guardado (o el del formulario, en la vista previa) como lo recibe el motor. */
+export function toIncomeInput(income: CaseRows['incomes'][number]): IncomeInput {
+  return {
+    kind: incomeKindSchema.parse(income.kind),
+    monthlyAmount: { amount: income.amount, currency: income.currency },
+    paymentsByMonth: monthFlags(income.payments_by_month),
+  };
+}
+
 /** Una partida guardada (o la del formulario, en la vista previa) como la recibe el motor. */
 export function toBudgetItemInput(item: CaseRows['budgetItems'][number]): BudgetItemInput {
   return {
@@ -102,11 +111,7 @@ export function toCaseInput(rows: CaseRows, today: IsoDate): CaseForEngine {
     ratesToBase: Object.fromEntries(rows.fxRates.map((rate) => [rate.currency, rate.rate_to_base])),
   };
 
-  const incomes = rows.incomes.map((income): IncomeInput => ({
-    kind: incomeKindSchema.parse(income.kind),
-    monthlyAmount: { amount: income.amount, currency: income.currency },
-    paymentsByMonth: monthFlags(income.payments_by_month),
-  }));
+  const incomes = rows.incomes.map(toIncomeInput);
 
   const budgetItems = rows.budgetItems
     .filter((item) => item.scope === 'presupuesto')

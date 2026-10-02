@@ -50,11 +50,22 @@ gantt
   F8 Endurecimiento y lanzamiento      :f8, after f7, 2028-04-17
 ```
 
+### 2.1 Avance real
+
+| Fase | Estimado | Estado al 02/10/2026 |
+|---|---|---|
+| F0 | 80 h, hasta mediados de noviembre de 2026 | Terminada salvo tareas del asesor: dominio y verificación de marca en Google, y la revisión del caso C1 (A11) |
+| F1 | 120 h, hasta mediados de enero de 2027 | Terminada salvo el alta con Google en un navegador real, el correo de la invitación (C14) y exportar y borrar en P-C11 (F7) |
+| F2 | 160 h, hasta comienzos de abril de 2027 | Terminada en el código; pendientes que no bloquean: C6 y C20 |
+| F3 a F8 | 760 h | Sin empezar |
+
+Con el agente de código, F0 a F2 avanzaron mucho más rápido que la estimación a 14 horas por semana, que suponía empezar el 5 de octubre de 2026. **Supuesto:** el calendario de arriba se mantiene como techo y se reestima al cerrar F3, con lo que tome realmente una fase que mezcla motor, base de datos y pantallas. Las horas del resto no cambian hasta entonces.
+
 ## 3. MVP e hitos
 
 | Hito | Horas acumuladas | Fecha estimada | Qué se puede hacer |
 |---|---|---|---|
-| M0. Base validada | 80 | noviembre de 2026 | Sabemos que la sesión funciona en iPhone y tenemos los casos de prueba |
+| M0. Base validada | 80 | noviembre de 2026 (logrado el 29/09/2026) | Sabemos que la sesión funciona en iPhone y tenemos los casos de prueba |
 | **M1. MVP** | **520** | **junio de 2027 (julio con margen)** | El asesor atiende un cliente sin deudas de principio a fin en la plataforma (como los dos casos reales): captura, diagnóstico, bolsillos, fondo, flujo, prueba de realidad y plan entregado. El cliente entra por invitación, ve su plan, ajusta ingresos y gastos, y el asesor recibe el antes y después. La carta se sigue escribiendo fuera |
 | M2. Deudas | 680 | septiembre de 2027 | Clientes con deudas y seguimiento de créditos por el cliente |
 | M3. Paridad de cálculo | 880 | diciembre de 2027 | La plataforma calcula todo lo que calcula la plantilla |
@@ -175,8 +186,15 @@ Avance:
 - [x] Motor: `compute` (entrada del caso completa, filas automáticas, Resumen `C11:C15` igual a Excel en los cuatro casos) y cifras clave con su antes y después (`keyFigures`, `diffKeyFigures`). `ENGINE_VERSION` 0.6.0.
 - [x] Registro de impacto: `client_key_figures`, `change_impacts` y `record_change_impact`, con agrupación de 10 minutos y aviso al asesor cuando cambia algo el cliente; en la app, `withImpact`.
 - [x] Pantallas del presupuesto: P-A06 (lista con totales y filtros, alta, edición y borrado), P-C06 (Mis datos, por ahora con gastos) y P-C07 (edición del cliente con "Así cambia tu plan" calculado en el teléfono); cifras en P-A03 y aviso con el antes y después. Verificado de punta a punta contra Supabase local.
-- [ ] Pantallas de ingresos (P-A04 bloque B y su versión del cliente), monedas (P-A19), costo de vida (P-A11), perfil y tipo de cliente con los supuestos del caso (P-A04 bloque A, P-A05).
-- [ ] Correo diario con los cambios del cliente (C6): cuando la app envíe correos.
+- [x] Pantallas de ingresos (P-A04 bloque B): lista con totales, alta, edición y borrado con pagos por mes y "Así cambia el plan", meses con seguridad social y calculadora de ingreso base (con `baseIncome` del motor); la misma versión para el cliente en Mis datos.
+- [x] Monedas (P-A19), para asesor y cliente: tasa que recibe el cliente, fecha y nota; la base impide borrar una moneda en uso y la pantalla lo explica.
+- [x] Perfil y supuestos del caso (P-A04 bloque A y P-A05): fecha de nacimiento, sexo, personas a cargo, tipo de cliente con sus reglas (protocolo, sección 4) y meses de fondo sugeridos (parámetro de la metodología, migración `methodology_emergency_months`); fecha de corte, año del flujo, modo de cálculo, análisis de pensión (apagado por defecto) y umbrales fiscales que aplican al caso.
+- [x] Costo de vida (P-A11): tres niveles por mes y por año, sin temporales, lo que paga cada uno, umbrales marcados (con remisión al contador o gestor) y cada partida con enlace a su nivel básico en el presupuesto.
+- [x] Ficha (P-A03) con todos los datos del caso y Mis datos (P-C06) con ingresos, gastos y monedas. Verificado de punta a punta contra Supabase local (asesora y cliente de prueba, 390 px), sin errores de consola.
+- [ ] Correo diario con los cambios del cliente (C6): cuando la app envíe correos. No bloquea: el aviso dentro de la app ya llega al momento.
+- [ ] Datos de salud al retirar ese consentimiento (C20): marcar las partidas de salud y pedir renombrarlas. Pendiente de la decisión del responsable.
+
+Estado al 02/10/2026: **F2 terminada en el código**. Los tres criterios de aceptación se cumplen: pruebas de oro de Ingresos, Presupuesto y `Resumen!C11:C15` en C1, C2, C3 y C7; caso C2 con la hoja "Costo de vida" completa, 15.710,46 EUR y tasa personal de 100 % (`test/golden/c2-cost-of-living.test.ts`, `test/native/c2-payer.test.ts`); y el cliente edita un gasto o un ingreso en el celular, ve "Así cambia tu plan" antes de guardar y el asesor recibe el aviso con el antes y después (verificado contra Supabase local). Quedan dos tareas que no bloquean F3 (C6 y C20) y las decisiones abiertas del asesor (A11, ADR 0010, B13).
 
 ### F3. Bolsillos, fondo, flujo, prueba de realidad, cobros y entrega mínima (160 horas)
 

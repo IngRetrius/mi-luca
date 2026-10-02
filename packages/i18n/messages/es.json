@@ -144,7 +144,17 @@
       "budget": "Presupuesto",
       "budgetSummary": "{amount} de gasto al mes",
       "figuresTitle": "Cifras del plan",
-      "figuresNote": "Con los datos registrados hoy. Las cifras de flujo, fondo e inversión llegan con sus módulos."
+      "figuresNote": "Con los datos registrados hoy. Las cifras de flujo, fondo e inversión llegan con sus módulos.",
+      "profile": "Perfil y supuestos",
+      "profileSummary": "{type} · corte: {cutoff}",
+      "today": "hoy",
+      "incomes": "Ingresos",
+      "incomesSummary": "{amount} al año",
+      "costOfLiving": "Costo de vida",
+      "costOfLivingSummary": "Esencial {amount} al mes",
+      "currencies": "Monedas",
+      "currenciesSummary": "{count} además de {base}",
+      "currenciesNone": "Solo {base}"
     }
   },
   "invitation": {
@@ -633,6 +643,280 @@
     "incomes": "Ingresos",
     "incomesSummary": "{count} ingresos · {amount} al año",
     "noIncomes": "Sin ingresos registrados",
-    "link": "Mis datos"
+    "link": "Mis datos",
+    "currencies": "Monedas",
+    "currenciesSummary": "{count} además de {base}",
+    "currenciesNone": "Solo {base}"
+  },
+  "currencies": {
+    "title": "Monedas",
+    "intro": "La tasa que recibe el cliente por cada moneda distinta de la base. Sin tasa, un importe en esa moneda no se puede guardar.",
+    "back": "Ficha del cliente",
+    "baseCurrency": "Moneda base: {currency}",
+    "empty": "No hay otras monedas registradas.",
+    "rateSummary": "1 {currency} = {rate}",
+    "asOf": "Tasa del {date}",
+    "add": "Agregar moneda",
+    "common": ["USD", "EUR", "COP", "GBP", "MXN", "CAD", "CHF", "BRL", "CLP", "PEN", "ARS"],
+    "client": {
+      "intro": {
+        "tu": "La tasa que recibes por cada moneda distinta de tu moneda base. Sin tasa no se puede guardar un importe en esa moneda.",
+        "usted": "La tasa que recibe por cada moneda distinta de su moneda base. Sin tasa no se puede guardar un importe en esa moneda."
+      },
+      "back": "Mis datos",
+      "rateHint": {
+        "tu": "La que realmente recibes en tu banco o plataforma, no la oficial.",
+        "usted": "La que realmente recibe en su banco o plataforma, no la oficial."
+      },
+      "noteHint": "Por ejemplo, la que paga mi banco."
+    },
+    "form": {
+      "newTitle": "Nueva moneda",
+      "editTitle": "Tasa de {currency}",
+      "currency": "Moneda",
+      "currencyHint": "Código de tres letras, por ejemplo USD.",
+      "rate": "Tasa: {base} por 1 unidad",
+      "rateHint": "La que realmente recibe el cliente, no la oficial.",
+      "asOf": "Fecha de la tasa",
+      "note": "Nota (opcional)",
+      "noteHint": "Por ejemplo, la que paga su banco.",
+      "submit": "Guardar",
+      "submitting": "Guardando…",
+      "cancel": "Cancelar",
+      "deleteToggle": "Borrar esta moneda",
+      "deleteConfirm": "Sí, borrarla",
+      "deleteHint": "Solo se puede si ningún importe usa esta moneda.",
+      "errors": {
+        "invalidCurrency": "Escribe un código de tres letras, por ejemplo USD.",
+        "isBase": "La moneda base no lleva tasa.",
+        "duplicate": "Esa moneda ya tiene tasa: edítala desde la lista.",
+        "invalidRate": "Escribe una tasa mayor que 0, solo con números.",
+        "invalidDate": "Elige la fecha de la tasa.",
+        "tooLong": "Es demasiado largo.",
+        "inUse": "Hay importes en esta moneda. Cámbialos antes de borrar su tasa.",
+        "notAllowed": "No tienes permiso para cambiar este dato.",
+        "notFound": "Esta moneda ya no tiene tasa registrada.",
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      }
+    }
+  },
+  "incomes": {
+    "title": "Ingresos",
+    "intro": "Cada ingreso con su valor por pago y los meses en que llega.",
+    "back": "Ficha del cliente",
+    "add": "Agregar ingreso",
+    "empty": "Todavía no hay ingresos registrados.",
+    "kinds": {
+      "laboral": "Laboral",
+      "renta": "Renta",
+      "pension": "Pensión",
+      "otro": "Otro"
+    },
+    "itemSummary": "{amount} · {payments} pagos al año",
+    "annual": "{amount} al año",
+    "savingsOnly": "Va todo a ahorro",
+    "gross": "Bruto",
+    "totals": {
+      "title": "Totales",
+      "annual": "Ingreso al año",
+      "monthly": "Promedio al mes"
+    },
+    "socialSecurity": {
+      "title": "Meses con seguridad social",
+      "summary": "{count} de 12 meses",
+      "intro": "Marca los meses en que se paga seguridad social. Los gastos con la frecuencia «Meses con seguridad social» se pagan esos meses.",
+      "legend": "Meses de pago",
+      "submit": "Guardar",
+      "submitting": "Guardando…",
+      "cancel": "Cancelar",
+      "errors": {
+        "notAllowed": "No tienes permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      }
+    },
+    "variable": {
+      "title": "Ingreso base",
+      "summary": "Sugerido: {amount}",
+      "noData": "Sin datos",
+      "intro": "Para ingresos variables: lo recibido en cada uno de los últimos 12 meses. El ingreso base es el menor entre el promedio de los 12 meses y el promedio de los 3 meses más bajos.",
+      "currency": "Moneda",
+      "legend": "Lo recibido cada mes",
+      "average": "Promedio de 12 meses",
+      "lowestThree": "Promedio de los 3 meses más bajos",
+      "suggested": "Ingreso base sugerido",
+      "missing": "Escribe al menos un mes para calcularlo.",
+      "submit": "Guardar",
+      "submitting": "Guardando…",
+      "cancel": "Cancelar",
+      "errors": {
+        "invalidAmount": "Revisa los meses marcados: solo números de 0 o más.",
+        "invalidCurrency": "Elige una moneda de la lista.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrala en Monedas.",
+        "notAllowed": "No tienes permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      },
+      "resultTitle": "Resultado"
+    },
+    "form": {
+      "newTitle": "Nuevo ingreso",
+      "editTitle": "Editar ingreso",
+      "name": "Nombre",
+      "nameHint": "Por ejemplo, Sueldo o Arriendo del apartamento.",
+      "kind": "Tipo",
+      "amount": "Valor por pago",
+      "amountHint": "Lo que llega cada vez.",
+      "currency": "Moneda",
+      "currencyHint": "Para otra moneda, registra antes su tasa en Monedas.",
+      "payments": "Pagos en cada mes",
+      "paymentsHint": "0 si ese mes no llega; 2 si llega doble, por ejemplo con la prima.",
+      "isNet": "Llega neto",
+      "isNetHint": "Es lo que llega, ya con los descuentos.",
+      "savingsOnly": "Va todo a ahorro",
+      "savingsOnlyHint": "No paga gastos: alimenta el ahorro, por ejemplo un sueldo que se ahorra entero.",
+      "note": "Nota (opcional)",
+      "submit": "Guardar",
+      "submitting": "Guardando…",
+      "cancel": "Cancelar",
+      "deleteToggle": "Borrar este ingreso",
+      "deleteConfirm": "Sí, borrarlo",
+      "deleteHint": "Se borra de los ingresos. El historial de cambios lo conserva.",
+      "errors": {
+        "missingName": "Escribe el nombre.",
+        "tooLong": "Es demasiado largo.",
+        "missingAmount": "Escribe el valor por pago.",
+        "invalidAmount": "Escribe un valor de 0 o más, solo con números.",
+        "invalidCurrency": "Elige una moneda de la lista.",
+        "invalidPayments": "Escribe un número de 0 a 9 en cada mes.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrala en Monedas y vuelve a intentarlo.",
+        "notAllowed": "No tienes permiso para cambiar este dato.",
+        "notFound": "Este ingreso ya no existe.",
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      }
+    },
+    "client": {
+      "title": "Mis ingresos",
+      "intro": {
+        "tu": "Lo que recibes y en qué meses. Si cambias algo, tu asesor ve el antes y después.",
+        "usted": "Lo que recibe y en qué meses. Si cambia algo, su asesor ve el antes y después."
+      },
+      "back": "Mis datos",
+      "add": "Agregar ingreso",
+      "empty": {
+        "tu": "Todavía no tienes ingresos registrados.",
+        "usted": "Todavía no tiene ingresos registrados."
+      },
+      "amountHint": {
+        "tu": "Lo que te llega cada vez.",
+        "usted": "Lo que le llega cada vez."
+      }
+    }
+  },
+  "profile": {
+    "title": "Perfil y supuestos",
+    "intro": "Datos del cliente y criterio del caso. Cada caso es diferente: nada de esto sale del país.",
+    "back": "Ficha del cliente",
+    "profileTitle": "Perfil",
+    "birthDate": "Fecha de nacimiento",
+    "birthDateHint": "Define la edad a la fecha de corte.",
+    "sex": "Sexo",
+    "sexHint": "Lo usan las reglas de pensión de algunos países.",
+    "sexes": {
+      "mujer": "Mujer",
+      "hombre": "Hombre",
+      "none": "Sin dato"
+    },
+    "dependents": "Personas a cargo",
+    "dependentsHint": "Hijos u otras personas que dependen económicamente.",
+    "typeTitle": "Tipo de cliente",
+    "typeHint": "Define las reglas que se aplican en el plan.",
+    "types": {
+      "empleado": "Empleado",
+      "contratista": "Contratista",
+      "independiente_variable": "Independiente con ingresos variables",
+      "pensionado": "Pensionado",
+      "rentista": "Rentista",
+      "mixto": "Mixto",
+      "none": "Sin definir"
+    },
+    "rules": {
+      "empleado": "Prima: repartirla entre bolsillos anuales, deudas y ahorro según prioridad. Cesantías: son ahorro para vivienda o educación, no liquidez del fondo.",
+      "contratista": "Revisar meses sin contrato y la seguridad social de cada mes; bolsillo de meses sin ingreso. Sin prestaciones, el ahorro propio las reemplaza. Confirmar la base de cotización, porque define la mesada.",
+      "independiente_variable": "El presupuesto se hace con el ingreso base: el menor entre el promedio de 12 meses y el de los 3 meses más bajos. Lo que llegue por encima se reparte con una regla fija.",
+      "pensionado": "La mesada neta es el ingreso principal y la salud ya viene descontada. Revisar si sigue trabajando; énfasis en liquidez y sucesión.",
+      "rentista": "Las rentas son el ingreso principal: revisar los meses sin arrendatario y quién paga administración y predial.",
+      "mixto": "Se aplican las reglas de cada tipo de ingreso que tenga."
+    },
+    "emergencyMonths": "Fondo de emergencia sugerido: {months} meses de lo esencial.",
+    "settingsTitle": "Supuestos del caso",
+    "cutoffDate": "Fecha de corte",
+    "cutoffDateHint": "Vacía, es la de hoy. Fíjala para que las cifras no cambien con los días.",
+    "flowYear": "Año del flujo anual",
+    "flowYearHint": "Vacío, es el año siguiente a la fecha de corte.",
+    "mode": "Modo de cálculo",
+    "modes": {
+      "native": "Nativo",
+      "compatible": "Compatible con la plantilla"
+    },
+    "modeHints": {
+      "native": "Con las correcciones aprobadas, por ejemplo quién paga cada gasto.",
+      "compatible": "Reproduce la plantilla 2.2 tal cual."
+    },
+    "pension": "Analizar la pensión de este cliente",
+    "pensionHint": "Apagado por defecto. Se usan las reglas de pensión de {country}.",
+    "pensionUnavailable": "{country} no tiene módulo de pensión por ahora.",
+    "thresholds": "Umbrales fiscales que aplican",
+    "thresholdsHint": "Marca solo los que aplican a este caso. Son una referencia: se confirman con el contador o gestor.",
+    "thresholdOption": "{label}: {amount}",
+    "noThresholds": "No hay umbrales publicados para {country}.",
+    "thresholdLabels": {
+      "tax.dependent_income_limit": "Límite de rentas del descendiente (mínimo por descendientes)"
+    },
+    "submit": "Guardar",
+    "submitting": "Guardando…",
+    "cancel": "Cancelar",
+    "saved": "Cambios guardados.",
+    "errors": {
+      "invalidDate": "Escribe una fecha válida.",
+      "futureBirthDate": "La fecha de nacimiento no puede ser futura.",
+      "invalidDependents": "Escribe un número de 0 a 20.",
+      "invalidYear": "Escribe un año entre 2000 y 2100.",
+      "notAllowed": "No tienes permiso para cambiar estos datos.",
+      "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+    }
+  },
+  "costOfLiving": {
+    "title": "Costo de vida",
+    "intro": "Cuánto cuesta la vida del cliente en tres niveles. El nivel básico lo propones en cada gasto del presupuesto.",
+    "back": "Ficha del cliente",
+    "levels": {
+      "essential": "Esencial",
+      "basic": "Básico",
+      "current": "Actual"
+    },
+    "levelHints": {
+      "essential": "Solo los gastos esenciales.",
+      "basic": "Lo actual con tu propuesta del nivel básico.",
+      "current": "Todo el presupuesto, sin ahorro."
+    },
+    "perMonth": "{amount} al mes",
+    "perYear": "{amount} al año",
+    "byPayer": "Lo paga cada uno, al año",
+    "payers": {
+      "cliente": "El cliente",
+      "familia": "La familia",
+      "tercero": "Otra persona"
+    },
+    "withoutTemporary": "Sin gastos temporales, al mes",
+    "itemsTitle": "Por partida, al año",
+    "editBasic": "Editar en el presupuesto",
+    "thresholdsTitle": "Umbrales fiscales",
+    "thresholdsNote": "Referencia, no asesoría tributaria: se confirma con el contador o gestor.",
+    "ownIncome": "Ingreso propio al año",
+    "limit": "Límite: {amount} al año",
+    "exceeds": "Supera",
+    "notExceeds": "No supera",
+    "noThresholds": "Ningún umbral marcado para este caso. Se marcan en Perfil y supuestos.",
+    "empty": "Todavía no hay gastos en el presupuesto.",
+    "annualLabel": "Al año"
   }
 }

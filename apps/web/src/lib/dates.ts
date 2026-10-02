@@ -18,3 +18,12 @@ export function todayIn(countryCode: string, now: Date = new Date()): IsoDate {
     day: '2-digit',
   }).format(now);
 }
+
+/** Nombres de los meses en el idioma del país, de enero a diciembre: cortos y completos. */
+export function monthNames(locale: string): { short: string[]; long: string[] } {
+  const names = (month: 'short' | 'long') =>
+    Array.from({ length: 12 }, (_, index) =>
+      new Intl.DateTimeFormat(locale, { month, timeZone: 'UTC' }).format(Date.UTC(2026, index, 1)),
+    );
+  return { short: names('short'), long: names('long') };
+}

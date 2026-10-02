@@ -12,6 +12,8 @@ type Row<T extends keyof Database['public']['Tables']> = Database['public']['Tab
 
 /** Las filas del caso completas, para las pantallas que las muestran además de calcularlas. */
 export interface LoadedCaseRows extends CaseRows {
+  readonly client: Pick<Row<'clients'>, 'base_currency' | 'country_code' | 'client_type'>;
+  readonly fxRates: readonly Row<'client_fx_rates'>[];
   readonly incomes: readonly Row<'incomes'>[];
   readonly budgetItems: readonly Row<'budget_items'>[];
 }
@@ -21,9 +23,11 @@ export interface ComputedCase extends CaseForEngine {
   readonly result: CaseResult;
   readonly figures: KeyFigures;
   /**
-   * Fila del presupuesto calculado de cada partida guardada que suma (por id). Las automáticas van
-   * primero y las de referencia familiar no tienen fila.
+   * Posición de cada partida guardada que suma (por id) en el presupuesto calculado y en el costo
+   * de vida. Las automáticas van primero y las de referencia familiar no tienen posición.
    */
+  readonly budgetIndexById: ReadonlyMap<string, number>;
+  /** Fila del presupuesto calculado de cada partida guardada que suma (por id). */
   readonly budgetRowById: ReadonlyMap<string, CaseResult['budget']['rows'][number]>;
 }
 
@@ -34,13 +38,17 @@ export interface ComputedCase extends CaseForEngine {
 export async function loadCaseRows(clientId: string): Promise<LoadedCaseRows | null> {
   const supabase = await createClient();
   const [client, settings, fxRates, incomes, socialSecurity, budgetItems] = await Promise.all([
-    supabase.from('clients').select('base_currency, country_code').eq('id', clientId).maybeSingle(),
+    supabase
+      .from('clients')
+      .select('base_currency, country_code, client_type')
+      .eq('id', clientId)
+      .maybeSingle(),
     supabase
       .from('case_settings')
       .select('cutoff_date, compatibility_mode, fiscal_threshold_keys')
       .eq('client_id', clientId)
       .maybeSingle(),
-    supabase.from('client_fx_rates').select('currency, rate_to_base').eq('client_id', clientId),
+    supabase.from('client_fx_rates').select('*').eq('client_id', clientId).order('currency'),
     supabase
       .from('incomes')
       .select('*')
@@ -100,11 +108,19 @@ export async function loadComputedCase(clientId: string): Promise<ComputedCase |
   const result = compute(forEngine.input, { mode: forEngine.mode });
   const automatic = result.budgetItems.length - forEngine.input.budgetItems.length;
   const counted = rows.budgetItems.filter((item) => item.scope === 'presupuesto');
+  const budgetIndexById = new Map(counted.map((item, index) => [item.id, automatic + index]));
   const budgetRowById = new Map(
-    counted.flatMap((item, index) => {
-      const row = result.budget.rows[automatic + index];
-      return row ? [[item.id, row] as const] : [];
+    [...budgetIndexById].flatMap(([id, index]) => {
+      const row = result.budget.rows[index];
+      return row ? [[id, row] as const] : [];
     }),
   );
-  return { ...forEngine, rows, result, figures: keyFigures(result), budgetRowById };
+  return {
+    ...forEngine,
+    rows,
+    result,
+    figures: keyFigures(result),
+    budgetIndexById,
+    budgetRowById,
+  };
 }

@@ -61,7 +61,9 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Ingreso | `income` | Tipos (`incomeKind`): laboral, renta, pension, otro |
 | Pagos por mes | `paymentsByMonth` / `MonthFlags` | Doce marcas, de enero a diciembre |
 | Meses con seguridad social | `socialSecurityPayments` | `Ingresos!S17` |
-| Ingreso base (variable) | `baseIncome` | |
+| Ingreso base (variable) | `baseIncome` / `variable_income_history` | Calculadora en `/ingresos/ingreso-base` |
+| Va todo a ahorro | `allocation = 'ahorro_total'` | RN-014 |
+| Pagos en cada mes | `payments_by_month` | De 0 a 9 por mes |
 | Aporte implícito de terceros | `impliedThirdPartyIncome` | RN-015; pagadores `ThirdPartyPayer` (familia, tercero) |
 | Indicadores personales | `personalIndicators` | Modo nativo (ADR 0010) |
 | Ingreso propio, aporte de terceros, ingreso total | `ownIncome`, `thirdPartyContribution`, `totalIncome` | |
@@ -163,6 +165,13 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Cambio del cliente | `cambio_del_cliente` | Tipo de aviso al asesor |
 | Mis datos | `/mis-datos` | P-C06 |
 | Mis gastos | `/mis-datos/gastos` | P-C06 y P-C07 |
+| Mis ingresos, monedas | `/mis-datos/ingresos`, `/mis-datos/monedas` | |
+| Perfil y supuestos | `/clientes/[id]/perfil` / `ProfileScreen` | P-A04 bloque A y P-A05 |
+| Monedas del cliente | `/clientes/[id]/monedas` / `CurrenciesScreen`, `saveFxRate` | P-A19 |
+| Meses de fondo sugeridos | `method.emergency_months_by_client_type` | Parámetro común de la metodología (RN-004) |
+| Vista previa del impacto | `ImpactPreview`, `usePreviewFigures` / `PreviewCase` | "Así cambia tu plan" |
+| Avisar al salir sin guardar | `useUnsavedWarning` | |
+| Importe con más decimales | `parseDecimal` | Tasas de cambio, hasta 8 decimales |
 | Quien edita los datos del cliente | `requireCaseEditor` / `CaseEditor` | Asesor (RLS decide) o dueño del perfil |
 | Umbrales fiscales que aplican | `fiscal_threshold_keys` | Columna de `case_settings` |
 | Importe escrito | `parseAmount`, `amountToText` | Punto de miles y coma decimal |

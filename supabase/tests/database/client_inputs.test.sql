@@ -33,8 +33,10 @@ select is((public.parameter_at('ES', 'tax.dependent_income_limit', '2026-09-28')
   'España: límite de rentas del descendiente');
 select is((public.parameter_at('CO', 'minimum_wage', '2026-09-28')).value, '1750905'::jsonb,
   'Colombia: salario mínimo 2026');
-select is((select count(*)::int from public.country_parameters where source_url is null or consulted_at is null), 0,
+select is((select count(*)::int from public.country_parameters where consulted_at is null or btrim(source_name) = ''), 0,
   'Todo parámetro sembrado tiene fuente y fecha de consulta');
+select is((public.parameter_at('ES', 'method.emergency_months_by_client_type', '2026-09-28')).value ->> 'independiente_variable', '6',
+  'La metodología es común: España usa los meses de fondo de la plantilla');
 
 -- Visitante sin sesión -------------------------------------------------------------------------
 

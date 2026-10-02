@@ -3,12 +3,12 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
+import { allowedCurrencies } from '@/features/currencies';
 import { withImpact } from '@/features/summary';
 import { createClient } from '@/lib/supabase/server';
 import { isUuid, requireCaseEditor } from '@/server/case-access';
 
 import { budgetPaths } from './paths';
-import { allowedCurrencies } from './queries';
 import {
   parseBudgetItem,
   type BudgetItemErrors,

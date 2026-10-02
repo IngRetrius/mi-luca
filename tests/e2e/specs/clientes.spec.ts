@@ -2,8 +2,9 @@ import { expect, test } from '@playwright/test';
 
 // Sin Supabase (CI): las pantallas del asesor y P-G02 exigen sesión y vuelven a la ruta pedida.
 // El flujo con sesión (lista vacía, crear perfil, ficha, P-G02; en F2, presupuesto con filtros,
-// alta y edición con vista previa, cifras de la ficha y aviso con el antes y después) se verificó
-// contra Supabase local.
+// alta y edición con vista previa, ingresos, seguridad social, ingreso base, monedas, perfil y
+// supuestos, costo de vida, cifras de la ficha y aviso con el antes y después) se verificó contra
+// Supabase local.
 
 const CLIENT = '00000000-0000-4000-8000-000000000001';
 
@@ -14,6 +15,16 @@ for (const path of [
   `/clientes/${CLIENT}/presupuesto`,
   `/clientes/${CLIENT}/presupuesto/nuevo`,
   `/clientes/${CLIENT}/presupuesto/${CLIENT}`,
+  `/clientes/${CLIENT}/ingresos`,
+  `/clientes/${CLIENT}/ingresos/nuevo`,
+  `/clientes/${CLIENT}/ingresos/${CLIENT}`,
+  `/clientes/${CLIENT}/ingresos/seguridad-social`,
+  `/clientes/${CLIENT}/ingresos/ingreso-base`,
+  `/clientes/${CLIENT}/monedas`,
+  `/clientes/${CLIENT}/monedas/nueva`,
+  `/clientes/${CLIENT}/monedas/USD`,
+  `/clientes/${CLIENT}/perfil`,
+  `/clientes/${CLIENT}/costo-de-vida`,
 ]) {
   test(`${path} sin sesión lleva a Entrar con la ruta de retorno`, async ({ page }) => {
     await page.goto(path);

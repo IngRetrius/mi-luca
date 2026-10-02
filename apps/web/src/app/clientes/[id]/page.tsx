@@ -6,6 +6,7 @@ import { KEY_FIGURES, type KeyFigureId } from '@miluca/engine';
 import { COUNTRY_LOCALES, formatDate, formatMoney, formatPercent, messages } from '@miluca/i18n';
 
 import { Screen } from '@/components/screen';
+import { ModuleLink } from '@/components/back-link';
 import { focusRing, linkButton, secondaryButton } from '@/components/ui-classes';
 import { ClientStatusBadge, getClientDetail } from '@/features/clients';
 import {
@@ -117,19 +118,6 @@ const PROFILE_FIGURES: readonly KeyFigureId[] = [
   'savingsRate',
 ];
 
-const chevron = (
-  <svg
-    aria-hidden="true"
-    viewBox="0 0 20 20"
-    className="size-5 shrink-0"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path d="M7.5 4.5 13 10l-5.5 5.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
 /** Datos del caso y cifras del plan calculadas por el motor con lo registrado hoy. */
 function CaseData({ clientId, computed }: { clientId: string; computed: ComputedCase | null }) {
   const text = t.clientProfile.caseData;
@@ -152,6 +140,50 @@ function CaseData({ clientId, computed }: { clientId: string; computed: Computed
       ? formatPercent(value, locale)
       : formatMoney(value, client.base_currency, locale);
   };
+  const money = (amount: number) => formatMoney(amount, client.base_currency, locale);
+  const types: Readonly<Record<string, string>> = t.profile.types;
+  const cutoff = computed.rows.settings?.cutoff_date
+    ? formatDate(computed.rows.settings.cutoff_date, locale, 'UTC')
+    : text.today;
+  const otherCurrencies = computed.rows.fxRates.length;
+  const base = `/clientes/${clientId}`;
+  const modules = [
+    {
+      href: `${base}/perfil`,
+      title: text.profile,
+      summary: text.profileSummary
+        .replace('{type}', types[client.client_type ?? 'none'] ?? types.none ?? '')
+        .replace('{cutoff}', cutoff),
+    },
+    {
+      href: `${base}/ingresos`,
+      title: text.incomes,
+      summary: text.incomesSummary.replace('{amount}', money(computed.result.incomes.annual)),
+    },
+    {
+      href: `${base}/presupuesto`,
+      title: text.budget,
+      summary: text.budgetSummary.replace('{amount}', format('monthlyExpenses')),
+    },
+    {
+      href: `${base}/costo-de-vida`,
+      title: text.costOfLiving,
+      summary: text.costOfLivingSummary.replace(
+        '{amount}',
+        money(computed.result.costOfLiving.levels.essential.monthly),
+      ),
+    },
+    {
+      href: `${base}/monedas`,
+      title: text.currencies,
+      summary:
+        otherCurrencies === 0
+          ? text.currenciesNone.replace('{base}', client.base_currency)
+          : text.currenciesSummary
+              .replace('{count}', String(otherCurrencies))
+              .replace('{base}', client.base_currency),
+    },
+  ];
   return (
     <>
       <section aria-labelledby="case-title" className="flex flex-col gap-2">
@@ -159,20 +191,11 @@ function CaseData({ clientId, computed }: { clientId: string; computed: Computed
           {text.title}
         </h2>
         <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
-          <li>
-            <Link
-              href={`/clientes/${clientId}/presupuesto`}
-              className={`flex min-h-12 items-center justify-between gap-3 rounded-xl p-4 hover:bg-surface ${focusRing}`}
-            >
-              <span className="flex flex-col">
-                <span className="font-medium">{text.budget}</span>
-                <span className="text-sm text-text-muted">
-                  {text.budgetSummary.replace('{amount}', format('monthlyExpenses'))}
-                </span>
-              </span>
-              {chevron}
-            </Link>
-          </li>
+          {modules.map((module) => (
+            <li key={module.href}>
+              <ModuleLink {...module} />
+            </li>
+          ))}
         </ul>
       </section>
       <section
