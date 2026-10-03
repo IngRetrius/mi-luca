@@ -38,10 +38,10 @@ Cada gasto puede marcarse "de salud". Si el cliente retira su consentimiento de 
 |---|---|---|
 | H-01 Aporte al fondo que no se descuenta | Corregido: plan secuencial (ADR 0008), desde el mes siguiente al corte | Hecho |
 | H-02 Gasto tipo bolsillo sin bolsillo | Corregido: aviso en el presupuesto y control que bloquea la entrega; la base no lo exige para no impedir el registro | Hecho |
-| H-03 Cuotas de deudas los 12 meses | Corregir: en modo nativo, la cuota sale del flujo desde el mes en que termina la deuda | F4 |
-| H-04 Extra a deudas promedio | Documentar; la simulación usa el promedio | F4 |
-| H-05 Seguros dentro de la cuota | Corregir: campo de seguros en la deuda | F4 |
-| H-06 Dos motores de deudas | Corregir: un solo motor con horizonte, seguros, FRECH y orden manual | F4 |
+| H-03 Cuotas de deudas los 12 meses | Corregido: en modo nativo las cuotas salen del flujo cuando el plan salda todas las deudas (ADR 0015) | Hecho |
+| H-04 Extra a deudas promedio | Documentado: la simulación usa el promedio del año (`Deudas!C8`) | Hecho |
+| H-05 Seguros dentro de la cuota | Corregido: seguros en el seguimiento cuota a cuota; en modo nativo el plan del diagnóstico los paga cada mes sin bajar el saldo | Hecho |
+| H-06 Dos motores de deudas | Corregido: un solo simulador para la hoja Deudas y el plan de créditos, con horizonte, seguros y orden manual (el FRECH va en la tabla del crédito) | Hecho |
 | H-07 "Otro" se pierde solo en C | Corregido: escenario por ingreso, con la regla de la plantilla por defecto | Hecho |
 | H-08 Pensión de Colombia fija | Corregir con parámetros con fuente (B10) | F6 |
 | H-09 Desfase de un año en la proyección | Documentar | F5 |
@@ -53,12 +53,12 @@ Cada gasto puede marcarse "de salud". Si el cliente retira su consentimiento de 
 | H-15 Solo dos monedas | Corregido: multimoneda | Hecho |
 | H-16 Ingresos variables solo por tipo | Corregir: sugerido por tipo y editable por el asesor | F5 |
 | H-17 Meta que se repite ignora lo ahorrado | Documentar | F5 |
-| H-18 Orden avalancha sin el subsidio FRECH | Corregir: mostrar la tasa efectiva para el cliente junto a la nominal | F4 |
+| H-18 Orden avalancha sin el subsidio FRECH | Corregido: la tasa para el cliente con FRECH se muestra junto a la del banco (`frechClientRate`) | Hecho |
 | H-19 Escenarios de IBL derivados | Documentar y permitir escribir los tres | F6 |
 | H-20 Fechas fijas en el plan de acción | Corregir: tareas sugeridas según los módulos activos del cliente | F7 |
-| H-21 Cuotas como un solo gasto | Documentar | F4 |
+| H-21 Cuotas como un solo gasto | Documentado: la fila automática suma las cuotas; el detalle está en Deudas | Hecho |
 | H-22 Varios pagos en un mes | Corregido | Hecho |
-| H-23 Ingresos promediados en créditos | Corregir: una sola fuente de ingresos | F4 |
+| H-23 Ingresos promediados en créditos | Corregido: el Panel de créditos usa el ingreso del caso y el diagnóstico, el saldo de la tabla (ADR 0014) | Hecho |
 | H-24 Seguros en cotización en el presupuesto | Mantenerlos en el presupuesto (el plan supone que se toman) pero mostrarlos aparte como "en cotización" | F5 |
 | H-26 Sobrante con partidas o ingresos sin tipo | Reproducir la plantilla y bloquear la entrega hasta corregir los datos | Hecho |
 | H-27 Cobro sin saldo | La base exige saldo y cuota; el motor reproduce la plantilla para las pruebas | Hecho |

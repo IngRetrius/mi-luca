@@ -93,11 +93,15 @@ export function qualityChecks(input: CaseInput, result: CaseResult): QcReport {
   const { summary, budget, pockets, cashflow, expensiveDebt, realityCheck } = result;
 
   // Ingreso - gasto - ahorro programado = sobrante. Con ingresos o partidas sin tipo no cuadra (H-26).
+  // En modo nativo, las cuotas que el flujo ya no paga porque el plan saldó las deudas vuelven al
+  // sobrante (H-03, ADR 0015); en modo compatible esa diferencia es 0.
+  const releasedDebtPayments = budget.debtPayments.annual - cashflow.flow.debtPayments.total;
   const surplusGap =
     summary.annualIncome -
     summary.annualExpenses -
     summary.programmedSavings -
-    summary.annualSurplus;
+    summary.annualSurplus +
+    releasedDebtPayments;
 
   // Lo que el presupuesto manda a bolsillos frente a lo que llega a los bolsillos generales.
   const toGeneralPockets = pockets.general.reduce((sum, row) => sum + row.monthlyContribution, 0);

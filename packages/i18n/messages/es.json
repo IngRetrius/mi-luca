@@ -486,6 +486,7 @@
     "ownSavingsRate": "Tasa de ahorro sobre el ingreso propio",
     "debtLoad": "Carga de deuda",
     "totalDebt": "Deuda total",
+    "expensiveDebtMonths": "Meses para salir de la deuda cara",
     "emergencyGoal": "Meta del fondo de emergencia",
     "emergencyProgress": "Avance del fondo de emergencia",
     "noIncomeShortfall": "Faltante de los meses sin ingreso",
@@ -1486,7 +1487,8 @@
       "paidOff": "Pagado"
     },
     "panelLink": "Panel de créditos",
-    "panelLinkSummary": "{count} en seguimiento cuota a cuota"
+    "panelLinkSummary": "{count} en seguimiento cuota a cuota",
+    "frechSummary": "Con FRECH: {rate} EA hasta la cuota {until}"
   },
   "assets": {
     "title": "Patrimonio",
@@ -1888,7 +1890,9 @@
         "notFound": "Esta cuota ya no existe.",
         "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
       }
-    }
+    },
+    "frechRate": "Tasa para el cliente con FRECH",
+    "frechRateValue": "{rate} EA hasta la cuota {until} (tasa del banco: {bank})"
   },
   "creditsPanel": {
     "title": "Panel de créditos",
@@ -1942,5 +1946,10 @@
     "minimumOnly": "Solo cuotas",
     "payments": "Pagos del año",
     "illustrative": "Proyección ilustrativa, no garantizada: supone que las tasas y las cuotas no cambian. Los saldos y las cuotas se confirman con los extractos de cada entidad. Esta plataforma no recomienda productos ni entidades."
+  },
+  "keyFigureMonths": {
+    "one": "1 mes",
+    "other": "{count} meses",
+    "more": "Más de {count} meses"
   }
 }

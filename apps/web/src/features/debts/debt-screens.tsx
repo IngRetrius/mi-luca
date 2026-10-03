@@ -1,7 +1,13 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { DIAGNOSIS_HORIZON_MONTHS, type CreditSchedule, type DebtSimulation } from '@miluca/engine';
+import {
+  DIAGNOSIS_HORIZON_MONTHS,
+  frechClientRate,
+  type CreditInput,
+  type CreditSchedule,
+  type DebtSimulation,
+} from '@miluca/engine';
 import { COUNTRY_LOCALES, formatDate, formatMoney, formatPercent, messages } from '@miluca/i18n';
 
 import { BackLink, LoadError, ModuleLink } from '@/components/back-link';
@@ -166,6 +172,15 @@ function DebtPlan({
   );
 }
 
+/** "Con FRECH: 6,3 % EA hasta la cuota 84" para un crédito en seguimiento con FRECH (H-18). */
+function frechText(credit: CreditInput | null, locale: string): string | null {
+  const rate = credit ? frechClientRate(credit) : null;
+  if (rate === null || !credit) return null;
+  return text.frechSummary
+    .replace('{rate}', formatPercent(rate, locale, 2))
+    .replace('{until}', String(credit.frechUntilInstallment ?? '—'));
+}
+
 /** La línea de seguimiento de una deuda: próxima cuota o vencidas sin marcar, y sus cuotas. */
 function TrackingLine({
   schedule,
@@ -281,7 +296,15 @@ export async function DebtsScreen({ viewer, clientId }: { viewer: CaseEditor; cl
                     {[
                       text.itemSummary
                         .replace('{rate}', formatPercent(row.annual_rate, locale, 2))
-                        .replace('{payment}', money(row.min_payment, row.currency)),
+                        .replace(
+                          '{payment}',
+                          // En seguimiento, la cuota de la tabla (la calculada con el plazo si es 0).
+                          money(
+                            result.creditSchedules[index]?.payment ?? row.min_payment,
+                            row.currency,
+                          ),
+                        ),
+                      frechText(computed.input.debts[index]?.tracking?.credit ?? null, locale),
                       !row.accepts_extra
                         ? text.noExtra
                         : row.extra_from_date

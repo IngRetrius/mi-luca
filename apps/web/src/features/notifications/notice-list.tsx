@@ -1,9 +1,10 @@
 import Link from 'next/link';
 
 import { KEY_FIGURES, type KeyFigureDelta } from '@miluca/engine';
-import { formatDate, formatMoney, formatPercent, messages } from '@miluca/i18n';
+import { formatDate, messages } from '@miluca/i18n';
 
 import { focusRing, textButton } from '@/components/ui-classes';
+import { formatKeyFigure } from '@/features/summary';
 
 import { markNoticeRead } from './actions';
 import type { ChangeNotice, Notice } from './queries';
@@ -73,8 +74,12 @@ function NoticeMessage({ notice }: { notice: Notice }) {
 function ChangeDeltas({ notice }: { notice: ChangeNotice }) {
   const format = (delta: KeyFigureDelta, value: number | null) => {
     if (value === null) return '—';
-    if (KEY_FIGURES[delta.id] === 'ratio') return formatPercent(value, notice.locale);
-    return notice.currency ? formatMoney(value, notice.currency, notice.locale) : String(value);
+    if (KEY_FIGURES[delta.id] === 'amount' && !notice.currency) return String(value);
+    return formatKeyFigure(delta.id, value, {
+      locale: notice.locale,
+      currency: notice.currency ?? '',
+      months: t.keyFigureMonths,
+    });
   };
   return (
     <dl className="flex flex-col gap-1 text-sm">

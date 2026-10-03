@@ -3,6 +3,8 @@ import type { DebtMethod, IncomeScenario, IsoDate, Money, MonthFlags } from '@mi
 import { automaticRows, computeBudget, type BudgetItemInput, type BudgetResult } from './budget';
 import {
   monthlyFlow,
+  monthValues,
+  type MonthValues,
   noIncomeMonths,
   surplusDestination,
   thirdPartyByMonth,
@@ -40,7 +42,7 @@ import {
   type EmergencyFund,
   type EmergencyProgress,
 } from './emergency-fund';
-import { parseIsoDate } from './excel';
+import { monthIndex, parseIsoDate } from './excel';
 import { computeGoals, type GoalInput, type GoalsResult } from './goals';
 import {
   computeIncomes,
@@ -202,6 +204,31 @@ export interface CaseResult {
 }
 
 /**
+ * Lo que se paga de cuotas mínimas en cada mes del año del flujo según el plan de pago: lo pagado
+ * en el plan ese mes (cuota y extra), sin pasar de la suma de las cuotas. Mientras quede deuda, la
+ * cuota de la que termina pasa a la siguiente (RN-093) y no sale del flujo; cuando el plan las
+ * salda todas, ese dinero vuelve al sobrante. Antes del primer mes del plan, la cuota completa.
+ * (H-03, ADR 0015)
+ */
+function debtMinimumsByMonth(
+  simulation: DebtSimulation,
+  minimums: number,
+  planStart: IsoDate,
+  flowYear: number,
+): MonthValues {
+  const first = monthIndex(planStart);
+  return monthValues((month) => {
+    const offset = flowYear * 12 + month + 1 - first;
+    if (offset < 0) return minimums;
+    const paid = simulation.byOrder.reduce(
+      (sum, row) => sum + (row.minimum[offset] ?? 0) + (row.extra[offset] ?? 0),
+      0,
+    );
+    return Math.min(minimums, paid);
+  });
+}
+
+/**
  * Cálculo completo de lo que hay hasta F4, en el orden de la sección 4 de 04-motor: ingresos,
  * deudas, metas y seguros, presupuesto con filas automáticas, costo de vida, cuentas por cobrar,
  * flujo anual, prueba de realidad, destino del sobrante, fondo de emergencia, bolsillos, plan de
@@ -237,6 +264,11 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
       balance: { amount: bridge.balance, currency },
       minPayment: { amount: bridge.minPayment ?? 0, currency },
       extraFrom: bridge.extraFrom ?? debt.extraFrom,
+      // En modo nativo los seguros de la cuota se pagan cada mes sin bajar el saldo (H-05); la
+      // hoja Deudas los trata como capital.
+      ...(native && debt.tracking!.credit.insurance > 0
+        ? { insurance: { amount: debt.tracking!.credit.insurance, currency } }
+        : {}),
     };
   });
   const debts = debtTotals(debtInputs, fx);
@@ -267,20 +299,6 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
   const implied = native ? impliedThirdPartyIncome(budget) : null;
 
   const receivables = computeReceivables(input.receivables, input.cutoffDate, flowYear, fx);
-  const flow = monthlyFlow(
-    input.incomes,
-    incomes,
-    budget,
-    input.socialSecurityMonths,
-    native ? thirdPartyByMonth(budgetItems, budget, input.socialSecurityMonths, fx) : null,
-  );
-  const noIncome = noIncomeMonths(flow.balance.months);
-  const annualSurplus = noIncome.surplus.total;
-  const reality = realityCheck(input.realityCheck, annualSurplus, budget.programmedSavings.annual, {
-    pctInvestConfirmed: parameters.pctInvestConfirmed,
-    pctInvestPending: parameters.pctInvestPending,
-  });
-
   const liquid = liquidAssets(input.assets, fx);
   // Ingresos de los escenarios del fondo: la regla de la plantilla por tipo y, en modo nativo, la
   // marca de cada ingreso (H-07). Lo que pagan terceros es un ingreso "otro" (ADR 0010).
@@ -302,55 +320,105 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
     months: parameters.emergencyMonths,
     hasExpensiveDebt: expensive.exists,
   });
-  const pockets = computePockets(
-    {
-      pockets: input.pockets,
-      budgetItems,
+  const classification = classifyDebts(debtInputs, input.debtMethod, fx);
+  const planStart = debtPlanStart(input.cutoffDate);
+
+  // Del flujo al plan de pago. En modo nativo corre dos veces: con el flujo de la plantilla y luego
+  // con las cuotas que de verdad se pagan cada mes según ese plan (H-03, ADR 0015).
+  const cashflowChain = (
+    debtMinimums: { readonly automaticMonthly: number; readonly months: MonthValues } | null,
+  ) => {
+    const flow = monthlyFlow(
+      input.incomes,
+      incomes,
       budget,
-      emergencyCurrentGoal: fund.currentGoal,
-      noIncomeShortfall: noIncome.shortfall,
-      noIncomeContribution: noIncome.equalContribution,
-      liquidAssets: liquid,
-      operatingCushion: toBaseCompat(parameters.operatingCushion, fx),
+      input.socialSecurityMonths,
+      native ? thirdPartyByMonth(budgetItems, budget, input.socialSecurityMonths, fx) : null,
+      debtMinimums,
+    );
+    const noIncome = noIncomeMonths(flow.balance.months);
+    const annualSurplus = noIncome.surplus.total;
+    const reality = realityCheck(
+      input.realityCheck,
+      annualSurplus,
+      budget.programmedSavings.annual,
+      {
+        pctInvestConfirmed: parameters.pctInvestConfirmed,
+        pctInvestPending: parameters.pctInvestPending,
+      },
+    );
+
+    const pockets = computePockets(
+      {
+        pockets: input.pockets,
+        budgetItems,
+        budget,
+        emergencyCurrentGoal: fund.currentGoal,
+        noIncomeShortfall: noIncome.shortfall,
+        noIncomeContribution: noIncome.equalContribution,
+        liquidAssets: liquid,
+        operatingCushion: toBaseCompat(parameters.operatingCushion, fx),
+        hasExpensiveDebt: expensive.exists,
+        pctToDebt: parameters.pctSurplusToDebt,
+        pctExcessToInvestment: parameters.pctExcessToInvestment,
+      },
+      fx,
+    );
+    const progress = emergencyProgress(pockets.emergency.balance, fund);
+
+    // En modo nativo el sobrante completa primero el fondo; se reparte lo que queda (ADR 0008).
+    const savingsPlan = native
+      ? sequentialSavingsPlan(
+          noIncome.surplus.months,
+          fund.currentGoal,
+          pockets.emergency.balance,
+          flowYear,
+          input.cutoffDate,
+        )
+      : null;
+    const destination = surplusDestination({
+      surplus: savingsPlan?.afterFund ?? noIncome.surplus.months,
       hasExpensiveDebt: expensive.exists,
       pctToDebt: parameters.pctSurplusToDebt,
-      pctExcessToInvestment: parameters.pctExcessToInvestment,
-    },
-    fx,
-  );
-  const progress = emergencyProgress(pockets.emergency.balance, fund);
+      pctToInvestment: reality.pctToInvestment,
+      receivables: receivables.payments,
+    });
 
-  // En modo nativo el sobrante completa primero el fondo; se reparte lo que queda (ADR 0008).
-  const savingsPlan = native
-    ? sequentialSavingsPlan(
-        noIncome.surplus.months,
-        fund.currentGoal,
-        pockets.emergency.balance,
-        flowYear,
-        input.cutoffDate,
-      )
-    : null;
-  const destination = surplusDestination({
-    surplus: savingsPlan?.afterFund ?? noIncome.surplus.months,
-    hasExpensiveDebt: expensive.exists,
-    pctToDebt: parameters.pctSurplusToDebt,
-    pctToInvestment: reality.pctToInvestment,
-    receivables: receivables.payments,
-  });
-
-  // El extra mensual es el promedio de lo que el flujo manda a deudas en el año (H-04).
-  const classification = classifyDebts(debtInputs, input.debtMethod, fx);
-  const simulation = simulateDebts(
-    debtInputs,
-    classification,
-    {
-      startMonth: debtPlanStart(input.cutoffDate),
-      extraMonthly: destination.totalExtraToDebt.total / 12,
-      lumpSum: pockets.lumpSumToDebt,
-      horizonMonths: DIAGNOSIS_HORIZON_MONTHS,
-    },
-    fx,
-  );
+    // El extra mensual es el promedio de lo que el flujo manda a deudas en el año (H-04).
+    const simulation = simulateDebts(
+      debtInputs,
+      classification,
+      {
+        startMonth: planStart,
+        extraMonthly: destination.totalExtraToDebt.total / 12,
+        lumpSum: pockets.lumpSumToDebt,
+        horizonMonths: DIAGNOSIS_HORIZON_MONTHS,
+      },
+      fx,
+    );
+    return {
+      flow,
+      noIncome,
+      annualSurplus,
+      reality,
+      pockets,
+      progress,
+      savingsPlan,
+      destination,
+      simulation,
+    };
+  };
+  const firstPass = cashflowChain(null);
+  const chain =
+    native && debtInputs.length > 0
+      ? cashflowChain({
+          automaticMonthly: debts.minPayment,
+          months: debtMinimumsByMonth(firstPass.simulation, debts.minPayment, planStart, flowYear),
+        })
+      : firstPass;
+  const { flow, noIncome, annualSurplus, reality, pockets, progress, savingsPlan, destination } =
+    chain;
+  const { simulation } = chain;
 
   const annualIncome = incomes.annual + (implied?.annual ?? 0);
   const annualExpenses = budget.expensesWithoutSavings.annual;

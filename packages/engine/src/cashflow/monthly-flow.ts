@@ -61,6 +61,8 @@ export function thirdPartyByMonth(
  * plantilla (y quedan en los pendientes del presupuesto).
  *
  * `extraOtherIncome` suma a "otros ingresos": el aporte implícito de terceros del modo nativo.
+ * `debtMinimums`, también del modo nativo (H-03, ADR 0015), reemplaza el promedio de la fila
+ * automática de cuotas (`Presupuesto!6`) por lo que se paga cada mes según el plan de pago.
  */
 export function monthlyFlow(
   incomes: readonly IncomeInput[],
@@ -68,6 +70,7 @@ export function monthlyFlow(
   budget: BudgetResult,
   socialSecurityMonths: MonthFlags,
   extraOtherIncome: MonthValues | null = null,
+  debtMinimums: { readonly automaticMonthly: number; readonly months: MonthValues } | null = null,
 ): MonthlyFlow {
   const incomeByKind = Object.fromEntries(
     KINDS.map((kind) => [
@@ -93,7 +96,11 @@ export function monthlyFlow(
   );
   const direct = flowRow(() => budget.direct.monthly);
   const pockets = flowRow(() => budget.pockets.monthly);
-  const debtPayments = flowRow(() => budget.debtPayments.monthly);
+  const debtPayments = flowRow((month) =>
+    debtMinimums
+      ? budget.debtPayments.monthly - debtMinimums.automaticMonthly + at(debtMinimums.months, month)
+      : budget.debtPayments.monthly,
+  );
   const programmedSavings = flowRow(() => budget.programmedSavings.monthly);
   const totalOut = flowRow(
     (month) =>

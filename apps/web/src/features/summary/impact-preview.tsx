@@ -1,8 +1,8 @@
 'use client';
 
-import { KEY_FIGURES, type KeyFigureId, type KeyFigures } from '@miluca/engine';
-// Solo los formateadores: el índice del paquete trae todos los textos al navegador.
-import { formatMoney, formatPercent } from '@miluca/i18n/format';
+import type { KeyFigureId, KeyFigures } from '@miluca/engine';
+
+import { formatKeyFigure, type MonthsText } from './format-key-figure';
 
 export interface ImpactPreviewText {
   readonly title: string;
@@ -10,6 +10,7 @@ export interface ImpactPreviewText {
   readonly change: string;
   readonly note: string;
   readonly labels: Readonly<Record<KeyFigureId, string>>;
+  readonly months: MonthsText;
 }
 
 /**
@@ -31,12 +32,8 @@ export function ImpactPreview({
   locale: string;
   currency: string;
 }) {
-  const format = (id: KeyFigureId, value: number | null) => {
-    if (value === null) return '—';
-    return KEY_FIGURES[id] === 'ratio'
-      ? formatPercent(value, locale)
-      : formatMoney(value, currency, locale);
-  };
+  const format = (id: KeyFigureId, value: number | null) =>
+    formatKeyFigure(id, value, { locale, currency, months: text.months });
   const changed = figures.some((id) => format(id, before[id]) !== format(id, after[id]));
 
   return (

@@ -244,7 +244,12 @@ export async function IncomeScreen({
     form: { ...text.form, amountHint: local.amountHint },
     kinds: text.kinds,
     months: monthNames(locale),
-    preview: { ...t.budget.preview, title: local.previewTitle, labels: t.keyFigures },
+    preview: {
+      ...t.budget.preview,
+      title: local.previewTitle,
+      labels: t.keyFigures,
+      months: t.keyFigureMonths,
+    },
   };
   const initial: IncomeValues = row
     ? {

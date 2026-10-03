@@ -6,3 +6,5 @@ export { ImpactPreview } from './impact-preview';
 export type { ImpactPreviewText } from './impact-preview';
 export { previewFigureIds, usePreviewFigures } from './preview';
 export type { PreviewCase } from './preview';
+export { formatKeyFigure } from './format-key-figure';
+export type { MonthsText } from './format-key-figure';

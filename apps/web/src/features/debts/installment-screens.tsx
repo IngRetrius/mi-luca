@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import type { CreditSchedule, Installment } from '@miluca/engine';
+import { frechClientRate, type CreditSchedule, type Installment } from '@miluca/engine';
 import { COUNTRY_LOCALES, formatDate, formatMoney, formatPercent, messages } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
@@ -60,6 +60,7 @@ async function loadCredit(clientId: string, debtId: string) {
     computed,
     debt: computed.rows.debts[index]!,
     schedule: computed.result.creditSchedules[index] ?? null,
+    credit: computed.input.debts[index]?.tracking?.credit ?? null,
   };
 }
 
@@ -85,8 +86,9 @@ export async function InstallmentsScreen({
       </Screen>
     );
   }
-  const { computed, debt, schedule } = loaded;
+  const { computed, debt, schedule, credit } = loaded;
   const { client } = computed.rows;
+  const frechRate = credit ? frechClientRate(credit) : null;
   const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
   const money = (amount: number) => formatMoney(amount, debt.currency, locale);
   const date = (value: string) => formatDate(value, locale, 'UTC');
@@ -159,6 +161,17 @@ export async function InstallmentsScreen({
           { label: text.pendingInterest, value: money(schedule.pendingInterest) },
           { label: text.pendingTotal, value: money(schedule.pendingTotal) },
           { label: text.principalPaid, value: formatPercent(schedule.principalPaidShare, locale) },
+          ...(frechRate !== null && credit
+            ? [
+                {
+                  label: text.frechRate,
+                  value: text.frechRateValue
+                    .replace('{rate}', formatPercent(frechRate, locale, 2))
+                    .replace('{until}', String(credit.frechUntilInstallment ?? '—'))
+                    .replace('{bank}', formatPercent(credit.annualRate ?? 0, locale, 2)),
+                },
+              ]
+            : []),
         ]}
       />
 

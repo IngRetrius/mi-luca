@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { KEY_FIGURES, type KeyFigureId } from '@miluca/engine';
-import { COUNTRY_LOCALES, formatDate, formatMoney, formatPercent, messages } from '@miluca/i18n';
+import type { KeyFigureId } from '@miluca/engine';
+import { COUNTRY_LOCALES, formatDate, formatMoney, messages } from '@miluca/i18n';
 
 import { Screen } from '@/components/screen';
 import { ModuleLink } from '@/components/back-link';
@@ -17,7 +17,7 @@ import {
   InvitationPanel,
   revokeInvitation,
 } from '@/features/invitations';
-import { loadComputedCase, type ComputedCase } from '@/features/summary';
+import { formatKeyFigure, loadComputedCase, type ComputedCase } from '@/features/summary';
 import { requireAdvisor } from '@/server/viewer';
 
 const t = messages.es;
@@ -122,6 +122,9 @@ const PROFILE_FIGURES: readonly KeyFigureId[] = [
   'programmedSavings',
   'annualSurplus',
   'savingsRate',
+  'debtLoad',
+  'totalDebt',
+  'expensiveDebtMonths',
   'emergencyGoal',
   'emergencyProgress',
   'noIncomeShortfall',
@@ -151,13 +154,12 @@ function CaseData({
   }
   const { client } = computed.rows;
   const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
-  const format = (id: KeyFigureId) => {
-    const value = computed.figures[id];
-    if (value === null) return '—';
-    return KEY_FIGURES[id] === 'ratio'
-      ? formatPercent(value, locale)
-      : formatMoney(value, client.base_currency, locale);
-  };
+  const format = (id: KeyFigureId) =>
+    formatKeyFigure(id, computed.figures[id], {
+      locale,
+      currency: client.base_currency,
+      months: t.keyFigureMonths,
+    });
   const money = (amount: number) => formatMoney(amount, client.base_currency, locale);
   const types: Readonly<Record<string, string>> = t.profile.types;
   const cutoff = computed.rows.settings?.cutoff_date

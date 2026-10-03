@@ -110,9 +110,9 @@ Tiempo objetivo: menos de 50 ms por cálculo completo en un teléfono de gama me
 | Pagador de cada gasto | Hay que registrar el aporte del tercero como ingreso | Pagador por partida y aporte implícito del tercero, que en el flujo y en el fondo es un ingreso "otro"; indicadores personales aparte (ADR 0010). Hecho | H-12, RN-015 |
 | Aporte para completar el fondo | Informativo, no se descuenta | Plan secuencial: primero el fondo, luego el reparto (ADR 0008). Hecho | H-01 |
 | Bolsillo en partidas tipo bolsillo | Opcional | Obligatorio | H-02 |
-| Cuotas de deuda en el flujo | 12 meses iguales | Hasta el mes de fin de cada deuda | H-03 |
-| Seguros en la cuota | No se separan | Se separan | H-05 |
-| Motor de deudas | 120 meses | Uno solo, horizonte configurable, FRECH y orden manual. Horizonte y orden manual hechos (también en modo compatible, porque la plantilla no tiene orden manual); FRECH y seguros llegan con C5 | H-06 |
+| Cuotas de deuda en el flujo | 12 meses iguales | Salen completas mientras el plan tenga deuda y vuelven al sobrante cuando las salda todas (ADR 0015). Hecho | H-03 |
+| Seguros en la cuota | No se separan | Se separan: el plan los paga cada mes sin bajar el saldo, en el seguimiento y en el plan nativo. Hecho | H-05 |
+| Motor de deudas | 120 meses | Uno solo, horizonte configurable, FRECH y orden manual. Hecho: el mismo simulador para la hoja Deudas y el plan de créditos; el FRECH vive en la tabla del crédito | H-06 |
 | Escenarios del fondo | "Otro" se pierde solo en C | Se pierde en el escenario marcado por ingreso (`lostInScenario`: A, B, C o ninguno); sin marca, la regla de la plantilla. Hecho (ADR 0011) | H-07 |
 | Seguro de vida | 10 años fijos | Años y gasto editables | H-10 |
 | Avance del fondo | Frente a la meta completa | Frente a la completa y a la vigente | H-11 |

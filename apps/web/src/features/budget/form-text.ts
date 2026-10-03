@@ -26,7 +26,12 @@ export function budgetFormText(
       ...shared,
       form: budget.form,
       payers: budget.payers,
-      preview: { ...budget.preview, title: budget.preview.advisorTitle, labels: t.keyFigures },
+      preview: {
+        ...budget.preview,
+        title: budget.preview.advisorTitle,
+        labels: t.keyFigures,
+        months: t.keyFigureMonths,
+      },
     };
   }
   const client = withAddress(budget.client, viewer.formOfAddress);
@@ -44,6 +49,7 @@ export function budgetFormText(
       ...budget.preview,
       title: withAddress(budget.preview.title, viewer.formOfAddress),
       labels: t.keyFigures,
+      months: t.keyFigureMonths,
     },
   };
 }

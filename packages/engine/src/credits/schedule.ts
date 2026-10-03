@@ -345,3 +345,15 @@ export function creditBridge(schedule: CreditSchedule): CreditBridge {
     extraFrom: schedule.extraFromDate,
   };
 }
+
+/**
+ * Tasa efectiva anual que paga el cliente mientras dura el FRECH: la del banco menos los puntos que
+ * cubre el gobierno (H-18). null sin FRECH. El orden de pago sigue usando la tasa del banco, como la
+ * plantilla; esta tasa se muestra al lado.
+ *
+ * @excel 'Crédito 1'!F8 (en tasa mensual)
+ */
+export function frechClientRate(credit: CreditInput): number | null {
+  if (!credit.frechPoints) return null;
+  return Math.max(0, (credit.annualRate ?? 0) - credit.frechPoints);
+}

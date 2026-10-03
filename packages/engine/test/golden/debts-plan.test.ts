@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { compute } from '../../src/compute';
+import { keyFigures } from '../../src/key-figures';
 import { DIAGNOSIS_HORIZON_MONTHS } from '../../src/debts';
 import { edate } from '../../src/excel';
 import { caseInput, debtRows } from './adapters';
@@ -146,5 +147,17 @@ describe.each(goldenCases)('caso de oro $case: plan de pago de deudas', (golden)
       return [payoffDate(expectedMonths(golden, order))!];
     });
     expect(payoff).toEqual({ date: expensiveDates.sort().at(-1), exceedsHorizon: false });
+  });
+
+  it('cifra clave: meses para salir de la deuda cara (como C25, en meses)', () => {
+    const months = rows.flatMap((row, index) => {
+      const order = simulation.debts[index]!.order;
+      if (cell(golden, `Deudas!J${row}`) !== 'Sí' || order === null) return [];
+      const value = expectedMonths(golden, order);
+      return [value === MORE_THAN_HORIZON ? DIAGNOSIS_HORIZON_MONTHS + 1 : value];
+    });
+    expect(keyFigures(result).expensiveDebtMonths).toBe(
+      months.length === 0 ? null : Math.max(...months),
+    );
   });
 });

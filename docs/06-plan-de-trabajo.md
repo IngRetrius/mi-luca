@@ -58,7 +58,7 @@ gantt
 | F1 | 120 h, hasta mediados de enero de 2027 | Terminada salvo el alta con Google en un navegador real, el correo de la invitación (C14) y exportar y borrar en P-C11 (F7) |
 | F2 | 160 h, hasta comienzos de abril de 2027 | Terminada; queda el correo diario de cambios (C6), que espera a que la app envíe correos |
 | F3 | 160 h, hasta finales de junio de 2027 | Terminada en el código; falta el piloto con un caso real (criterio MVP) |
-| F4 | 160 h, hasta comienzos de septiembre de 2027 | En curso: deudas del diagnóstico (C4 y C9), créditos cuota a cuota (C5) con marcas de pago, y sus pantallas |
+| F4 | 160 h, hasta comienzos de septiembre de 2027 | Terminada en el código: deudas del diagnóstico (C4 y C9), créditos cuota a cuota, plan de pago y Panel (C5), correcciones del modo nativo y pantallas |
 | F5 a F8 | 440 h | Sin empezar |
 
 Con el agente de código, F0 a F2 avanzaron mucho más rápido que la estimación a 14 horas por semana, que suponía empezar el 5 de octubre de 2026. **Supuesto:** el calendario de arriba se mantiene como techo y se reestima al cerrar F3, con lo que tome realmente una fase que mezcla motor, base de datos y pantallas. Las horas del resto no cambian hasta entonces.
@@ -234,7 +234,7 @@ Avance:
 - [x] Motor del diagnóstico: `classifyDebts` (avalancha, bola de nieve y orden manual, con empates por el orden de la lista), `simulateDebts` (simulación mes a mes con abono único, abonos desde una fecha, deudas que no aceptan abonos, cuotas que se liberan y horizonte configurable) y `expensiveDebtPayoff`; `nper` en `excel`, probado contra Excel. `compute` arma el plan con el extra del flujo y el abono único de Bolsillos y llena `Resumen!C19`. `ENGINE_VERSION` 0.10.0.
 - [x] Casos de oro C4 (avalancha, 8 deudas inspiradas en el caso 15.1) y C9 (bola de nieve); la prueba `debts-plan.test.ts` compara la hoja Deudas completa en los ocho casos. Se comprobó que falla con errores provocados en el reparto del abono único y en el desempate.
 - [x] Hallazgo H-28 (ADR 0013): con coma decimal, la plantilla da 1 mes para pagar cualquier deuda; el motor da los meses reales.
-- [ ] Modo nativo: cuotas en el flujo hasta el fin de cada deuda (H-03), seguros en la cuota (H-05), FRECH y tasa efectiva para el cliente (H-18).
+- [x] Modo nativo (`ENGINE_VERSION` 0.14.0): cuotas en el flujo hasta que el plan salda las deudas (H-03, ADR 0015), con el control de calidad del sobrante ajustado; seguros de los créditos en seguimiento pagados cada mes en el plan del diagnóstico (H-05); tasa para el cliente con FRECH junto a la del banco (H-18). Cifra clave "Meses para salir de la deuda cara" en la ficha, en el antes y después y en el plan entregado, con un formateador único de cifras clave en la app.
 - [ ] Créditos cuota a cuota (360 meses), marcas de pago, panel y caso C5 (plantilla de créditos).
 - [x] Base de datos: `debts` con RLS, historial, guarda del orden manual y moneda en uso; `case_settings.debt_method` (migración `debts`, 24 pruebas pgTAP). La app calcula el caso con las deudas: la fila automática de cuotas del presupuesto ya no vale 0.
 - [x] Pantallas: Deudas del asesor (P-A10) con el método de pago y el plan, alta y edición con el orden manual; las deudas del cliente en Mis datos, que edita sin cambiar método ni orden, con el antes y después para el asesor. Verificado contra Supabase local (asesora en Chromium a 320 px con un error de validación y el foco en él, y los tres métodos; cliente en WebKit de iPhone) y revisado con `web-design-guidelines`.
@@ -244,6 +244,8 @@ Avance:
 - [x] Pantallas: sección "Seguimiento cuota a cuota" en el formulario de la deuda; cuotas de cada crédito (P-C10) para asesor y cliente, con "Marcar pagada", el detalle de cada cuota y la alerta de vencidas sin marcar; la próxima cuota o las vencidas en la lista de deudas. Verificado contra Supabase local (asesora a 320 px, cliente en iPhone) y revisado con `web-design-guidelines`.
 - [x] Plan de pago de 360 meses (`creditsPaymentPlan`, el mismo simulador de la hoja Deudas con `variant: 'credits'` y seguros por deuda, H-06) y Panel (`creditsPanel`) de la plantilla de créditos; `round` y `excelSerial` en `excel`. C5 se regeneró con la corrección de H-28 en las 41 fórmulas afectadas (ADR 0013): sin ella el plan de Excel no sirve con coma decimal. Plan y Panel en verde contra C5. `ENGINE_VERSION` 0.13.0.
 - [x] Pantalla "Panel de créditos" para asesor y cliente, enlazada desde Deudas. Verificado contra Supabase local (asesora a 320 px, cliente en iPhone) y revisado con `web-design-guidelines` (la tabla de años pasó a lista para no desplazarse de lado).
+
+Estado al 03/10/2026: **F4 terminada en el código**. Los tres criterios de aceptación se cumplen: pruebas de oro de C4 y C9 (hoja Deudas) y de C5 (hoja de cada crédito, plan de pago y Panel de la plantilla de créditos, con la corrección de H-28), `Resumen!C16:C19` en verde, y el cliente marca una cuota pagada y el panel se actualiza (verificado contra Supabase local). Quedan para cuando haga falta: la sensibilidad a la tasa de cambio de `Datos!B26:E31` de la plantilla de créditos y corregir `">0.5"` en las plantillas de Excel del asesor.
 
 ### F5. Inversión, patrimonio, metas y seguros (120 horas)
 

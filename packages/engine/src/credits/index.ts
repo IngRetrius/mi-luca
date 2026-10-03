@@ -2,6 +2,7 @@ export {
   CREDIT_HORIZON_INSTALLMENTS,
   creditBridge,
   creditSchedule,
+  frechClientRate,
   paymentToFinishIn,
   simulateFixedExtra,
 } from './schedule';

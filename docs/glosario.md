@@ -199,6 +199,8 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Plan de pago de créditos | `creditsPaymentPlan` | Hoja Plan de pago, 360 meses |
 | Solo con cuotas | `minimumOnly` | Pagando solo la cuota, sin extras |
 | Panel de créditos | `creditsPanel` | Hoja Panel |
+| Meses para salir de la deuda cara | `expensiveDebtMonths` | Cifra clave en meses; 121 es más de 120 |
+| Tasa para el cliente con FRECH | `frechClientRate` | H-18 |
 | Libre de deudas | `debtFree` | |
 | Tramos del mes | `monthSegments` | Días 1 a 10, 11 a 20 y 21 a 31 |
 | Hitos | `milestones` | Cuándo termina cada crédito y cuánto libera |

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   creditSchedule,
+  frechClientRate,
   paymentToFinishIn,
   simulateFixedExtra,
   type CreditInput,
@@ -105,5 +106,16 @@ describe('simuladores', () => {
       6,
     );
     expect(paymentToFinishIn(schedule, 0, 0)).toBeNull();
+  });
+});
+
+describe('frechClientRate', () => {
+  it('es la tasa del banco menos los puntos del FRECH; sin FRECH, null', () => {
+    expect(frechClientRate({ ...credit, annualRate: 0.103, frechPoints: 0.04 })).toBeCloseTo(
+      0.063,
+      10,
+    );
+    expect(frechClientRate({ ...credit, annualRate: 0.03, frechPoints: 0.04 })).toBe(0);
+    expect(frechClientRate(credit)).toBeNull();
   });
 });

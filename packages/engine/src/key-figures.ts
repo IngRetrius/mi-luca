@@ -1,12 +1,15 @@
 import type { CaseResult } from './compute';
-
-/** Cómo se compara y se muestra cada cifra: importe en moneda base o razón (0,3 es 30 %). */
-export type KeyFigureKind = 'amount' | 'ratio';
+import { DIAGNOSIS_HORIZON_MONTHS } from './debts';
 
 /**
- * Cifras clave de lo que hay hasta F3 (03-modelo, sección 7.4). Las demás (salida de la deuda
- * cara, % en crecimiento, patrimonio) se agregan con sus módulos. Importes anuales salvo los
- * marcados "Monthly" y la meta del fondo, que es un saldo.
+ * Cómo se compara y se muestra cada cifra: importe en moneda base, razón (0,3 es 30 %) o meses. En
+ * meses, un valor mayor que el horizonte (121) es "más de 120 meses".
+ */
+export type KeyFigureKind = 'amount' | 'ratio' | 'months';
+
+/**
+ * Cifras clave (03-modelo, sección 7.4). Las demás (% en crecimiento, patrimonio) se agregan con
+ * sus módulos. Importes anuales salvo los marcados "Monthly" y la meta del fondo, que es un saldo.
  */
 export const KEY_FIGURES = {
   annualIncome: 'amount',
@@ -20,6 +23,7 @@ export const KEY_FIGURES = {
   ownSavingsRate: 'ratio',
   debtLoad: 'ratio',
   totalDebt: 'amount',
+  expensiveDebtMonths: 'months',
   emergencyGoal: 'amount',
   emergencyProgress: 'ratio',
   noIncomeShortfall: 'amount',
@@ -39,7 +43,28 @@ export interface KeyFigureDelta {
 }
 
 // Por debajo de esto, la diferencia es ruido de redondeo y no un cambio (04-motor, 7.1).
-const TOLERANCE: Readonly<Record<KeyFigureKind, number>> = { amount: 0.005, ratio: 0.0000005 };
+const TOLERANCE: Readonly<Record<KeyFigureKind, number>> = {
+  amount: 0.005,
+  ratio: 0.0000005,
+  months: 0.5,
+};
+
+/**
+ * Meses desde el primer mes del plan hasta que termina la última deuda cara (0 si la salda el
+ * abono único); el horizonte más uno si alguna pasa de 120 meses; null sin deuda cara.
+ *
+ * @excel Deudas!C25, Resumen!C19 (en meses)
+ */
+function expensiveDebtMonths(result: CaseResult): number | null {
+  const months = result.debtPlan.simulation.debts.flatMap((debt, index) =>
+    result.expensiveDebt.rows[index] === true
+      ? [debt.exceedsHorizon ? null : debt.monthsToPayoff]
+      : [],
+  );
+  if (months.length === 0) return null;
+  if (months.some((value) => value === null)) return DIAGNOSIS_HORIZON_MONTHS + 1;
+  return Math.max(...(months as number[]));
+}
 
 export function keyFigures(result: CaseResult): KeyFigures {
   const { summary, budget, costOfLiving, personal } = result;
@@ -55,6 +80,7 @@ export function keyFigures(result: CaseResult): KeyFigures {
     ownSavingsRate: personal?.ownSavingsRate ?? null,
     debtLoad: summary.debtLoad,
     totalDebt: summary.totalDebt,
+    expensiveDebtMonths: expensiveDebtMonths(result),
     emergencyGoal: summary.emergencyCurrentGoal,
     emergencyProgress: summary.emergencyProgress,
     noIncomeShortfall: summary.noIncomeShortfall,

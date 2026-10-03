@@ -1,13 +1,8 @@
-import {
-  diffKeyFigures,
-  KEY_FIGURES,
-  type CaseResult,
-  type KeyFigureId,
-  type KeyFigures,
-} from '@miluca/engine';
-import { formatDate, formatMoney, formatPercent, messages } from '@miluca/i18n';
+import { diffKeyFigures, type CaseResult, type KeyFigureId, type KeyFigures } from '@miluca/engine';
+import { formatDate, formatMoney, messages } from '@miluca/i18n';
 
 import { FigureList } from '@/components/figure-list';
+import { formatKeyFigure } from '@/features/summary';
 
 import { PlanAssumptions } from './plan-assumptions';
 import type { Delivery } from './queries';
@@ -34,10 +29,7 @@ export function formatFigure(
   locale: string,
   currency: string,
 ): string {
-  if (value === null || value === undefined) return '—';
-  return KEY_FIGURES[id] === 'ratio'
-    ? formatPercent(value, locale)
-    : formatMoney(value, currency, locale);
+  return formatKeyFigure(id, value, { locale, currency, months: messages.es.keyFigureMonths });
 }
 
 function formatMonth(date: string, locale: string): string {
