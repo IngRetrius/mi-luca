@@ -4,7 +4,8 @@ import { expect, test } from '@playwright/test';
 // (iPhone y Android) y P-C11 (retirar y devolver el acceso, consentimientos) se verificaron contra
 // Supabase local (ver apps/web/README.md), igual que en F2 Mis datos con sus gastos, ingresos y
 // monedas, y la edición con "Así cambia tu plan" (P-C06 y P-C07). En F3, el inicio con el plan
-// entregado y Mi plan (P-C05) con la comparación con hoy.
+// entregado y Mi plan (P-C05) con la comparación con hoy. Después de F3, la lista de gastos típicos
+// del país (P-A06b en Mis gastos).
 
 for (const path of [
   '/instalar',
@@ -12,6 +13,7 @@ for (const path of [
   '/mis-datos',
   '/mis-datos/gastos',
   '/mis-datos/gastos/nuevo',
+  '/mis-datos/gastos/lista',
   '/mis-datos/gastos/00000000-0000-4000-8000-000000000001',
   '/mis-datos/ingresos',
   '/mis-datos/ingresos/nuevo',

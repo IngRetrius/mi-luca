@@ -23,6 +23,7 @@ const FIELD_ORDER: readonly PlanField[] = ['emergencyMonths', ...PLAN_PERCENTS, 
 export function PlanSettingsForm({
   text,
   hints,
+  help,
   initial,
   action,
   cancelHref,
@@ -30,6 +31,8 @@ export function PlanSettingsForm({
   text: Messages['planSettings']['form'];
   /** Ayuda de cada campo, ya con el valor de la metodología y la moneda. */
   hints: Readonly<Record<PlanField, string>> & { readonly cushionLabel: string };
+  /** Qué hace cada supuesto: se abre con el signo de pregunta junto a la etiqueta. */
+  help: Readonly<Record<PlanField, { readonly label: string; readonly text: string }>>;
   initial: PlanValues;
   action: (previous: PlanSettingsState | null, formData: FormData) => Promise<PlanSettingsState>;
   cancelHref: string;
@@ -54,6 +57,7 @@ export function PlanSettingsForm({
       id={fieldId(field)}
       label={label}
       hint={hints[field]}
+      help={help[field]}
       error={errors[field] ? text.errors[errors[field]] : null}
     >
       <input

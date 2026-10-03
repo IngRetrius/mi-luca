@@ -123,6 +123,14 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | % del cobro a inversión | `pctToInvestment` / `pct_to_investment` | Lo decide el asesor |
 | Banco | `bank` | Solo el nombre de la entidad |
 | Bolsillo | `pocket` | |
+| Asistente (IA) | `CaptureAssistant`, `proposeCapture`, `features/assistant/` | ADR 0012; Claude Haiku 4.5 (`CAPTURE_MODEL`) desde el servidor (`askClaude`, `server-only`) |
+| Propuesta del asistente | `CaptureProposal`, `CaptureItem` (`key`, `amount`, `frequency`, `quote`), `CaptureUnmatched` | `parseCaptureResponse` la valida contra la lista; `captureConcepts` arma la lista en el servidor |
+| Qué hace la lista con cada propuesta | `CaptureStatus` (`ready`, `frequencyDiffers`, `noFrequency`, `needsDays`, `noAmount`, `present`) | `planCapture`; solo `ready` escribe el valor |
+| Ayuda de un dato | `Help`, `HelpButton`, `HelpPanel` | `src/components/help.tsx`; en un campo, `Field` con `help` |
+| Supuestos del plan entregado | `PlanAssumptions`, `Delivery.parameters` | `inputs.parameters` de `plan_deliveries`; los ven el asesor y el cliente |
+| Catálogo de conceptos del presupuesto | `budgetCatalog`, `BUDGET_CATALOGS` | Uno por país en `packages/i18n/src/budget-catalog/`; un país nuevo agrega su archivo |
+| Concepto del catálogo | `CatalogConcept` (`key`, `name`, `frequency`, `expenseType`, `pocket`, `essential`, `health`, `hint`) | La llave es la misma en todos los países si el concepto es equivalente |
+| Gastos típicos (rutas) | `/presupuesto/lista`, `/mis-datos/gastos/lista` | P-A06b; `BudgetCatalogScreen`, `addCatalogItems` |
 | Tipo de bolsillo | `kind` | emergencia, meses_sin_ingreso, general |
 | Bolsillo del fondo o de meses sin ingreso | `SpecialPocketKind`, `/bolsillos/fondo`, `/bolsillos/meses-sin-ingreso` | Meta y saldo del motor; se elige su banco |
 | Límite de bolsillos del banco | `max_pockets` | RN-073 |

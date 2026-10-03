@@ -4,6 +4,8 @@ export function budgetPaths(role: 'advisor' | 'client', clientId: string) {
   return {
     list,
     add: `${list}/nuevo`,
+    /** Gastos típicos del país (P-A06b). */
+    catalog: `${list}/lista`,
     item: (itemId: string) => `${list}/${itemId}`,
   };
 }

@@ -15,5 +15,6 @@ Cada decisión que cambia la arquitectura, el modelo de datos o un resultado del
 | [0009](0009-google-y-correo-con-contrasena.md) | Inicio de sesión con Google y con correo y contraseña; Apple aplazado | Aceptada |
 | [0010](0010-pagador-por-gasto.md) | Pagador por gasto y aporte implícito de terceros (modo nativo, H-12) | Aceptada |
 | [0011](0011-decisiones-de-criterio-del-modo-nativo.md) | Decisiones de criterio del modo nativo y del mantenimiento del plan por el cliente | Aceptada |
+| [0012](0012-asistente-de-ia-del-asesor.md) | Asistente de IA del asesor con Claude Haiku, desde el servidor (la prueba con Ollama local quedó como alternativa) | Aceptada |
 
 Plantilla: [plantilla.md](plantilla.md).

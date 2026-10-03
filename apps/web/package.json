@@ -12,6 +12,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.131.0",
     "@miluca/db": "workspace:*",
     "@miluca/domain": "workspace:*",
     "@miluca/engine": "workspace:*",

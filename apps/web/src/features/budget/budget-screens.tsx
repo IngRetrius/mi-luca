@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { COUNTRY_LOCALES, formatMoney, messages } from '@miluca/i18n';
+import { budgetCatalog, COUNTRY_LOCALES, formatMoney, messages } from '@miluca/i18n';
 
 import { Screen, ScreenActions } from '@/components/screen';
 import { BackLink, LoadError as SharedLoadError } from '@/components/back-link';
-import { linkButton, primaryButton } from '@/components/ui-classes';
+import { linkButton, primaryButton, secondaryButton } from '@/components/ui-classes';
 import { loadComputedCase, toCaseInput, type ComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
 import { todayIn } from '@/lib/dates';
@@ -78,6 +78,13 @@ export async function BudgetScreen({
   const groups = budgetView(computed.rows.budgetItems, monthlyById, filters);
   const { budget } = computed.result;
   const money = (amount: number) => formatMoney(amount, currency, locale);
+  const empty = computed.rows.budgetItems.length === 0;
+  // Con el presupuesto vacío se empieza por la lista de gastos típicos del país (P-A06b).
+  const hasCatalog = budgetCatalog(computed.rows.client.country_code).length > 0;
+  const addLink = { href: paths.add, label: clientText?.add ?? t.budget.add };
+  const catalogLink = hasCatalog ? { href: paths.catalog, label: t.budget.addFromCatalog } : null;
+  const [primaryLink, secondaryLink] =
+    empty && catalogLink ? [catalogLink, addLink] : [addLink, catalogLink];
   const totals = [
     [t.budget.totals.expenses, budget.expensesWithoutSavings.monthly],
     [t.budget.totals.essential, budget.essential.monthly],
@@ -94,8 +101,13 @@ export async function BudgetScreen({
         <p className="text-text-muted">{clientText?.intro ?? t.budget.intro}</p>
       </div>
 
-      {computed.rows.budgetItems.length === 0 ? (
-        <p className="text-text-muted">{clientText?.empty ?? t.budget.empty}</p>
+      {empty ? (
+        <div className="flex flex-col gap-1">
+          <p className="text-text-muted">{clientText?.empty ?? t.budget.empty}</p>
+          {hasCatalog ? (
+            <p className="text-text-muted">{clientText?.emptyCatalog ?? t.budget.emptyCatalog}</p>
+          ) : null}
+        </div>
       ) : (
         <>
           <section
@@ -137,9 +149,14 @@ export async function BudgetScreen({
       )}
 
       <ScreenActions>
-        <Link href={paths.add} className={`w-full ${primaryButton} ${linkButton}`}>
-          {clientText?.add ?? t.budget.add}
+        <Link href={primaryLink.href} className={`w-full ${primaryButton} ${linkButton}`}>
+          {primaryLink.label}
         </Link>
+        {secondaryLink ? (
+          <Link href={secondaryLink.href} className={`w-full ${secondaryButton} ${linkButton}`}>
+            {secondaryLink.label}
+          </Link>
+        ) : null}
       </ScreenActions>
     </Screen>
   );

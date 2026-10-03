@@ -77,6 +77,19 @@ Nivel de verificación:
 | F49 | [Ley 1581 de 2012, art. 8 (texto)](https://leyonline.co/laws/ley-1581-de-2012/articulo-8o-derechos-de-los) (consultado el 02/10/2026) | Art. 8 e: el titular puede revocar la autorización y pedir la supresión del dato. Sustenta C20 en Colombia (ADR 0011) | Búsqueda |
 | F50 | [Sinking funds: SuperMoney](https://www.supermoney.com/encyclopedia/sinking-fund) y [FinMasters](https://finmasters.com/sinking-fund-cash-flow/) (consultadas el 02/10/2026) | Un bolsillo (sinking fund) junta cada mes una parte de un gasto previsto que no es mensual; se separa del fondo de emergencia, que es para lo imprevisto. Respalda la regla de bolsillos de la plantilla (RN-070) | Búsqueda |
 
+## IA del asesor
+
+| N.º | Fuente | Dato usado | Nivel |
+|---|---|---|---|
+| F51 | [Ollama, FAQ](https://docs.ollama.com/faq) (consultada el 02/10/2026) | Escucha en 127.0.0.1, puerto 11434. Por defecto acepta peticiones de otro origen solo desde 127.0.0.1 y 0.0.0.0; se agregan orígenes con `OLLAMA_ORIGINS`. En macOS, cada variable se fija con `launchctl setenv` y se reinicia la aplicación. "We don't see your prompts or data when you run locally". ADR 0012 | Leída |
+| F52 | [Ollama, salidas estructuradas](https://docs.ollama.com/capabilities/structured-outputs) (consultada el 02/10/2026) | El campo `format` de `/api/chat` recibe un esquema JSON; conviene repetir el esquema en el texto y bajar la temperatura a 0. ADR 0012 | Leída |
+| F53 | [Chrome, Local Network Access](https://developer.chrome.com/blog/local-network-access) (publicada el 09/06/2025; consultada el 02/10/2026) | Una petición de una página pública a la red local o al propio equipo (loopback) pide permiso al usuario; se aplica desde Chrome 142. ADR 0012 | Leída |
+| F54 | [WebKit, error 171934](https://bugs.webkit.org/show_bug.cgi?id=171934) (consultado el 02/10/2026) | "Don't treat loopback addresses … as mixed content", abierto: Safari bloquea `http://127.0.0.1` y `http://localhost` desde una página https. ADR 0012 | Leída |
+| F56 | Referencia de la API de Claude (skill `claude-api`, datos al 25/09/2026; consultada el 02/10/2026) | Claude Haiku 4.5, `claude-haiku-4-5`: 200K de contexto, 1 USD por millón de tokens de entrada y 5 de salida; Claude Sonnet 5.5, `claude-sonnet-5-5`: 2 y 10 USD. ADR 0012 | Leída |
+| F57 | Referencia de la API de Claude, salidas estructuradas (skill `claude-api`; consultada el 02/10/2026) | `output_config.format` con esquema JSON; todo objeto con `additionalProperties: false`; sin límites numéricos ni de longitud; disponible en Haiku 4.5. ADR 0012 | Leída |
+| F58 | [Claude, API and data retention](https://platform.claude.com/docs/en/manage-claude/api-and-data-retention), [Privacy Center, retención comercial](https://privacy.anthropic.com/en/articles/7996866-how-long-do-you-store-personal-data), [DPA](https://support.anthropic.com/en/articles/7996862-i-am-a-prospective-api-customer-can-i-see-a-copy-of-your-data-processing-addendum-dpa) y [encargado o responsable](https://support.anthropic.com/en/articles/9267385-what-is-the-data-relationship-between-anthropic-the-customer-and-the-user) (consultados el 02/10/2026) | Anthropic es encargado bajo su DPA, incorporado a los términos comerciales con cláusulas contractuales tipo; no entrena con datos de la API sin permiso expreso; borra entradas y salidas en 30 días; lo marcado por sus sistemas de seguridad puede guardarse hasta 2 años; retención cero solo para cuentas calificadas. ADR 0012 y avisos 1.1 | Leída |
+| F55 | [Ollama, biblioteca de modelos](https://ollama.com/library) (consultada el 02/10/2026) | Modelos con tamaños de 12 a 14 mil millones de parámetros, entre otros `gemma4` (12b), `qwen3` (14b) y `qwen2.5` (14b); el asesor tiene `qwen2.5:32b`. Candidatos para la prueba del ADR 0012, sin elegir | Leída |
+
 ## Accesibilidad
 
 | N.º | Fuente | Dato usado | Nivel |

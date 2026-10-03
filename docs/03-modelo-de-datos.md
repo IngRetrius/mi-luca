@@ -837,6 +837,7 @@ Las secciones 3 a 10 siguen siendo el diseño de referencia. Lo que ya existe co
 | `20260929200939_consent_withdrawal.sql` | El dueño retira su consentimiento de datos sensibles (punto 14) |
 | `20260929201135_unclaimed_account_cleanup.sql` | `private.delete_unclaimed_accounts()` y su tarea diaria en `pg_cron` (punto 15) |
 | `20260929202128_legal_texts_1_0.sql` | Avisos de privacidad y de datos de salud 1.0, Colombia y España (A7b), generados desde `docs/legal/textos/` |
+| `20261003034320_legal_texts_1_1.sql` | Avisos de tratamiento de datos 1.1, Colombia y España: agregan a Anthropic como encargado del asistente del asesor (ADR 0012) |
 | `20260929203237_notifications.sql` | `notifications` con RLS; aviso `invitacion_aceptada` al asesor (punto 16) |
 | `20261002033836_client_inputs.sql` | F2: `client_fx_rates`, `case_settings`, `incomes`, `variable_income_history`, `social_security_months`, `budget_items` y `country_parameters` con `parameter_at`; RLS, privilegios por columna, historial y guardas (puntos 17 a 22) |
 | `20261002034216_country_parameters_2026.sql` | Primeros parámetros con fuente: límite de rentas del descendiente en España (F30) y salario mínimo 2026 de Colombia (F45) |

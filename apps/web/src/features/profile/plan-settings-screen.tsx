@@ -7,6 +7,7 @@ import { amountToText, percentToText } from '@/lib/amount';
 
 import { savePlanSettings } from './actions';
 import { PlanSettingsForm } from './plan-settings-form';
+import { PLAN_PERCENTS, type PlanField } from './plan-settings-validation';
 
 const t = messages.es;
 const text = t.planSettings;
@@ -46,6 +47,15 @@ export async function PlanSettingsScreen({ clientId }: { clientId: string }) {
       ? methodology.emergencyMonthsByClientType[client.client_type]
       : undefined) ?? MONTHS_WITHOUT_TYPE;
   const form = text.form;
+  const help = Object.fromEntries(
+    (['emergencyMonths', ...PLAN_PERCENTS, 'cushion'] as const).map((field) => [
+      field,
+      {
+        label: t.common.helpFor.replace('{label}', t.assumptions.labels[field]),
+        text: t.assumptions.help[field],
+      },
+    ]),
+  ) as Record<PlanField, { label: string; text: string }>;
 
   return (
     <Screen>
@@ -74,6 +84,7 @@ export async function PlanSettingsScreen({ clientId }: { clientId: string }) {
           cushion: form.cushionHint,
           cushionLabel: form.cushion.replace('{currency}', client.base_currency),
         }}
+        help={help}
         initial={{
           emergencyMonths: amountToText(settings?.emergency_months_override ?? null, locale, 1),
           expensiveDebtThreshold: percentToText(settings?.expensive_debt_threshold ?? null, locale),

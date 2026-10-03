@@ -1,6 +1,6 @@
 # Textos legales de P-C02
 
-Avisos que el cliente acepta al entrar por la invitación. Son cortos a propósito: el servicio se presta de manera informal (decisión A7b). Los redactó el agente a partir de la norma registrada en `docs/fuentes.md` (F28, F29, F23, F41) y los aprobó el responsable del tratamiento. **No los revisó un abogado.** Versión 1.0 publicada con la migración `legal_texts_1_0`.
+Avisos que el cliente acepta al entrar por la invitación. Son cortos a propósito: el servicio se presta de manera informal (decisión A7b). Los redactó el agente a partir de la norma registrada en `docs/fuentes.md` (F28, F29, F23, F41) y los aprobó el responsable del tratamiento. **No los revisó un abogado.** Versión 1.0 publicada con la migración `legal_texts_1_0`; los avisos de tratamiento de datos pasaron a 1.1 con `legal_texts_1_1` para nombrar a Anthropic (ADR 0012).
 
 | Archivo | Tipo | País | Qué cubre |
 |---|---|---|---|

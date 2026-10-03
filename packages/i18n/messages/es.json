@@ -49,7 +49,8 @@
       "body": "No pudimos mostrar esta pantalla. Intenta de nuevo; si sigue fallando, vuelve al inicio.",
       "retry": "Intentar de nuevo",
       "backHome": "Ir al inicio"
-    }
+    },
+    "helpFor": "Qué significa: {label}"
   },
   "noProfile": {
     "title": "Tu cuenta aún no tiene un perfil",
@@ -492,7 +493,9 @@
     "intro": "Partidas del cliente por categoría. Las cuotas de deudas, los seguros nuevos y los aportes a metas se suman solos cuando esos módulos tengan datos.",
     "back": "Ficha del cliente",
     "add": "Agregar gasto",
+    "addFromCatalog": "Agregar desde la lista",
     "empty": "Todavía no hay gastos registrados.",
+    "emptyCatalog": "Para empezar, marca en la lista los gastos típicos que tiene el cliente.",
     "categoryTotal": "{amount} al mes",
     "itemSummary": "{amount} · {frequency}",
     "incomplete": "Sin frecuencia o sin tipo: no suma hasta completarlo",
@@ -651,6 +654,10 @@
         "tu": "Todavía no tienes gastos registrados.",
         "usted": "Todavía no tiene gastos registrados."
       },
+      "emptyCatalog": {
+        "tu": "Para empezar, marca en la lista los gastos que tienes.",
+        "usted": "Para empezar, marque en la lista los gastos que tiene."
+      },
       "payers": {
         "cliente": "Yo",
         "familia": "Mi familia",
@@ -666,7 +673,38 @@
         "usted": "No lo puede dejar de pagar aunque baje su ingreso."
       }
     },
-    "withoutPocket": "Tipo bolsillo, pero falta elegir el bolsillo"
+    "withoutPocket": "Tipo bolsillo, pero falta elegir el bolsillo",
+    "catalog": {
+      "title": "Gastos típicos",
+      "intro": "Marca lo que el cliente gasta, categoría por categoría. El valor es opcional: se completa después en cada gasto. Lo que no se marca no se guarda.",
+      "client": {
+        "intro": {
+          "tu": "Marca lo que pagas, categoría por categoría. El valor es opcional: puedes completarlo después en cada gasto. Lo que no marques no se guarda.",
+          "usted": "Marque lo que paga, categoría por categoría. El valor es opcional: puede completarlo después en cada gasto. Lo que no marque no se guarda."
+        }
+      },
+      "pocketNote": "Los gastos que no son mensuales van a un bolsillo. Si el bolsillo sugerido no existe, se crea al guardar.",
+      "pocket": "Bolsillo {pocket}",
+      "essential": "Esencial",
+      "amount": "Valor por pago (opcional)",
+      "days": "Días que dura cada compra",
+      "present": "Ya está en el presupuesto",
+      "moreTitle": "¿Algo más?",
+      "more": "Lo que más se olvida: comidas fuera, regalos, apps, efectivo, ayudas familiares y compras en línea. Lo que no esté en la lista se agrega después, uno por uno, con Agregar gasto.",
+      "noCatalog": "Todavía no hay una lista de gastos típicos para este país. Los gastos se agregan uno por uno.",
+      "allPresent": "Todos los gastos de la lista ya están en el presupuesto.",
+      "submit": "Agregar los marcados",
+      "submitting": "Agregando…",
+      "cancel": "Cancelar",
+      "errors": {
+        "invalidAmount": "Escribe un valor de 0 o más, solo con números.",
+        "missingDays": "Con valor, escribe cuántos días dura: un número mayor que 0.",
+        "nothingPicked": "Marca al menos un gasto de la lista.",
+        "missingRate": "Falta la tasa de cambio de la moneda base. Revisa Monedas y vuelve a intentarlo.",
+        "notAllowed": "No tienes permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      }
+    }
   },
   "myData": {
     "title": "Mis datos",
@@ -1380,21 +1418,21 @@
   },
   "planSettings": {
     "title": "Supuestos del plan",
-    "intro": "Criterio profesional del caso. Vacío usa el valor de la metodología, que se muestra en cada campo.",
+    "intro": "Criterio profesional del caso. Vacío usa el valor de la metodología, que se muestra en cada campo. El signo de pregunta explica qué hace cada uno.",
     "back": "Ficha del cliente",
     "methodology": "Metodología: {value}",
     "form": {
       "emergencyMonths": "Meses de fondo de emergencia",
-      "emergencyMonthsHint": "Meses de lo esencial que cubre la meta. Metodología para este tipo de cliente: {value}.",
+      "emergencyMonthsHint": "Metodología para este tipo de cliente: {value}.",
       "expensiveDebtThreshold": "Umbral de deuda cara (% efectivo anual)",
-      "expensiveDebtThresholdHint": "Desde esta tasa una deuda es cara: no se invierte y el sobrante va a deudas. Metodología: {value}.",
+      "expensiveDebtThresholdHint": "Metodología: {value}.",
       "pctInvestConfirmed": "Sobrante a inversión con la prueba de realidad confirmada (%)",
       "pctInvestPending": "Sobrante a inversión mientras la prueba no se confirma (%)",
       "pctSurplusToDebt": "Sobrante a deudas cuando hay deuda cara (%)",
-      "pctExcessToInvest": "Excedente del saldo de hoy a inversión o a la deuda cara (%)",
+      "pctExcessToInvest": "Excedente del saldo de hoy a inversión (%)",
       "percentHint": "Metodología: {value}.",
       "cushion": "Colchón en la cuenta operativa ({currency})",
-      "cushionHint": "Dinero que se queda en la cuenta del día a día y no se reparte en bolsillos.",
+      "cushionHint": "Vacío es 0.",
       "submit": "Guardar",
       "submitting": "Guardando…",
       "cancel": "Cancelar",
@@ -1405,6 +1443,64 @@
         "notAllowed": "Solo el asesor cambia los supuestos del plan.",
         "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
       }
+    }
+  },
+  "assumptions": {
+    "title": "Supuestos del plan",
+    "intro": "Los criterios con que se calculó este plan. El signo de pregunta explica qué hace cada uno.",
+    "months": {
+      "one": "{value} mes",
+      "other": "{value} meses"
+    },
+    "labels": {
+      "emergencyMonths": "Meses de fondo de emergencia",
+      "expensiveDebtThreshold": "Umbral de deuda cara (tasa efectiva anual)",
+      "pctInvestConfirmed": "Sobrante a inversión con la prueba de realidad confirmada",
+      "pctInvestPending": "Sobrante a inversión mientras la prueba no se confirma",
+      "pctSurplusToDebt": "Sobrante a deudas cuando hay deuda cara",
+      "pctExcessToInvest": "Excedente del saldo de hoy a inversión",
+      "cushion": "Colchón en la cuenta operativa"
+    },
+    "help": {
+      "emergencyMonths": "Cuántos meses de gasto esencial cubre el fondo de emergencia en el peor escenario, si se pierden los ingresos. Se sugieren más meses cuanto menos estable es el ingreso. La meta nunca baja de un mes de lo esencial y, mientras haya deuda cara, se queda en ese mes.",
+      "expensiveDebtThreshold": "Desde esta tasa una deuda se considera cara. Mientras haya deuda cara no se invierte, porque ninguna inversión rinde con seguridad más de lo que cuesta esa deuda: el sobrante va primero a pagarla.",
+      "pctInvestConfirmed": "Parte del sobrante de cada mes que va a inversión cuando la prueba de realidad confirma que el ahorro real llega al menos al 85 % del esperado. El resto queda como margen.",
+      "pctInvestPending": "Parte del sobrante que va a inversión mientras la prueba de realidad está pendiente o muestra gastos sin registrar. Es menor porque ese sobrante todavía no se ha visto en la cuenta.",
+      "pctSurplusToDebt": "Con deuda cara no se invierte: esta parte del sobrante de cada mes va a pagarla. También se aplica al dinero de hoy que sobra después de llenar el fondo, los meses sin ingreso y los bolsillos.",
+      "pctExcessToInvest": "Sin deuda cara, la parte del dinero de hoy que va a inversión como aporte único: lo que sobra del saldo líquido después de dejar el colchón y llenar el fondo, los meses sin ingreso y los bolsillos. Con deuda cara se usa el porcentaje de deudas.",
+      "cushion": "Dinero que se deja en la cuenta del día a día y no se reparte. El resto del saldo líquido va al fondo, a los meses sin ingreso, a los bolsillos y, si sobra, al excedente."
+    }
+  },
+  "assistant": {
+    "open": "Asistente (IA)",
+    "close": "Cerrar el asistente",
+    "title": "Asistente",
+    "intro": "Escribe o dicta lo que cuenta el cliente. Claude propone qué marcar en la lista y tú revisas antes de guardar. Las notas solo se envían a Claude para esta propuesta: MiLuca no las guarda. No escribas nombres ni números de cuenta.",
+    "notes": "Notas de la conversación",
+    "notesHint": "Por ejemplo: arriendo 1.200.000 al mes, SOAT 900 mil al año, mercado 250 mil a la semana. Para dictar, usa el dictado del teclado o de macOS.",
+    "propose": "Proponer gastos",
+    "proposing": "Pensando…",
+    "resultTitle": "Propuesta",
+    "reviewNote": "Propuesta automática: revisa cada valor antes de guardar.",
+    "nothingFound": "El modelo no encontró en las notas gastos de la lista.",
+    "apply": "Marcar en la lista",
+    "applied": "Marcados en la lista: {count}. Revisa los valores y guarda con Agregar los marcados.",
+    "status": {
+      "ready": "{amount} por pago, {frequency}",
+      "frequencyDiffers": "Dijo {amount} {said}; la lista va {listed}: escribe el valor por pago",
+      "noFrequency": "Dijo {amount} sin decir cada cuánto: escribe el valor por pago",
+      "needsDays": "Dijo {amount}: escribe el valor por compra y los días que dura",
+      "noAmount": "Sin valor en las notas",
+      "present": "Ya está en el presupuesto"
+    },
+    "quote": "En las notas: “{quote}”",
+    "unmatchedTitle": "No están en la lista",
+    "unmatchedHint": "Se agregan después, uno por uno, con Agregar gasto.",
+    "errors": {
+      "emptyNotes": "Escribe primero las notas.",
+      "notAllowed": "Solo el asesor usa el asistente.",
+      "notConfigured": "El asistente no está configurado: falta la clave de Anthropic en el servidor.",
+      "failed": "No llegó una propuesta válida. Intenta de nuevo en un momento."
     }
   },
   "quality": {

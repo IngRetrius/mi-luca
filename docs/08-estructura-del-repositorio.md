@@ -15,7 +15,7 @@ miluca/
 │       ├── public/               Manifiesto, iconos, pantallas de inicio
 │       └── src/
 │           ├── app/              Solo rutas, layouts y páginas
-│           ├── features/         Un módulo por área del dominio (24 módulos)
+│           ├── features/         Un módulo por área del dominio (29 módulos; `assistant` es la IA del asesor, ADR 0012)
 │           ├── components/       Componentes de la app compartidos entre módulos
 │           ├── lib/              Clientes de Supabase, service worker, utilidades técnicas
 │           ├── server/           Código solo de servidor: guardas, impacto de cambios, correo

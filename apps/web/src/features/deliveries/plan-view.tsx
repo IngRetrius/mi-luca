@@ -9,6 +9,7 @@ import { formatDate, formatMoney, formatPercent, messages } from '@miluca/i18n';
 
 import { FigureList } from '@/components/figure-list';
 
+import { PlanAssumptions } from './plan-assumptions';
 import type { Delivery } from './queries';
 
 const t = messages.es;
@@ -48,8 +49,8 @@ function formatMonth(date: string, locale: string): string {
 }
 
 /**
- * Un plan entregado por secciones (P-C05): cifras, fondo, bolsillos, el año del flujo y la
- * comparación con hoy. Lee solo lo que se guardó el día de la entrega (`results`), así lo
+ * Un plan entregado por secciones (P-C05): cifras, fondo, bolsillos, el año del flujo, los
+ * supuestos con su explicación y la comparación con hoy. Lee solo lo que se guardó el día de la entrega (`results`), así lo
  * entregado no cambia aunque cambien los datos. Textos neutros: lo usan el asesor y el cliente.
  */
 export function PlanView({
@@ -178,6 +179,10 @@ export function PlanView({
           ]}
         />
       </section>
+
+      {delivery.parameters ? (
+        <PlanAssumptions parameters={delivery.parameters} locale={locale} />
+      ) : null}
 
       {today ? (
         <section

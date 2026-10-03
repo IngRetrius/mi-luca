@@ -1,6 +1,6 @@
 import 'server-only';
 
-import type { CaseResult, KeyFigures } from '@miluca/engine';
+import type { CaseResult, KeyFigures, PlanParameters } from '@miluca/engine';
 
 import { createClient } from '@/lib/supabase/server';
 
@@ -21,6 +21,29 @@ export interface Delivery extends DeliverySummary {
   readonly keyFigures: Partial<KeyFigures>;
   /** Nombre de cada bolsillo general, en el orden de `results.pockets.general`. */
   readonly pocketNames: readonly string[];
+  /** Supuestos con que se calculó (`inputs.parameters`); null si la entrega no los trae. */
+  readonly parameters: PlanParameters | null;
+}
+
+const PARAMETER_NUMBERS = [
+  'emergencyMonths',
+  'expensiveDebtThreshold',
+  'pctInvestConfirmed',
+  'pctInvestPending',
+  'pctSurplusToDebt',
+  'pctExcessToInvestment',
+] as const;
+
+/** Los supuestos guardados, si tienen la forma de hoy; una entrega de otra versión puede no traerlos. */
+function planParameters(value: unknown): PlanParameters | null {
+  if (typeof value !== 'object' || value === null) return null;
+  const record = value as Record<string, unknown>;
+  const cushion = record.operatingCushion as Record<string, unknown> | null | undefined;
+  const complete =
+    PARAMETER_NUMBERS.every((key) => typeof record[key] === 'number') &&
+    typeof cushion?.amount === 'number' &&
+    typeof cushion.currency === 'string';
+  return complete ? (value as PlanParameters) : null;
 }
 
 /** Planes entregados de un cliente, del más reciente al más antiguo. Null si falla la consulta. */
@@ -46,7 +69,7 @@ export async function loadDelivery(clientId: string, deliveryId: string): Promis
   const { data, error } = await supabase
     .from('plan_deliveries')
     .select(
-      'id, label, delivered_at, cutoff_date, engine_version, base_currency:inputs->fx->>baseCurrency, results, key_figures, labels',
+      'id, label, delivered_at, cutoff_date, engine_version, base_currency:inputs->fx->>baseCurrency, parameters:inputs->parameters, results, key_figures, labels',
     )
     .eq('client_id', clientId)
     .eq('id', deliveryId)
@@ -64,5 +87,6 @@ export async function loadDelivery(clientId: string, deliveryId: string): Promis
     results: data.results as unknown as CaseResult,
     keyFigures: data.key_figures as unknown as Partial<KeyFigures>,
     pocketNames: labels?.pockets ?? [],
+    parameters: planParameters(data.parameters),
   };
 }

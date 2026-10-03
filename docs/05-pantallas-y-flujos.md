@@ -108,7 +108,7 @@ flowchart TD
 | P-C02 | Consentimiento | Texto de tratamiento de datos del país (versión y fecha), casilla obligatoria; casilla aparte para datos de salud si el presupuesto los incluye; enlace a la política completa |
 | P-C03 | Agregar a inicio | Instrucciones según el sistema: en iPhone, Compartir y luego "Agregar a inicio"; en Android, botón "Instalar" (evento `beforeinstallprompt`). Opción "Ahora no" |
 | P-C04 | Inicio | Saludo con el tratamiento elegido; 4 cifras clave con semáforo; próximas 3 tareas; aviso si el asesor publicó algo nuevo; botón "Registrar el gasto de este mes" |
-| P-C05 | Mi plan | Plan entregado vigente por secciones plegables (estructura de la carta, sección 11 del protocolo); selector de versión; botón "Comparar con hoy"; descargar PDF |
+| P-C05 | Mi plan | Plan entregado vigente por secciones plegables (estructura de la carta, sección 11 del protocolo); selector de versión; botón "Comparar con hoy"; descargar PDF. Incluye los supuestos con que se calculó, en solo lectura, cada uno con su ayuda (la misma vista la ve el asesor) |
 | P-C06 | Mis datos | Lista de módulos editables con su total (Ingresos, Gastos, Bancos y bolsillos, Deudas, Metas, Patrimonio, Inversiones, Perfil de riesgo, Pensión, Seguros) |
 | P-C07 | Editar un dato | Hoja inferior con el formulario; debajo, "Así cambia tu plan" con las cifras clave antes y después, calculadas en el teléfono |
 | P-C08 | Control mensual | Selector de mes; por categoría: presupuesto, campo del gasto real, barra de desviación; total del mes |
@@ -128,6 +128,7 @@ flowchart TD
 | P-A04 | Cuestionario por bloques | Pasos A a G; en cada campo, marca "estimado" y "por confirmar" |
 | P-A05 | Tipo de cliente | Selector y reglas que se activan |
 | P-A06 | Presupuesto | Partidas agrupadas por categoría con total mensual; icono en filas incompletas; alta rápida; filtros por tipo, pagador y esencial |
+| P-A06b | Gastos típicos | Catálogo del país por categoría (`packages/i18n/src/budget-catalog/`): se marca lo que el cliente gasta, con valor opcional (y días si va por duración); lo marcado se guarda con la frecuencia, el tipo, el bolsillo y el esencial sugeridos, y el bolsillo que falta se crea. Lo que ya está se ve sin casilla. Al final, recordatorio de lo que más se olvida (protocolo, prueba de realidad). Es el punto de partida con el presupuesto vacío. El cliente la tiene en Mis gastos. Solo para el asesor, el asistente con Claude (ADR 0012): notas escritas o dictadas, propuesta con la cita de cada gasto, y "Marcar en la lista" sin guardar |
 | P-A07 | Aclaraciones | Campos por confirmar y preguntas sugeridas; "Copiar mensaje" |
 | P-A08 | Prueba de realidad | Tres campos, resultado y efecto en el % a inversión |
 | P-A09 | Diagnóstico | Indicadores con semáforo; campos de fortalezas y puntos de atención |
