@@ -5,6 +5,7 @@ import { debtTotals } from './debt-totals';
 import { debtLoad, expensiveDebt } from './expensive-debt';
 
 const fx: FxContext = { baseCurrency: 'COP', ratesToBase: { USD: 4000 } };
+const noExtras = { acceptsExtra: true, extraFrom: null, manualOrder: null } as const;
 
 describe('debtTotals', () => {
   it('suma saldos y cuotas en moneda base; una cuota sin escribir no suma', () => {
@@ -14,8 +15,14 @@ describe('debtTotals', () => {
           balance: { amount: 1000, currency: 'USD' },
           minPayment: { amount: 50, currency: 'USD' },
           annualRate: 0.3,
+          ...noExtras,
         },
-        { balance: { amount: 2_000_000, currency: 'COP' }, minPayment: null, annualRate: null },
+        {
+          balance: { amount: 2_000_000, currency: 'COP' },
+          minPayment: null,
+          annualRate: null,
+          ...noExtras,
+        },
       ],
       fx,
     );
@@ -27,10 +34,25 @@ describe('expensiveDebt y debtLoad', () => {
   it('marca las deudas con saldo cuya tasa llega al umbral; sin tasa vale 0', () => {
     const result = expensiveDebt(
       [
-        { balance: { amount: 1000, currency: 'USD' }, minPayment: null, annualRate: 0.2 },
-        { balance: { amount: 2_000_000, currency: 'COP' }, minPayment: null, annualRate: 0.19 },
-        { balance: { amount: 0, currency: 'COP' }, minPayment: null, annualRate: 0.5 },
-        { balance: { amount: 500_000, currency: 'COP' }, minPayment: null, annualRate: null },
+        {
+          balance: { amount: 1000, currency: 'USD' },
+          minPayment: null,
+          annualRate: 0.2,
+          ...noExtras,
+        },
+        {
+          balance: { amount: 2_000_000, currency: 'COP' },
+          minPayment: null,
+          annualRate: 0.19,
+          ...noExtras,
+        },
+        { balance: { amount: 0, currency: 'COP' }, minPayment: null, annualRate: 0.5, ...noExtras },
+        {
+          balance: { amount: 500_000, currency: 'COP' },
+          minPayment: null,
+          annualRate: null,
+          ...noExtras,
+        },
       ],
       0.2,
       fx,

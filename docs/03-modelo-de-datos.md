@@ -346,32 +346,27 @@ create table public.budget_items (
   constraint pocket_required check (expense_type is distinct from 'bolsillo' or pocket_id is not null)
 );
 
-create table public.debts (
-  id                        uuid primary key default gen_random_uuid(),
-  client_id                 uuid not null references public.clients(id) on delete cascade,
-  name                      text not null,
-  debt_type                 text check (debt_type in ('tarjeta_credito', 'libre_inversion', 'vehiculo', 'hipotecario',
-                              'libranza', 'informal', 'otro')),
-  lender_name               text,
-  currency                  char(3) not null,        -- moneda del crédito; todos sus importes van en ella
-  balance                   numeric(18,2) not null,
-  annual_rate               numeric(12,8) not null,
-  payment                   numeric(18,2),            -- cuota con seguros; si es nula se calcula con el plazo
-  insurance_in_payment      numeric(18,2) not null default 0,
-  first_installment_date    date,
-  first_installment_number  int not null default 1,
-  total_installments        int,
-  original_amount           numeric(18,2),
-  accepts_extra             boolean not null default true,
-  extra_from_date           date,
-  extra_from_installment    int,
-  frech_points              numeric(12,8),
-  frech_until_installment   int,
-  manual_order              smallint,
-  has_arrears               boolean not null default false,
-  note                      text,
-  sort_order                int not null default 0
+create table public.debts (                -- F4, migración `debts` (punto 33)
+  id              uuid primary key default gen_random_uuid(),
+  client_id       uuid not null references public.clients(id) on delete cascade,
+  name            text not null,             -- sin números de tarjeta ni de crédito
+  debt_type       text not null check (debt_type in ('tarjeta_credito', 'libre_inversion', 'vehiculo',
+                    'hipotecario', 'libranza', 'informal', 'otro')),
+  lender_name     text,                      -- solo el nombre de la entidad
+  currency        char(3) not null,          -- moneda de la deuda; saldo y cuota van en ella
+  balance         numeric(18,2) not null check (balance >= 0),
+  annual_rate     numeric(8,6) not null,     -- efectiva anual, de 0 a 10 (1.000 %)
+  min_payment     numeric(18,2) not null,    -- cuota mínima mensual (hoy con seguros, H-05)
+  accepts_extra   boolean not null default true,
+  extra_from_date date,                      -- solo si acepta abonos
+  manual_order    smallint,                  -- criterio del asesor (guarda propia)
+  note            text,
+  sort_order      int not null default 0,
+  updated_at      timestamptz not null default now(),
+  updated_by      uuid
 );
+-- Con los créditos (seguimiento cuota a cuota) se agregan: plazo, primera cuota, seguros en la
+-- cuota, FRECH, número de cuota desde el que acepta abonos y las marcas de pago:
 
 create table public.debt_installments (        -- marcas de pago del cliente (plantilla de créditos)
   debt_id            uuid not null references public.debts(id) on delete cascade,
@@ -384,12 +379,9 @@ create table public.debt_installments (        -- marcas de pago del cliente (pl
   primary key (debt_id, installment_number)
 );
 
-create table public.debt_strategy (
-  client_id     uuid primary key references public.clients(id) on delete cascade,
-  method        text not null default 'avalancha' check (method in ('avalancha', 'bola_de_nieve', 'manual')),
-  extra_monthly numeric(18,2) not null default 0,
-  currency      char(3) not null                    -- moneda del extra mensual
-);
+-- El método de pago va en `case_settings.debt_method` ('avalancha', 'bola_de_nieve', 'manual'),
+-- con los demás supuestos del asesor; no hay tabla `debt_strategy`. El extra mensual no se escribe:
+-- sale del flujo (`Deudas!C8`).
 
 create table public.goals (
   id                   uuid primary key default gen_random_uuid(),
@@ -848,6 +840,7 @@ Las secciones 3 a 10 siguen siendo el diseño de referencia. Lo que ya existe co
 | `20261002170000_pocket_fk_indexes.sql` | Índices que cubren las llaves compuestas `(bank_id, client_id)` y `(pocket_id, client_id)` (lint 0001 del asesor de rendimiento) |
 | `20261002180000_plan_deliveries.sql` | `plan_deliveries`: el plan entregado, inmutable y sellado con sha256; solo lo crea el asesor (punto 31) |
 | `20261002190000_income_scenarios_health_items.sql` | `incomes.lost_in_scenario` admite `ninguno`; `budget_items.is_health` y los disparadores que quitan el detalle de salud al retirar ese consentimiento (punto 32, ADR 0011) |
+| `20261003170000_debts.sql` | F4: `debts` con RLS, historial y guarda del orden manual; `case_settings.debt_method`; la tasa de una moneda con deudas no se borra (punto 33) |
 
 Diferencias con el borrador de las secciones 3.1, 4 y 5:
 
@@ -887,4 +880,5 @@ Diferencias con el borrador de las secciones 3.1, 4 y 5:
 30. **Prueba de realidad y activos.** `reality_check` con N de 1 a 120 meses y los dos saldos en una moneda. `assets` solo con los tipos líquido, inmueble, vehículo y otro: inversiones y cobros tienen sus tablas. La tasa de una moneda usada en bolsillos, cobros, prueba de realidad o activos no se borra (`private.guard_fx_rate`).
 31. **Planes entregados.** `plan_deliveries` guarda la entrada del motor (`inputs`), los nombres que muestran las pantallas (`labels`, hoy los de los bolsillos generales en el orden de los resultados), los resultados, las cifras clave, el control de calidad con las notas del asesor (`qc_report`), la versión del motor, el modo y los ids de los parámetros usados. La base pone `delivered_at`, `delivered_by` y `sha256` (de entradas, nombres, resultados y documentos) y rechaza todo cambio, también con la clave secreta. Sin privilegios de actualizar ni borrar: la entrega se va solo con el perfil. El historial registra la entrega sin copiar las fotos. Sin llave foránea en `delivered_by`, como el historial. `documents` y `pdf_path` quedan para F7.
 32. **Datos de salud (C20, ADR 0011).** `budget_items.is_health` lo marcan el cliente o el asesor. `private.health_consent_refused` mira el último consentimiento de datos de salud del cliente (sin consentimientos, como en un borrador, no se toca nada). Mientras esté retirado o negado, un disparador guarda los gastos de salud con categoría "Salud y bienestar", concepto "Salud" y sin nota; al retirarlo, otro disparador aplica eso a los existentes y quita la categoría, el concepto y la nota de sus filas del historial. El importe se conserva: es un dato económico que el plan necesita.
+33. **Deudas.** El inventario lo editan cliente y asesor (matriz de permisos); el lugar en el orden manual es criterio del asesor y tiene guarda propia, `private.guard_debt_advisor_columns()`, como el % a inversión de los cobros. El método de pago (`case_settings.debt_method`, avalancha por defecto) también es del asesor. Del borrador cambian: `payment` pasa a `min_payment`, obligatoria (la hoja Deudas la necesita para la simulación); `annual_rate` admite hasta 1.000 % por los préstamos informales; una deuda que no acepta abonos no tiene fecha desde la que los acepta (`extra_from_needs_extra`); `debt_strategy` se reemplaza por la columna de `case_settings`, y los datos de los créditos (`insurance_in_payment`, FRECH, plazo, `has_arrears`, `debt_installments`) se agregan cuando lleguen. La tasa de una moneda usada en deudas no se borra.
 Sin pendientes de F1 en el modelo de datos.

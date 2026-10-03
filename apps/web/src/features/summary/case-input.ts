@@ -1,6 +1,7 @@
 import type { Database, Json } from '@miluca/db';
 import {
   assetTypeSchema,
+  debtMethodSchema,
   expenseTypeSchema,
   frequencySchema,
   incomeKindSchema,
@@ -14,6 +15,7 @@ import {
   type AssetInput,
   type BudgetItemInput,
   type CaseInput,
+  type DebtInput,
   type EngineMode,
   type FiscalThreshold,
   type FxContext,
@@ -53,6 +55,7 @@ export interface CaseRows {
     | 'pct_surplus_to_debt'
     | 'pct_excess_to_invest'
     | 'operating_cushion'
+    | 'debt_method'
   > | null;
   readonly methodology: Methodology;
   readonly fxRates: readonly Pick<Row<'client_fx_rates'>, 'currency' | 'rate_to_base'>[];
@@ -85,6 +88,16 @@ export interface CaseRows {
     'currency' | 'savings_n_ago' | 'n_months' | 'savings_today'
   > | null;
   readonly assets: readonly Pick<Row<'assets'>, 'asset_type' | 'currency' | 'value'>[];
+  readonly debts: readonly Pick<
+    Row<'debts'>,
+    | 'currency'
+    | 'balance'
+    | 'annual_rate'
+    | 'min_payment'
+    | 'accepts_extra'
+    | 'extra_from_date'
+    | 'manual_order'
+  >[];
   /** Los parámetros de `fiscal_threshold_keys`, vigentes en la fecha de corte. */
   readonly thresholds: readonly Pick<Row<'country_parameters'>, 'key' | 'value' | 'unit'>[];
 }
@@ -196,6 +209,17 @@ function toReceivableInput(row: CaseRows['receivables'][number]): ReceivableInpu
   };
 }
 
+function toDebtInput(row: CaseRows['debts'][number]): DebtInput {
+  return {
+    balance: { amount: row.balance, currency: row.currency },
+    minPayment: { amount: row.min_payment, currency: row.currency },
+    annualRate: row.annual_rate,
+    acceptsExtra: row.accepts_extra,
+    extraFrom: row.extra_from_date,
+    manualOrder: row.manual_order,
+  };
+}
+
 function toAssetInput(row: CaseRows['assets'][number]): AssetInput {
   return {
     assetType: assetTypeSchema.parse(row.asset_type),
@@ -219,8 +243,8 @@ function toPocketInputs(pockets: CaseRows['pockets']): PocketInput[] {
 /**
  * Traduce las filas del cliente a la entrada del motor. `today` es la fecha de corte si el asesor no
  * fijó otra. Sin fila de supuestos, el caso va en modo nativo con los parámetros de la metodología.
- * Las partidas marcadas "referencia familiar" no suman en ningún cálculo (RN-025). Metas, seguros y
- * deudas llegan con sus tablas (F4 y F5): mientras tanto, sus filas automáticas valen 0.
+ * Las partidas marcadas "referencia familiar" no suman en ningún cálculo (RN-025). Metas y seguros
+ * llegan con sus tablas (F5): mientras tanto, sus filas automáticas valen 0.
  */
 export function toCaseInput(rows: CaseRows, today: IsoDate): CaseForEngine {
   const fx: FxContext = {
@@ -275,7 +299,8 @@ export function toCaseInput(rows: CaseRows, today: IsoDate): CaseForEngine {
       goals: [],
       insurances: [],
       insurancePocket: null,
-      debts: [],
+      debts: rows.debts.map(toDebtInput),
+      debtMethod: debtMethodSchema.parse(rows.settings?.debt_method ?? 'avalancha'),
       receivables: rows.receivables.map(toReceivableInput),
       realityCheck: {
         savingsMonthsAgo: inBase(reality?.savings_n_ago ?? null),

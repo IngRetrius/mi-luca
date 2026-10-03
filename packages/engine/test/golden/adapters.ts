@@ -5,6 +5,7 @@
  */
 import type {
   AssetType,
+  DebtMethod,
   ExpenseType,
   Frequency,
   IncomeKind,
@@ -34,7 +35,7 @@ export const BUDGET_ROWS = Array.from({ length: 82 }, (_, i) => i + 6); // 6 a 8
 const MANUAL_BUDGET_ROWS = BUDGET_ROWS.filter((row) => row >= 13);
 export const GOAL_ROWS = [6, 7, 8, 9, 10] as const;
 export const INSURANCE_ROWS = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15] as const;
-const DEBT_ROWS = [13, 14, 15, 16, 17, 18, 19, 20] as const;
+export const DEBT_ROWS = [13, 14, 15, 16, 17, 18, 19, 20] as const;
 /** Conceptos de la calculadora de viaje; la fila 16 es el alojamiento y la 17 sus impuestos. */
 const TRIP_ITEM_ROWS = [15, 16, 18, 19, 20, 21, 22] as const;
 const TRIP_LODGING_ROW = 16;
@@ -80,6 +81,11 @@ const ASSET_TYPES: Readonly<Record<string, AssetType>> = {
   Inmueble: 'inmueble',
   Vehículo: 'vehiculo',
   Otro: 'otro',
+};
+
+const DEBT_METHODS: Readonly<Record<string, DebtMethod>> = {
+  Avalancha: 'avalancha',
+  'Bola de nieve': 'bola_de_nieve',
 };
 
 const INSURANCE_STATUSES: Readonly<Record<string, InsuranceStatus>> = {
@@ -207,21 +213,36 @@ export function insuranceInput(golden: GoldenCase): InsuranceInput[] {
   }));
 }
 
-/** Filas de Deudas con saldo o cuota; la plantilla no tiene moneda por deuda. */
+/** Filas de Deudas con saldo o cuota, en orden: la deuda `i` del motor es la fila `debtRows(golden)[i]`. */
+export function debtRows(golden: GoldenCase): number[] {
+  return DEBT_ROWS.filter(
+    (row) => baseMoney(golden, `Deudas!D${row}`) || baseMoney(golden, `Deudas!F${row}`),
+  );
+}
+
+/** Deudas del inventario; la plantilla no tiene moneda por deuda ni orden manual. */
 export function debtsInput(golden: GoldenCase): DebtInput[] {
   const { baseCurrency } = fxContext(golden);
-  return DEBT_ROWS.flatMap((row) => {
-    const balance = baseMoney(golden, `Deudas!D${row}`);
-    const minPayment = baseMoney(golden, `Deudas!F${row}`);
-    if (!balance && !minPayment) return [];
-    return [
-      {
-        balance: balance ?? { amount: 0, currency: baseCurrency },
-        minPayment,
-        annualRate: numberOrNull(golden, `Deudas!E${row}`),
-      },
-    ];
+  return debtRows(golden).map((row) => {
+    const accepts = cell(golden, `Deudas!G${row}`);
+    if (accepts !== undefined && accepts !== null && accepts !== 'Sí' && accepts !== 'No') {
+      throw new Error(`Etiqueta desconocida en Deudas!G${row}: ${String(accepts)}`);
+    }
+    return {
+      balance: baseMoney(golden, `Deudas!D${row}`) ?? { amount: 0, currency: baseCurrency },
+      minPayment: baseMoney(golden, `Deudas!F${row}`),
+      annualRate: numberOrNull(golden, `Deudas!E${row}`),
+      // Solo "No" cierra los abonos; vacía vale "Sí", como en Deudas!C36.
+      acceptsExtra: accepts !== 'No',
+      extraFrom: isoDate(golden, `Deudas!H${row}`),
+      manualOrder: null,
+    };
   });
+}
+
+/** @excel Deudas!C6 */
+export function debtMethod(golden: GoldenCase): DebtMethod {
+  return label(cell(golden, 'Deudas!C6'), DEBT_METHODS, 'Deudas!C6') ?? 'avalancha';
 }
 
 /**
@@ -368,6 +389,7 @@ export function caseInput(golden: GoldenCase, options: BudgetInputOptions = {}):
     insurances: insuranceInput(golden),
     insurancePocket: INSURANCE_POCKET,
     debts: debtsInput(golden),
+    debtMethod: debtMethod(golden),
     receivables: receivablesInput(golden),
     realityCheck: realityCheckInput(golden),
     assets: assetsInput(golden),

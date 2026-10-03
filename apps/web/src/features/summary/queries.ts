@@ -27,6 +27,7 @@ export interface LoadedCaseRows extends CaseRows {
   readonly receivables: readonly Row<'receivables'>[];
   readonly realityCheck: Row<'reality_check'> | null;
   readonly assets: readonly Row<'assets'>[];
+  readonly debts: readonly Row<'debts'>[];
   /** Ids de las versiones de `country_parameters` que usó el cálculo: van en el plan entregado. */
   readonly parameterIds: readonly string[];
 }
@@ -62,6 +63,7 @@ export async function loadCaseRows(clientId: string): Promise<LoadedCaseRows | n
     receivables,
     realityCheck,
     assets,
+    debts,
   ] = await Promise.all([
     supabase
       .from('clients')
@@ -71,7 +73,7 @@ export async function loadCaseRows(clientId: string): Promise<LoadedCaseRows | n
     supabase
       .from('case_settings')
       .select(
-        'cutoff_date, flow_year, compatibility_mode, fiscal_threshold_keys, emergency_months_override, expensive_debt_threshold, pct_surplus_invest_confirmed, pct_surplus_invest_pending, pct_surplus_to_debt, pct_excess_to_invest, operating_cushion',
+        'cutoff_date, flow_year, compatibility_mode, fiscal_threshold_keys, emergency_months_override, expensive_debt_threshold, pct_surplus_invest_confirmed, pct_surplus_invest_pending, pct_surplus_to_debt, pct_excess_to_invest, operating_cushion, debt_method',
       )
       .eq('client_id', clientId)
       .maybeSingle(),
@@ -109,12 +111,14 @@ export async function loadCaseRows(clientId: string): Promise<LoadedCaseRows | n
       .order('debtor_label'),
     supabase.from('reality_check').select('*').eq('client_id', clientId).maybeSingle(),
     supabase.from('assets').select('*').eq('client_id', clientId).order('sort_order').order('name'),
+    supabase.from('debts').select('*').eq('client_id', clientId).order('sort_order').order('name'),
   ]);
   if (client.error || settings.error || fxRates.error || incomes.error) return null;
   if (socialSecurity.error || budgetItems.error || !client.data) return null;
   if (banks.error || pockets.error || receivables.error || realityCheck.error || assets.error) {
     return null;
   }
+  if (debts.error) return null;
   const profile = client.data;
 
   // Umbrales que el asesor marcó para este caso y parámetros de la metodología, vigentes en su
@@ -157,6 +161,7 @@ export async function loadCaseRows(clientId: string): Promise<LoadedCaseRows | n
     receivables: receivables.data,
     realityCheck: realityCheck.data,
     assets: assets.data,
+    debts: debts.data,
     methodology: toMethodology(
       Object.fromEntries(
         methodologyEntries.map(([name], index) => [name, methodology[index]?.data?.value]),

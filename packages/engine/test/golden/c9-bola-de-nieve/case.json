@@ -1,0 +1,8 @@
+{
+  "case": "c9-bola-de-nieve",
+  "template": "Plantilla_Asesoria_Financiera.xlsx",
+  "cutoffCell": "Supuestos!C12",
+  "cutoffDate": "2026-09-28",
+  "inputCells": 598,
+  "formulaCells": 5738
+}

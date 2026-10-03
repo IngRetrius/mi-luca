@@ -43,6 +43,7 @@ const settings = (overrides: Partial<NonNullable<CaseRows['settings']>>) => ({
   pct_surplus_to_debt: null,
   pct_excess_to_invest: null,
   operating_cushion: 0,
+  debt_method: 'avalancha',
   ...overrides,
 });
 
@@ -70,10 +71,44 @@ const rows: CaseRows = {
   receivables: [],
   realityCheck: null,
   assets: [],
+  debts: [],
   thresholds: [{ key: 'tax.dependent_income_limit', value: 8000, unit: 'EUR' }],
 };
 
 describe('toCaseInput', () => {
+  it('las deudas van en su moneda y el método sale de los supuestos', () => {
+    const { input } = toCaseInput(
+      {
+        ...rows,
+        settings: settings({ debt_method: 'bola_de_nieve' }),
+        debts: [
+          {
+            currency: 'USD',
+            balance: 1000,
+            annual_rate: 0.3,
+            min_payment: 50,
+            accepts_extra: false,
+            extra_from_date: null,
+            manual_order: 2,
+          },
+        ],
+      },
+      '2026-10-01',
+    );
+    expect(input.debtMethod).toBe('bola_de_nieve');
+    expect(input.debts).toEqual([
+      {
+        balance: { amount: 1000, currency: 'USD' },
+        minPayment: { amount: 50, currency: 'USD' },
+        annualRate: 0.3,
+        acceptsExtra: false,
+        extraFrom: null,
+        manualOrder: 2,
+      },
+    ]);
+    expect(toCaseInput(rows, '2026-10-01').input.debtMethod).toBe('avalancha');
+  });
+
   it('sin supuestos: fecha de corte de hoy, modo nativo y ningún umbral aplicado', () => {
     const { input, mode } = toCaseInput(rows, '2026-10-01');
     expect(mode).toBe('native');

@@ -1,0 +1,362 @@
+[
+  {
+    "sheet": "Supuestos",
+    "cell": "C7",
+    "value": "Caso sintético C4"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C10",
+    "value": "Mixto"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C17",
+    "value": 4000
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "B6",
+    "value": "Salario en dólares"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "C6",
+    "value": "Laboral"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "D6",
+    "value": "USD"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "E6",
+    "value": 2125
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "B7",
+    "value": "Arriendo"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "C7",
+    "value": "Renta"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "E7",
+    "value": 1000000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D14",
+    "value": 0
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D21",
+    "value": 250000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D27",
+    "value": 900000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D28",
+    "value": 2400000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D31",
+    "value": 350000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "B13",
+    "value": "Tarjeta principal"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "C13",
+    "value": "Tarjeta de crédito"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "D13",
+    "value": 6000000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "E13",
+    "value": 0.28
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "F13",
+    "value": 300000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "G13",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "B14",
+    "value": "Vehículo"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "C14",
+    "value": "Vehículo"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "D14",
+    "value": 38000000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "E14",
+    "value": 0.176
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "F14",
+    "value": 1250000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "G14",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "H14",
+    "date": "2026-08-01"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "B15",
+    "value": "Obra en vivienda"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "C15",
+    "value": "Libre inversión"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "D15",
+    "value": 25000000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "E15",
+    "value": 0.142
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "F15",
+    "value": 700000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "G15",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "B16",
+    "value": "Libre inversión largo plazo"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "C16",
+    "value": "Libre inversión"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "D16",
+    "value": 60000000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "E16",
+    "value": 0.124
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "F16",
+    "value": 700000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "G16",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "H16",
+    "date": "2027-06-15"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "B17",
+    "value": "Hipotecario"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "C17",
+    "value": "Hipotecario"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "D17",
+    "value": 300000000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "E17",
+    "value": 0.103
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "F17",
+    "value": 2800000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "G17",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "H17",
+    "date": "2033-10-01"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "B18",
+    "value": "Préstamo de un particular"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "C18",
+    "value": "Informal"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "D18",
+    "value": 12000000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "E18",
+    "value": 0.08
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "F18",
+    "value": 500000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "G18",
+    "value": "No"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "B19",
+    "value": "Préstamo familiar"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "C19",
+    "value": "Informal"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "D19",
+    "value": 10000000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "E19",
+    "value": 0
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "F19",
+    "value": 250000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "G19",
+    "value": "No"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "B20",
+    "value": "Tarjeta de almacén"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "C20",
+    "value": "Tarjeta de crédito"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "D20",
+    "value": 8000000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "E20",
+    "value": 0.28
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "F20",
+    "value": 150000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "G20",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "B8",
+    "value": "Cuenta de ahorros"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "C8",
+    "value": "Líquido"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "E8",
+    "value": 45000000
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "B9",
+    "value": "Casa"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "C9",
+    "value": "Inmueble"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "E9",
+    "value": 420000000
+  }
+]

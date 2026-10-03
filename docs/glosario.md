@@ -157,6 +157,26 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Totales de deudas | `debtTotals` | Saldo y cuotas mínimas (`Deudas!D21`, `F21`) |
 | Abono extra | `extraPayment` | |
 | Avalancha, bola de nieve, orden manual | `avalancha`, `bola_de_nieve`, `manual` | Valores de catálogo |
+| Método de pago de deudas | `debtMethod` / `DebtMethod` | Avalancha, bola de nieve u orden manual (`Deudas!C6`) |
+| Orden de pago | `classifyDebts`, `order`, `byOrder` | Lugar de cada deuda (1 es la primera en recibir abonos) |
+| Lugar en el orden manual | `manualOrder` / `manual_order` | |
+| Tipo de deuda | `debtType` / `debt_type` | `tarjeta_credito`, `libre_inversion`, `vehiculo`, `hipotecario`, `libranza`, `informal`, `otro` |
+| Entidad acreedora | `lender_name` | Solo el nombre (regla 9) |
+| Método de pago (columna) | `debt_method` | En `case_settings` |
+| Tasa mensual | `monthlyRate` | (1 + EA)^(1/12) - 1 (`Deudas!I`) |
+| ¿Acepta abonos extra?, abonos desde | `acceptsExtra`, `extraFrom` | RN-092 |
+| Plan de pago de deudas | `debtPlan`, `simulateDebts` | Simulación mes a mes (`Deudas!E29:DT80`) |
+| Primer mes del plan | `startMonth`, `debtPlanStart` | Mes siguiente al de corte (`Deudas!C11`) |
+| Pago extra mensual | `extraMonthly` | Del sobrante (`Deudas!C8`) |
+| Pago mensual total para deudas | `totalPayment` | Cuotas mínimas más el extra (`Deudas!C9`) |
+| Abono único inicial | `lumpSum` | Del excedente del saldo de hoy (`Deudas!C10`) |
+| Horizonte de la simulación | `horizonMonths` | 120 en el diagnóstico, 360 en créditos (RN-094) |
+| Meses para pagar, fecha de salida | `monthsToPayoff`, `payoffDate` | |
+| Más de 120 meses | `exceedsHorizon` | |
+| Intereses con el plan, solo con la cuota | `interestWithPlan`, `interestMinimumOnly` | |
+| No se paga (solo con la cuota) | `neverPaidWithMinimum` | La cuota no cubre el interés del mes |
+| Ahorro en intereses | `interestSavings` | `Deudas!H22` |
+| Salida de la deuda cara | `expensiveDebtPayoff` | `Deudas!C25`, `Resumen!C19` |
 | Carga de deuda | `debtLoad` | Cuotas / ingreso mensual |
 | Crédito (seguimiento) | `credit` | Plantilla de créditos |
 | Cuota | `installment` | |

@@ -76,6 +76,14 @@ export default async function MyDataPage() {
       summary: text.assetsSummary.replace('{amount}', money(result.liquidAssets)),
     },
     {
+      href: '/mis-datos/deudas',
+      title: text.debts,
+      summary:
+        computed.rows.debts.length === 0
+          ? text.debtsNone
+          : text.debtsSummary.replace('{amount}', money(result.debts.balance)),
+    },
+    {
       href: '/mis-datos/cobros',
       title: text.receivables,
       summary:

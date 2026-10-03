@@ -9,3 +9,16 @@ export function roundUp(value: number, digits: number): number {
   const scaled = Number((Math.abs(value) * factor).toPrecision(15));
   return (Math.sign(value) * Math.ceil(scaled)) / factor;
 }
+
+/**
+ * Número de pagos para saldar `presentValue` con pagos iguales al final de cada periodo, como
+ * `NPER(tasa, pago, valor_actual)` con valor futuro 0. El pago va con signo contrario al saldo,
+ * como en Excel (`NPER(tasa, -cuota, saldo)`). Devuelve null donde Excel da #NUM!: cuando la
+ * cuota no alcanza a cubrir el interés del periodo y el saldo nunca baja.
+ */
+export function nper(rate: number, payment: number, presentValue: number): number | null {
+  if (rate === 0) return payment === 0 ? null : -presentValue / payment;
+  const ratio = payment / (payment + presentValue * rate);
+  if (!(ratio > 0) || !Number.isFinite(ratio)) return null;
+  return Math.log(ratio) / Math.log(1 + rate);
+}

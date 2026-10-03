@@ -1,4 +1,4 @@
-import type { IncomeScenario, IsoDate, Money, MonthFlags } from '@miluca/domain';
+import type { DebtMethod, IncomeScenario, IsoDate, Money, MonthFlags } from '@miluca/domain';
 
 import { automaticRows, computeBudget, type BudgetItemInput, type BudgetResult } from './budget';
 import {
@@ -17,12 +17,20 @@ import {
 } from './cost-of-living';
 import { toBaseCompat, type FxContext } from './currency';
 import {
+  classifyDebts,
   debtLoad,
+  debtPlanStart,
   debtTotals,
+  DIAGNOSIS_HORIZON_MONTHS,
   expensiveDebt,
+  expensiveDebtPayoff,
+  simulateDebts,
+  type DebtClassification,
   type DebtInput,
+  type DebtSimulation,
   type DebtTotals,
   type ExpensiveDebt,
+  type ExpensiveDebtPayoff,
 } from './debts';
 import {
   DEFAULT_LOSS_BY_KIND,
@@ -95,6 +103,8 @@ export interface CaseInput {
   /** Bolsillo de las primas de seguros nuevos. @excel Presupuesto!K7 */
   readonly insurancePocket: string | null;
   readonly debts: readonly DebtInput[];
+  /** Orden de pago de las deudas. @excel Deudas!C6 */
+  readonly debtMethod: DebtMethod;
   readonly receivables: readonly ReceivableInput[];
   readonly realityCheck: RealityCheckInput;
   readonly assets: readonly AssetInput[];
@@ -126,6 +136,8 @@ export interface SummaryFigures {
   readonly totalDebt: number;
   /** @excel Resumen!C18 */
   readonly hasExpensiveDebt: boolean;
+  /** Mes en que termina la última deuda cara; null sin deuda cara. @excel Resumen!C19 */
+  readonly expensiveDebtPayoff: ExpensiveDebtPayoff | null;
   /** Meses de gasto esencial que cubre el saldo líquido; null sin gasto esencial. @excel Resumen!C20 */
   readonly liquidityMonths: number | null;
   /** @excel Resumen!C21 */
@@ -160,6 +172,11 @@ export interface CaseResult {
   readonly insurance: InsuranceResult;
   readonly debts: DebtTotals;
   readonly expensiveDebt: ExpensiveDebt;
+  /** Plan de pago de deudas: orden y simulación mes a mes con el extra del flujo y el abono único. */
+  readonly debtPlan: {
+    readonly classification: DebtClassification;
+    readonly simulation: DebtSimulation;
+  };
   /** Las partidas con que se calculó el presupuesto: primero las automáticas. */
   readonly budgetItems: readonly BudgetItemInput[];
   readonly budget: BudgetResult;
@@ -180,9 +197,10 @@ export interface CaseResult {
 }
 
 /**
- * Cálculo completo de lo que hay hasta F3, en el orden de la sección 4 de 04-motor: ingresos,
+ * Cálculo completo de lo que hay hasta F4, en el orden de la sección 4 de 04-motor: ingresos,
  * deudas, metas y seguros, presupuesto con filas automáticas, costo de vida, cuentas por cobrar,
- * flujo anual, prueba de realidad, destino del sobrante, fondo de emergencia, bolsillos y Resumen.
+ * flujo anual, prueba de realidad, destino del sobrante, fondo de emergencia, bolsillos, plan de
+ * pago de deudas y Resumen.
  * Puro y determinista: misma entrada, mismo resultado.
  *
  * En modo compatible lo que pagan otros no suma al ingreso (la plantilla pide escribirlo como
@@ -297,6 +315,20 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
     receivables: receivables.payments,
   });
 
+  // El extra mensual es el promedio de lo que el flujo manda a deudas en el año (H-04).
+  const classification = classifyDebts(input.debts, input.debtMethod, fx);
+  const simulation = simulateDebts(
+    input.debts,
+    classification,
+    {
+      startMonth: debtPlanStart(input.cutoffDate),
+      extraMonthly: destination.totalExtraToDebt.total / 12,
+      lumpSum: pockets.lumpSumToDebt,
+      horizonMonths: DIAGNOSIS_HORIZON_MONTHS,
+    },
+    fx,
+  );
+
   const annualIncome = incomes.annual + (implied?.annual ?? 0);
   const annualExpenses = budget.expensesWithoutSavings.annual;
   const programmedSavings = budget.programmedSavings.annual;
@@ -311,6 +343,7 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
     insurance,
     debts,
     expensiveDebt: expensive,
+    debtPlan: { classification, simulation },
     budgetItems,
     budget,
     costOfLiving,
@@ -332,6 +365,7 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
       debtLoad: debtLoad(debts.minPayment, incomes.monthlyAverage),
       totalDebt: debts.balance,
       hasExpensiveDebt: expensive.exists,
+      expensiveDebtPayoff: expensiveDebtPayoff(expensive.rows, simulation),
       liquidityMonths: essentialMonthly === 0 ? null : liquid / essentialMonthly,
       emergencyCurrentGoal: fund.currentGoal,
       emergencyProgress: progress.vsFullGoal,

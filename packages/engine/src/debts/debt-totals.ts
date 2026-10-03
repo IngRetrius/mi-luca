@@ -1,17 +1,21 @@
-import type { Money } from '@miluca/domain';
+import type { IsoDate, Money } from '@miluca/domain';
 
 import { toBaseCompat, type FxContext } from '../currency';
 
-/**
- * Lo que necesitan los totales y la marca de deuda cara de una deuda del inventario. El orden y la
- * simulación (abonos, plazos) llegan con el resto del módulo en F4.
- */
+/** Una deuda del inventario, con lo que necesitan los totales, el orden y la simulación. */
 export interface DebtInput {
+  /** @excel Deudas!D13:D20 */
   readonly balance: Money;
-  /** Cuota mínima mensual; null si aún no se escribe. */
+  /** Cuota mínima mensual; null si aún no se escribe. @excel Deudas!F13:F20 */
   readonly minPayment: Money | null;
   /** Tasa efectiva anual (0,28 es 28 %); null si aún no se escribe. @excel Deudas!E13:E20 */
   readonly annualRate: number | null;
+  /** Si recibe abonos extra (RN-092); "No" en créditos con FRECH, préstamos familiares, etc. @excel Deudas!G13:G20 */
+  readonly acceptsExtra: boolean;
+  /** Desde qué fecha recibe abonos extra; null es desde el primer mes. @excel Deudas!H13:H20 */
+  readonly extraFrom: IsoDate | null;
+  /** Lugar en el orden manual (1 es la primera); solo cuenta con el método manual. */
+  readonly manualOrder: number | null;
 }
 
 export interface DebtTotals {

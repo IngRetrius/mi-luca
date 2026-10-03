@@ -62,6 +62,7 @@ Cada gasto puede marcarse "de salud". Si el cliente retira su consentimiento de 
 | H-24 Seguros en cotización en el presupuesto | Mantenerlos en el presupuesto (el plan supone que se toman) pero mostrarlos aparte como "en cotización" | F5 |
 | H-26 Sobrante con partidas o ingresos sin tipo | Reproducir la plantilla y bloquear la entrega hasta corregir los datos | Hecho |
 | H-27 Cobro sin saldo | La base exige saldo y cuota; el motor reproduce la plantilla para las pruebas | Hecho |
+| H-28 Meses para pagar con coma decimal | El motor cuenta los meses en los dos modos, como Excel con punto decimal (ADR 0013) | Hecho |
 
 ## Consecuencias
 

@@ -310,6 +310,7 @@ export type Database = {
           client_id: string;
           compatibility_mode: boolean;
           cutoff_date: string | null;
+          debt_method: string;
           emergency_months_override: number | null;
           expensive_debt_threshold: number | null;
           fiscal_threshold_keys: string[];
@@ -327,6 +328,7 @@ export type Database = {
           client_id: string;
           compatibility_mode?: boolean;
           cutoff_date?: string | null;
+          debt_method?: string;
           emergency_months_override?: number | null;
           expensive_debt_threshold?: number | null;
           fiscal_threshold_keys?: string[];
@@ -344,6 +346,7 @@ export type Database = {
           client_id?: string;
           compatibility_mode?: boolean;
           cutoff_date?: string | null;
+          debt_method?: string;
           emergency_months_override?: number | null;
           expensive_debt_threshold?: number | null;
           fiscal_threshold_keys?: string[];
@@ -683,6 +686,71 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'countries';
             referencedColumns: ['code'];
+          },
+        ];
+      };
+      debts: {
+        Row: {
+          accepts_extra: boolean;
+          annual_rate: number;
+          balance: number;
+          client_id: string;
+          currency: string;
+          debt_type: string;
+          extra_from_date: string | null;
+          id: string;
+          lender_name: string | null;
+          manual_order: number | null;
+          min_payment: number;
+          name: string;
+          note: string | null;
+          sort_order: number;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          accepts_extra?: boolean;
+          annual_rate: number;
+          balance: number;
+          client_id: string;
+          currency: string;
+          debt_type: string;
+          extra_from_date?: string | null;
+          id?: string;
+          lender_name?: string | null;
+          manual_order?: number | null;
+          min_payment: number;
+          name: string;
+          note?: string | null;
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          accepts_extra?: boolean;
+          annual_rate?: number;
+          balance?: number;
+          client_id?: string;
+          currency?: string;
+          debt_type?: string;
+          extra_from_date?: string | null;
+          id?: string;
+          lender_name?: string | null;
+          manual_order?: number | null;
+          min_payment?: number;
+          name?: string;
+          note?: string | null;
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'debts_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
           },
         ];
       };

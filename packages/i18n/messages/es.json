@@ -151,7 +151,7 @@
       "budget": "Presupuesto",
       "budgetSummary": "{amount} de gasto al mes",
       "figuresTitle": "Cifras del plan",
-      "figuresNote": "Con los datos registrados hoy. Las cifras de deudas, inversión y patrimonio llegan con sus módulos.",
+      "figuresNote": "Con los datos registrados hoy. Las cifras de inversión y patrimonio llegan con sus módulos.",
       "profile": "Perfil y supuestos",
       "profileSummary": "{type} · corte: {cutoff}",
       "today": "hoy",
@@ -172,6 +172,9 @@
       "receivables": "Cuentas por cobrar",
       "receivablesSummary": "{amount} pendientes",
       "receivablesNone": "Ninguna",
+      "debts": "Deudas",
+      "debtsSummary": "{amount} en total",
+      "debtsNone": "Ninguna",
       "assets": "Patrimonio",
       "assetsSummary": "Saldo líquido de {amount}",
       "realityCheck": "Prueba de realidad",
@@ -736,7 +739,13 @@
       "usted": "Lo que tiene"
     },
     "assetsSummary": "Saldo líquido de {amount}",
-    "realityCheck": "Prueba de realidad"
+    "realityCheck": "Prueba de realidad",
+    "debts": {
+      "tu": "Tus deudas",
+      "usted": "Sus deudas"
+    },
+    "debtsSummary": "{amount} en total",
+    "debtsNone": "Ninguna"
   },
   "currencies": {
     "title": "Monedas",
@@ -1293,6 +1302,133 @@
         "tu": "Saldo que te deben",
         "usted": "Saldo que le deben"
       }
+    }
+  },
+  "debts": {
+    "title": "Deudas",
+    "intro": "Lo que debe el cliente: saldo, tasa y cuota de cada deuda. Con esto se calcula el orden de pago y cuándo sale de cada una.",
+    "back": "Ficha del cliente",
+    "add": "Agregar deuda",
+    "empty": "El cliente no tiene deudas registradas.",
+    "types": {
+      "tarjeta_credito": "Tarjeta de crédito",
+      "libre_inversion": "Libre inversión",
+      "vehiculo": "Vehículo",
+      "hipotecario": "Hipotecario",
+      "libranza": "Libranza",
+      "informal": "Informal (familiar o particular)",
+      "otro": "Otro"
+    },
+    "itemSummary": "{rate} EA · cuota de {payment}",
+    "noExtra": "No acepta abonos",
+    "extraFrom": "Abonos desde el {date}",
+    "expensive": "Deuda cara",
+    "balanceTotal": "Deuda total",
+    "minPaymentTotal": "Cuotas mínimas al mes",
+    "debtLoad": "Carga de deuda (cuotas / ingreso)",
+    "plan": {
+      "title": "Plan de pago",
+      "intro": "Cada mes se paga la cuota de todas las deudas; lo que sobra del pago total va como abono a la primera del orden que acepta abonos. Cuando una deuda termina, su cuota pasa a la siguiente.",
+      "method": "Método",
+      "methods": {
+        "avalancha": "Avalancha",
+        "bola_de_nieve": "Bola de nieve",
+        "manual": "Orden manual"
+      },
+      "start": "Primer mes",
+      "totalPayment": "Pago mensual total para deudas",
+      "extraMonthly": "Extra del sobrante al mes",
+      "lumpSum": "Abono único inicial (del excedente del saldo de hoy)",
+      "orderLabel": "{order}.",
+      "payoff": "Sale en {month} · {months} meses",
+      "payoffOne": "Sale en {month} · 1 mes",
+      "payoffLumpSum": "La salda el abono único",
+      "exceeds": "Más de {months} meses: el pago total no alcanza a saldarla en ese plazo",
+      "interest": "Intereses con el plan: {amount}",
+      "neverPaid": "Con solo la cuota no se termina de pagar: la cuota no cubre el interés del mes.",
+      "interestSavings": "Ahorro en intereses frente a pagar solo la cuota",
+      "interestSavingsDetail": "Ver cada deuda: alguna no se paga con solo la cuota o pasa del plazo",
+      "expensivePayoff": "Salida de la deuda cara",
+      "expensivePayoffExceeds": "Más de {months} meses",
+      "noExpensive": "Sin deuda cara",
+      "notInPlan": "Sin saldo: no entra al plan",
+      "illustrative": "Proyección ilustrativa, no garantizada: supone que el pago total se mantiene, que las tasas no cambian y que no hay deudas nuevas. Esta plataforma no recomienda productos ni entidades.",
+      "methodHints": {
+        "avalancha": "Mayor tasa primero: ahorra más intereses.",
+        "bola_de_nieve": "Menor saldo primero: salen antes las deudas pequeñas y motiva más.",
+        "manual": "En el orden que fijó el asesor en cada deuda."
+      }
+    },
+    "methodForm": {
+      "label": "Método de pago",
+      "hint": "Avalancha: mayor tasa primero, ahorra más intereses. Bola de nieve: menor saldo primero, motiva más. Orden manual: el lugar de cada deuda se fija en su formulario.",
+      "submit": "Guardar método",
+      "submitting": "Guardando…",
+      "saved": "Método guardado.",
+      "error": "No se pudo guardar el método. Intenta de nuevo en unos minutos."
+    },
+    "form": {
+      "newTitle": "Nueva deuda",
+      "editTitle": "Editar deuda",
+      "name": "Nombre de la deuda",
+      "nameHint": "Por ejemplo Tarjeta principal o Crédito del carro. Sin números de tarjeta ni de crédito.",
+      "type": "Tipo",
+      "lender": "Entidad (opcional)",
+      "lenderHint": "Solo el nombre, por ejemplo Banco A.",
+      "balance": "Saldo de hoy",
+      "currency": "Moneda",
+      "currencyHint": "Saldo y cuota van en la misma moneda. Para otra, registra antes su tasa en Monedas.",
+      "rate": "Tasa efectiva anual (%)",
+      "rateHint": "La que aparece en el extracto como EA. Un préstamo sin intereses es 0.",
+      "minPayment": "Cuota mínima mensual",
+      "minPaymentHint": "Si la cuota incluye seguros, por ahora escríbela completa.",
+      "acceptsExtra": "¿Acepta abonos extra?",
+      "acceptsExtraYes": "Sí",
+      "acceptsExtraNo": "No",
+      "acceptsExtraHint": "No, por ejemplo, en un crédito con cobertura FRECH o un préstamo familiar que no conviene adelantar.",
+      "extraFrom": "Acepta abonos desde (opcional)",
+      "extraFromHint": "Vacío es desde ya.",
+      "manualOrder": "Lugar en el orden manual (opcional)",
+      "manualOrderHint": "Solo cuenta con el método de orden manual. 1 es la primera en recibir abonos.",
+      "note": "Nota (opcional)",
+      "submit": "Guardar",
+      "submitting": "Guardando…",
+      "cancel": "Cancelar",
+      "deleteToggle": "Borrar esta deuda",
+      "deleteConfirm": "Sí, borrarla",
+      "deleteHint": "Se borra del inventario de deudas. El historial de cambios la conserva.",
+      "errors": {
+        "missingName": "Escribe el nombre de la deuda.",
+        "tooLong": "Es demasiado largo.",
+        "invalidType": "Elige un tipo de la lista.",
+        "missingAmount": "Escribe el valor.",
+        "invalidAmount": "Escribe un valor de 0 o más, solo con números.",
+        "invalidCurrency": "Elige una moneda de la lista.",
+        "invalidRate": "Escribe la tasa como un número de 0 a 1.000, por ejemplo 28 o 12,5.",
+        "invalidDate": "Escribe una fecha válida.",
+        "extraFromWithoutExtra": "Una deuda que no acepta abonos no lleva fecha desde la que los acepta.",
+        "invalidOrder": "Escribe un número entero de 1 a 99.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrala en Monedas y vuelve a intentarlo.",
+        "notAllowed": "No tienes permiso para cambiar este dato.",
+        "notFound": "Esta deuda ya no existe.",
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      }
+    },
+    "client": {
+      "back": "Mis datos",
+      "title": {
+        "tu": "Tus deudas",
+        "usted": "Sus deudas"
+      },
+      "intro": {
+        "tu": "Lo que debes: saldo, tasa y cuota de cada deuda. Con esto se calcula el orden de pago y cuándo sales de cada una.",
+        "usted": "Lo que debe: saldo, tasa y cuota de cada deuda. Con esto se calcula el orden de pago y cuándo sale de cada una."
+      },
+      "empty": {
+        "tu": "No tienes deudas registradas.",
+        "usted": "No tiene deudas registradas."
+      },
+      "orderNote": "El método de pago y el orden los decide el asesor."
     }
   },
   "assets": {

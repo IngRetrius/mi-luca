@@ -202,6 +202,14 @@ function CaseData({
       summary: text.assetsSummary.replace('{amount}', money(computed.result.liquidAssets)),
     },
     {
+      href: `${base}/deudas`,
+      title: text.debts,
+      summary:
+        computed.rows.debts.length === 0
+          ? text.debtsNone
+          : text.debtsSummary.replace('{amount}', money(computed.result.debts.balance)),
+    },
+    {
       href: `${base}/cobros`,
       title: text.receivables,
       summary:

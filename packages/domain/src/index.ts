@@ -16,6 +16,8 @@ export type {
   Payer,
 } from './budget';
 export { isoDateSchema } from './date';
+export { debtMethodSchema } from './debt';
+export type { DebtMethod } from './debt';
 export type { IsoDate } from './date';
 export { insuranceStatusSchema } from './insurance';
 export type { InsuranceStatus } from './insurance';

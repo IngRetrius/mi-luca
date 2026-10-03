@@ -19,3 +19,4 @@ uv run --with openpyxl python tools/excel-extractor/compat.py \
 | `datedifMonths` (`DATEDIF(inicio, fin, "m")`) | 18: fin de mes, bisiestos, cambio de año y fecha final anterior (#NUM!)   | 16.113.3, 01/10/2026 |
 | `edate` (`EDATE(inicio, meses)`)              | 13: fin de mes, bisiestos, cambio de año, meses negativos y fraccionarios | 16.113.3, 02/10/2026 |
 | `roundUp` (`ROUNDUP(valor, decimales)`)       | 11: exactos, negativos, decimales positivos y negativos, y 0,1 * 3 * 10   | 16.113.3, 02/10/2026 |
+| `nper` (`NPER(tasa, -cuota, saldo)`)          | 10: tarjeta, vehículo, plazos largos, tasa muy baja y cero, cuota igual o menor que el interés (#NUM!) | 16.113.3, 03/10/2026 |
