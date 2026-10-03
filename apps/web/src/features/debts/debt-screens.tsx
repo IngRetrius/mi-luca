@@ -17,6 +17,7 @@ import type { CaseEditor } from '@/server/case-access';
 import { deleteDebt, saveDebt, saveDebtMethod } from './actions';
 import { DebtForm } from './debt-form';
 import { DebtMethodForm } from './debt-method-form';
+import { DebtWhatIf } from './debt-what-if';
 import { debtPaths } from './paths';
 import type { DebtType } from './validation';
 
@@ -258,6 +259,27 @@ export async function DebtsScreen({ viewer, clientId }: { viewer: CaseEditor; cl
             ))}
           </ul>
           <DebtPlan viewer={viewer} clientId={clientId} computed={computed} locale={locale} />
+          {result.debtPlan.classification.byOrder.length > 0 ? (
+            <DebtWhatIf
+              text={text.whatIf}
+              illustrative={text.plan.illustrative}
+              data={{
+                debts: computed.input.debts,
+                names: debts.map((row) => row.name),
+                classification: result.debtPlan.classification,
+                plan: {
+                  startMonth: result.debtPlan.simulation.startMonth,
+                  extraMonthly: result.debtPlan.simulation.totalPayment - result.debts.minPayment,
+                  lumpSum: result.pockets.lumpSumToDebt,
+                  horizonMonths: DIAGNOSIS_HORIZON_MONTHS,
+                },
+                expensiveRows: result.expensiveDebt.rows,
+                fx: computed.input.fx,
+                freeMonthly: result.cashflow.destination.freeMargin.total / 12,
+                locale,
+              }}
+            />
+          ) : null}
         </>
       )}
       <ScreenActions>

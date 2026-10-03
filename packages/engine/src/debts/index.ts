@@ -17,3 +17,5 @@ export type {
   ExpensiveDebtPayoff,
   SimulatedDebt,
 } from './simulate';
+export { debtWhatIf } from './what-if';
+export type { DebtExtraPayment, DebtFreedom, DebtWhatIf, DebtWhatIfRow } from './what-if';

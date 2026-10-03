@@ -1429,6 +1429,33 @@
         "usted": "No tiene deudas registradas."
       },
       "orderNote": "El método de pago y el orden los decide el asesor."
+    },
+    "whatIf": {
+      "title": "¿Y si se abona más?",
+      "intro": "Simula un pago adicional a las deudas. Entra por el mismo orden de pago y respeta las que no aceptan abonos. No cambia el plan ni se guarda.",
+      "monthly": "Pago adicional al mes",
+      "lumpSum": "Abono único adicional (opcional)",
+      "free": "Libre al mes según el flujo: {amount}",
+      "overFree": "Es más de lo que queda libre en el flujo: tendría que salir de otro gasto o de un ingreso nuevo.",
+      "empty": "Escribe un valor para ver cuánto se adelanta la salida y cuánto se ahorra en intereses.",
+      "invalidAmount": "Escribe un valor de 0 o más, solo con números.",
+      "resultTitle": "Con el pago adicional",
+      "freedom": "Salida de todas las deudas",
+      "monthsEarlier": "{month} · {months} meses antes",
+      "oneMonthEarlier": "{month} · 1 mes antes",
+      "sameMonth": "{month} · igual que en el plan",
+      "baseExceeds": "{month} · en el plan, más de {horizon} meses",
+      "exceeds": "Más de {horizon} meses",
+      "interestSaved": "Ahorro en intereses frente al plan",
+      "atLeast": "Al menos {amount}",
+      "expensivePayoff": "Salida de la deuda cara",
+      "perDebt": "Cada deuda",
+      "rowChange": "{months} meses antes · {amount} menos en intereses",
+      "rowChangeOne": "1 mes antes · {amount} menos en intereses",
+      "rowInterestOnly": "{amount} menos en intereses",
+      "rowSame": "Sin cambio",
+      "rowPaidByLumpSum": "La salda el abono único",
+      "termNote": "Al abonar a un crédito largo, conviene pedir a la entidad que reduzca el plazo y no la cuota, y preguntar si cobra por abonar."
     }
   },
   "assets": {

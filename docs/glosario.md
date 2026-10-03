@@ -177,6 +177,9 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | No se paga (solo con la cuota) | `neverPaidWithMinimum` | La cuota no cubre el interés del mes |
 | Ahorro en intereses | `interestSavings` | `Deudas!H22` |
 | Salida de la deuda cara | `expensiveDebtPayoff` | `Deudas!C25`, `Resumen!C19` |
+| ¿Y si se abona más? | `debtWhatIf`, `DebtExtraPayment` | Simulación del plan con un pago adicional; no se guarda |
+| Salida de todas las deudas | `freedom` / `DebtFreedom` | |
+| Meses que se adelanta, intereses que se ahorran | `monthsSaved`, `interestSaved` | |
 | Carga de deuda | `debtLoad` | Cuotas / ingreso mensual |
 | Crédito (seguimiento) | `credit` | Plantilla de créditos |
 | Cuota | `installment` | |
