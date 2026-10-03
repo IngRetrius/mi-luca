@@ -1,0 +1,51 @@
+[
+  {
+    "id": "medio-arriba",
+    "expression": "2.25",
+    "value": 2.25,
+    "digits": 1,
+    "formula": "=ROUND(2.25,1)"
+  },
+  {
+    "id": "binario",
+    "expression": "2.35",
+    "value": 2.35,
+    "digits": 1,
+    "formula": "=ROUND(2.35,1)"
+  },
+  {
+    "id": "cociente",
+    "expression": "(46752-46028)/365.25",
+    "value": 1.9822039698836413,
+    "digits": 1,
+    "formula": "=ROUND((46752-46028)/365.25,1)"
+  },
+  {
+    "id": "entero",
+    "expression": "1.95",
+    "value": 1.95,
+    "digits": 1,
+    "formula": "=ROUND(1.95,1)"
+  },
+  {
+    "id": "negativo",
+    "expression": "-2.35",
+    "value": -2.35,
+    "digits": 1,
+    "formula": "=ROUND(-2.35,1)"
+  },
+  {
+    "id": "cero-decimales",
+    "expression": "2.5",
+    "value": 2.5,
+    "digits": 0,
+    "formula": "=ROUND(2.5,0)"
+  },
+  {
+    "id": "muchos",
+    "expression": "16.94999999",
+    "value": 16.94999999,
+    "digits": 1,
+    "formula": "=ROUND(16.94999999,1)"
+  }
+]

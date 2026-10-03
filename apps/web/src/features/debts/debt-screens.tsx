@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { DIAGNOSIS_HORIZON_MONTHS, type CreditSchedule, type DebtSimulation } from '@miluca/engine';
 import { COUNTRY_LOCALES, formatDate, formatMoney, formatPercent, messages } from '@miluca/i18n';
 
-import { BackLink, LoadError } from '@/components/back-link';
+import { BackLink, LoadError, ModuleLink } from '@/components/back-link';
 import { FigureList } from '@/components/figure-list';
 import { Screen, ScreenActions } from '@/components/screen';
 import { StatusLabel } from '@/components/status';
@@ -238,6 +238,7 @@ export async function DebtsScreen({ viewer, clientId }: { viewer: CaseEditor; cl
     formatMoney(amount, currency, locale);
   const { result } = computed;
   const types: Readonly<Record<string, string>> = text.types;
+  const trackedCount = result.creditSchedules.filter(Boolean).length;
 
   return (
     <Screen>
@@ -308,6 +309,15 @@ export async function DebtsScreen({ viewer, clientId }: { viewer: CaseEditor; cl
               </li>
             ))}
           </ul>
+          {trackedCount > 0 ? (
+            <div className="rounded-xl border border-border">
+              <ModuleLink
+                href={paths.panel}
+                title={text.panelLink}
+                summary={text.panelLinkSummary.replace('{count}', String(trackedCount))}
+              />
+            </div>
+          ) : null}
           <DebtPlan viewer={viewer} clientId={clientId} computed={computed} locale={locale} />
           {result.debtPlan.classification.byOrder.length > 0 ? (
             <DebtWhatIf

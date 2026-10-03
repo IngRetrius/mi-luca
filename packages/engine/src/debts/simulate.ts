@@ -19,6 +19,13 @@ export interface DebtPlanInput {
   /** Abono único inicial desde el excedente del saldo de hoy, en moneda base. @excel Deudas!C10 */
   readonly lumpSum: number;
   readonly horizonMonths: number;
+  /**
+   * Qué hoja reproduce. `diagnosis` (por defecto): la hoja Deudas de la plantilla de asesoría.
+   * `credits`: el plan de pago de la plantilla de créditos, en el que una deuda con medio peso o
+   * menos ya no genera interés ni seguros y el pago total solo cuenta las cuotas de las deudas que
+   * siguen abiertas. @excel 'Plan de pago'!C8, E28:AJ387
+   */
+  readonly variant?: 'diagnosis' | 'credits';
 }
 
 /** Una fila de la simulación mes a mes: la deuda que ocupa un lugar del orden de pago. */
@@ -107,8 +114,14 @@ export function simulateDebts(
   const horizon = plan.horizonMonths;
   const balances = debts.map((debt) => toBaseCompat(debt.balance, fx));
   const minimums = debts.map((debt) => (debt.minPayment ? toBaseCompat(debt.minPayment, fx) : 0));
-  // Las cuotas de las deudas sin saldo también suman al pago total, como en la plantilla.
-  const totalPayment = minimums.reduce((sum, value) => sum + value, 0) + plan.extraMonthly;
+  const insurances = debts.map((debt) => (debt.insurance ? toBaseCompat(debt.insurance, fx) : 0));
+  const credits = plan.variant === 'credits';
+  // En la hoja Deudas también suman las cuotas de las deudas sin saldo; en la de créditos, no.
+  const totalPayment =
+    minimums.reduce(
+      (sum, value, index) => (credits && balances[index]! <= PAID_OFF ? sum : sum + value),
+      0,
+    ) + plan.extraMonthly;
   const months = Array.from({ length: horizon }, (_, month) => edate(plan.startMonth, month));
 
   const startsWithExtra = (debt: DebtInput): boolean =>
@@ -135,7 +148,11 @@ export function simulateDebts(
     let minimumsPaid = 0;
     rows.forEach((row, slot) => {
       const previous = month === 0 ? row.initialBalance : balance[slot]![month - 1]!;
-      owed[slot]![month] = previous * (1 + rates[slot]!);
+      const open = previous > PAID_OFF;
+      owed[slot]![month] =
+        credits && !open
+          ? 0
+          : previous * (1 + rates[slot]!) + (open ? insurances[row.debtIndex]! : 0);
       minimum[slot]![month] = Math.min(minimums[row.debtIndex]!, owed[slot]![month]!);
       minimumsPaid += minimum[slot]![month]!;
     });

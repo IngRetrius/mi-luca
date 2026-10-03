@@ -1,0 +1,41 @@
+{
+  "excel": "16.113.3",
+  "generated": "2026-10-03",
+  "results": [
+    {
+      "id": "medio-arriba",
+      "formula": "=ROUND(2.25,1)",
+      "value": 2.3
+    },
+    {
+      "id": "binario",
+      "formula": "=ROUND(2.35,1)",
+      "value": 2.4
+    },
+    {
+      "id": "cociente",
+      "formula": "=ROUND((46752-46028)/365.25,1)",
+      "value": 2
+    },
+    {
+      "id": "entero",
+      "formula": "=ROUND(1.95,1)",
+      "value": 2
+    },
+    {
+      "id": "negativo",
+      "formula": "=ROUND(-2.35,1)",
+      "value": -2.4
+    },
+    {
+      "id": "cero-decimales",
+      "formula": "=ROUND(2.5,0)",
+      "value": 3
+    },
+    {
+      "id": "muchos",
+      "formula": "=ROUND(16.94999999,1)",
+      "value": 16.9
+    }
+  ]
+}

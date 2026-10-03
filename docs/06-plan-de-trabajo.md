@@ -242,7 +242,8 @@ Avance:
 - [x] Créditos cuota a cuota: `creditSchedule` (360 cuotas con interés, seguros, FRECH, cuota calculada con el plazo, cuota distinta, abono extra y marcas de pago), sus simuladores y `creditBridge`, el puente hacia Deudas; `pmt` en `excel`, probado contra Excel. Caso de oro C5 sobre la plantilla de créditos: la hoja de cada uno de los ocho créditos y la sección 7 del Panel en verde. `ENGINE_VERSION` 0.12.0.
 - [x] Una deuda en seguimiento entra al diagnóstico con el saldo y la cuota de su tabla (ADR 0014). Migración `credits`: datos del crédito en `debts` y `debt_installments` con RLS e historial (310 pruebas pgTAP en total).
 - [x] Pantallas: sección "Seguimiento cuota a cuota" en el formulario de la deuda; cuotas de cada crédito (P-C10) para asesor y cliente, con "Marcar pagada", el detalle de cada cuota y la alerta de vencidas sin marcar; la próxima cuota o las vencidas en la lista de deudas. Verificado contra Supabase local (asesora a 320 px, cliente en iPhone) y revisado con `web-design-guidelines`.
-- [ ] Plan de pago de 360 meses y el resto del Panel de la plantilla de créditos (calendario del mes, hitos, deuda año por año) contra C5.
+- [x] Plan de pago de 360 meses (`creditsPaymentPlan`, el mismo simulador de la hoja Deudas con `variant: 'credits'` y seguros por deuda, H-06) y Panel (`creditsPanel`) de la plantilla de créditos; `round` y `excelSerial` en `excel`. C5 se regeneró con la corrección de H-28 en las 41 fórmulas afectadas (ADR 0013): sin ella el plan de Excel no sirve con coma decimal. Plan y Panel en verde contra C5. `ENGINE_VERSION` 0.13.0.
+- [x] Pantalla "Panel de créditos" para asesor y cliente, enlazada desde Deudas. Verificado contra Supabase local (asesora a 320 px, cliente en iPhone) y revisado con `web-design-guidelines` (la tabla de años pasó a lista para no desplazarse de lado).
 
 ### F5. Inversión, patrimonio, metas y seguros (120 horas)
 

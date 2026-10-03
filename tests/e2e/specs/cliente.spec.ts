@@ -33,6 +33,7 @@ for (const path of [
   '/mis-datos/bolsillos/bancos/nuevo',
   '/mis-datos/deudas',
   '/mis-datos/deudas/nuevo',
+  '/mis-datos/deudas/panel',
   '/mis-datos/deudas/00000000-0000-4000-8000-000000000001',
   '/mis-datos/deudas/00000000-0000-4000-8000-000000000001/cuotas',
   '/mis-datos/deudas/00000000-0000-4000-8000-000000000001/cuotas/1',

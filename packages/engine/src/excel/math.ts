@@ -31,3 +31,15 @@ export function pmt(rate: number, periods: number, presentValue: number): number
   if (rate === 0) return presentValue / periods;
   return (presentValue * rate) / (1 - (1 + rate) ** -periods);
 }
+
+/**
+ * Redondeo como `ROUND(valor, decimales)`: la mitad se aleja del cero (`ROUND(2.5, 0)` es 3 y
+ * `ROUND(-2.35, 1)` es -2.4). Como `roundUp`, primero se quitan los errores de la representación
+ * binaria en el decimal 15, para que 2,35 suba a 2,4.
+ */
+export function round(value: number, digits: number): number {
+  if (value === 0 || !Number.isFinite(value)) return value;
+  const factor = 10 ** Math.trunc(digits);
+  const scaled = Number((Math.abs(value) * factor).toPrecision(15));
+  return (Math.sign(value) * Math.round(scaled)) / factor;
+}

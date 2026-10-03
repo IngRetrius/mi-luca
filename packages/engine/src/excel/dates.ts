@@ -59,3 +59,12 @@ export function monthIndex(date: IsoDate): number {
   const { year, month } = parseIsoDate(date);
   return year * 12 + month;
 }
+
+/**
+ * Número de serie de Excel de una fecha (días desde el 30/12/1899). Sirve para restar fechas en
+ * días, como hace Excel con `fecha1 - fecha2`.
+ */
+export function excelSerial(date: IsoDate): number {
+  const { year, month, day } = parseIsoDate(date);
+  return (Date.UTC(year, month - 1, day) - Date.UTC(1899, 11, 30)) / 86_400_000;
+}

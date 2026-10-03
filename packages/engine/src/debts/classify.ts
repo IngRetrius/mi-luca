@@ -29,10 +29,14 @@ export function classifyDebts(
   debts: readonly DebtInput[],
   method: DebtMethod,
   fx: FxContext,
+  /** Saldo desde el que una deuda entra al orden: 0 en la hoja Deudas, 0,5 en la de créditos. */
+  minBalance = 0,
 ): DebtClassification {
   const balances = debts.map((debt) => toBaseCompat(debt.balance, fx));
   const rates = debts.map((debt) => debt.annualRate ?? 0);
-  const withBalance = debts.map((_, index) => index).filter((index) => balances[index]! > 0);
+  const withBalance = debts
+    .map((_, index) => index)
+    .filter((index) => balances[index]! > minBalance);
 
   const before = (a: number, b: number): number => {
     if (method === 'manual') {

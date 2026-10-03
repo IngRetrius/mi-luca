@@ -14,3 +14,7 @@ export type {
   InstallmentMark,
   InstallmentStatus,
 } from './schedule';
+export { creditsPaymentPlan } from './payment-plan';
+export type { CreditPlanRow, CreditsPaymentPlan, TrackedCredit } from './payment-plan';
+export { creditsPanel } from './panel';
+export type { CalendarStatus, CreditsPanel, DebtLoadLevel } from './panel';

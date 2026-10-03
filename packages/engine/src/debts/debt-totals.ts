@@ -18,6 +18,11 @@ export interface DebtInput {
   /** Lugar en el orden manual (1 es la primera); solo cuenta con el método manual. */
   readonly manualOrder: number | null;
   /**
+   * Seguros y cargos incluidos en la cuota, al mes (RN-096): en la simulación se suman a lo que se
+   * debe cada mes, no amortizan capital. La hoja Deudas no los tiene (H-05). @excel 'Plan de pago'!G12
+   */
+  readonly insurance?: Money | null;
+  /**
    * Seguimiento cuota a cuota (plantilla de créditos). Con él, el saldo, la cuota mínima y la fecha
    * de los abonos del diagnóstico salen de la tabla del crédito (`creditBridge`); importes en la
    * moneda de la deuda.

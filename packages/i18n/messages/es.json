@@ -1484,7 +1484,9 @@
       "overdue": "{count} cuotas vencidas sin marcar",
       "overdueOne": "1 cuota vencida sin marcar",
       "paidOff": "Pagado"
-    }
+    },
+    "panelLink": "Panel de créditos",
+    "panelLinkSummary": "{count} en seguimiento cuota a cuota"
   },
   "assets": {
     "title": "Patrimonio",
@@ -1861,7 +1863,7 @@
     "markPaid": "Marcar pagada",
     "marking": "Marcando…",
     "edit": "Detalle",
-    "illustrative": "Las cifras son una guía calculada con la tasa y la cuota registradas: confirma saldos y cuotas con los extractos de la entidad.",
+    "illustrative": "Las cifras son una guía calculada con la tasa y la cuota registradas: los saldos y las cuotas se confirman con los extractos de la entidad.",
     "markError": "No se pudo marcar la cuota. Intenta de nuevo en unos minutos.",
     "notTracked": "Esta deuda no tiene seguimiento cuota a cuota. Actívalo en la deuda con la fecha de la primera cuota.",
     "form": {
@@ -1887,5 +1889,58 @@
         "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
       }
     }
+  },
+  "creditsPanel": {
+    "title": "Panel de créditos",
+    "intro": "Los créditos en seguimiento cuota a cuota: lo que se debe hoy, lo que se paga este mes y cuándo termina cada uno con el plan de pago.",
+    "back": "Deudas",
+    "empty": "Ningún crédito tiene seguimiento cuota a cuota. Se activa en cada deuda con la fecha de la primera cuota.",
+    "today": "Hoy",
+    "totalDebt": "Deuda total",
+    "nextPayments": "Pago del próximo mes",
+    "pendingInterest": "Intereses por pagar",
+    "principalPaid": "Capital ya pagado",
+    "debtFree": "Libre de deudas (con el plan)",
+    "debtFreeExceeds": "Más de 30 años",
+    "overdue": "Cuotas vencidas sin marcar",
+    "load": "Carga financiera (pagos del mes / ingreso)",
+    "loadLevels": {
+      "sana": "Sana (hasta 30 %)",
+      "alta": "Alta (30 % a 40 %)",
+      "muy_alta": "Muy alta (40 % a 50 %)",
+      "critica": "Crítica (más de 50 %)"
+    },
+    "noIncome": "Sin ingreso registrado",
+    "calendarTitle": "Calendario: la próxima cuota de cada crédito",
+    "calendarStatus": {
+      "vencida": "Vencida",
+      "esta_semana": "Se paga esta semana",
+      "al_dia": "Al día"
+    },
+    "calendarRow": "{date} · {amount}",
+    "segmentsTitle": "Pagos según el día del mes",
+    "segmentsIntro": "Conviene tener ese dinero en la cuenta antes de cada tramo.",
+    "segments": ["Días 1 a 10", "Días 11 a 20", "Días 21 a 31"],
+    "segmentsTotal": "Total del mes",
+    "planTitle": "Plan de pago",
+    "planIntro": "Con el método de pago del plan y el extra del sobrante, cuánto se ahorra frente a pagar solo las cuotas.",
+    "planPayment": "Pago mensual total del plan",
+    "costMinimumOnly": "Intereses y seguros solo con cuotas",
+    "costWithPlan": "Intereses y seguros con el plan",
+    "savings": "Ahorro con el plan",
+    "suggestedExtra": "Abono extra sugerido el próximo mes: {amount} a {name}",
+    "noSuggestedExtra": "El próximo mes solo se pagan las cuotas normales.",
+    "milestonesTitle": "Hitos: cuándo termina cada crédito",
+    "milestone": "{date} · en {years} años",
+    "milestoneFreed": "Libera {amount} al mes; quedan {after} en cuotas",
+    "milestoneLoad": "Carga después: {load}",
+    "milestonesNone": "Ningún crédito termina dentro de 30 años con sus cuotas.",
+    "yearsTitle": "Deuda año por año",
+    "yearsCaption": "Deuda al cierre de cada año con el plan y pagando solo las cuotas, y lo que se paga en el año con el plan.",
+    "year": "Año",
+    "withPlan": "Con el plan",
+    "minimumOnly": "Solo cuotas",
+    "payments": "Pagos del año",
+    "illustrative": "Proyección ilustrativa, no garantizada: supone que las tasas y las cuotas no cambian. Los saldos y las cuotas se confirman con los extractos de cada entidad. Esta plataforma no recomienda productos ni entidades."
   }
 }

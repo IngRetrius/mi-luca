@@ -196,6 +196,13 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Cuotas vencidas sin marcar | `overdueCount` | |
 | Lo que paga el cliente | `clientPays` | Pago menos el subsidio |
 | Puente hacia Deudas | `creditBridge` | `Panel!B95:H102` (ADR 0014) |
+| Plan de pago de créditos | `creditsPaymentPlan` | Hoja Plan de pago, 360 meses |
+| Solo con cuotas | `minimumOnly` | Pagando solo la cuota, sin extras |
+| Panel de créditos | `creditsPanel` | Hoja Panel |
+| Libre de deudas | `debtFree` | |
+| Tramos del mes | `monthSegments` | Días 1 a 10, 11 a 20 y 21 a 31 |
+| Hitos | `milestones` | Cuándo termina cada crédito y cuánto libera |
+| Nivel de carga | `debtLoadLevel` | `sana`, `alta`, `muy_alta`, `critica` (`Datos!D21`) |
 | Meta | `goal` | |
 | Valor usado de la meta | `usedAmount` | El escrito o el de la calculadora de viaje, en moneda base (`Metas!F`) |
 | Ya ahorrado | `alreadySaved` | |

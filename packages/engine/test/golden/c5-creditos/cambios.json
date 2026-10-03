@@ -1,5 +1,210 @@
 [
   {
+    "sheet": "Panel",
+    "cell": "E48",
+    "formula": "=IF(B48=\"\",\"\",MAX(0,SUMIFS('Plan de pago'!$F$12:$F$19,'Plan de pago'!$C$12:$C$19,\">\"&0.5)-(D48)))"
+  },
+  {
+    "sheet": "Panel",
+    "cell": "E49",
+    "formula": "=IF(B49=\"\",\"\",MAX(0,SUMIFS('Plan de pago'!$F$12:$F$19,'Plan de pago'!$C$12:$C$19,\">\"&0.5)-(D48+D49)))"
+  },
+  {
+    "sheet": "Panel",
+    "cell": "E50",
+    "formula": "=IF(B50=\"\",\"\",MAX(0,SUMIFS('Plan de pago'!$F$12:$F$19,'Plan de pago'!$C$12:$C$19,\">\"&0.5)-(D48+D49+D50)))"
+  },
+  {
+    "sheet": "Panel",
+    "cell": "E51",
+    "formula": "=IF(B51=\"\",\"\",MAX(0,SUMIFS('Plan de pago'!$F$12:$F$19,'Plan de pago'!$C$12:$C$19,\">\"&0.5)-(D48+D49+D50+D51)))"
+  },
+  {
+    "sheet": "Panel",
+    "cell": "E52",
+    "formula": "=IF(B52=\"\",\"\",MAX(0,SUMIFS('Plan de pago'!$F$12:$F$19,'Plan de pago'!$C$12:$C$19,\">\"&0.5)-(D48+D49+D50+D51+D52)))"
+  },
+  {
+    "sheet": "Panel",
+    "cell": "E53",
+    "formula": "=IF(B53=\"\",\"\",MAX(0,SUMIFS('Plan de pago'!$F$12:$F$19,'Plan de pago'!$C$12:$C$19,\">\"&0.5)-(D48+D49+D50+D51+D52+D53)))"
+  },
+  {
+    "sheet": "Panel",
+    "cell": "E54",
+    "formula": "=IF(B54=\"\",\"\",MAX(0,SUMIFS('Plan de pago'!$F$12:$F$19,'Plan de pago'!$C$12:$C$19,\">\"&0.5)-(D48+D49+D50+D51+D52+D53+D54)))"
+  },
+  {
+    "sheet": "Panel",
+    "cell": "E55",
+    "formula": "=IF(B55=\"\",\"\",MAX(0,SUMIFS('Plan de pago'!$F$12:$F$19,'Plan de pago'!$C$12:$C$19,\">\"&0.5)-(D48+D49+D50+D51+D52+D53+D54+D55)))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "C8",
+    "formula": "=SUMIFS(F12:F19,C12:C19,\">\"&0.5)+N(C6)"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "K12",
+    "formula": "=IF(C12<=0.5,\"\",1+COUNTIFS($C$12:$C$19,\">\"&0.5,$Q$12:$Q$19,\"<\"&Q12)+COUNTIFS($C$12:$C$19,\">\"&0.5,$Q$12:$Q$19,Q12,$R$12:$R$19,\"<\"&R12))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "K13",
+    "formula": "=IF(C13<=0.5,\"\",1+COUNTIFS($C$12:$C$19,\">\"&0.5,$Q$12:$Q$19,\"<\"&Q13)+COUNTIFS($C$12:$C$19,\">\"&0.5,$Q$12:$Q$19,Q13,$R$12:$R$19,\"<\"&R13))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "K14",
+    "formula": "=IF(C14<=0.5,\"\",1+COUNTIFS($C$12:$C$19,\">\"&0.5,$Q$12:$Q$19,\"<\"&Q14)+COUNTIFS($C$12:$C$19,\">\"&0.5,$Q$12:$Q$19,Q14,$R$12:$R$19,\"<\"&R14))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "K15",
+    "formula": "=IF(C15<=0.5,\"\",1+COUNTIFS($C$12:$C$19,\">\"&0.5,$Q$12:$Q$19,\"<\"&Q15)+COUNTIFS($C$12:$C$19,\">\"&0.5,$Q$12:$Q$19,Q15,$R$12:$R$19,\"<\"&R15))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "K16",
+    "formula": "=IF(C16<=0.5,\"\",1+COUNTIFS($C$12:$C$19,\">\"&0.5,$Q$12:$Q$19,\"<\"&Q16)+COUNTIFS($C$12:$C$19,\">\"&0.5,$Q$12:$Q$19,Q16,$R$12:$R$19,\"<\"&R16))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "K17",
+    "formula": "=IF(C17<=0.5,\"\",1+COUNTIFS($C$12:$C$19,\">\"&0.5,$Q$12:$Q$19,\"<\"&Q17)+COUNTIFS($C$12:$C$19,\">\"&0.5,$Q$12:$Q$19,Q17,$R$12:$R$19,\"<\"&R17))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "K18",
+    "formula": "=IF(C18<=0.5,\"\",1+COUNTIFS($C$12:$C$19,\">\"&0.5,$Q$12:$Q$19,\"<\"&Q18)+COUNTIFS($C$12:$C$19,\">\"&0.5,$Q$12:$Q$19,Q18,$R$12:$R$19,\"<\"&R18))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "K19",
+    "formula": "=IF(C19<=0.5,\"\",1+COUNTIFS($C$12:$C$19,\">\"&0.5,$Q$12:$Q$19,\"<\"&Q19)+COUNTIFS($C$12:$C$19,\">\"&0.5,$Q$12:$Q$19,Q19,$R$12:$R$19,\"<\"&R19))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "G22",
+    "formula": "=IF(F25<=0.5,0,IF(H387>0.5,\"Más de 360\",COUNTIF(H28:H387,\">\"&0.5)+1))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "K22",
+    "formula": "=IF(J25<=0.5,0,IF(L387>0.5,\"Más de 360\",COUNTIF(L28:L387,\">\"&0.5)+1))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "O22",
+    "formula": "=IF(N25<=0.5,0,IF(P387>0.5,\"Más de 360\",COUNTIF(P28:P387,\">\"&0.5)+1))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "S22",
+    "formula": "=IF(R25<=0.5,0,IF(T387>0.5,\"Más de 360\",COUNTIF(T28:T387,\">\"&0.5)+1))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "W22",
+    "formula": "=IF(V25<=0.5,0,IF(X387>0.5,\"Más de 360\",COUNTIF(X28:X387,\">\"&0.5)+1))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AA22",
+    "formula": "=IF(Z25<=0.5,0,IF(AB387>0.5,\"Más de 360\",COUNTIF(AB28:AB387,\">\"&0.5)+1))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AE22",
+    "formula": "=IF(AD25<=0.5,0,IF(AF387>0.5,\"Más de 360\",COUNTIF(AF28:AF387,\">\"&0.5)+1))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AI22",
+    "formula": "=IF(AH25<=0.5,0,IF(AJ387>0.5,\"Más de 360\",COUNTIF(AJ28:AJ387,\">\"&0.5)+1))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AK22",
+    "formula": "=IF($C$12<=0.5,0,IF(AK387>0.5,\"Más de 360\",COUNTIF(AK28:AK387,\">\"&0.5)+1))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AL22",
+    "formula": "=IF($C$13<=0.5,0,IF(AL387>0.5,\"Más de 360\",COUNTIF(AL28:AL387,\">\"&0.5)+1))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AM22",
+    "formula": "=IF($C$14<=0.5,0,IF(AM387>0.5,\"Más de 360\",COUNTIF(AM28:AM387,\">\"&0.5)+1))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AN22",
+    "formula": "=IF($C$15<=0.5,0,IF(AN387>0.5,\"Más de 360\",COUNTIF(AN28:AN387,\">\"&0.5)+1))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AO22",
+    "formula": "=IF($C$16<=0.5,0,IF(AO387>0.5,\"Más de 360\",COUNTIF(AO28:AO387,\">\"&0.5)+1))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AP22",
+    "formula": "=IF($C$17<=0.5,0,IF(AP387>0.5,\"Más de 360\",COUNTIF(AP28:AP387,\">\"&0.5)+1))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AQ22",
+    "formula": "=IF($C$18<=0.5,0,IF(AQ387>0.5,\"Más de 360\",COUNTIF(AQ28:AQ387,\">\"&0.5)+1))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AR22",
+    "formula": "=IF($C$19<=0.5,0,IF(AR387>0.5,\"Más de 360\",COUNTIF(AR28:AR387,\">\"&0.5)+1))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AK23",
+    "formula": "=IF($C$12<=0.5,0,$E$12*($C$12+SUM(AK28:AK386))+$G$12*(1+COUNTIF(AK28:AK386,\">\"&0.5)))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AL23",
+    "formula": "=IF($C$13<=0.5,0,$E$13*($C$13+SUM(AL28:AL386))+$G$13*(1+COUNTIF(AL28:AL386,\">\"&0.5)))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AM23",
+    "formula": "=IF($C$14<=0.5,0,$E$14*($C$14+SUM(AM28:AM386))+$G$14*(1+COUNTIF(AM28:AM386,\">\"&0.5)))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AN23",
+    "formula": "=IF($C$15<=0.5,0,$E$15*($C$15+SUM(AN28:AN386))+$G$15*(1+COUNTIF(AN28:AN386,\">\"&0.5)))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AO23",
+    "formula": "=IF($C$16<=0.5,0,$E$16*($C$16+SUM(AO28:AO386))+$G$16*(1+COUNTIF(AO28:AO386,\">\"&0.5)))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AP23",
+    "formula": "=IF($C$17<=0.5,0,$E$17*($C$17+SUM(AP28:AP386))+$G$17*(1+COUNTIF(AP28:AP386,\">\"&0.5)))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AQ23",
+    "formula": "=IF($C$18<=0.5,0,$E$18*($C$18+SUM(AQ28:AQ386))+$G$18*(1+COUNTIF(AQ28:AQ386,\">\"&0.5)))"
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "AR23",
+    "formula": "=IF($C$19<=0.5,0,$E$19*($C$19+SUM(AR28:AR386))+$G$19*(1+COUNTIF(AR28:AR386,\">\"&0.5)))"
+  },
+  {
     "sheet": "Datos",
     "cell": "C5",
     "value": "Caso sintético C5"

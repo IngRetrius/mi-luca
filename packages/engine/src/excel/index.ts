@@ -1,3 +1,3 @@
-export { datedifMonths, edate, monthIndex, parseIsoDate } from './dates';
+export { datedifMonths, edate, excelSerial, monthIndex, parseIsoDate } from './dates';
 export type { CalendarDate } from './dates';
-export { nper, pmt, roundUp } from './math';
+export { nper, pmt, round, roundUp } from './math';

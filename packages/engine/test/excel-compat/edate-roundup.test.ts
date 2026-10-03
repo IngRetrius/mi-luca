@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { edate, monthIndex, roundUp } from '../../src/excel';
+import { edate, excelSerial, monthIndex, round, roundUp } from '../../src/excel';
 import edateCases from './edate.cases.json' with { type: 'json' };
 import edateExcel from './edate.excel.json' with { type: 'json' };
+import roundCases from './round.cases.json' with { type: 'json' };
+import roundExcel from './round.excel.json' with { type: 'json' };
 import roundUpCases from './roundup.cases.json' with { type: 'json' };
 import roundUpExcel from './roundup.excel.json' with { type: 'json' };
 
@@ -32,5 +34,20 @@ describe('monthIndex', () => {
   it('es AÑO*12 + MES, como Supuestos!J46', () => {
     expect(monthIndex('2026-10-01')).toBe(24322);
     expect(monthIndex('2031-05-01')).toBe(24377);
+  });
+});
+
+describe(`round frente a Excel ${roundExcel.excel}`, () => {
+  const expected = results(roundExcel);
+  it.each(roundCases)('$id: ROUND($expression, $digits)', ({ id, value, digits }) => {
+    expect(expected.get(id), `${id} sin resultado de Excel`).toBeDefined();
+    expect(round(value, digits)).toBe(expected.get(id));
+  });
+});
+
+describe('excelSerial', () => {
+  it('es el número de serie de Excel: la resta de dos fechas da los días entre ellas', () => {
+    expect(excelSerial('2026-09-28')).toBe(46293);
+    expect(excelSerial('2026-10-05') - excelSerial('2026-09-28')).toBe(7);
   });
 });
