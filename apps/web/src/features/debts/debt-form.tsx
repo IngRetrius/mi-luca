@@ -6,7 +6,7 @@ import type { Messages } from '@miluca/i18n';
 
 import { DeleteDisclosure, FormSubmitActions } from '@/components/form-actions';
 import { describedBy, Field } from '@/components/form-field';
-import { choiceCard, choiceInput, textField } from '@/components/ui-classes';
+import { choiceCard, choiceInput, focusRing, textField } from '@/components/ui-classes';
 import { useUnsavedWarning } from '@/components/use-unsaved-warning';
 
 import type { DebtState } from './actions';
@@ -15,6 +15,7 @@ import {
   LENDER_MAX,
   NAME_MAX,
   NOTE_MAX,
+  TRACKING_FIELDS,
   type DebtField,
   type DebtValues,
 } from './validation';
@@ -30,6 +31,7 @@ const FIELD_ORDER: readonly DebtField[] = [
   'acceptsExtra',
   'extraFrom',
   'manualOrder',
+  ...TRACKING_FIELDS,
   'note',
 ];
 
@@ -38,6 +40,7 @@ type DebtText = Messages['debts'];
 /** Inventario de deudas: crear o editar una deuda; el lugar en el orden manual, solo el asesor. */
 export function DebtForm({
   text,
+  minPaymentTrackingHint,
   types,
   initial,
   currencies,
@@ -47,6 +50,8 @@ export function DebtForm({
   cancelHref,
 }: {
   text: DebtText['form'];
+  /** Ayuda de la cuota cuando la deuda tiene seguimiento cuota a cuota. */
+  minPaymentTrackingHint: string;
   types: DebtText['types'];
   initial: DebtValues;
   currencies: readonly string[];
@@ -62,6 +67,10 @@ export function DebtForm({
   const fieldId = (field: DebtField) => `${formId}-${field}`;
   const [dirty, setDirty] = useState(false);
   const [acceptsExtra, setAcceptsExtra] = useState(values.acceptsExtra !== 'no');
+  const [tracked, setTracked] = useState(values.firstInstallmentDate !== '');
+  // Abierto si la deuda ya tiene seguimiento; no se cierra solo al borrar la fecha.
+  const [trackingOpen] = useState(values.firstInstallmentDate !== '');
+  const trackingError = TRACKING_FIELDS.some((field) => errors[field]);
   useUnsavedWarning(dirty, pending);
 
   useEffect(() => {
@@ -87,6 +96,46 @@ export function DebtForm({
       aria-describedby={describedBy(fieldId(field), hasHint)}
       className={`${textField} text-right tabular-nums`}
     />
+  );
+
+  const numberField = (
+    field: 'firstInstallmentNumber' | 'totalInstallments' | 'extraFromInstallment' | 'frechUntil',
+    label: string,
+    hint: string | null,
+  ) => (
+    <Field
+      id={fieldId(field)}
+      label={label}
+      {...(hint === null ? {} : { hint })}
+      error={errorText(field)}
+    >
+      <input
+        id={fieldId(field)}
+        name={field}
+        type="text"
+        inputMode="numeric"
+        autoComplete="off"
+        defaultValue={values[field]}
+        aria-invalid={errors[field] ? true : false}
+        aria-describedby={describedBy(fieldId(field), hint !== null)}
+        className={`${textField} max-w-28 text-right tabular-nums`}
+      />
+    </Field>
+  );
+  const amountField = (field: 'insurance' | 'originalAmount', label: string) => (
+    <Field id={fieldId(field)} label={label} error={errorText(field)}>
+      <input
+        id={fieldId(field)}
+        name={field}
+        type="text"
+        inputMode="decimal"
+        autoComplete="off"
+        defaultValue={values[field]}
+        aria-invalid={errors[field] ? true : false}
+        aria-describedby={describedBy(fieldId(field), false)}
+        className={`${textField} text-right tabular-nums`}
+      />
+    </Field>
   );
 
   return (
@@ -185,7 +234,7 @@ export function DebtForm({
       <Field
         id={fieldId('minPayment')}
         label={text.minPayment}
-        hint={text.minPaymentHint}
+        hint={tracked ? minPaymentTrackingHint : text.minPaymentHint}
         error={errorText('minPayment')}
       >
         {decimalInput('minPayment', true)}
@@ -253,6 +302,67 @@ export function DebtForm({
           />
         </Field>
       ) : null}
+
+      <details
+        open={trackingOpen || trackingError}
+        className="group rounded-xl border border-border"
+      >
+        <summary
+          className={`flex min-h-12 cursor-pointer items-center rounded-xl px-4 font-medium ${focusRing}`}
+        >
+          {text.trackingTitle}
+        </summary>
+        <div className="flex flex-col gap-6 px-4 pt-2 pb-4">
+          <p className="text-sm text-text-muted">{text.trackingIntro}</p>
+          <Field
+            id={fieldId('firstInstallmentDate')}
+            label={text.firstInstallmentDate}
+            hint={text.firstInstallmentDateHint}
+            error={errorText('firstInstallmentDate')}
+          >
+            <input
+              id={fieldId('firstInstallmentDate')}
+              name="firstInstallmentDate"
+              type="date"
+              defaultValue={values.firstInstallmentDate}
+              onChange={(event) => setTracked(event.target.value !== '')}
+              aria-invalid={errors.firstInstallmentDate ? true : false}
+              aria-describedby={describedBy(fieldId('firstInstallmentDate'), true)}
+              className={textField}
+            />
+          </Field>
+          {numberField(
+            'firstInstallmentNumber',
+            text.firstInstallmentNumber,
+            text.firstInstallmentNumberHint,
+          )}
+          {numberField('totalInstallments', text.totalInstallments, text.totalInstallmentsHint)}
+          {amountField('insurance', text.insurance)}
+          {amountField('originalAmount', text.originalAmount)}
+          {acceptsExtra
+            ? numberField('extraFromInstallment', text.extraFromInstallment, null)
+            : null}
+          <Field
+            id={fieldId('frechPoints')}
+            label={text.frechPoints}
+            hint={text.frechPointsHint}
+            error={errorText('frechPoints')}
+          >
+            <input
+              id={fieldId('frechPoints')}
+              name="frechPoints"
+              type="text"
+              inputMode="decimal"
+              autoComplete="off"
+              defaultValue={values.frechPoints}
+              aria-invalid={errors.frechPoints ? true : false}
+              aria-describedby={describedBy(fieldId('frechPoints'), true)}
+              className={`${textField} max-w-28 text-right tabular-nums`}
+            />
+          </Field>
+          {numberField('frechUntil', text.frechUntil, null)}
+        </div>
+      </details>
 
       <Field id={fieldId('note')} label={text.note} error={errorText('note')}>
         <textarea

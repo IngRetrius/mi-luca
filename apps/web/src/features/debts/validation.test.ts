@@ -93,3 +93,74 @@ describe('parseDebtMethod', () => {
     expect(parseDebtMethod(data)).toBeNull();
   });
 });
+
+describe('parseDebt con seguimiento cuota a cuota', () => {
+  it('sin fecha de la primera cuota no hay seguimiento y los campos quedan vacíos', () => {
+    const result = parseDebt(form({ totalInstallments: '36', insurance: '20.000' }), client);
+    expect(result).toMatchObject({
+      ok: true,
+      record: { first_installment_date: null, total_installments: null, insurance_in_payment: 0 },
+    });
+  });
+
+  it('con fecha guarda el crédito; los puntos del FRECH pasan a razón', () => {
+    const result = parseDebt(
+      form({
+        debtType: 'hipotecario',
+        minPayment: '0',
+        firstInstallmentDate: '2026-10-01',
+        firstInstallmentNumber: '37',
+        totalInstallments: '240',
+        insurance: '120.000',
+        extraFromInstallment: '85',
+        frechPoints: '4',
+        frechUntil: '84',
+      }),
+      client,
+    );
+    expect(result).toMatchObject({
+      ok: true,
+      record: {
+        first_installment_date: '2026-10-01',
+        first_installment_number: 37,
+        total_installments: 240,
+        insurance_in_payment: 120_000,
+        extra_from_installment: 85,
+        frech_points: 0.04,
+        frech_until_installment: 84,
+      },
+    });
+  });
+
+  it('pide la cuota o el plazo, el FRECH completo y un plazo desde la primera cuota', () => {
+    const result = parseDebt(
+      form({
+        minPayment: '0',
+        firstInstallmentDate: '2026-10-01',
+        firstInstallmentNumber: '37',
+        frechPoints: '4',
+        acceptsExtra: 'no',
+        extraFromInstallment: '85',
+      }),
+      client,
+    );
+    expect(result).toMatchObject({
+      ok: false,
+      errors: {
+        totalInstallments: 'paymentOrTerm',
+        frechUntil: 'frechIncomplete',
+        extraFromInstallment: 'extraInstallmentWithoutExtra',
+      },
+    });
+    expect(
+      parseDebt(
+        form({
+          firstInstallmentDate: '2026-10-01',
+          firstInstallmentNumber: '37',
+          totalInstallments: '12',
+        }),
+        client,
+      ),
+    ).toMatchObject({ errors: { totalInstallments: 'beforeFirst' } });
+  });
+});

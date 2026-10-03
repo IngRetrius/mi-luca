@@ -1,13 +1,21 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 import { allowedCurrencies } from '@/features/currencies';
 import { withImpact } from '@/features/summary';
+import { todayIn } from '@/lib/dates';
 import { createClient } from '@/lib/supabase/server';
 import { isUuid, requireCaseEditor } from '@/server/case-access';
 
+import {
+  isEmptyMark,
+  parseInstallment,
+  type InstallmentErrors,
+  type InstallmentRecord,
+  type InstallmentValues,
+} from './installment-validation';
 import { debtPaths } from './paths';
 import { parseDebt, parseDebtMethod, type DebtErrors, type DebtValues } from './validation';
 
@@ -133,4 +141,103 @@ export async function saveDebtMethod(
   if (error) return 'error';
   revalidatePath(debtPaths('advisor', clientId).list);
   return 'saved';
+}
+
+export type InstallmentFormError = 'notAllowed' | 'notFound' | 'unavailable';
+
+export interface InstallmentState {
+  readonly values: InstallmentValues;
+  readonly errors: InstallmentErrors;
+  readonly formError: InstallmentFormError | null;
+}
+
+/**
+ * Guarda la marca de una cuota: actualiza la fila o la crea (la API no deja escribir la llave en una
+ * actualización, así que no hay upsert). Una marca vacía se borra.
+ */
+async function writeMark(
+  clientId: string,
+  debtId: string,
+  number: number,
+  record: InstallmentRecord,
+): Promise<InstallmentFormError | null> {
+  const supabase = await createClient();
+  const { value } = await withImpact(
+    clientId,
+    async () => {
+      const match = { debt_id: debtId, client_id: clientId, installment_number: number };
+      if (isEmptyMark(record)) {
+        const { error } = await supabase.from('debt_installments').delete().match(match);
+        return error ? 'unavailable' : null;
+      }
+      const updated = await supabase
+        .from('debt_installments')
+        .update(record)
+        .match(match)
+        .select('debt_id');
+      if (updated.error) return updated.error.code === '42501' ? 'notAllowed' : 'unavailable';
+      if (updated.data.length > 0) return null;
+      const { error } = await supabase.from('debt_installments').insert({ ...record, ...match });
+      if (!error) return null;
+      // 23503: la deuda no existe o es de otro cliente; 42501: sin acceso.
+      if (error.code === '23503') return 'notFound';
+      return error.code === '42501' ? 'notAllowed' : 'unavailable';
+    },
+    (outcome) => outcome === null,
+  );
+  return value;
+}
+
+function validMark(debtId: string, number: number): boolean {
+  return isUuid(debtId) && Number.isInteger(number) && number >= 1 && number <= 1000;
+}
+
+/** "Marcar pagada" desde la lista de cuotas: pagada hoy, en la fecha del país del cliente. */
+export async function markInstallmentPaid(
+  clientId: string,
+  debtId: string,
+  number: number,
+): Promise<void> {
+  const viewer = await requireCaseEditor(clientId, '/');
+  const paths = debtPaths(viewer.role, clientId);
+  if (validMark(debtId, number)) {
+    const supabase = await createClient();
+    const [client, current] = await Promise.all([
+      supabase.from('clients').select('country_code').eq('id', clientId).maybeSingle(),
+      supabase
+        .from('debt_installments')
+        .select('custom_payment, extra_payment')
+        .match({ debt_id: debtId, client_id: clientId, installment_number: number })
+        .maybeSingle(),
+    ]);
+    if (!client.data) notFound();
+    await writeMark(clientId, debtId, number, {
+      paid: true,
+      paid_on: todayIn(client.data.country_code),
+      custom_payment: current.data?.custom_payment ?? null,
+      extra_payment: current.data?.extra_payment ?? null,
+    });
+  }
+  revalidatePath(paths.installments(debtId));
+}
+
+/** El detalle de una cuota: pagada con su fecha, cuota distinta y abono extra. */
+export async function saveInstallment(
+  clientId: string,
+  debtId: string,
+  number: number,
+  _previous: InstallmentState | null,
+  formData: FormData,
+): Promise<InstallmentState> {
+  const viewer = await requireCaseEditor(clientId, '/');
+  const paths = debtPaths(viewer.role, clientId);
+  const parsed = parseInstallment(formData);
+  if (!parsed.ok) return { values: parsed.values, errors: parsed.errors, formError: null };
+  if (!validMark(debtId, number)) {
+    return { values: parsed.values, errors: {}, formError: 'notFound' };
+  }
+  const error = await writeMark(clientId, debtId, number, parsed.record);
+  if (error) return { values: parsed.values, errors: {}, formError: error };
+  revalidatePath(paths.installments(debtId));
+  redirect(paths.installments(debtId));
 }

@@ -1,5 +1,6 @@
 import type { IsoDate, Money } from '@miluca/domain';
 
+import type { CreditInput, InstallmentMark } from '../credits';
 import { toBaseCompat, type FxContext } from '../currency';
 
 /** Una deuda del inventario, con lo que necesitan los totales, el orden y la simulación. */
@@ -16,6 +17,12 @@ export interface DebtInput {
   readonly extraFrom: IsoDate | null;
   /** Lugar en el orden manual (1 es la primera); solo cuenta con el método manual. */
   readonly manualOrder: number | null;
+  /**
+   * Seguimiento cuota a cuota (plantilla de créditos). Con él, el saldo, la cuota mínima y la fecha
+   * de los abonos del diagnóstico salen de la tabla del crédito (`creditBridge`); importes en la
+   * moneda de la deuda.
+   */
+  readonly tracking?: { readonly credit: CreditInput; readonly marks: readonly InstallmentMark[] };
 }
 
 export interface DebtTotals {

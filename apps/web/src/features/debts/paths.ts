@@ -8,5 +8,7 @@ export function debtPaths(role: CaseEditor['role'], clientId: string) {
     list,
     add: `${list}/nuevo`,
     item: (debtId: string) => `${list}/${debtId}`,
+    installments: (debtId: string) => `${list}/${debtId}/cuotas`,
+    installment: (debtId: string, number: number) => `${list}/${debtId}/cuotas/${number}`,
   };
 }

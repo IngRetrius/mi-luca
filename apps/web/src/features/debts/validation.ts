@@ -31,7 +31,15 @@ export type DebtField =
   | 'acceptsExtra'
   | 'extraFrom'
   | 'manualOrder'
-  | 'note';
+  | 'note'
+  | 'firstInstallmentDate'
+  | 'firstInstallmentNumber'
+  | 'totalInstallments'
+  | 'insurance'
+  | 'originalAmount'
+  | 'extraFromInstallment'
+  | 'frechPoints'
+  | 'frechUntil';
 export type DebtFieldError =
   | 'missingName'
   | 'tooLong'
@@ -42,7 +50,25 @@ export type DebtFieldError =
   | 'invalidRate'
   | 'invalidDate'
   | 'extraFromWithoutExtra'
-  | 'invalidOrder';
+  | 'invalidOrder'
+  | 'invalidInstallment'
+  | 'beforeFirst'
+  | 'frechIncomplete'
+  | 'invalidPoints'
+  | 'paymentOrTerm'
+  | 'extraInstallmentWithoutExtra';
+
+/** Campos del seguimiento cuota a cuota (hoja "Crédito" de la plantilla de créditos). */
+export const TRACKING_FIELDS = [
+  'firstInstallmentDate',
+  'firstInstallmentNumber',
+  'totalInstallments',
+  'insurance',
+  'originalAmount',
+  'extraFromInstallment',
+  'frechPoints',
+  'frechUntil',
+] as const satisfies readonly DebtField[];
 
 export interface DebtValues {
   readonly name: string;
@@ -59,6 +85,15 @@ export interface DebtValues {
   /** Solo lo escribe el asesor. */
   readonly manualOrder: string;
   readonly note: string;
+  readonly firstInstallmentDate: string;
+  readonly firstInstallmentNumber: string;
+  readonly totalInstallments: string;
+  readonly insurance: string;
+  readonly originalAmount: string;
+  readonly extraFromInstallment: string;
+  /** Puntos de tasa efectiva anual ("4" son 4 puntos). */
+  readonly frechPoints: string;
+  readonly frechUntil: string;
 }
 
 /** Una deuda lista para guardar, con los nombres de columna de `debts`. */
@@ -74,6 +109,14 @@ export interface DebtRecord {
   readonly extra_from_date: string | null;
   readonly manual_order?: number | null;
   readonly note: string | null;
+  readonly first_installment_date: string | null;
+  readonly first_installment_number: number;
+  readonly total_installments: number | null;
+  readonly insurance_in_payment: number;
+  readonly original_amount: number | null;
+  readonly extra_from_installment: number | null;
+  readonly frech_points: number | null;
+  readonly frech_until_installment: number | null;
 }
 
 export type DebtErrors = Readonly<Partial<Record<DebtField, DebtFieldError>>>;
@@ -113,6 +156,14 @@ export function parseDebt(
     extraFrom: text(formData, 'extraFrom'),
     manualOrder: options.advisor ? text(formData, 'manualOrder') : '',
     note: typeof formData.get('note') === 'string' ? String(formData.get('note')).trim() : '',
+    firstInstallmentDate: text(formData, 'firstInstallmentDate'),
+    firstInstallmentNumber: text(formData, 'firstInstallmentNumber'),
+    totalInstallments: text(formData, 'totalInstallments'),
+    insurance: text(formData, 'insurance'),
+    originalAmount: text(formData, 'originalAmount'),
+    extraFromInstallment: text(formData, 'extraFromInstallment'),
+    frechPoints: text(formData, 'frechPoints'),
+    frechUntil: text(formData, 'frechUntil'),
   };
   const errors: Partial<Record<DebtField, DebtFieldError>> = {};
   if (!values.name) errors.name = 'missingName';
@@ -144,6 +195,7 @@ export function parseDebt(
     if (!(manualOrder >= 1 && manualOrder <= 99)) errors.manualOrder = 'invalidOrder';
   }
   if (values.note.length > NOTE_MAX) errors.note = 'tooLong';
+  const tracking = parseTracking(values, { acceptsExtra, minPayment }, errors);
 
   if (Object.keys(errors).length > 0) return { ok: false, values, errors };
   return {
@@ -162,7 +214,95 @@ export function parseDebt(
       extra_from_date: values.extraFrom || null,
       ...(options.advisor ? { manual_order: manualOrder } : {}),
       note: values.note || null,
+      ...tracking,
     },
+  };
+}
+
+type TrackingRecord = Pick<
+  DebtRecord,
+  | 'first_installment_date'
+  | 'first_installment_number'
+  | 'total_installments'
+  | 'insurance_in_payment'
+  | 'original_amount'
+  | 'extra_from_installment'
+  | 'frech_points'
+  | 'frech_until_installment'
+>;
+
+const NO_TRACKING: TrackingRecord = {
+  first_installment_date: null,
+  first_installment_number: 1,
+  total_installments: null,
+  insurance_in_payment: 0,
+  original_amount: null,
+  extra_from_installment: null,
+  frech_points: null,
+  frech_until_installment: null,
+};
+
+/** Un número de cuota de 1 a 600; vacío es null y mal escrito, NaN. */
+function installment(text: string): number | null {
+  if (!text) return null;
+  return /^\d{1,3}$/.test(text) && Number(text) >= 1 && Number(text) <= 600
+    ? Number(text)
+    : Number.NaN;
+}
+
+/**
+ * Seguimiento cuota a cuota: sin fecha de la primera cuota no hay seguimiento y los demás campos se
+ * guardan vacíos. Con ella, la cuota (0 = calcularla) necesita el plazo, y el FRECH va con su
+ * cuota final (RN-095).
+ */
+function parseTracking(
+  values: DebtValues,
+  debt: { readonly acceptsExtra: boolean; readonly minPayment: number },
+  errors: Partial<Record<DebtField, DebtFieldError>>,
+): TrackingRecord {
+  if (!values.firstInstallmentDate) return NO_TRACKING;
+  if (!isoDateSchema.safeParse(values.firstInstallmentDate).success) {
+    errors.firstInstallmentDate = 'invalidDate';
+  }
+  const first = installment(values.firstInstallmentNumber) ?? 1;
+  if (Number.isNaN(first)) errors.firstInstallmentNumber = 'invalidInstallment';
+  const total = installment(values.totalInstallments);
+  if (total !== null && Number.isNaN(total)) errors.totalInstallments = 'invalidInstallment';
+  else if (total !== null && total < first) errors.totalInstallments = 'beforeFirst';
+  const optionalAmount = (field: 'insurance' | 'originalAmount') => {
+    const parsed = parseAmount(values[field]);
+    if (parsed !== null && Number.isNaN(parsed)) errors[field] = 'invalidAmount';
+    return parsed;
+  };
+  const insurance = optionalAmount('insurance') ?? 0;
+  const original = optionalAmount('originalAmount');
+  const extraFrom = installment(values.extraFromInstallment);
+  if (extraFrom !== null && Number.isNaN(extraFrom)) {
+    errors.extraFromInstallment = 'invalidInstallment';
+  } else if (extraFrom !== null && !debt.acceptsExtra) {
+    errors.extraFromInstallment = 'extraInstallmentWithoutExtra';
+  }
+  const points = parseDecimal(values.frechPoints.replace('%', ''), 2);
+  if (points !== null && (Number.isNaN(points) || points <= 0 || points > 100)) {
+    errors.frechPoints = 'invalidPoints';
+  }
+  const frechUntil = installment(values.frechUntil);
+  if (frechUntil !== null && Number.isNaN(frechUntil)) errors.frechUntil = 'invalidInstallment';
+  else if ((points === null) !== (frechUntil === null)) {
+    errors[points === null ? 'frechPoints' : 'frechUntil'] = 'frechIncomplete';
+  }
+  if (debt.minPayment === 0 && total === null && !errors.totalInstallments) {
+    errors.totalInstallments = 'paymentOrTerm';
+  }
+  return {
+    first_installment_date: values.firstInstallmentDate,
+    first_installment_number: first,
+    total_installments: total,
+    insurance_in_payment: insurance,
+    original_amount: original === 0 ? null : original,
+    extra_from_installment: extraFrom,
+    frech_points: points === null ? null : Math.round(points * 100) / 10_000,
+    frech_until_installment: frechUntil,
   };
 }
 

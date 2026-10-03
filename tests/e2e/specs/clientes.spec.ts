@@ -6,7 +6,7 @@ import { expect, test } from '@playwright/test';
 // supuestos, costo de vida, cifras de la ficha y aviso con el antes y después; en F3, flujo, fondo,
 // bolsillos y bancos, bolsillo de cada gasto, cobros, patrimonio, prueba de realidad y supuestos del
 // plan, con sus errores y el foco en el primero; después de F3, la lista de gastos típicos del país,
-// P-A06b; en F4, deudas con su plan de pago y el método) se verificó contra Supabase local.
+// P-A06b; en F4, deudas con su plan de pago y el método, y el seguimiento cuota a cuota) se verificó contra Supabase local.
 
 const CLIENT = '00000000-0000-4000-8000-000000000001';
 
@@ -42,6 +42,8 @@ for (const path of [
   `/clientes/${CLIENT}/deudas`,
   `/clientes/${CLIENT}/deudas/nuevo`,
   `/clientes/${CLIENT}/deudas/${CLIENT}`,
+  `/clientes/${CLIENT}/deudas/${CLIENT}/cuotas`,
+  `/clientes/${CLIENT}/deudas/${CLIENT}/cuotas/1`,
   `/clientes/${CLIENT}/cobros`,
   `/clientes/${CLIENT}/cobros/nuevo`,
   `/clientes/${CLIENT}/cobros/${CLIENT}`,

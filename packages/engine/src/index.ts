@@ -15,6 +15,7 @@ export * from './currency';
 export * from './budget';
 export * from './cashflow';
 export * from './cost-of-living';
+export * from './credits';
 export * from './debts';
 export * from './emergency-fund';
 export * from './excel';

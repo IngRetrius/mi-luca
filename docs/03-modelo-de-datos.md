@@ -365,17 +365,23 @@ create table public.debts (                -- F4, migración `debts` (punto 33)
   updated_at      timestamptz not null default now(),
   updated_by      uuid
 );
--- Con los créditos (seguimiento cuota a cuota) se agregan: plazo, primera cuota, seguros en la
--- cuota, FRECH, número de cuota desde el que acepta abonos y las marcas de pago:
+-- Seguimiento cuota a cuota (migración `credits`, punto 34): con `first_installment_date` la deuda
+-- está en seguimiento; `balance` es el saldo al inicio de la tabla y `min_payment` la cuota del banco
+-- con seguros (0 = calcularla con el plazo).
+--   first_installment_date date, first_installment_number int default 1, total_installments int,
+--   insurance_in_payment numeric default 0, original_amount numeric, extra_from_installment int,
+--   frech_points numeric (0,04 son 4 puntos), frech_until_installment int
 
 create table public.debt_installments (        -- marcas de pago del cliente (plantilla de créditos)
-  debt_id            uuid not null references public.debts(id) on delete cascade,
+  debt_id            uuid not null,              -- (debt_id, client_id) referencia a debts(id, client_id)
   client_id          uuid not null references public.clients(id) on delete cascade,
   installment_number int not null,
   paid               boolean not null default false,
-  paid_on            date,
+  paid_on            date,                       -- solo si está pagada
   custom_payment     numeric(18,2),             -- "cuota distinta este mes"
   extra_payment      numeric(18,2),             -- abono extra de ese mes
+  updated_at         timestamptz not null default now(),
+  updated_by         uuid,
   primary key (debt_id, installment_number)
 );
 
@@ -841,6 +847,7 @@ Las secciones 3 a 10 siguen siendo el diseño de referencia. Lo que ya existe co
 | `20261002180000_plan_deliveries.sql` | `plan_deliveries`: el plan entregado, inmutable y sellado con sha256; solo lo crea el asesor (punto 31) |
 | `20261002190000_income_scenarios_health_items.sql` | `incomes.lost_in_scenario` admite `ninguno`; `budget_items.is_health` y los disparadores que quitan el detalle de salud al retirar ese consentimiento (punto 32, ADR 0011) |
 | `20261003170000_debts.sql` | F4: `debts` con RLS, historial y guarda del orden manual; `case_settings.debt_method`; la tasa de una moneda con deudas no se borra (punto 33) |
+| `20261003200000_credits.sql` | F4: datos del seguimiento cuota a cuota en `debts` y `debt_installments` con RLS e historial (punto 34) |
 
 Diferencias con el borrador de las secciones 3.1, 4 y 5:
 
@@ -881,4 +888,5 @@ Diferencias con el borrador de las secciones 3.1, 4 y 5:
 31. **Planes entregados.** `plan_deliveries` guarda la entrada del motor (`inputs`), los nombres que muestran las pantallas (`labels`, hoy los de los bolsillos generales en el orden de los resultados), los resultados, las cifras clave, el control de calidad con las notas del asesor (`qc_report`), la versión del motor, el modo y los ids de los parámetros usados. La base pone `delivered_at`, `delivered_by` y `sha256` (de entradas, nombres, resultados y documentos) y rechaza todo cambio, también con la clave secreta. Sin privilegios de actualizar ni borrar: la entrega se va solo con el perfil. El historial registra la entrega sin copiar las fotos. Sin llave foránea en `delivered_by`, como el historial. `documents` y `pdf_path` quedan para F7.
 32. **Datos de salud (C20, ADR 0011).** `budget_items.is_health` lo marcan el cliente o el asesor. `private.health_consent_refused` mira el último consentimiento de datos de salud del cliente (sin consentimientos, como en un borrador, no se toca nada). Mientras esté retirado o negado, un disparador guarda los gastos de salud con categoría "Salud y bienestar", concepto "Salud" y sin nota; al retirarlo, otro disparador aplica eso a los existentes y quita la categoría, el concepto y la nota de sus filas del historial. El importe se conserva: es un dato económico que el plan necesita.
 33. **Deudas.** El inventario lo editan cliente y asesor (matriz de permisos); el lugar en el orden manual es criterio del asesor y tiene guarda propia, `private.guard_debt_advisor_columns()`, como el % a inversión de los cobros. El método de pago (`case_settings.debt_method`, avalancha por defecto) también es del asesor. Del borrador cambian: `payment` pasa a `min_payment`, obligatoria (la hoja Deudas la necesita para la simulación); `annual_rate` admite hasta 1.000 % por los préstamos informales; una deuda que no acepta abonos no tiene fecha desde la que los acepta (`extra_from_needs_extra`); `debt_strategy` se reemplaza por la columna de `case_settings`, y los datos de los créditos (`insurance_in_payment`, FRECH, plazo, `has_arrears`, `debt_installments`) se agregan cuando lleguen. La tasa de una moneda usada en deudas no se borra.
+34. **Créditos.** El seguimiento cuota a cuota vive en `debts` (no hay tabla aparte): con fecha de la primera cuota, el motor arma la tabla de la hoja "Crédito" de la plantilla de créditos y el diagnóstico usa su saldo y su cuota de hoy (ADR 0014). `debt_installments` guarda solo lo que el cliente marca: pagada con su fecha real, cuota distinta y abono extra; una marca vacía se borra. La llave compuesta `(debt_id, client_id)` impide marcar la deuda de otro cliente. Cliente y asesor la editan (matriz de permisos). Del borrador cambian: `has_arrears` no se guarda (las cuotas vencidas sin marcar las calcula el motor con la fecha de corte) y la fecha de pago exige la cuota pagada.
 Sin pendientes de F1 en el modelo de datos.

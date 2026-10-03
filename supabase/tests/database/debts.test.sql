@@ -22,6 +22,7 @@ insert into public.advisor_client_access (advisor_id, client_id) values
 
 set local role anon;
 select throws_ok('select * from public.debts', '42501', null, 'anon no lee deudas');
+select throws_ok('select * from public.debt_installments', '42501', null, 'anon no lee cuotas marcadas');
 reset role;
 
 -- Cliente Uno (dueño) --------------------------------------------------------------------------
@@ -73,11 +74,38 @@ select throws_ok(
   $$insert into public.case_settings (client_id, debt_method) values
     ('c1c1c1c1-0000-4000-8000-000000000001', 'bola_de_nieve')$$,
   '42501', null, 'El cliente no fija el método de pago');
+
+-- Seguimiento cuota a cuota: el cliente lo activa y marca sus cuotas.
+select lives_ok(
+  $$update public.debts set first_installment_date = '2026-08-15', total_installments = 36,
+      insurance_in_payment = 20000 where name = 'Tarjeta'$$,
+  'El cliente activa el seguimiento cuota a cuota de una deuda');
+select lives_ok(
+  $$insert into public.debt_installments (debt_id, client_id, installment_number, paid, paid_on) values
+    ((select id from public.debts where name = 'Tarjeta'), 'c1c1c1c1-0000-4000-8000-000000000001', 1, true,
+     '2026-08-14')$$,
+  'Y marca una cuota pagada con la fecha real');
+select lives_ok(
+  $$insert into public.debt_installments (debt_id, client_id, installment_number, extra_payment) values
+    ((select id from public.debts where name = 'Tarjeta'), 'c1c1c1c1-0000-4000-8000-000000000001', 3, 500000)$$,
+  'Y un abono extra en una cuota futura');
+select throws_ok(
+  $$insert into public.debt_installments (debt_id, client_id, installment_number, paid_on) values
+    ((select id from public.debts where name = 'Tarjeta'), 'c1c1c1c1-0000-4000-8000-000000000001', 4,
+     '2026-10-01')$$,
+  '23514', null, 'Una fecha de pago va con la cuota marcada como pagada');
+select throws_ok(
+  $$update public.debts set frech_points = 0.04 where name = 'Tarjeta'$$,
+  '23514', null, 'Los puntos del FRECH van con la cuota hasta la que cubre');
+select throws_ok(
+  $$update public.debts set extra_from_installment = 10 where name = 'Préstamo familiar'$$,
+  '23514', null, 'Una deuda que no acepta abonos no tiene cuota desde la que los acepta');
+
 select is(
   (select count(*)::int from public.audit_log
    where client_id = 'c1c1c1c1-0000-4000-8000-000000000001' and actor_role = 'cliente'
-     and table_name = 'debts'),
-  3, 'Cada cambio del cliente en sus deudas queda en el historial a su nombre');
+     and table_name in ('debts', 'debt_installments')),
+  6, 'Cada cambio del cliente en sus deudas y cuotas queda en el historial a su nombre');
 
 -- Asesora A ------------------------------------------------------------------------------------
 
@@ -121,6 +149,7 @@ select throws_ok(
 
 select set_config('request.jwt.claims', '{"sub":"22222222-2222-4222-8222-222222222222"}', true);
 select is((select count(*)::int from public.debts), 0, 'Un asesor sin acceso no ve las deudas');
+select is((select count(*)::int from public.debt_installments), 0, 'Ni las cuotas marcadas');
 select throws_ok(
   $$insert into public.debts (client_id, name, debt_type, currency, balance, annual_rate, min_payment) values
     ('c1c1c1c1-0000-4000-8000-000000000001', 'Intrusa', 'otro', 'COP', 1, 0.1, 1)$$,

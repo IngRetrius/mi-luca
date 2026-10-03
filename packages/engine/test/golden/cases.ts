@@ -12,6 +12,9 @@ import c2Inputs from './c2-espana/inputs.json' with { type: 'json' };
 import c4Case from './c4-deudas/case.json' with { type: 'json' };
 import c4Expected from './c4-deudas/expected.json' with { type: 'json' };
 import c4Inputs from './c4-deudas/inputs.json' with { type: 'json' };
+import c5Case from './c5-creditos/case.json' with { type: 'json' };
+import c5Expected from './c5-creditos/expected.json' with { type: 'json' };
+import c5Inputs from './c5-creditos/inputs.json' with { type: 'json' };
 import c6Case from './c6-ingreso-variable/case.json' with { type: 'json' };
 import c6Expected from './c6-ingreso-variable/expected.json' with { type: 'json' };
 import c6Inputs from './c6-ingreso-variable/inputs.json' with { type: 'json' };
@@ -51,6 +54,11 @@ export const goldenCases: readonly GoldenCase[] = [
   { ...c7Case, inputs: c7Inputs as Sheets, expected: c7Expected as Sheets },
   { ...c8Case, inputs: c8Inputs as Sheets, expected: c8Expected as Sheets },
   { ...c9Case, inputs: c9Inputs as Sheets, expected: c9Expected as Sheets },
+];
+
+/** Casos sobre la plantilla de créditos (`Plantilla_Creditos.xlsx`): otras hojas y otras pruebas. */
+export const creditCases: readonly GoldenCase[] = [
+  { ...c5Case, inputs: c5Inputs as Sheets, expected: c5Expected as Sheets },
 ];
 
 /** Valor de una celda del caso: primero en las entradas y luego en las fórmulas. Vacía es undefined. */

@@ -184,6 +184,18 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Crédito (seguimiento) | `credit` | Plantilla de créditos |
 | Cuota | `installment` | |
 | Subsidio FRECH | `frechSubsidy` | Cobertura de tasa del gobierno de Colombia |
+| Seguimiento cuota a cuota | `tracking`, `creditSchedule` | Hoja "Crédito" de la plantilla de créditos |
+| Tabla del crédito, cuota de la tabla | `CreditSchedule`, `Installment` | |
+| Marca de pago | `InstallmentMark` / `debt_installments` | Pagada, fecha real, cuota distinta, abono extra (RN-099) |
+| Cuota distinta este mes | `customPayment` / `custom_payment` | |
+| Fecha de la primera cuota, número de esa cuota | `firstInstallmentDate`, `firstInstallmentNumber` | |
+| Plazo total en cuotas | `totalInstallments` | |
+| Seguros incluidos en la cuota | `insurance` / `insurance_in_payment` | RN-096 |
+| Puntos y cuota final del FRECH | `frechPoints`, `frechUntilInstallment` | |
+| Saldo de hoy | `currentBalance` | Saldo menos el capital de las cuotas pagadas (`'Crédito 1'!I6`) |
+| Cuotas vencidas sin marcar | `overdueCount` | |
+| Lo que paga el cliente | `clientPays` | Pago menos el subsidio |
+| Puente hacia Deudas | `creditBridge` | `Panel!B95:H102` (ADR 0014) |
 | Meta | `goal` | |
 | Valor usado de la meta | `usedAmount` | El escrito o el de la calculadora de viaje, en moneda base (`Metas!F`) |
 | Ya ahorrado | `alreadySaved` | |

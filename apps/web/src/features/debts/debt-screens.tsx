@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { DIAGNOSIS_HORIZON_MONTHS, type DebtSimulation } from '@miluca/engine';
+import { DIAGNOSIS_HORIZON_MONTHS, type CreditSchedule, type DebtSimulation } from '@miluca/engine';
 import { COUNTRY_LOCALES, formatDate, formatMoney, formatPercent, messages } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
@@ -166,6 +166,50 @@ function DebtPlan({
   );
 }
 
+/** La línea de seguimiento de una deuda: próxima cuota o vencidas sin marcar, y sus cuotas. */
+function TrackingLine({
+  schedule,
+  href,
+  money,
+  date,
+}: {
+  schedule: CreditSchedule | null;
+  href: string;
+  money: (amount: number) => string;
+  date: (value: string) => string;
+}) {
+  if (!schedule) return null;
+  const tracking = text.tracking;
+  const summary =
+    schedule.overdueCount > 0 ? (
+      <StatusLabel
+        status="alert"
+        label={
+          schedule.overdueCount === 1
+            ? tracking.overdueOne
+            : tracking.overdue.replace('{count}', String(schedule.overdueCount))
+        }
+      />
+    ) : schedule.next ? (
+      tracking.next
+        .replace('{amount}', money(schedule.next.clientPays))
+        .replace('{date}', schedule.next.date ? date(schedule.next.date) : '—')
+    ) : (
+      tracking.paidOff
+    );
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-x-3 border-t border-border px-4 text-sm">
+      <span className="py-2">{summary}</span>
+      <Link
+        href={href}
+        className={`inline-flex min-h-12 items-center rounded-xl text-link hover:underline ${focusRing}`}
+      >
+        {tracking.link}
+      </Link>
+    </div>
+  );
+}
+
 /** Deudas (P-A10, pestaña Deudas; Mis datos del cliente): inventario, totales y plan de pago. */
 export async function DebtsScreen({ viewer, clientId }: { viewer: CaseEditor; clientId: string }) {
   const paths = debtPaths(viewer.role, clientId);
@@ -255,6 +299,12 @@ export async function DebtsScreen({ viewer, clientId }: { viewer: CaseEditor; cl
                     </span>
                   ) : null}
                 </Link>
+                <TrackingLine
+                  schedule={result.creditSchedules[index] ?? null}
+                  href={paths.installments(row.id)}
+                  money={(amount) => money(amount, row.currency)}
+                  date={(value) => formatDate(value, locale, 'UTC')}
+                />
               </li>
             ))}
           </ul>
@@ -264,7 +314,7 @@ export async function DebtsScreen({ viewer, clientId }: { viewer: CaseEditor; cl
               text={text.whatIf}
               illustrative={text.plan.illustrative}
               data={{
-                debts: computed.input.debts,
+                debts: result.debtPlan.debts,
                 names: debts.map((row) => row.name),
                 classification: result.debtPlan.classification,
                 plan: {
@@ -328,6 +378,7 @@ export async function DebtFormScreen({
       ) : null}
       <DebtForm
         text={text.form}
+        minPaymentTrackingHint={text.minPaymentHintTracking}
         types={text.types}
         initial={{
           name: row?.name ?? '',
@@ -341,6 +392,21 @@ export async function DebtFormScreen({
           extraFrom: row?.extra_from_date ?? '',
           manualOrder: row?.manual_order === null || !row ? '' : String(row.manual_order),
           note: row?.note ?? '',
+          firstInstallmentDate: row?.first_installment_date ?? '',
+          firstInstallmentNumber: row?.first_installment_date
+            ? String(row.first_installment_number)
+            : '',
+          totalInstallments: row?.total_installments ? String(row.total_installments) : '',
+          insurance: row?.first_installment_date
+            ? amountToText(row.insurance_in_payment, locale)
+            : '',
+          originalAmount: amountToText(row?.original_amount ?? null, locale),
+          extraFromInstallment: row?.extra_from_installment
+            ? String(row.extra_from_installment)
+            : '',
+          frechPoints:
+            row?.frech_points === null || !row ? '' : amountToText(row.frech_points * 100, locale),
+          frechUntil: row?.frech_until_installment ? String(row.frech_until_installment) : '',
         }}
         currencies={[client.base_currency, ...fxRates.map((rate) => rate.currency)]}
         advisor={viewer.role === 'advisor'}

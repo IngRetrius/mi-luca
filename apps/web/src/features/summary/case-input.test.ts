@@ -72,10 +72,67 @@ const rows: CaseRows = {
   realityCheck: null,
   assets: [],
   debts: [],
+  installments: [],
   thresholds: [{ key: 'tax.dependent_income_limit', value: 8000, unit: 'EUR' }],
 };
 
+const noTracking = {
+  first_installment_date: null,
+  first_installment_number: 1,
+  total_installments: null,
+  insurance_in_payment: 0,
+  original_amount: null,
+  extra_from_installment: null,
+  frech_points: null,
+  frech_until_installment: null,
+} as const;
+
 describe('toCaseInput', () => {
+  it('una deuda con fecha de la primera cuota va con su seguimiento y sus marcas', () => {
+    const { input } = toCaseInput(
+      {
+        ...rows,
+        debts: [
+          {
+            id: 'd1',
+            currency: 'COP',
+            balance: 1_200_000,
+            annual_rate: 0,
+            min_payment: 0,
+            accepts_extra: true,
+            extra_from_date: null,
+            manual_order: null,
+            ...noTracking,
+            first_installment_date: '2026-08-28',
+            total_installments: 12,
+          },
+        ],
+        installments: [
+          {
+            debt_id: 'd1',
+            installment_number: 1,
+            paid: true,
+            custom_payment: null,
+            extra_payment: null,
+          },
+          {
+            debt_id: 'otra',
+            installment_number: 1,
+            paid: true,
+            custom_payment: null,
+            extra_payment: null,
+          },
+        ],
+      },
+      '2026-10-01',
+    );
+    const tracking = input.debts[0]?.tracking;
+    expect(tracking?.credit).toMatchObject({ payment: null, totalInstallments: 12 });
+    expect(tracking?.marks).toEqual([
+      { installmentNumber: 1, paid: true, customPayment: null, extraPayment: null },
+    ]);
+  });
+
   it('las deudas van en su moneda y el método sale de los supuestos', () => {
     const { input } = toCaseInput(
       {
@@ -83,6 +140,7 @@ describe('toCaseInput', () => {
         settings: settings({ debt_method: 'bola_de_nieve' }),
         debts: [
           {
+            id: 'd1',
             currency: 'USD',
             balance: 1000,
             annual_rate: 0.3,
@@ -90,6 +148,7 @@ describe('toCaseInput', () => {
             accepts_extra: false,
             extra_from_date: null,
             manual_order: 2,
+            ...noTracking,
           },
         ],
       },

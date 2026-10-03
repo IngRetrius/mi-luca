@@ -58,7 +58,7 @@ gantt
 | F1 | 120 h, hasta mediados de enero de 2027 | Terminada salvo el alta con Google en un navegador real, el correo de la invitación (C14) y exportar y borrar en P-C11 (F7) |
 | F2 | 160 h, hasta comienzos de abril de 2027 | Terminada; queda el correo diario de cambios (C6), que espera a que la app envíe correos |
 | F3 | 160 h, hasta finales de junio de 2027 | Terminada en el código; falta el piloto con un caso real (criterio MVP) |
-| F4 | 160 h, hasta comienzos de septiembre de 2027 | En curso: motor de deudas del diagnóstico (casos C4 y C9), tabla de deudas y pantallas del asesor y del cliente |
+| F4 | 160 h, hasta comienzos de septiembre de 2027 | En curso: deudas del diagnóstico (C4 y C9), créditos cuota a cuota (C5) con marcas de pago, y sus pantallas |
 | F5 a F8 | 440 h | Sin empezar |
 
 Con el agente de código, F0 a F2 avanzaron mucho más rápido que la estimación a 14 horas por semana, que suponía empezar el 5 de octubre de 2026. **Supuesto:** el calendario de arriba se mantiene como techo y se reestima al cerrar F3, con lo que tome realmente una fase que mezcla motor, base de datos y pantallas. Las horas del resto no cambian hasta entonces.
@@ -239,7 +239,10 @@ Avance:
 - [x] Base de datos: `debts` con RLS, historial, guarda del orden manual y moneda en uso; `case_settings.debt_method` (migración `debts`, 24 pruebas pgTAP). La app calcula el caso con las deudas: la fila automática de cuotas del presupuesto ya no vale 0.
 - [x] Pantallas: Deudas del asesor (P-A10) con el método de pago y el plan, alta y edición con el orden manual; las deudas del cliente en Mis datos, que edita sin cambiar método ni orden, con el antes y después para el asesor. Verificado contra Supabase local (asesora en Chromium a 320 px con un error de validación y el foco en él, y los tres métodos; cliente en WebKit de iPhone) y revisado con `web-design-guidelines`.
 - [x] A pedido del asesor (03/10/2026): "¿Y si se abona más?" en Deudas, para asesor y cliente. `debtWhatIf` en el motor (`ENGINE_VERSION` 0.11.0, sin cambios en los resultados del plan) compara el plan con un pago adicional al mes y un abono único que entran por el mismo orden de pago y respetan las restricciones de abono: salida de cada deuda y de todas, meses que se adelantan, ahorro en intereses y salida de la deuda cara, con lo que queda libre en el flujo al lado. Se calcula en el navegador y no se guarda. Verificado contra Supabase local (asesora a 320 px, valor mal escrito, extra mayor que lo libre y abono único; cliente en iPhone) y revisado con `web-design-guidelines`.
-- [ ] `debt_installments` y los datos de los créditos con C5; P-C10 Créditos con marcas de pago.
+- [x] Créditos cuota a cuota: `creditSchedule` (360 cuotas con interés, seguros, FRECH, cuota calculada con el plazo, cuota distinta, abono extra y marcas de pago), sus simuladores y `creditBridge`, el puente hacia Deudas; `pmt` en `excel`, probado contra Excel. Caso de oro C5 sobre la plantilla de créditos: la hoja de cada uno de los ocho créditos y la sección 7 del Panel en verde. `ENGINE_VERSION` 0.12.0.
+- [x] Una deuda en seguimiento entra al diagnóstico con el saldo y la cuota de su tabla (ADR 0014). Migración `credits`: datos del crédito en `debts` y `debt_installments` con RLS e historial (310 pruebas pgTAP en total).
+- [x] Pantallas: sección "Seguimiento cuota a cuota" en el formulario de la deuda; cuotas de cada crédito (P-C10) para asesor y cliente, con "Marcar pagada", el detalle de cada cuota y la alerta de vencidas sin marcar; la próxima cuota o las vencidas en la lista de deudas. Verificado contra Supabase local (asesora a 320 px, cliente en iPhone) y revisado con `web-design-guidelines`.
+- [ ] Plan de pago de 360 meses y el resto del Panel de la plantilla de créditos (calendario del mes, hitos, deuda año por año) contra C5.
 
 ### F5. Inversión, patrimonio, metas y seguros (120 horas)
 

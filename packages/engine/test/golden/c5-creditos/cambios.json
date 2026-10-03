@@ -1,0 +1,582 @@
+[
+  {
+    "sheet": "Datos",
+    "cell": "C5",
+    "value": "Caso sintético C5"
+  },
+  {
+    "sheet": "Datos",
+    "cell": "C8",
+    "value": 4000
+  },
+  {
+    "sheet": "Datos",
+    "cell": "B11",
+    "value": "Salario en dólares"
+  },
+  {
+    "sheet": "Datos",
+    "cell": "C11",
+    "value": "USD"
+  },
+  {
+    "sheet": "Datos",
+    "cell": "D11",
+    "value": 2125
+  },
+  {
+    "sheet": "Datos",
+    "cell": "B12",
+    "value": "Arriendo"
+  },
+  {
+    "sheet": "Datos",
+    "cell": "D12",
+    "value": 1000000
+  },
+  {
+    "sheet": "Datos",
+    "cell": "C19",
+    "value": 2500000
+  },
+  {
+    "sheet": "Plan de pago",
+    "cell": "C6",
+    "value": 500000
+  },
+  {
+    "sheet": "Crédito 1",
+    "cell": "C6",
+    "value": "Tarjeta principal"
+  },
+  {
+    "sheet": "Crédito 1",
+    "cell": "C7",
+    "value": "Banco A"
+  },
+  {
+    "sheet": "Crédito 1",
+    "cell": "C8",
+    "value": "Tarjeta de crédito"
+  },
+  {
+    "sheet": "Crédito 1",
+    "cell": "C9",
+    "value": 6000000
+  },
+  {
+    "sheet": "Crédito 1",
+    "cell": "C10",
+    "date": "2026-08-15"
+  },
+  {
+    "sheet": "Crédito 1",
+    "cell": "C11",
+    "value": 1
+  },
+  {
+    "sheet": "Crédito 1",
+    "cell": "C12",
+    "value": 36
+  },
+  {
+    "sheet": "Crédito 1",
+    "cell": "C13",
+    "value": 0.28
+  },
+  {
+    "sheet": "Crédito 1",
+    "cell": "C15",
+    "value": 0
+  },
+  {
+    "sheet": "Crédito 1",
+    "cell": "C17",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "C6",
+    "value": "Vehículo"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "C7",
+    "value": "Banco B"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "C8",
+    "value": "Vehículo"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "C9",
+    "value": 38000000
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "C10",
+    "date": "2025-11-05"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "C11",
+    "value": 1
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "C12",
+    "value": 60
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "C13",
+    "value": 0.176
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "C14",
+    "value": 1250000
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "C15",
+    "value": 80000
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "C16",
+    "value": 45000000
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "C17",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 3",
+    "cell": "C6",
+    "value": "Obra en vivienda"
+  },
+  {
+    "sheet": "Crédito 3",
+    "cell": "C7",
+    "value": "Banco A"
+  },
+  {
+    "sheet": "Crédito 3",
+    "cell": "C8",
+    "value": "Libre inversión"
+  },
+  {
+    "sheet": "Crédito 3",
+    "cell": "C9",
+    "value": 25000000
+  },
+  {
+    "sheet": "Crédito 3",
+    "cell": "C10",
+    "date": "2026-10-10"
+  },
+  {
+    "sheet": "Crédito 3",
+    "cell": "C11",
+    "value": 1
+  },
+  {
+    "sheet": "Crédito 3",
+    "cell": "C12",
+    "value": 48
+  },
+  {
+    "sheet": "Crédito 3",
+    "cell": "C13",
+    "value": 0.142
+  },
+  {
+    "sheet": "Crédito 3",
+    "cell": "C15",
+    "value": 30000
+  },
+  {
+    "sheet": "Crédito 3",
+    "cell": "C17",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 4",
+    "cell": "C6",
+    "value": "Libre inversión largo plazo"
+  },
+  {
+    "sheet": "Crédito 4",
+    "cell": "C7",
+    "value": "Cooperativa C"
+  },
+  {
+    "sheet": "Crédito 4",
+    "cell": "C8",
+    "value": "Libre inversión"
+  },
+  {
+    "sheet": "Crédito 4",
+    "cell": "C9",
+    "value": 60000000
+  },
+  {
+    "sheet": "Crédito 4",
+    "cell": "C10",
+    "date": "2026-10-20"
+  },
+  {
+    "sheet": "Crédito 4",
+    "cell": "C11",
+    "value": 9
+  },
+  {
+    "sheet": "Crédito 4",
+    "cell": "C12",
+    "value": 240
+  },
+  {
+    "sheet": "Crédito 4",
+    "cell": "C13",
+    "value": 0.124
+  },
+  {
+    "sheet": "Crédito 4",
+    "cell": "C15",
+    "value": 0
+  },
+  {
+    "sheet": "Crédito 4",
+    "cell": "C17",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 4",
+    "cell": "C18",
+    "value": 15
+  },
+  {
+    "sheet": "Crédito 5",
+    "cell": "C6",
+    "value": "Hipotecario"
+  },
+  {
+    "sheet": "Crédito 5",
+    "cell": "C7",
+    "value": "Banco D"
+  },
+  {
+    "sheet": "Crédito 5",
+    "cell": "C8",
+    "value": "Hipotecario"
+  },
+  {
+    "sheet": "Crédito 5",
+    "cell": "C9",
+    "value": 180000000
+  },
+  {
+    "sheet": "Crédito 5",
+    "cell": "C10",
+    "date": "2026-10-01"
+  },
+  {
+    "sheet": "Crédito 5",
+    "cell": "C11",
+    "value": 37
+  },
+  {
+    "sheet": "Crédito 5",
+    "cell": "C12",
+    "value": 240
+  },
+  {
+    "sheet": "Crédito 5",
+    "cell": "C13",
+    "value": 0.103
+  },
+  {
+    "sheet": "Crédito 5",
+    "cell": "C15",
+    "value": 120000
+  },
+  {
+    "sheet": "Crédito 5",
+    "cell": "C16",
+    "value": 200000000
+  },
+  {
+    "sheet": "Crédito 5",
+    "cell": "C17",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 5",
+    "cell": "C18",
+    "value": 85
+  },
+  {
+    "sheet": "Crédito 5",
+    "cell": "C19",
+    "value": 0.04
+  },
+  {
+    "sheet": "Crédito 5",
+    "cell": "C20",
+    "value": 84
+  },
+  {
+    "sheet": "Crédito 6",
+    "cell": "C6",
+    "value": "Préstamo de un particular"
+  },
+  {
+    "sheet": "Crédito 6",
+    "cell": "C7",
+    "value": "Particular"
+  },
+  {
+    "sheet": "Crédito 6",
+    "cell": "C8",
+    "value": "Informal"
+  },
+  {
+    "sheet": "Crédito 6",
+    "cell": "C9",
+    "value": 12000000
+  },
+  {
+    "sheet": "Crédito 6",
+    "cell": "C10",
+    "date": "2026-10-30"
+  },
+  {
+    "sheet": "Crédito 6",
+    "cell": "C11",
+    "value": 1
+  },
+  {
+    "sheet": "Crédito 6",
+    "cell": "C13",
+    "value": 0.08
+  },
+  {
+    "sheet": "Crédito 6",
+    "cell": "C14",
+    "value": 500000
+  },
+  {
+    "sheet": "Crédito 6",
+    "cell": "C15",
+    "value": 0
+  },
+  {
+    "sheet": "Crédito 6",
+    "cell": "C17",
+    "value": "No"
+  },
+  {
+    "sheet": "Crédito 7",
+    "cell": "C6",
+    "value": "Préstamo familiar"
+  },
+  {
+    "sheet": "Crédito 7",
+    "cell": "C7",
+    "value": "Familia"
+  },
+  {
+    "sheet": "Crédito 7",
+    "cell": "C8",
+    "value": "Informal"
+  },
+  {
+    "sheet": "Crédito 7",
+    "cell": "C9",
+    "value": 10000000
+  },
+  {
+    "sheet": "Crédito 7",
+    "cell": "C10",
+    "date": "2026-10-05"
+  },
+  {
+    "sheet": "Crédito 7",
+    "cell": "C11",
+    "value": 1
+  },
+  {
+    "sheet": "Crédito 7",
+    "cell": "C13",
+    "value": 0
+  },
+  {
+    "sheet": "Crédito 7",
+    "cell": "C14",
+    "value": 250000
+  },
+  {
+    "sheet": "Crédito 7",
+    "cell": "C15",
+    "value": 0
+  },
+  {
+    "sheet": "Crédito 7",
+    "cell": "C17",
+    "value": "No"
+  },
+  {
+    "sheet": "Crédito 8",
+    "cell": "C6",
+    "value": "Tarjeta de almacén"
+  },
+  {
+    "sheet": "Crédito 8",
+    "cell": "C7",
+    "value": "Almacén E"
+  },
+  {
+    "sheet": "Crédito 8",
+    "cell": "C8",
+    "value": "Tarjeta de crédito"
+  },
+  {
+    "sheet": "Crédito 8",
+    "cell": "C9",
+    "value": 8000000
+  },
+  {
+    "sheet": "Crédito 8",
+    "cell": "C10",
+    "date": "2026-10-12"
+  },
+  {
+    "sheet": "Crédito 8",
+    "cell": "C11",
+    "value": 1
+  },
+  {
+    "sheet": "Crédito 8",
+    "cell": "C13",
+    "value": 0.28
+  },
+  {
+    "sheet": "Crédito 8",
+    "cell": "C14",
+    "value": 150000
+  },
+  {
+    "sheet": "Crédito 8",
+    "cell": "C15",
+    "value": 0
+  },
+  {
+    "sheet": "Crédito 8",
+    "cell": "C17",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 1",
+    "cell": "O27",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 1",
+    "cell": "P27",
+    "date": "2026-08-14"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "O27",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "O28",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "O29",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "O30",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "O31",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "O32",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "O33",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "O34",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "O35",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "O36",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "O37",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "O30",
+    "value": "Si"
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "I29",
+    "value": 1400000
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "J32",
+    "value": 2000000
+  },
+  {
+    "sheet": "Crédito 3",
+    "cell": "J30",
+    "value": 1000000
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "C22",
+    "value": 300000
+  },
+  {
+    "sheet": "Crédito 2",
+    "cell": "C23",
+    "value": 24
+  },
+  {
+    "sheet": "Crédito 8",
+    "cell": "C22",
+    "value": 100000
+  }
+]

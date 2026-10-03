@@ -5,7 +5,7 @@ import { expect, test } from '@playwright/test';
 // Supabase local (ver apps/web/README.md), igual que en F2 Mis datos con sus gastos, ingresos y
 // monedas, y la edición con "Así cambia tu plan" (P-C06 y P-C07). En F3, el inicio con el plan
 // entregado y Mi plan (P-C05) con la comparación con hoy. Después de F3, la lista de gastos típicos
-// del país (P-A06b en Mis gastos). En F4, las deudas del cliente con su plan de pago.
+// del país (P-A06b en Mis gastos). En F4, las deudas del cliente con su plan de pago y P-C10 (marcar cuotas pagadas).
 
 for (const path of [
   '/instalar',
@@ -34,6 +34,8 @@ for (const path of [
   '/mis-datos/deudas',
   '/mis-datos/deudas/nuevo',
   '/mis-datos/deudas/00000000-0000-4000-8000-000000000001',
+  '/mis-datos/deudas/00000000-0000-4000-8000-000000000001/cuotas',
+  '/mis-datos/deudas/00000000-0000-4000-8000-000000000001/cuotas/1',
   '/mis-datos/cobros',
   '/mis-datos/cobros/nuevo',
   '/mis-datos/patrimonio',

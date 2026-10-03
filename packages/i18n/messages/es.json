@@ -1411,8 +1411,28 @@
         "missingRate": "Falta la tasa de cambio de esa moneda. Regístrala en Monedas y vuelve a intentarlo.",
         "notAllowed": "No tienes permiso para cambiar este dato.",
         "notFound": "Esta deuda ya no existe.",
-        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
-      }
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos.",
+        "invalidInstallment": "Escribe un número entero de 1 a 600.",
+        "beforeFirst": "El plazo total no puede ser menor que el número de la primera cuota.",
+        "frechIncomplete": "Escribe los puntos del FRECH y la cuota hasta la que cubre, o deja los dos vacíos.",
+        "invalidPoints": "Escribe los puntos como un número mayor que 0, por ejemplo 4.",
+        "paymentOrTerm": "Con seguimiento, escribe la cuota o el plazo total para calcularla.",
+        "extraInstallmentWithoutExtra": "Una deuda que no acepta abonos no lleva cuota desde la que los acepta."
+      },
+      "trackingTitle": "Seguimiento cuota a cuota (opcional)",
+      "trackingIntro": "Con la fecha de la primera cuota, la app arma la tabla del crédito y el cliente marca cada cuota pagada. El saldo y la cuota del plan salen de esa tabla.",
+      "firstInstallmentDate": "Fecha de la primera cuota de la tabla",
+      "firstInstallmentDateHint": "La del extracto o la tabla del banco. Vacía, la deuda no tiene seguimiento.",
+      "firstInstallmentNumber": "Número de esa cuota",
+      "firstInstallmentNumberHint": "1 si el crédito es nuevo; si la tabla empieza en la cuota 37, va 37 y el saldo de ese momento.",
+      "totalInstallments": "Plazo total en cuotas (opcional)",
+      "totalInstallmentsHint": "Con el plazo, la cuota se calcula sola si la cuota queda en 0.",
+      "insurance": "Seguros y cargos incluidos en la cuota",
+      "originalAmount": "Monto original (opcional)",
+      "extraFromInstallment": "Acepta abonos desde la cuota N.º (opcional)",
+      "frechPoints": "FRECH: puntos de tasa que cubre el gobierno (opcional)",
+      "frechPointsHint": "Por ejemplo 4 si cubre 4 puntos de la tasa efectiva anual.",
+      "frechUntil": "FRECH: cobertura hasta la cuota N.º"
     },
     "client": {
       "back": "Mis datos",
@@ -1456,6 +1476,14 @@
       "rowSame": "Sin cambio",
       "rowPaidByLumpSum": "La salda el abono único",
       "termNote": "Al abonar a un crédito largo, conviene pedir a la entidad que reduzca el plazo y no la cuota, y preguntar si cobra por abonar."
+    },
+    "minPaymentHintTracking": "En seguimiento es la cuota del banco con seguros; 0 la calcula con el plazo.",
+    "tracking": {
+      "link": "Cuotas",
+      "next": "Próxima cuota: {amount} el {date}",
+      "overdue": "{count} cuotas vencidas sin marcar",
+      "overdueOne": "1 cuota vencida sin marcar",
+      "paidOff": "Pagado"
     }
   },
   "assets": {
@@ -1801,5 +1829,63 @@
       "usted": "Su asesor todavía no ha entregado su plan."
     },
     "back": "Inicio"
+  },
+  "credits": {
+    "title": "Cuotas de {name}",
+    "intro": "La tabla del crédito cuota a cuota. Cada cuota se marca como pagada con su fecha real; si se pagó una cuota distinta o un abono extra, se anota en esa cuota.",
+    "back": "Deudas",
+    "currentBalance": "Saldo de hoy",
+    "next": "Próxima cuota",
+    "nextValue": "N.º {number} · {amount} el {date}",
+    "none": "Ninguna",
+    "remaining": "Cuotas restantes",
+    "endDate": "Termina",
+    "exceeds": "Más de 360 cuotas",
+    "pendingInterest": "Intereses por pagar",
+    "pendingTotal": "Total por pagar",
+    "principalPaid": "Capital ya pagado",
+    "overdueAlert": "Hay cuotas vencidas sin marcar. Si ya se pagaron, hay que marcarlas; si no, conviene ponerse al día con la entidad.",
+    "paidOff": "Este crédito ya está pagado.",
+    "listTitle": "Cuotas",
+    "showAll": "Ver todas las cuotas",
+    "showSome": "Ver solo las cercanas",
+    "status": {
+      "pagada": "Pagada",
+      "vencida": "Vencida",
+      "proxima": "Próxima",
+      "pendiente": "Pendiente"
+    },
+    "row": "N.º {number} · {date}",
+    "paidOn": "Pagada el {date}",
+    "withExtra": "con abono de {amount}",
+    "markPaid": "Marcar pagada",
+    "marking": "Marcando…",
+    "edit": "Detalle",
+    "illustrative": "Las cifras son una guía calculada con la tasa y la cuota registradas: confirma saldos y cuotas con los extractos de la entidad.",
+    "markError": "No se pudo marcar la cuota. Intenta de nuevo en unos minutos.",
+    "notTracked": "Esta deuda no tiene seguimiento cuota a cuota. Actívalo en la deuda con la fecha de la primera cuota.",
+    "form": {
+      "title": "Cuota N.º {number}",
+      "summary": "Fecha {date} · cuota de {amount}",
+      "paid": "¿Está pagada?",
+      "paidYes": "Sí",
+      "paidNo": "No",
+      "paidOn": "Fecha real de pago (opcional)",
+      "customPayment": "Cuota distinta este mes (opcional)",
+      "customPaymentHint": "Si se pagó otro valor en lugar de la cuota.",
+      "extraPayment": "Abono extra (opcional)",
+      "extraPaymentHint": "Lo que se abonó además de la cuota. Conviene pedir que reduzca el plazo y no la cuota.",
+      "submit": "Guardar",
+      "submitting": "Guardando…",
+      "cancel": "Cancelar",
+      "errors": {
+        "invalidAmount": "Escribe un valor mayor que 0, solo con números.",
+        "invalidDate": "Escribe una fecha válida.",
+        "paidOnWithoutPaid": "La fecha de pago va con la cuota marcada como pagada.",
+        "notAllowed": "No tienes permiso para cambiar este dato.",
+        "notFound": "Esta cuota ya no existe.",
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      }
+    }
   }
 }

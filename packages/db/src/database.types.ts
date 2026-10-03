@@ -689,6 +689,57 @@ export type Database = {
           },
         ];
       };
+      debt_installments: {
+        Row: {
+          client_id: string;
+          custom_payment: number | null;
+          debt_id: string;
+          extra_payment: number | null;
+          installment_number: number;
+          paid: boolean;
+          paid_on: string | null;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          client_id: string;
+          custom_payment?: number | null;
+          debt_id: string;
+          extra_payment?: number | null;
+          installment_number: number;
+          paid?: boolean;
+          paid_on?: string | null;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          client_id?: string;
+          custom_payment?: number | null;
+          debt_id?: string;
+          extra_payment?: number | null;
+          installment_number?: number;
+          paid?: boolean;
+          paid_on?: string | null;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'debt_installments_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'debt_installments_debt_id_client_id_fkey';
+            columns: ['debt_id', 'client_id'];
+            isOneToOne: false;
+            referencedRelation: 'debts';
+            referencedColumns: ['id', 'client_id'];
+          },
+        ];
+      };
       debts: {
         Row: {
           accepts_extra: boolean;
@@ -698,13 +749,21 @@ export type Database = {
           currency: string;
           debt_type: string;
           extra_from_date: string | null;
+          extra_from_installment: number | null;
+          first_installment_date: string | null;
+          first_installment_number: number;
+          frech_points: number | null;
+          frech_until_installment: number | null;
           id: string;
+          insurance_in_payment: number;
           lender_name: string | null;
           manual_order: number | null;
           min_payment: number;
           name: string;
           note: string | null;
+          original_amount: number | null;
           sort_order: number;
+          total_installments: number | null;
           updated_at: string;
           updated_by: string | null;
         };
@@ -716,13 +775,21 @@ export type Database = {
           currency: string;
           debt_type: string;
           extra_from_date?: string | null;
+          extra_from_installment?: number | null;
+          first_installment_date?: string | null;
+          first_installment_number?: number;
+          frech_points?: number | null;
+          frech_until_installment?: number | null;
           id?: string;
+          insurance_in_payment?: number;
           lender_name?: string | null;
           manual_order?: number | null;
           min_payment: number;
           name: string;
           note?: string | null;
+          original_amount?: number | null;
           sort_order?: number;
+          total_installments?: number | null;
           updated_at?: string;
           updated_by?: string | null;
         };
@@ -734,13 +801,21 @@ export type Database = {
           currency?: string;
           debt_type?: string;
           extra_from_date?: string | null;
+          extra_from_installment?: number | null;
+          first_installment_date?: string | null;
+          first_installment_number?: number;
+          frech_points?: number | null;
+          frech_until_installment?: number | null;
           id?: string;
+          insurance_in_payment?: number;
           lender_name?: string | null;
           manual_order?: number | null;
           min_payment?: number;
           name?: string;
           note?: string | null;
+          original_amount?: number | null;
           sort_order?: number;
+          total_installments?: number | null;
           updated_at?: string;
           updated_by?: string | null;
         };

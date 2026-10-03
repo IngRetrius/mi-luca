@@ -1,0 +1,8 @@
+{
+  "case": "c5-creditos",
+  "template": "Plantilla_Creditos.xlsx",
+  "cutoffCell": "Datos!C7",
+  "cutoffDate": "2026-09-28",
+  "inputCells": 128,
+  "formulaCells": 57446
+}

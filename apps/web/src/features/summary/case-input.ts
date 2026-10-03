@@ -90,6 +90,7 @@ export interface CaseRows {
   readonly assets: readonly Pick<Row<'assets'>, 'asset_type' | 'currency' | 'value'>[];
   readonly debts: readonly Pick<
     Row<'debts'>,
+    | 'id'
     | 'currency'
     | 'balance'
     | 'annual_rate'
@@ -97,6 +98,19 @@ export interface CaseRows {
     | 'accepts_extra'
     | 'extra_from_date'
     | 'manual_order'
+    | 'first_installment_date'
+    | 'first_installment_number'
+    | 'total_installments'
+    | 'insurance_in_payment'
+    | 'original_amount'
+    | 'extra_from_installment'
+    | 'frech_points'
+    | 'frech_until_installment'
+  >[];
+  /** Marcas de pago de las deudas con seguimiento cuota a cuota. */
+  readonly installments: readonly Pick<
+    Row<'debt_installments'>,
+    'debt_id' | 'installment_number' | 'paid' | 'custom_payment' | 'extra_payment'
   >[];
   /** Los parámetros de `fiscal_threshold_keys`, vigentes en la fecha de corte. */
   readonly thresholds: readonly Pick<Row<'country_parameters'>, 'key' | 'value' | 'unit'>[];
@@ -209,14 +223,50 @@ function toReceivableInput(row: CaseRows['receivables'][number]): ReceivableInpu
   };
 }
 
-function toDebtInput(row: CaseRows['debts'][number]): DebtInput {
-  return {
+/**
+ * Una deuda del inventario. Con fecha de la primera cuota está en seguimiento cuota a cuota: el
+ * motor arma su tabla con las marcas del cliente y usa su saldo y su cuota de hoy (puente).
+ */
+function toDebtInput(
+  row: CaseRows['debts'][number],
+  installments: CaseRows['installments'],
+): DebtInput {
+  const debt: DebtInput = {
     balance: { amount: row.balance, currency: row.currency },
     minPayment: { amount: row.min_payment, currency: row.currency },
     annualRate: row.annual_rate,
     acceptsExtra: row.accepts_extra,
     extraFrom: row.extra_from_date,
     manualOrder: row.manual_order,
+  };
+  if (row.first_installment_date === null) return debt;
+  return {
+    ...debt,
+    tracking: {
+      credit: {
+        balance: row.balance,
+        firstInstallmentDate: row.first_installment_date,
+        firstInstallmentNumber: row.first_installment_number,
+        totalInstallments: row.total_installments,
+        annualRate: row.annual_rate,
+        // En seguimiento, la cuota es la del banco con seguros; 0 la calcula con el plazo.
+        payment: row.min_payment > 0 ? row.min_payment : null,
+        insurance: row.insurance_in_payment,
+        originalAmount: row.original_amount,
+        acceptsExtra: row.accepts_extra,
+        extraFromInstallment: row.extra_from_installment,
+        frechPoints: row.frech_points,
+        frechUntilInstallment: row.frech_until_installment,
+      },
+      marks: installments
+        .filter((mark) => mark.debt_id === row.id)
+        .map((mark) => ({
+          installmentNumber: mark.installment_number,
+          paid: mark.paid,
+          customPayment: mark.custom_payment,
+          extraPayment: mark.extra_payment,
+        })),
+    },
   };
 }
 
@@ -299,7 +349,7 @@ export function toCaseInput(rows: CaseRows, today: IsoDate): CaseForEngine {
       goals: [],
       insurances: [],
       insurancePocket: null,
-      debts: rows.debts.map(toDebtInput),
+      debts: rows.debts.map((row) => toDebtInput(row, rows.installments)),
       debtMethod: debtMethodSchema.parse(rows.settings?.debt_method ?? 'avalancha'),
       receivables: rows.receivables.map(toReceivableInput),
       realityCheck: {

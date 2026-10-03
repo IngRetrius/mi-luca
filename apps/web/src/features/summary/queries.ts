@@ -28,6 +28,7 @@ export interface LoadedCaseRows extends CaseRows {
   readonly realityCheck: Row<'reality_check'> | null;
   readonly assets: readonly Row<'assets'>[];
   readonly debts: readonly Row<'debts'>[];
+  readonly installments: readonly Row<'debt_installments'>[];
   /** Ids de las versiones de `country_parameters` que usó el cálculo: van en el plan entregado. */
   readonly parameterIds: readonly string[];
 }
@@ -64,6 +65,7 @@ export async function loadCaseRows(clientId: string): Promise<LoadedCaseRows | n
     realityCheck,
     assets,
     debts,
+    installments,
   ] = await Promise.all([
     supabase
       .from('clients')
@@ -112,13 +114,18 @@ export async function loadCaseRows(clientId: string): Promise<LoadedCaseRows | n
     supabase.from('reality_check').select('*').eq('client_id', clientId).maybeSingle(),
     supabase.from('assets').select('*').eq('client_id', clientId).order('sort_order').order('name'),
     supabase.from('debts').select('*').eq('client_id', clientId).order('sort_order').order('name'),
+    supabase
+      .from('debt_installments')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('installment_number'),
   ]);
   if (client.error || settings.error || fxRates.error || incomes.error) return null;
   if (socialSecurity.error || budgetItems.error || !client.data) return null;
   if (banks.error || pockets.error || receivables.error || realityCheck.error || assets.error) {
     return null;
   }
-  if (debts.error) return null;
+  if (debts.error || installments.error) return null;
   const profile = client.data;
 
   // Umbrales que el asesor marcó para este caso y parámetros de la metodología, vigentes en su
@@ -162,6 +169,7 @@ export async function loadCaseRows(clientId: string): Promise<LoadedCaseRows | n
     realityCheck: realityCheck.data,
     assets: assets.data,
     debts: debts.data,
+    installments: installments.data,
     methodology: toMethodology(
       Object.fromEntries(
         methodologyEntries.map(([name], index) => [name, methodology[index]?.data?.value]),

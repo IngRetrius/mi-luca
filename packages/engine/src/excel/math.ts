@@ -22,3 +22,12 @@ export function nper(rate: number, payment: number, presentValue: number): numbe
   if (!(ratio > 0) || !Number.isFinite(ratio)) return null;
   return Math.log(ratio) / Math.log(1 + rate);
 }
+
+/**
+ * Pago periódico que salda `presentValue` en `periods` pagos iguales al final de cada periodo,
+ * como `PMT(tasa, periodos, -valor_actual)` con valor futuro 0. Positivo para un saldo positivo.
+ */
+export function pmt(rate: number, periods: number, presentValue: number): number {
+  if (rate === 0) return presentValue / periods;
+  return (presentValue * rate) / (1 - (1 + rate) ** -periods);
+}

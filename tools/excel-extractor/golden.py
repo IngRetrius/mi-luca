@@ -39,6 +39,7 @@ EXCEL_ERRORS = {"#DIV/0!", "#N/A", "#NAME?", "#NULL!", "#NUM!", "#REF!", "#VALUE
 # por cliente (la moneda base de Listas!M2 cambió a EUR en el caso de España, hallazgo H-15).
 TEMPLATES = {
     "Plantilla_Asesoria_Financiera.xlsx": {"cutoff": "Supuestos!C12", "extra_inputs": ["Listas!M2"]},
+    "Plantilla_Creditos.xlsx": {"cutoff": "Datos!C7", "extra_inputs": []},
 }
 NS = {
     "m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",

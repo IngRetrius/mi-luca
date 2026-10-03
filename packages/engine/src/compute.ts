@@ -15,6 +15,7 @@ import {
   type CostOfLivingResult,
   type FiscalThreshold,
 } from './cost-of-living';
+import { creditBridge, creditSchedule, type CreditSchedule } from './credits';
 import { toBaseCompat, type FxContext } from './currency';
 import {
   classifyDebts,
@@ -172,8 +173,12 @@ export interface CaseResult {
   readonly insurance: InsuranceResult;
   readonly debts: DebtTotals;
   readonly expensiveDebt: ExpensiveDebt;
+  /** Tabla de cada deuda con seguimiento cuota a cuota, en el orden de `debts`; null sin él. */
+  readonly creditSchedules: readonly (CreditSchedule | null)[];
   /** Plan de pago de deudas: orden y simulación mes a mes con el extra del flujo y el abono único. */
   readonly debtPlan: {
+    /** Las deudas con que se calculó el plan: las de seguimiento, con su saldo y cuota de hoy. */
+    readonly debts: readonly DebtInput[];
     readonly classification: DebtClassification;
     readonly simulation: DebtSimulation;
   };
@@ -216,8 +221,26 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
 
   const incomes = computeIncomes(input.incomes, fx);
   const ssPayments = socialSecurityPayments(input.socialSecurityMonths);
-  const debts = debtTotals(input.debts, fx);
-  const expensive = expensiveDebt(input.debts, parameters.expensiveDebtThreshold, fx);
+  // Con seguimiento cuota a cuota, el diagnóstico usa el saldo y la cuota de hoy (puente, Panel 7).
+  const creditSchedules = input.debts.map((debt) =>
+    debt.tracking
+      ? creditSchedule(debt.tracking.credit, debt.tracking.marks, input.cutoffDate)
+      : null,
+  );
+  const debtInputs: DebtInput[] = input.debts.map((debt, index) => {
+    const schedule = creditSchedules[index];
+    if (!schedule) return debt;
+    const bridge = creditBridge(schedule);
+    const { currency } = debt.balance;
+    return {
+      ...debt,
+      balance: { amount: bridge.balance, currency },
+      minPayment: { amount: bridge.minPayment ?? 0, currency },
+      extraFrom: bridge.extraFrom ?? debt.extraFrom,
+    };
+  });
+  const debts = debtTotals(debtInputs, fx);
+  const expensive = expensiveDebt(debtInputs, parameters.expensiveDebtThreshold, fx);
   const goals = computeGoals(input.goals, input.cutoffDate, fx);
   const insurance = computeInsurance(input.insurances, fx);
 
@@ -316,9 +339,9 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
   });
 
   // El extra mensual es el promedio de lo que el flujo manda a deudas en el año (H-04).
-  const classification = classifyDebts(input.debts, input.debtMethod, fx);
+  const classification = classifyDebts(debtInputs, input.debtMethod, fx);
   const simulation = simulateDebts(
-    input.debts,
+    debtInputs,
     classification,
     {
       startMonth: debtPlanStart(input.cutoffDate),
@@ -343,7 +366,8 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
     insurance,
     debts,
     expensiveDebt: expensive,
-    debtPlan: { classification, simulation },
+    creditSchedules,
+    debtPlan: { debts: debtInputs, classification, simulation },
     budgetItems,
     budget,
     costOfLiving,

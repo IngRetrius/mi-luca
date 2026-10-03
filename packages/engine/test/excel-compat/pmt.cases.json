@@ -1,0 +1,51 @@
+[
+  {
+    "id": "vehiculo-60",
+    "annualRate": 0.176,
+    "periods": 60,
+    "balance": 38000000,
+    "formula": "=PMT(((1+0.176)^(1/12)-1),60,-38000000)"
+  },
+  {
+    "id": "hipotecario-240",
+    "annualRate": 0.103,
+    "periods": 240,
+    "balance": 180000000,
+    "formula": "=PMT(((1+0.103)^(1/12)-1),240,-180000000)"
+  },
+  {
+    "id": "libre-232",
+    "annualRate": 0.124,
+    "periods": 232,
+    "balance": 60000000,
+    "formula": "=PMT(((1+0.124)^(1/12)-1),232,-60000000)"
+  },
+  {
+    "id": "una-cuota",
+    "annualRate": 0.2,
+    "periods": 1,
+    "balance": 1000000,
+    "formula": "=PMT(((1+0.2)^(1/12)-1),1,-1000000)"
+  },
+  {
+    "id": "tasa-muy-baja",
+    "annualRate": 0.0001,
+    "periods": 12,
+    "balance": 1200000,
+    "formula": "=PMT(((1+0.0001)^(1/12)-1),12,-1200000)"
+  },
+  {
+    "id": "tasa-alta",
+    "annualRate": 1.5,
+    "periods": 24,
+    "balance": 5000000,
+    "formula": "=PMT(((1+1.5)^(1/12)-1),24,-5000000)"
+  },
+  {
+    "id": "tasa-cero",
+    "annualRate": 0,
+    "periods": 10,
+    "balance": 1000000,
+    "formula": "=PMT(0,10,-1000000)"
+  }
+]
