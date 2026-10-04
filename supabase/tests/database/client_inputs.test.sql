@@ -129,7 +129,7 @@ select throws_ok(
     ('c1c1c1c1-0000-4000-8000-000000000001', '{tax.dependent_income_limit}')$$,
   '42501', null, 'Ni marca umbrales fiscales');
 select throws_ok(
-  $$insert into public.case_settings (client_id, pension_enabled) values
+  $$insert into public.case_settings (client_id, compatibility_mode) values
     ('c1c1c1c1-0000-4000-8000-000000000001', true)$$,
   '42501', null, 'El cliente no escribe los supuestos del caso');
 
@@ -165,11 +165,8 @@ select lives_ok(
   $$insert into public.case_settings (client_id, cutoff_date) values
     ('c1c1c1c1-0000-4000-8000-000000000001', '2026-09-28')$$,
   'La asesora fija la fecha de corte');
-select is((select pension_enabled from public.case_settings where client_id = 'c1c1c1c1-0000-4000-8000-000000000001'),
-  false, 'El análisis de pensión empieza apagado, sea cual sea el país');
-select lives_ok(
-  $$update public.case_settings set pension_enabled = true where client_id = 'c1c1c1c1-0000-4000-8000-000000000001'$$,
-  'La asesora lo activa para este cliente');
+select is((select compatibility_mode from public.case_settings where client_id = 'c1c1c1c1-0000-4000-8000-000000000001'),
+  false, 'El caso empieza en modo nativo');
 select lives_ok(
   $$update public.case_settings set fiscal_threshold_keys = '{tax.dependent_income_limit}'
     where client_id = 'c1c1c1c1-0000-4000-8000-000000000001'$$,

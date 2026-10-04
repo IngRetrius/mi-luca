@@ -549,7 +549,8 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
   });
 
   const { retirementAge } = parameters;
-  // La pensión llega en F6: hasta entonces no hay brecha ni semanas aseguradas.
+  // La pensión no se analiza en la plataforma (ADR 0016): como la plantilla con la hoja Pensión
+  // vacía, no hay brecha y ninguna pensión está asegurada.
   const profile = riskProfile(
     input.riskProfile.answers,
     {

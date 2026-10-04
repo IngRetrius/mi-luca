@@ -38,11 +38,14 @@ export interface RiskCapacityInput {
   readonly variableIncome: boolean;
   /** @excel Inversión!C26 */
   readonly dependentsWithoutLifeInsurance: boolean;
-  /** @excel Inversión!C27 (hoja Pensión) */
+  /**
+   * Siempre false: la pensión no se analiza en la plataforma (ADR 0016); se conserva para
+   * reproducir la plantilla. @excel Inversión!C27 (hoja Pensión)
+   */
   readonly pensionGap: boolean;
   /** @excel Inversión!C28 */
   readonly emergencyFundIncomplete: boolean;
-  /** @excel Inversión!C29 */
+  /** Menos de 5 años para el retiro; ninguna pensión cuenta como asegurada. @excel Inversión!C29 */
   readonly nearRetirementWithoutPension: boolean;
 }
 

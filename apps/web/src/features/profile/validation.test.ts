@@ -12,7 +12,6 @@ function form(fields: Record<string, string | string[]>): FormData {
 
 const options = {
   today: '2026-10-01',
-  pensionAvailable: true,
   availableThresholds: ['tax.dependent_income_limit'],
 };
 
@@ -27,7 +26,6 @@ describe('parseProfile', () => {
         cutoffDate: '2026-09-28',
         flowYear: '2027',
         mode: 'compatible',
-        pensionEnabled: 'on',
         threshold: ['tax.dependent_income_limit', 'inventado'],
       }),
       options,
@@ -43,7 +41,6 @@ describe('parseProfile', () => {
         cutoff_date: '2026-09-28',
         flow_year: 2027,
         compatibility_mode: true,
-        pension_enabled: true,
         fiscal_threshold_keys: ['tax.dependent_income_limit'],
       },
     });
@@ -57,18 +54,9 @@ describe('parseProfile', () => {
         cutoff_date: null,
         flow_year: null,
         compatibility_mode: false,
-        pension_enabled: false,
         fiscal_threshold_keys: [],
       },
     });
-  });
-
-  it('sin módulo de pensión en el país, el análisis queda apagado', () => {
-    const parsed = parseProfile(form({ pensionEnabled: 'on' }), {
-      ...options,
-      pensionAvailable: false,
-    });
-    expect(parsed.ok && parsed.record.settings.pension_enabled).toBe(false);
   });
 
   it('valida fechas, personas a cargo y año', () => {

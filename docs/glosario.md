@@ -19,7 +19,7 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Acceso del asesor | `advisor_client_access` | Activo o revocado; lo controla el cliente |
 | Revocar, restablecer | `revoked`, `active` | Estados del acceso del asesor |
 | Tratamiento | `form_of_address` | tu, usted |
-| País | `country` | Catálogo `countries` con moneda, formato y módulo de pensión |
+| País | `country` | Catálogo `countries` con moneda y formato |
 | Gancho de registro | `before_user_created` | Cierra el registro público; solo pasan las altas con Google |
 | Consentimiento | `consent` | Fila de `consents`: qué texto legal exacto aceptó (o no) el cliente, cuándo y desde qué navegador |
 | Texto legal | `legal_text` | Fila de `legal_texts`: tipo, país, versión y cuerpo con su sha256. No cambia una vez publicado |
@@ -240,7 +240,7 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Si su inversión bajara 15 % | `dropReaction` / `drop_reaction` | venderia, esperaria, invertiria_mas |
 | Experiencia invirtiendo | `experience` | ninguna, algo, bastante |
 | Plazo en que podría necesitar el dinero | `horizon` / `MoneyHorizon` | menos_3, de_3_a_7, mas_7 |
-| Condiciones de capacidad | `RiskCapacityInput` | variableIncome, dependentsWithoutLifeInsurance, pensionGap, emergencyFundIncomplete, nearRetirementWithoutPension |
+| Condiciones de capacidad | `RiskCapacityInput` | variableIncome, dependentsWithoutLifeInsurance, pensionGap (siempre falso, ADR 0016), emergencyFundIncomplete, nearRetirementWithoutPension (menos de 5 años para el retiro) |
 | Perfil final | `final` / `finalLevel` | El menor entre disposición y capacidad |
 | Disposición | `riskWillingness` | Lo que quiere asumir |
 | Capacidad | `riskCapacity` | Lo que puede asumir |
@@ -254,12 +254,8 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Bajada cerca del retiro, piso | `glideStep`, `growthFloor` | `Supuestos!C30:C31` |
 | Inversión, metas, seguros (rutas) | `/inversion`, `/inversion/perfil`, `/inversion/supuestos`, `/metas`, `/seguros`, `/seguros/supuestos` | Dentro de `/clientes/[id]`; las del cliente en `/mis-datos` sin los supuestos |
 | Escribir los supuestos del caso | `writeCaseSettings` | `server/case-settings.ts` |
-| Pensión | `pension` | |
-| Analizar la pensión de este cliente | `pension_enabled` / `pensionEnabled` | Apagado por defecto; lo activa el asesor (RN-120) |
-| Semanas cotizadas | `contributedWeeks` | |
-| IBL | `ibl` | Ingreso base de liquidación (Colombia) |
-| Mesada | `monthlyPension` | |
-| Brecha pensional | `pensionGap` | |
+| Pensión | `pension` | Solo como tipo de ingreso y tipo de cliente; la plataforma no la analiza (ADR 0016) |
+| Brecha pensional | `pensionGap` | Condición de capacidad de la plantilla; siempre falsa (ADR 0016) |
 | Resumen | `summary` | |
 | Semáforo: bien, atención, alerta | `ok`, `warning`, `alert` | |
 | Pendientes | `pendingItems` | |

@@ -80,7 +80,7 @@ El plan Hobby es solo para uso personal no comercial: antes de que un cliente re
 | `/clientes/[id]/presupuesto/lista` | P-A06b: gastos típicos del país del cliente por categoría. Lo marcado se guarda de una vez con lo que sugiere el catálogo (`features/budget/catalog.ts`); los bolsillos sugeridos que faltan se crean en la moneda base. Con el presupuesto vacío es la acción principal |
 | (en `/presupuesto/lista`) | Asistente con IA, solo para el asesor (ADR 0012): la acción `proposeCapture` manda las notas y la lista del país a Claude Haiku 4.5 (`features/assistant/claude.ts`, `server-only`) y devuelve qué marcar; nada se guarda. Necesita `ANTHROPIC_API_KEY` en el servidor; sin ella avisa que no está configurado |
 | `/clientes/[id]/presupuesto/nuevo`, `/[itemId]` | Alta, edición y borrado (con confirmación) de una partida. El asesor escribe además el nivel básico y la marca de propuesto. Debajo, "Así cambia el plan": el motor recalcula en el navegador mientras se escribe |
-| `/clientes/[id]/perfil` | P-A04 bloque A y P-A05: fecha de nacimiento, sexo, personas a cargo, tipo de cliente con sus reglas y meses de fondo sugeridos, y los supuestos del caso: fecha de corte, año del flujo, modo de cálculo, análisis de pensión y umbrales fiscales que aplican |
+| `/clientes/[id]/perfil` | P-A04 bloque A y P-A05: fecha de nacimiento, sexo, personas a cargo, tipo de cliente con sus reglas y meses de fondo sugeridos, y los supuestos del caso: fecha de corte, año del flujo, modo de cálculo y umbrales fiscales que aplican |
 | `/clientes/[id]/ingresos` | P-A04 bloque B: ingresos con su total anual, más los meses con seguridad social y el ingreso base. Alta y edición en `/nuevo` y `/[incomeId]`, con pagos por mes y "Así cambia el plan"; `/seguridad-social` y `/ingreso-base` (calculadora que recalcula mientras se escribe) |
 | `/clientes/[id]/costo-de-vida` | P-A11: tres niveles al mes y al año, sin temporales, por pagador, umbrales marcados y cada partida con su enlace al presupuesto para editar el nivel básico |
 | `/clientes/[id]/monedas` | P-A19: tasa que recibe el cliente por cada moneda, con fecha y nota; alta en `/nueva` y edición o borrado en `/[currency]`. Si la moneda está en uso, borrar vuelve con el aviso (`?error=inUse`) |
@@ -189,7 +189,7 @@ El archivo `src/proxy.ts` (antes `middleware.ts` en Next.js 15) refresca la sesi
 | `pockets` | Hojas Bolsillos y Listas: bancos y bolsillos |
 | `emergency-fund` | Hoja Fondo emergencia |
 | `debts`, `credits` | Hoja Deudas y plantilla de créditos |
-| `goals`, `insurance`, `net-worth`, `investment`, `pension` | Hojas Metas, Seguros, Patrimonio, Inversión y Pensión |
+| `goals`, `insurance`, `net-worth`, `investment` | Hojas Metas, Seguros, Patrimonio e Inversión |
 | `summary` | Hoja Resumen: indicadores, semáforo y pendientes |
 | `reality-check`, `receivables` | Supuestos, filas 35 a 50 |
 | `monthly-control`, `action-plan` | Hojas Control mensual y Plan de acción |

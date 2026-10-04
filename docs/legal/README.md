@@ -55,7 +55,7 @@ Principio: describir lo que la plataforma hace (planificar, organizar, explicar)
 **Remisiones:**
 
 > Este punto es tributario: confírmalo con tu contador (Colombia) o con tu gestor o asesor fiscal (España).
-> Esta estimación de pensión es orientativa: pide el cálculo oficial a tu administradora de pensiones (Colombia) o a la Seguridad Social (España).
+> Este tema es pensional: confírmalo con tu administradora de pensiones (Colombia) o con la Seguridad Social (España). La plataforma no estima pensiones (ADR 0016).
 > Este tema es legal o sucesoral: consúltalo con un abogado o una notaría.
 
 **Expresiones que la interfaz no usa** (el control de calidad las busca en la carta y las notas): "te recomendamos invertir en", "compra", "vende", "el mejor fondo", "rentabilidad asegurada", "sin riesgo", "asesoría de inversión", nombres de productos, fondos, acciones, ETF o entidades.

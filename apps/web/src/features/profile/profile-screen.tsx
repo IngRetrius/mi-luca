@@ -63,7 +63,6 @@ export async function ProfileScreen({ clientId }: { clientId: string }) {
     cutoffDate: settings?.cutoff_date ?? '',
     flowYear: settings?.flow_year ? String(settings.flow_year) : '',
     mode: settings?.compatibility_mode ? 'compatible' : 'native',
-    pensionEnabled: settings?.pension_enabled ?? false,
     thresholds: settings?.fiscal_threshold_keys ?? [],
   };
 
@@ -74,7 +73,6 @@ export async function ProfileScreen({ clientId }: { clientId: string }) {
         text={text}
         initial={initial}
         countryName={data.countryName}
-        pensionAvailable={data.pensionAvailable}
         thresholds={thresholds}
         emergencyMonths={data.emergencyMonths}
         action={saveProfile.bind(null, clientId)}

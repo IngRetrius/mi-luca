@@ -305,6 +305,8 @@ Numeradas para citarlas desde el código, las pruebas y los ADR. "P" indica secc
 
 ### 4.13 Pensión
 
+> **Fuera del alcance desde el 04/10/2026 (ADR 0016).** La plataforma no analiza la pensión: las reglas RN-120 a RN-122 y los hallazgos H-08 y H-19 quedan como registro de la plantilla. Los temas de pensión se remiten a la administradora o a la Seguridad Social.
+
 - **RN-120** El país decide qué reglas de pensión se usan; el asesor decide si se analiza la pensión de cada cliente. Está apagado por defecto (decisión del 01/10/2026): un cliente de Colombia no tiene análisis pensional hasta que el asesor lo activa.
 - **RN-121** Colombia: reglas de la sección 3.2; resultados "confirmar con la administradora" (P8.6).
 - **RN-122** España: módulo informativo en el MVP (edad ordinaria de referencia como parámetro, remisión a la Seguridad Social), sin estimación de pensión (ver pregunta abierta).

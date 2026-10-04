@@ -63,7 +63,7 @@ La fase 8 del protocolo (llenar el Excel) desaparece: los datos viven en la plat
 | 4. Aclaraciones | P-A07 | Ve los campos "por confirmar" y el banco de preguntas; copia un mensaje numerado para enviar al cliente |
 | 5. Prueba de realidad | P-A08 | Escribe saldos de hace N meses y de hoy; ve el estado y el % a inversión que resulta |
 | 6. Diagnóstico | P-A09 | Revisa indicadores con semáforo; escribe fortalezas y puntos de atención |
-| 7. Análisis | P-A10, P-A11 | Flujo, bolsillos, fondo, deudas, metas, seguros, pensión, inversión, cobros, costo de vida, lista para contador y abogado |
+| 7. Análisis | P-A10, P-A11 | Flujo, bolsillos, fondo, deudas, metas, seguros, inversión, cobros, costo de vida, lista para contador y abogado (la pensión se remite al profesional, ADR 0016) |
 | 9. Control de calidad | P-A12 | Ve bloqueantes y advertencias; justifica advertencias con nota |
 | 10. Carta de cierre | P-A13 | Redacta notas y carta con cifras enlazadas; previsualiza como el cliente |
 | Entrega | P-A14 | Congela la versión, genera el PDF y avisa al cliente |
@@ -109,7 +109,7 @@ flowchart TD
 | P-C03 | Agregar a inicio | Instrucciones según el sistema: en iPhone, Compartir y luego "Agregar a inicio"; en Android, botón "Instalar" (evento `beforeinstallprompt`). Opción "Ahora no" |
 | P-C04 | Inicio | Saludo con el tratamiento elegido; 4 cifras clave con semáforo; próximas 3 tareas; aviso si el asesor publicó algo nuevo; botón "Registrar el gasto de este mes" |
 | P-C05 | Mi plan | Plan entregado vigente por secciones plegables (estructura de la carta, sección 11 del protocolo); selector de versión; botón "Comparar con hoy"; descargar PDF. Incluye los supuestos con que se calculó, en solo lectura, cada uno con su ayuda (la misma vista la ve el asesor) |
-| P-C06 | Mis datos | Lista de módulos editables con su total (Ingresos, Gastos, Bancos y bolsillos, Deudas, Metas, Patrimonio, Inversiones, Perfil de riesgo, Pensión, Seguros) |
+| P-C06 | Mis datos | Lista de módulos editables con su total (Ingresos, Gastos, Bancos y bolsillos, Deudas, Metas, Patrimonio, Inversiones, Perfil de riesgo, Seguros) |
 | P-C07 | Editar un dato | Hoja inferior con el formulario; debajo, "Así cambia tu plan" con las cifras clave antes y después, calculadas en el teléfono |
 | P-C08 | Control mensual | Selector de mes; por categoría: presupuesto, campo del gasto real, barra de desviación; total del mes |
 | P-C09 | Tareas | Lista del plan de acción; tocar para marcar hecha; filtro pendientes y hechas |
@@ -132,7 +132,7 @@ flowchart TD
 | P-A07 | Aclaraciones | Campos por confirmar y preguntas sugeridas; "Copiar mensaje" |
 | P-A08 | Prueba de realidad | Tres campos, resultado y efecto en el % a inversión |
 | P-A09 | Diagnóstico | Indicadores con semáforo; campos de fortalezas y puntos de atención |
-| P-A10 | Análisis | Pestañas: Flujo, Bolsillos, Fondo, Deudas, Metas, Seguros, Pensión, Inversión, Cobros, Profesionales. Pensión muestra "No incluida en este caso" y el botón para activarla mientras el asesor no la active para el cliente |
+| P-A10 | Análisis | Pestañas: Flujo, Bolsillos, Fondo, Deudas, Metas, Seguros, Inversión, Cobros, Profesionales. Sin pensión: la plataforma no la analiza (ADR 0016) |
 | P-A11 | Costo de vida | Tres niveles por partida; el asesor edita el básico; totales por pagador y sin temporales; umbrales fiscales |
 | P-A12 | Control de calidad | Resultado de `qualityChecks`: bloqueantes, advertencias, nota por advertencia |
 | P-A13 | Notas y carta | Editor por secciones; botón "Insertar cifra"; vista como el cliente; publicar notas |

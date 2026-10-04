@@ -5,7 +5,7 @@ import { useActionState, useEffect, useId, useState } from 'react';
 import type { Messages } from '@miluca/i18n';
 
 import { FormSubmitActions } from '@/components/form-actions';
-import { Checkbox, ChoiceGroup, describedBy, Field } from '@/components/form-field';
+import { ChoiceGroup, describedBy, Field } from '@/components/form-field';
 import { choiceCard, choiceInput, textField } from '@/components/ui-classes';
 import { useUnsavedWarning } from '@/components/use-unsaved-warning';
 
@@ -25,7 +25,6 @@ export function ProfileForm({
   text,
   initial,
   countryName,
-  pensionAvailable,
   thresholds,
   emergencyMonths,
   action,
@@ -34,7 +33,6 @@ export function ProfileForm({
   text: Messages['profile'];
   initial: ProfileValues;
   countryName: string;
-  pensionAvailable: boolean;
   thresholds: readonly ThresholdChoice[];
   emergencyMonths: Readonly<Record<string, number>>;
   action: (previous: ProfileState | null, formData: FormData) => Promise<ProfileState>;
@@ -221,18 +219,6 @@ export function ProfileForm({
             </label>
           ))}
         </ChoiceGroup>
-        {pensionAvailable ? (
-          <Checkbox
-            name="pensionEnabled"
-            label={text.pension}
-            hint={text.pensionHint.replace('{country}', countryName)}
-            defaultChecked={values.pensionEnabled}
-          />
-        ) : (
-          <p className="text-sm text-text-muted">
-            {text.pensionUnavailable.replace('{country}', countryName)}
-          </p>
-        )}
         <fieldset className="flex flex-col gap-2">
           <legend className="mb-1 font-medium">{text.thresholds}</legend>
           <p className="-mt-1 text-sm text-text-muted">{text.thresholdsHint}</p>

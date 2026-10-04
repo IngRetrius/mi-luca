@@ -43,7 +43,7 @@ Cada gasto puede marcarse "de salud". Si el cliente retira su consentimiento de 
 | H-05 Seguros dentro de la cuota | Corregido: seguros en el seguimiento cuota a cuota; en modo nativo el plan del diagnóstico los paga cada mes sin bajar el saldo | Hecho |
 | H-06 Dos motores de deudas | Corregido: un solo simulador para la hoja Deudas y el plan de créditos, con horizonte, seguros y orden manual (el FRECH va en la tabla del crédito) | Hecho |
 | H-07 "Otro" se pierde solo en C | Corregido: escenario por ingreso, con la regla de la plantilla por defecto | Hecho |
-| H-08 Pensión de Colombia fija | Corregir con parámetros con fuente (B10) | F6 |
+| H-08 Pensión de Colombia fija | Ya no aplica: la pensión queda fuera de la plataforma | ADR 0016 |
 | H-09 Desfase de un año en la proyección | Documentado: los años al retiro se cuentan desde la fecha de corte, como la plantilla | Hecho |
 | H-10 Seguro de vida a 10 años | Corregido: años y gasto a cubrir que fija el asesor (Supuestos de seguros); vacíos, los de la plantilla | Hecho |
 | H-11 Avance frente a la meta completa | Corregido: se muestran los dos avances | Hecho |
@@ -54,7 +54,7 @@ Cada gasto puede marcarse "de salud". Si el cliente retira su consentimiento de 
 | H-16 Ingresos variables solo por tipo | Corregido: sugerido por tipo y editable por el asesor en el perfil de riesgo; el historial registra quién lo cambió | Hecho |
 | H-17 Meta que se repite ignora lo ahorrado | Documentado: la pantalla de metas lo avisa cuando pasa | Hecho |
 | H-18 Orden avalancha sin el subsidio FRECH | Corregido: la tasa para el cliente con FRECH se muestra junto a la del banco (`frechClientRate`) | Hecho |
-| H-19 Escenarios de IBL derivados | Documentar y permitir escribir los tres | F6 |
+| H-19 Escenarios de IBL derivados | Ya no aplica: la pensión queda fuera de la plataforma | ADR 0016 |
 | H-20 Fechas fijas en el plan de acción | Corregir: tareas sugeridas según los módulos activos del cliente | F7 |
 | H-21 Cuotas como un solo gasto | Documentado: la fila automática suma las cuotas; el detalle está en Deudas | Hecho |
 | H-22 Varios pagos en un mes | Corregido | Hecho |

@@ -18,17 +18,17 @@
 | F3. Bolsillos, fondo, flujo anual, prueba de realidad, cobros y entrega mínima | Bancos y bolsillos, fondo de emergencia, plan de ahorro secuencial, flujo anual, meses sin ingreso, prueba de realidad, cuentas por cobrar, activos líquidos, plan entregado sin PDF, vista "Mi plan" | 160 | 520 | finales de junio de 2027 | F2 |
 | F4. Deudas y créditos | Motor único de deudas, simulación, créditos cuota a cuota, marcas de pago, panel | 160 | 680 | comienzos de septiembre de 2027 | F3 |
 | F5. Inversión, patrimonio, metas y seguros | Perfil de riesgo, rangos, distribución, proyección, patrimonio completo, metas y calculadora de viaje, seguros | 120 | 800 | comienzos de noviembre de 2027 | F3 (F4 para deuda cara) |
-| F6. Pensión por país | Módulo de Colombia completo, módulo informativo de España, activación por cliente (apagada por defecto) | 80 | 880 | mediados de diciembre de 2027 | F3 |
-| F7. Entregables y seguimiento | Notas y carta con cifras enlazadas, PDF, ficha de continuidad, Excel compatible, control mensual, plan de acción, comparación con el plan entregado, avisos por correo, exportación y borrado | 160 | 1.040 | comienzos de marzo de 2028 | F4, F5, F6 |
-| F8. Endurecimiento y lanzamiento | Accesibilidad, rendimiento, seguridad, textos legales finales, restauración de copias, planes pagados, migración de clientes actuales | 80 | 1.120 | mediados de abril de 2028 | F7 |
-| Margen (15 %) | | 168 | **1.288** | **comienzos de julio de 2028** | |
+| ~~F6. Pensión por país~~ | Eliminada el 04/10/2026: la pensión no entra en la plataforma (ADR 0016) | 0 | 800 | | |
+| F7. Entregables y seguimiento | Notas y carta con cifras enlazadas, PDF, ficha de continuidad, Excel compatible, control mensual, plan de acción, comparación con el plan entregado, avisos por correo, exportación y borrado | 160 | 960 | finales de enero de 2028 | F4, F5 |
+| F8. Endurecimiento y lanzamiento | Accesibilidad, rendimiento, seguridad, textos legales finales, restauración de copias, planes pagados, migración de clientes actuales | 80 | 1.040 | comienzos de marzo de 2028 | F7 |
+| Margen (15 %) | | 156 | **1.196** | **finales de mayo de 2028** | |
 
 El orden sigue la sugerencia del encargo, con dos ajustes:
 
 1. **Fase 0 nueva.** La sesión en la PWA de iOS y los casos de prueba de oro son los dos riesgos mayores del proyecto; se validan antes de construir pantallas.
 2. **Entrega mínima en F3.** Para que el MVP sirva con clientes reales, el cliente necesita ver su plan en la app. La carta en PDF y la exportación a Excel quedan en F7.
 
-Con 14 horas por semana el calendario total es de unos 21 meses. La pregunta A9 de [07-preguntas-abiertas.md](07-preguntas-abiertas.md) propone cómo adelantar el primer uso real.
+Con 14 horas por semana el calendario total es de unos 20 meses. La pregunta A9 de [07-preguntas-abiertas.md](07-preguntas-abiertas.md) propone cómo adelantar el primer uso real.
 
 ```mermaid
 gantt
@@ -44,10 +44,9 @@ gantt
   section Paridad con la plantilla
   F4 Deudas y créditos                 :f4, after f3, 2027-09-10
   F5 Inversión, patrimonio, metas      :f5, after f4, 2027-11-09
-  F6 Pensión por país                  :f6, after f5, 2027-12-19
   section Reemplazo total del Excel
-  F7 Entregables y seguimiento         :f7, after f6, 2028-03-08
-  F8 Endurecimiento y lanzamiento      :f8, after f7, 2028-04-17
+  F7 Entregables y seguimiento         :f7, after f5, 2028-01-28
+  F8 Endurecimiento y lanzamiento      :f8, after f7, 2028-03-08
 ```
 
 ### 2.1 Avance real
@@ -60,7 +59,8 @@ gantt
 | F3 | 160 h, hasta finales de junio de 2027 | Terminada en el código; falta el piloto con un caso real (criterio MVP) |
 | F4 | 160 h, hasta comienzos de septiembre de 2027 | Terminada en el código: deudas del diagnóstico (C4 y C9), créditos cuota a cuota, plan de pago y Panel (C5), correcciones del modo nativo y pantallas |
 | F5 | 120 h, hasta comienzos de noviembre de 2027 | Terminada en el código: inversión, patrimonio completo, metas con la calculadora de viaje, seguros con la suma asegurada de vida y sus pantallas |
-| F6 a F8 | 320 h | Sin empezar |
+| F6 | 80 h | Eliminada el 04/10/2026: la pensión no entra en la plataforma (ADR 0016) |
+| F7 y F8 | 240 h | Sin empezar |
 
 Con el agente de código, F0 a F2 avanzaron mucho más rápido que la estimación a 14 horas por semana, que suponía empezar el 5 de octubre de 2026. **Supuesto:** el calendario de arriba se mantiene como techo y se reestima al cerrar F3, con lo que tome realmente una fase que mezcla motor, base de datos y pantallas. Las horas del resto no cambian hasta entonces.
 
@@ -71,9 +71,9 @@ Con el agente de código, F0 a F2 avanzaron mucho más rápido que la estimació
 | M0. Base validada | 80 | noviembre de 2026 (logrado el 29/09/2026) | Sabemos que la sesión funciona en iPhone y tenemos los casos de prueba |
 | **M1. MVP** | **520** | **junio de 2027 (julio con margen)** | El asesor atiende un cliente sin deudas de principio a fin en la plataforma (como los dos casos reales): captura, diagnóstico, bolsillos, fondo, flujo, prueba de realidad y plan entregado. El cliente entra por invitación, ve su plan, ajusta ingresos y gastos, y el asesor recibe el antes y después. La carta se sigue escribiendo fuera |
 | M2. Deudas | 680 | septiembre de 2027 | Clientes con deudas y seguimiento de créditos por el cliente |
-| M3. Paridad de cálculo | 880 | diciembre de 2027 | La plataforma calcula todo lo que calcula la plantilla |
-| M4. Reemplazo del Excel | 1.040 | marzo de 2028 | Carta, notas, ficha, exportación a Excel, control mensual y seguimiento dentro de la plataforma |
-| M5. Lanzamiento | 1.120 (1.288 con margen) | abril a julio de 2028 | Planes pagados, textos legales validados, clientes actuales migrados con su consentimiento |
+| M3. Paridad de cálculo | 800 | noviembre de 2027 | La plataforma calcula todo lo que calcula la plantilla, salvo la hoja Pensión, que queda fuera (ADR 0016) |
+| M4. Reemplazo del Excel | 960 | enero de 2028 | Carta, notas, ficha, exportación a Excel, control mensual y seguimiento dentro de la plataforma |
+| M5. Lanzamiento | 1.040 (1.196 con margen) | marzo a mayo de 2028 | Planes pagados, textos legales validados, clientes actuales migrados con su consentimiento |
 
 Hasta M4, el asesor mantiene el Excel en paralelo para las partes que aún no existen.
 
@@ -191,7 +191,7 @@ Avance:
 - [x] Pantallas del presupuesto: P-A06 (lista con totales y filtros, alta, edición y borrado), P-C06 (Mis datos, por ahora con gastos) y P-C07 (edición del cliente con "Así cambia tu plan" calculado en el teléfono); cifras en P-A03 y aviso con el antes y después. Verificado de punta a punta contra Supabase local.
 - [x] Pantallas de ingresos (P-A04 bloque B): lista con totales, alta, edición y borrado con pagos por mes y "Así cambia el plan", meses con seguridad social y calculadora de ingreso base (con `baseIncome` del motor); la misma versión para el cliente en Mis datos.
 - [x] Monedas (P-A19), para asesor y cliente: tasa que recibe el cliente, fecha y nota; la base impide borrar una moneda en uso y la pantalla lo explica.
-- [x] Perfil y supuestos del caso (P-A04 bloque A y P-A05): fecha de nacimiento, sexo, personas a cargo, tipo de cliente con sus reglas (protocolo, sección 4) y meses de fondo sugeridos (parámetro de la metodología, migración `methodology_emergency_months`); fecha de corte, año del flujo, modo de cálculo, análisis de pensión (apagado por defecto) y umbrales fiscales que aplican al caso.
+- [x] Perfil y supuestos del caso (P-A04 bloque A y P-A05): fecha de nacimiento, sexo, personas a cargo, tipo de cliente con sus reglas (protocolo, sección 4) y meses de fondo sugeridos (parámetro de la metodología, migración `methodology_emergency_months`); fecha de corte, año del flujo, modo de cálculo, análisis de pensión (apagado por defecto; se quitó con ADR 0016) y umbrales fiscales que aplican al caso.
 - [x] Costo de vida (P-A11): tres niveles por mes y por año, sin temporales, lo que paga cada uno, umbrales marcados (con remisión al contador o gestor) y cada partida con enlace a su nivel básico en el presupuesto.
 - [x] Ficha (P-A03) con todos los datos del caso y Mis datos (P-C06) con ingresos, gastos y monedas. Verificado de punta a punta contra Supabase local (asesora y cliente de prueba, 390 px), sin errores de consola.
 - [ ] Correo diario con los cambios del cliente (C6): cuando la app envíe correos. No bloquea: el aviso dentro de la app ya llega al momento.
@@ -259,11 +259,11 @@ Avance:
 - [x] Base de datos: migración `investment_goals_insurance` (`goals`, `goal_trip_items`, `insurances`, `investments`, `risk_profile` y columnas de `case_settings`) con RLS, historial, guarda del criterio del asesor y pgTAP; parámetros de la metodología de la proyección, los rangos y la edad de retiro por defecto (supuesto, B16).
 - [x] Pantallas para asesor y cliente: Inversión (inversiones actuales, perfil de riesgo, cuánto va a crecimiento, distribución y proyección marcada "Ilustrativa, no garantizada", sin productos ni entidades), Perfil de riesgo (el cliente responde; el asesor fija dos condiciones y la posición), Supuestos de inversión (solo asesor), Metas con la calculadora de viaje, Seguros con la suma asegurada orientativa y Supuestos de seguros (solo asesor), y Patrimonio con el neto, la composición y la concentración. Accesos y cifras en la ficha y en Mis datos; los supuestos de inversión en el plan entregado. Verificado contra Supabase local (asesora en Chromium a 320 px con un error de validación por pantalla y el foco en él; cliente en WebKit de iPhone, sin el criterio del asesor), sin errores de consola, y revisado con `web-design-guidelines`.
 
-Estado al 03/10/2026: **F5 terminada en el código**. Los criterios se cumplen: pruebas de oro de Inversión, Patrimonio, Metas y Seguros en los nueve casos de la plantilla principal, `Resumen!C25:C28` y `C33:C34` en verde, la proyección dice "Ilustrativa, no garantizada" y ninguna pantalla nombra productos ni entidades. Las condiciones de capacidad que dependen de la pensión (brecha y semanas) llegan con F6.
+Estado al 03/10/2026: **F5 terminada en el código**. Los criterios se cumplen: pruebas de oro de Inversión, Patrimonio, Metas y Seguros en los nueve casos de la plantilla principal, `Resumen!C25:C28` y `C33:C34` en verde, la proyección dice "Ilustrativa, no garantizada" y ninguna pantalla nombra productos ni entidades. La pensión no se analiza (ADR 0016): en el perfil de riesgo no hay brecha pensional y ninguna pensión cuenta como asegurada, igual que la plantilla con la hoja Pensión vacía.
 
-### F6. Pensión por país (80 horas)
+### F6. Pensión por país (eliminada)
 
-Criterios de aceptación: pruebas de oro de la hoja Pensión en C1; `Resumen!C29:C32`; el módulo se desactiva por cliente; España muestra la edad de referencia con fuente y la remisión a la Seguridad Social.
+El 04/10/2026 el responsable decidió no incorporar la pensión a la plataforma (ADR 0016). Se quitaron la marca por cliente (`case_settings.pension_enabled`), el módulo por país (`countries.pension_module`) y el interruptor del perfil (migración `remove_pension`). Los temas de pensión se remiten a la administradora de pensiones o a la Seguridad Social (regla 11 de `CLAUDE.md`).
 
 ### F7. Entregables y seguimiento (160 horas)
 
@@ -340,4 +340,4 @@ Volumen esperado a 1.000 clientes: datos de cada cliente del orden de cientos de
 
 ## 7. Después del lanzamiento (fuera de este plan)
 
-Segundo factor para el asesor, notificaciones push, simulaciones "qué pasa si", más asesores con rol administrador, registro libre, más países, módulo de pensión de España con estimación, integración con extractos bancarios.
+Segundo factor para el asesor, notificaciones push, simulaciones "qué pasa si", más asesores con rol administrador, registro libre, más países, integración con extractos bancarios.

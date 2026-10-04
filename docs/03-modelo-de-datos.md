@@ -12,8 +12,8 @@ Borrador para Postgres en Supabase. Es una propuesta para revisar, no una migrac
 6. **Sin datos prohibidos.** No hay columnas para número de documento, cuenta, tarjeta ni contraseñas.
 7. **Importes** en `numeric(18,2)`, tasas en `numeric(12,8)`, monedas ISO 4217 en `char(3)`. El motor los convierte a `number` al calcular.
 8. **Multimoneda en todo** (decisión del 28/09/2026). Cada campo de dinero va acompañado de su moneda (columna `currency`, o `<campo>_currency` si la fila tiene varios importes). Por defecto es la moneda base del cliente y la interfaz muestra un selector. Las tasas viven en `client_fx_rates`; un disparador rechaza una moneda distinta de la base que no tenga tasa registrada.
-9. **Países de forma general.** Cualquier país se puede habilitar con su moneda, formato y parámetros. Los módulos que dependen de reglas de un país (pensión, umbrales fiscales) solo existen donde se programaron; en los demás países, el módulo se muestra como "no disponible para este país" y el resto de la plataforma funciona igual.
-10. **Cada caso es diferente** (decisión del 01/10/2026). Del país solo salen valores por defecto (moneda, formato, parámetros) y qué reglas existen. Lo que describe al cliente se guarda en sus propias filas y nunca se infiere del país: el pagador de cada gasto (`budget_items.payer`), si se analiza la pensión (`case_settings.pension_enabled`, apagado por defecto) y el tipo de cliente.
+9. **Países de forma general.** Cualquier país se puede habilitar con su moneda, formato y parámetros. Los módulos que dependen de reglas de un país (hoy, los umbrales fiscales) solo existen donde se programaron; en los demás países, el módulo se muestra como "no disponible para este país" y el resto de la plataforma funciona igual.
+10. **Cada caso es diferente** (decisión del 01/10/2026). Del país solo salen valores por defecto (moneda, formato, parámetros) y qué reglas existen. Lo que describe al cliente se guarda en sus propias filas y nunca se infiere del país: el pagador de cada gasto (`budget_items.payer`), qué umbrales fiscales aplican (`case_settings.fiscal_threshold_keys`) y el tipo de cliente. La pensión no se analiza en la plataforma (ADR 0016).
 
 ## 2. Diagrama de entidades (resumen)
 
@@ -65,7 +65,6 @@ create table public.countries (
   name             text not null,
   default_currency char(3) not null,                  -- 'COP', 'EUR'
   default_locale   text not null,                     -- 'es-CO', 'es-ES'
-  pension_module   text check (pension_module in ('co', 'es_info')),
   enabled          boolean not null default true
 );
 
@@ -189,8 +188,6 @@ Ejemplos de claves iniciales:
 | País | Clave | Valor | Fuente |
 |---|---|---|---|
 | CO | `minimum_wage` | 1.750.905 (2026) | Protocolo sección 14 [I1]; verificar con decreto oficial |
-| CO | `pension.retirement_age` | `{"mujer": 57, "hombre": 62}` | Protocolo sección 8.6 |
-| CO | `pension.required_weeks_female` | Tabla 2026 a 2036 | Protocolo sección 8.6 |
 | CO | `social_security.independent_rates` | `{"salud": 0.125, "pension": 0.16, "arl_i": 0.00522}` | Protocolo sección 14 |
 | CO | `social_security.contractor_base_ratio` | 0,40 | Protocolo sección 14 |
 | ES | `retirement_age_reference` | 67 | Caso España; verificar con Seguridad Social |
@@ -256,7 +253,6 @@ create table public.case_settings (
   growth_floor                  numeric(12,8),
   operating_cushion             numeric(18,2) not null default 0,   -- en moneda base
   compatibility_mode            boolean not null default false, -- true = reproduce la plantilla 2.2 sin correcciones
-  pension_enabled               boolean not null default false, -- lo activa el asesor por cliente; el país no lo decide
   updated_at                    timestamptz not null default now(),
   updated_by                    uuid references auth.users(id)
 );
@@ -461,13 +457,6 @@ create table public.risk_profile (
   horizon             text check (horizon in ('menos_3', 'de_3_a_7', 'mas_7')),
   capacity_overrides  jsonb not null default '{}',   -- solo asesor (guarda por disparador)
   range_position      numeric(5,4) not null default 0.5 check (range_position between 0 and 1) -- solo asesor
-);
-
-create table public.pension_inputs (
-  client_id     uuid primary key references public.clients(id) on delete cascade,
-  country_code  char(2) not null references public.countries(code),
-  schema_version smallint not null,           -- versión del esquema del módulo de ese país
-  data          jsonb not null                -- CO: régimen, semanas, fecha, base en SM, hijos, descuento
 );
 
 create table public.receivables (
@@ -764,7 +753,6 @@ Los consentimientos se registran en la misma transacción desde la acción de se
 | Patrimonio e inversiones actuales | Sí | Sí | Sí | Sí | |
 | Perfil de riesgo: respuestas 27a, 27b, 27c | Sí | Sí | Sí | Sí | |
 | Perfil de riesgo: ajustes de capacidad y posición en el rango | Sí | No | Sí | Sí | Guarda de columnas |
-| Pensión: datos del cliente | Sí | Sí | Sí | Sí | |
 | Prueba de realidad: saldos | Sí | Sí | Sí | Sí | |
 | Cuentas por cobrar: saldo, cuota, fecha | Sí | Sí | Sí | Sí | |
 | Cuentas por cobrar: % a inversión | Sí | No | Sí | Sí | Guarda de columnas |
@@ -785,7 +773,6 @@ Los consentimientos se registran en la misma transacción desde la acción de se
 |---|---|---|
 | Niveles de costo de vida (esencial, básico, actual) | No son copias: el nivel esencial sale de la marca `essential`, el básico de `basic_amount` y el actual de `amount`. El motor calcula los tres a la vez. | MVP |
 | Escenarios del fondo de emergencia (A, B, C) | Calculados por el motor; opcionalmente `incomes.lost_in_scenario` en modo nativo. | MVP |
-| Escenarios de pensión (IBL bajo, medio, alto) | Calculados; entradas en `pension_inputs.data`. | Fase 6 |
 | Sensibilidad a la tasa de cambio | Calculada. | Fase 3 |
 | Simulaciones "qué pasa si" (comprar carro, cambiar de trabajo) | Tabla futura `what_if_scenarios (id, client_id, name, patch jsonb)`: un parche JSON sobre las entradas vivas; el motor aplica el parche y calcula. No duplica tablas. | Posterior al MVP |
 
@@ -849,6 +836,7 @@ Las secciones 3 a 10 siguen siendo el diseño de referencia. Lo que ya existe co
 | `20261003170000_debts.sql` | F4: `debts` con RLS, historial y guarda del orden manual; `case_settings.debt_method`; la tasa de una moneda con deudas no se borra (punto 33) |
 | `20261003200000_credits.sql` | F4: datos del seguimiento cuota a cuota en `debts` y `debt_installments` con RLS e historial (punto 34) |
 | `20261003220000_investment_goals_insurance.sql` | F5: `goals` y `goal_trip_items`, `insurances`, `investments` y `risk_profile` con RLS e historial; supuestos de inversión y del seguro de vida en `case_settings`; parámetros de la metodología de la proyección, los rangos y la edad de retiro (punto 35) |
+| `20261004120000_remove_pension.sql` | Sin pensión en la plataforma (ADR 0016): se quitan `case_settings.pension_enabled` y `countries.pension_module` (punto 36) |
 
 Diferencias con el borrador de las secciones 3.1, 4 y 5:
 
@@ -871,7 +859,7 @@ Diferencias con el borrador de las secciones 3.1, 4 y 5:
 
 17. **Quién cambió la fila.** `updated_at` y `updated_by` los pone `private.stamp_update()` al insertar y al actualizar; `updated_by` no tiene llave foránea, como el historial, que tampoco la copia.
 18. **Multimoneda en la base.** `private.check_currency()` rechaza (`23514`) un importe en una moneda distinta de la base sin tasa del cliente, en `incomes`, `variable_income_history` y `budget_items`. Una tasa no se registra para la moneda base (`23514`) ni se borra mientras haya importes en esa moneda (`23503`); al borrar el perfil se va con todo lo demás. `variable_income_history` lleva su moneda (el borrador no la tenía).
-19. **Supuestos del caso.** `case_settings` tiene por ahora solo `cutoff_date` (vacía = hoy), `flow_year` (vacío = año siguiente al corte), `compatibility_mode` y `pension_enabled` (apagado por defecto); el resto de columnas llega con sus módulos. Sin fila valen los valores por defecto. Solo el asesor la crea y la cambia; nadie la borra desde la API.
+19. **Supuestos del caso.** `case_settings` tiene por ahora solo `cutoff_date` (vacía = hoy), `flow_year` (vacío = año siguiente al corte), `compatibility_mode` y `pension_enabled` (apagado por defecto; se quitó con ADR 0016); el resto de columnas llega con sus módulos. Sin fila valen los valores por defecto. Solo el asesor la crea y la cambia; nadie la borra desde la API.
 20. **Presupuesto sin bolsillo todavía.** `budget_items.pocket_id` y la restricción `pocket_required` (H-02) llegan en F3 con `banks` y `pockets`. Las filas automáticas no se guardan (RN-028). El nivel básico y la marca de propuesto los protege `private.guard_budget_item_advisor_columns()`: la guarda genérica no sirve porque `is_proposed` tiene valor por defecto.
 21. **Pagos por mes.** `payments_by_month` (ingresos y seguridad social): doce enteros de 0 a 9, sin vacíos. `social_security_months` sin fila = los doce meses.
 22. **Parámetros.** Los lee cualquier sesión (son datos públicos de la metodología y de cada país, no del cliente) y los publica un asesor; de una versión publicada solo cambian `valid_to` y `notes`. La restricción de exclusión (con `btree_gist`) impide dos versiones superpuestas de la misma clave y país. Los valores se siembran en migraciones solo con fuente verificada en `docs/fuentes.md`.
@@ -891,4 +879,5 @@ Diferencias con el borrador de las secciones 3.1, 4 y 5:
 33. **Deudas.** El inventario lo editan cliente y asesor (matriz de permisos); el lugar en el orden manual es criterio del asesor y tiene guarda propia, `private.guard_debt_advisor_columns()`, como el % a inversión de los cobros. El método de pago (`case_settings.debt_method`, avalancha por defecto) también es del asesor. Del borrador cambian: `payment` pasa a `min_payment`, obligatoria (la hoja Deudas la necesita para la simulación); `annual_rate` admite hasta 1.000 % por los préstamos informales; una deuda que no acepta abonos no tiene fecha desde la que los acepta (`extra_from_needs_extra`); `debt_strategy` se reemplaza por la columna de `case_settings`, y los datos de los créditos (`insurance_in_payment`, FRECH, plazo, `has_arrears`, `debt_installments`) se agregan cuando lleguen. La tasa de una moneda usada en deudas no se borra.
 34. **Créditos.** El seguimiento cuota a cuota vive en `debts` (no hay tabla aparte): con fecha de la primera cuota, el motor arma la tabla de la hoja "Crédito" de la plantilla de créditos y el diagnóstico usa su saldo y su cuota de hoy (ADR 0014). `debt_installments` guarda solo lo que el cliente marca: pagada con su fecha real, cuota distinta y abono extra; una marca vacía se borra. La llave compuesta `(debt_id, client_id)` impide marcar la deuda de otro cliente. Cliente y asesor la editan (matriz de permisos). Del borrador cambian: `has_arrears` no se guarda (las cuotas vencidas sin marcar las calcula el motor con la fecha de corte) y la fecha de pago exige la cuota pagada.
 35. **Inversión, metas y seguros (F5).** Metas, seguros, inversiones y las respuestas del perfil de riesgo los editan cliente y asesor; las dos condiciones de capacidad que la plantilla deja cambiar (`variable_income_override`, `dependents_override`, vacías = la sugerida) y la posición en el rango son del asesor, con guarda propia `private.guard_risk_profile_advisor_columns()` porque `range_position` tiene valor por defecto (0,5). Del borrador cambian: la calculadora de viaje guarda en `goals` su moneda, impuestos del alojamiento, colchón y costos en moneda base, y en `goal_trip_items` los conceptos fijos de la plantilla (sin `kind`); `goal_trip_items` lleva la llave compuesta `(goal_id, client_id)`; `insurances` tiene un catálogo cerrado (`insurance_type`), uno por tipo salvo "otro", que lleva nombre; `life_insurance_inputs` pasa a `case_settings` (`life_support_years`, `life_annual_to_cover` en moneda base) junto con `insurance_pocket_id`, el bolsillo de las primas nuevas; `capacity_overrides` se reemplaza por dos columnas. Los rendimientos, la bajada cerca del retiro, el piso, los rangos y la edad de retiro por sexo son parámetros comunes de la metodología (`method.*`, fuente interna I1 e I2); el asesor fija otro valor por cliente en `case_settings`. La edad de retiro por defecto es un supuesto (B16). La tasa de una moneda usada en metas (también la del viaje), seguros o inversiones no se borra.
+36. **Sin pensión (ADR 0016).** La migración `remove_pension` quita la marca por cliente `case_settings.pension_enabled` y el módulo por país `countries.pension_module`; nada más los usaba. `pension_inputs` nunca se creó. El historial conserva los valores anteriores.
 Sin pendientes de F1 en el modelo de datos.

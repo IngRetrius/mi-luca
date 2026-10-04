@@ -16,7 +16,6 @@ Motor de cálculo puro. Recibe los datos de un cliente y los parámetros de su p
 | `src/excel/` | Funciones con la semántica exacta de Excel: `EDATE`, `DATEDIF`, `NPER`, `PMT`, `ROUNDUP`, `MINIFS`, `MAXIFS`, `SUMPRODUCT`. |
 | `src/normalization/` | Frecuencias y veces al año. |
 | `src/incomes/` a `src/monthly-control/` | Un submódulo por hoja o bloque del dominio. |
-| `src/pension/co/`, `src/pension/es/` | Un módulo de pensión por país. España arranca como módulo informativo. |
 | `test/golden/` | Pruebas de oro: casos anonimizados extraídos de Excel con sus valores esperados. |
 | `test/native/` | Pruebas del modo nativo con datos de los casos de oro y valores revisados por el asesor. |
 | `test/excel-compat/` | Pruebas de las funciones de `src/excel/` contra resultados de Excel. |

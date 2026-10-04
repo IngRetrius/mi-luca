@@ -32,7 +32,6 @@ export async function saveProfile(
   const data = await loadProfile(clientId);
   const parsed = parseProfile(formData, {
     today: data?.today ?? '',
-    pensionAvailable: data?.pensionAvailable ?? false,
     availableThresholds: data?.thresholds.map((threshold) => threshold.key) ?? [],
   });
   if (viewer.role !== 'advisor')

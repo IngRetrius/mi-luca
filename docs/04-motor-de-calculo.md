@@ -68,14 +68,12 @@ interface ComputeOptions {
 | `net-worth` | `liquidAssets(assets, fx)` | Activos | Saldo líquido: lo que se reparte en bolsillos | `Patrimonio!C33` (RN-110) |
 | `net-worth` | `computeNetWorth({ assets, investments, receivables, debts }, fx)` | Activos, total invertido, saldo por cobrar y deudas | Valor de cada activo, totales, neto, composición por grupo, concentración en inmuebles y vehículos | `Patrimonio!F6:F30`, `C33:D39` (RN-110) |
 | `investment` | `currentInvestments(rows, fx)` | Inversiones con tramo | Saldo de cada una, total, en crecimiento y en estabilidad | `Inversión!F6:F14` |
-| `investment` | `riskProfile(answers, conditions, hasExpensiveDebt)` | Respuestas y condiciones (las dos que el asesor puede cambiar ya resueltas; la pensión llega en F6) | Puntos, disposición, capacidad, perfil final y sus niveles | `Inversión!D18:E32` (RN-112) |
+| `investment` | `riskProfile(answers, conditions, hasExpensiveDebt)` | Respuestas y condiciones (las dos que el asesor puede cambiar ya resueltas; sin módulo de pensión, la brecha pensional es siempre "No" y ninguna pensión cuenta como asegurada, ADR 0016) | Puntos, disposición, capacidad, perfil final y sus niveles | `Inversión!D18:E32` (RN-112) |
 | `investment` | `growthAllocation({ age, finalProfile, horizon, rangePosition, ranges })` | Perfil y edad | Tramo, rango, % en crecimiento y en estabilidad, motivo cuando no hay crecimiento | `Inversión!C41:C47` (RN-113, RN-114) |
 | `investment` | `investmentPlan(annualInvestment, lumpSum, current, growthShare)` | Flujo y bolsillos | Distribución mensual, anual, única; objetivo y movimiento sugerido | `Inversión!C51:E56` (RN-111) |
 | `investment` | `projection(input)` | Año del flujo, nacimiento, años al retiro, % en crecimiento, saldo inicial, aporte del sobrante (`Flujo anual!Q25`), abonos de cobros de cada año y supuestos | Tabla de 10 años con glide path; los años al retiro se cuentan desde el corte (H-09) | `Inversión!B61:J71` (RN-115, RN-116) |
-| `pension/co` | `projectWeeks`, `requiredWeeks`, `pensionScenarios`, `postRetirementFlow`, `pensionGap` | Datos de pensión y flujo | Semanas, requisito, faltantes, mesadas, flujos, brecha | `Pensión!C9:C25`, `B43:F54`, `C58:E78` (RN-121) |
-| `pension/es` | `informativePension(params)` | Parámetros | Edad de referencia y textos de remisión | Nuevo (RN-122) |
 | `summary` | `personalIndicators(incomes, budget)` | Ingresos y presupuesto con pagador | Ingreso propio, aporte de terceros, ingreso total, gasto y ahorro propios, tasa de ahorro sobre el ingreso propio | Nuevo, modo nativo (H-12, ADR 0010) |
-| `summary` | `summaryIndicators(result, thresholds)`, `pendingItems(input, result)`, `fxSensitivity(currency, ...)` | Todo | Indicadores con estado, pendientes, sensibilidad por cada moneda extranjera | `Resumen!C11:D35`, `B38:B47`, `B51:E60` (RN-130 a RN-132) |
+| `summary` | `summaryIndicators(result, thresholds)`, `pendingItems(input, result)`, `fxSensitivity(currency, ...)` | Todo | Indicadores con estado, pendientes, sensibilidad por cada moneda extranjera | `Resumen!C11:D35` salvo `C29:C32` (pensión, ADR 0016), `B38:B47` sin `B45`, `B51:E60` (RN-130 a RN-132) |
 | `monthly-control` | `monthlyControl(budgetByCategory, entries, threshold)` | Presupuesto y gasto real | Por categoría: presupuesto, promedio real, diferencia, desviación, alerta | `Control mensual!C6:S24` (RN-133) |
 
 ## 4. Orden de cálculo
@@ -97,10 +95,11 @@ interface ComputeOptions {
 13. Fondo de emergencia: avance.
 14. Plan de ahorro secuencial (modo nativo).
 15. Simulación de deudas (necesita el extra del flujo y el abono único de bolsillos).
-16. Pensión del país, si está activa.
-17. Inversión: perfil, rango, distribución y proyección.
-18. Resumen, pendientes y sensibilidad.
-19. Control mensual.
+16. Inversión: perfil, rango, distribución y proyección.
+17. Resumen, pendientes y sensibilidad.
+18. Control mensual.
+
+La hoja Pensión de la plantilla no se reproduce (ADR 0016): el Resumen no tiene `C29:C32`.
 
 Tiempo objetivo: menos de 50 ms por cálculo completo en un teléfono de gama media, para recalcular mientras se escribe. La simulación de 360 meses de 8 créditos es el tramo más pesado (unos 3.000 pasos); no requiere optimización especial.
 
@@ -170,8 +169,8 @@ Además se verifican los valores intermedios de Ingresos y Presupuesto, para loc
 
 | Caso | Fuente | Qué cubre | Estado |
 |---|---|---|---|
-| C1. Colombia (contratista con arriendos y meses sin ingreso) | Plantilla oficial llenada con los datos del libro del caso real de Colombia, anonimizados | Meses sin ingreso, seguridad social por mes, cobros, USD, pensión Colpensiones, patrimonio concentrado | **Construido** (702 entradas, 5.738 fórmulas; pendiente de revisión del asesor). Reproduce las cifras de la sección 15 salvo la inversión anual; contraste en `packages/engine/test/golden/README.md` |
-| C2. España (estudiante, padres pagan, sueldo a ahorro) | Libro del caso real de España, anonimizado | Euro como base, pagador, costo de vida por niveles, perfil conservador, pensión desactivada | **Listo** (466 entradas, 5.851 fórmulas; revisado por el asesor) |
+| C1. Colombia (contratista con arriendos y meses sin ingreso) | Plantilla oficial llenada con los datos del libro del caso real de Colombia, anonimizados | Meses sin ingreso, seguridad social por mes, cobros, USD, patrimonio concentrado (el libro trae la hoja Pensión llena, que el motor no reproduce: ADR 0016) | **Construido** (702 entradas, 5.738 fórmulas; pendiente de revisión del asesor). Reproduce las cifras de la sección 15 salvo la inversión anual; contraste en `packages/engine/test/golden/README.md` |
+| C2. España (estudiante, padres pagan, sueldo a ahorro) | Libro del caso real de España, anonimizado | Euro como base, pagador, costo de vida por niveles, perfil conservador | **Listo** (466 entradas, 5.851 fórmulas; revisado por el asesor) |
 | C3. Plantilla vacía | `Plantilla_Asesoria_Financiera.xlsx` con fecha de corte fija (28/09/2026) | Valores por defecto, pendientes, divisiones entre cero | **Listo** (535 entradas, 5.738 fórmulas, sin errores) |
 | C4. Deudas | Plantilla oficial sintética (`c4-deudas/cambios.json`) con 8 deudas inspiradas en el caso 15.1 del protocolo: ingreso en USD y arriendo, carga de 70 %, hipotecario que acepta abonos desde la cuota 84 (en lugar del FRECH, que la hoja Deudas no tiene), préstamos que no aceptan abonos, préstamo familiar a 0 % | Avalancha con empate de tasas, abono único que salda dos tarjetas y parte del vehículo, abonos desde una fecha anterior y posterior al primer mes, cuota que no cubre el interés ("No se paga"), más de 120 meses | **Listo** (598 entradas, 5.738 fórmulas) |
 | C9. Bola de nieve | C4 con método bola de nieve, menos saldo líquido y dos deudas con el mismo saldo (`c9-bola-de-nieve/cambios.json`) | Orden por saldo con empate, deuda cara que se paga en varios meses | **Listo** (598 entradas, 5.738 fórmulas) |
@@ -181,7 +180,7 @@ Además se verifican los valores intermedios de Ingresos y Presupuesto, para loc
 | C10. Inversión | Plantilla oficial sintética (`c10-inversion/cambios.json`) | Perfil respondido (tolerante por disposición, moderado por capacidad), personas a cargo con el seguro de vida en cotización, ingreso variable cambiado a "No", posición 80 %, edad 52 con retiro a 62 y bajada de 6 puntos que llega al piso, inversiones en dólares, en pesos y sin tramo, cobros que entran a la proyección en dos años, todos los tipos de activo y una deuda que no es cara | **Listo** (603 entradas, 5.737 fórmulas) |
 | C7. Metas, seguros y cuotas | Plantilla oficial sintética (`c7-metas-seguros/cambios.json`) | Metas con fecha, vencida, cubierta y repetida; calculadora de viaje; seguros nuevos, cotizando y que ya tiene; dos deudas; filas automáticas del presupuesto | **Listo** (591 entradas, 5.738 fórmulas, sin errores) |
 
-Los casos son ejemplos de prueba, no perfiles de país: C2 prueba el pagador y el costo de vida porque esa clienta los tiene, y C1 prueba la pensión porque se activó para ese cliente. El motor nunca decide por el país quién paga ni si se calcula la pensión; lo lee de los datos del cliente (`payer`, `pension_enabled`).
+Los casos son ejemplos de prueba, no perfiles de país: C2 prueba el pagador y el costo de vida porque esa clienta los tiene, y C1 los meses sin ingreso porque ese cliente los tiene. El motor nunca decide por el país quién paga; lo lee de los datos del cliente (`payer`).
 
 Ninguno de los dos casos reales tiene deudas, por eso C4, C9 y C5 son necesarios para cubrir los módulos de deudas y créditos. C7 tiene dos deudas solo para las cuotas mínimas; no reemplaza a C4.
 

@@ -35,10 +35,13 @@ import type { CapacityChoice } from './validation';
 const t = messages.es;
 const text = t.investment;
 
-const CONDITIONS: readonly (keyof RiskCapacityInput)[] = [
+/**
+ * Condiciones de capacidad que se muestran. La brecha pensional de la plantilla no aplica: la
+ * pensión no se analiza en la plataforma (ADR 0016) y el motor la deja siempre en "No".
+ */
+const CONDITIONS: readonly Exclude<keyof RiskCapacityInput, 'pensionGap'>[] = [
   'variableIncome',
   'dependentsWithoutLifeInsurance',
-  'pensionGap',
   'emergencyFundIncomplete',
   'nearRetirementWithoutPension',
 ];

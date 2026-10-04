@@ -961,7 +961,7 @@
     "birthDate": "Fecha de nacimiento",
     "birthDateHint": "Define la edad a la fecha de corte.",
     "sex": "Sexo",
-    "sexHint": "Lo usan las reglas de pensión de algunos países.",
+    "sexHint": "Lo usa la edad de retiro por defecto.",
     "sexes": {
       "mujer": "Mujer",
       "hombre": "Hombre",
@@ -1003,9 +1003,6 @@
       "native": "Con las correcciones aprobadas, por ejemplo quién paga cada gasto.",
       "compatible": "Reproduce la plantilla 2.2 tal cual."
     },
-    "pension": "Analizar la pensión de este cliente",
-    "pensionHint": "Apagado por defecto. Se usan las reglas de pensión de {country}.",
-    "pensionUnavailable": "{country} no tiene módulo de pensión por ahora.",
     "thresholds": "Umbrales fiscales que aplican",
     "thresholdsHint": "Marca solo los que aplican a este caso. Son una referencia: se confirman con el contador o gestor.",
     "thresholdOption": "{label}: {amount}",
@@ -1722,7 +1719,7 @@
       "pctSurplusToDebt": "Con deuda cara no se invierte: esta parte del sobrante de cada mes va a pagarla. También se aplica al dinero de hoy que sobra después de llenar el fondo, los meses sin ingreso y los bolsillos.",
       "pctExcessToInvest": "Sin deuda cara, la parte del dinero de hoy que va a inversión como aporte único: lo que sobra del saldo líquido después de dejar el colchón y llenar el fondo, los meses sin ingreso y los bolsillos. Con deuda cara se usa el porcentaje de deudas.",
       "cushion": "Dinero que se deja en la cuenta del día a día y no se reparte. El resto del saldo líquido va al fondo, a los meses sin ingreso, a los bolsillos y, si sobra, al excedente.",
-      "retirementAge": "Edad a la que el cliente espera dejar de trabajar. En los 10 años anteriores, el % en crecimiento baja poco a poco; con menos de 5 años y sin pensión asegurada, baja la capacidad de riesgo.",
+      "retirementAge": "Edad a la que el cliente espera dejar de trabajar. En los 10 años anteriores, el % en crecimiento baja poco a poco; con menos de 5 años para el retiro, baja la capacidad de riesgo.",
       "realReturnGrowth": "Rendimiento anual por encima de la inflación que se supone para el dinero en crecimiento en la proyección. Es ilustrativo y no está garantizado.",
       "realReturnStability": "Rendimiento anual por encima de la inflación que se supone para el dinero en estabilidad en la proyección. Es ilustrativo y no está garantizado.",
       "glideStep": "Puntos que baja cada año el % en crecimiento en los 10 años antes del retiro, para llegar a esa edad con menos riesgo.",
@@ -2062,14 +2059,13 @@
       "final": "Perfil final (el menor de los dos)",
       "unanswered": "Falta responder",
       "conditionsTitle": "Condiciones que bajan la capacidad",
-      "conditionsMet": "Se cumplen {count} de 5.",
+      "conditionsMet": "Se cumplen {count} de 4.",
       "expensiveDebt": "Hay deuda cara: primero se paga, luego se invierte.",
       "conditions": {
         "variableIncome": "Ingresos variables o contrato inestable",
         "dependentsWithoutLifeInsurance": "Personas a cargo sin seguro de vida",
-        "pensionGap": "Brecha pensional",
         "emergencyFundIncomplete": "Fondo de emergencia incompleto",
-        "nearRetirementWithoutPension": "Menos de 5 años para el retiro sin pensión asegurada"
+        "nearRetirementWithoutPension": "Menos de 5 años para el retiro"
       },
       "yes": "Sí",
       "no": "No"
@@ -2175,7 +2171,7 @@
       "yes": "Sí",
       "no": "No",
       "rangePosition": "Posición dentro del rango (%)",
-      "rangePositionHint": "0 es el mínimo del rango y 100 el máximo. Vacío: 50. Hacia el máximo si la pensión y las rentas cubren lo básico; hacia el mínimo si hay brecha, personas a cargo o metas cercanas.",
+      "rangePositionHint": "0 es el mínimo del rango y 100 el máximo. Vacío: 50. Hacia el máximo si la pensión que recibe y las rentas cubren lo básico o el dinero es para herencia; hacia el mínimo si hay personas a cargo o metas cercanas.",
       "submit": "Guardar",
       "submitting": "Guardando…",
       "cancel": "Cancelar",
@@ -2209,7 +2205,7 @@
       "title": "Supuestos de inversión",
       "intro": "Edad de retiro y supuestos de la proyección de este cliente. Vacío usa el valor de la metodología.",
       "retirementAge": "Edad de retiro esperada",
-      "retirementAgeHint": "Vacío: {value} años (por defecto, la edad de pensión de la plantilla según el sexo). Escribe la del cliente.",
+      "retirementAgeHint": "Vacío: {value} años (el valor por defecto de la plantilla según el sexo). Escribe la del cliente.",
       "realReturnGrowth": "Rendimiento real supuesto en crecimiento (%)",
       "realReturnStability": "Rendimiento real supuesto en estabilidad (%)",
       "glideStep": "Bajada anual del % en crecimiento cerca del retiro (puntos)",

@@ -32,4 +32,4 @@ Plan, diseño y decisiones del proyecto. La investigación inicial tiene fecha d
 - Lo que no está confirmado se marca **Supuesto** y se registra en [07-preguntas-abiertas.md](07-preguntas-abiertas.md).
 - Toda cifra externa remite a [fuentes.md](fuentes.md) con su número de fuente, por ejemplo [F3].
 - Las referencias a celdas usan la forma `Hoja!Celda` de la plantilla principal, salvo que se indique otra.
-- **Cada caso es diferente.** "Caso España" y "caso Colombia" son ejemplos de prueba, no perfiles de país. Que un cliente sea de España no significa que su familia pague sus gastos, y que sea de Colombia no significa que se analice su pensión: eso se marca cliente por cliente (RN-018, RN-120).
+- **Cada caso es diferente.** "Caso España" y "caso Colombia" son ejemplos de prueba, no perfiles de país. Que un cliente sea de España no significa que su familia pague sus gastos, y que sea de Colombia no significa que tenga meses sin ingreso: eso se marca cliente por cliente (RN-018, RN-120).

@@ -25,7 +25,6 @@ export interface ProfileValues {
   readonly cutoffDate: string;
   readonly flowYear: string;
   readonly mode: EngineModeChoice;
-  readonly pensionEnabled: boolean;
   readonly thresholds: readonly string[];
 }
 
@@ -41,7 +40,6 @@ export interface ProfileRecord {
     readonly cutoff_date: string | null;
     readonly flow_year: number | null;
     readonly compatibility_mode: boolean;
-    readonly pension_enabled: boolean;
     readonly fiscal_threshold_keys: string[];
   };
 }
@@ -55,8 +53,6 @@ export type ProfileParse =
 export interface ProfileParseOptions {
   /** Hoy en el país del cliente: la fecha de nacimiento no puede ser futura. */
   readonly today: string;
-  /** Si el país tiene módulo de pensión; si no, el análisis queda apagado. */
-  readonly pensionAvailable: boolean;
   /** Umbrales publicados para el país del cliente: solo se marcan esos. */
   readonly availableThresholds: readonly string[];
 }
@@ -85,7 +81,6 @@ export function parseProfile(formData: FormData, options: ProfileParseOptions): 
     cutoffDate: text('cutoffDate'),
     flowYear: text('flowYear'),
     mode: text('mode') === 'compatible' ? 'compatible' : 'native',
-    pensionEnabled: options.pensionAvailable && formData.get('pensionEnabled') === 'on',
     thresholds: formData
       .getAll('threshold')
       .filter(
@@ -124,7 +119,6 @@ export function parseProfile(formData: FormData, options: ProfileParseOptions): 
         cutoff_date: values.cutoffDate || null,
         flow_year: flowYear,
         compatibility_mode: values.mode === 'compatible',
-        pension_enabled: values.pensionEnabled,
         fiscal_threshold_keys: [...values.thresholds],
       },
     },

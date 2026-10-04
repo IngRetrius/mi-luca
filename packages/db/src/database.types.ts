@@ -325,7 +325,6 @@ export type Database = {
           pct_surplus_invest_confirmed: number | null;
           pct_surplus_invest_pending: number | null;
           pct_surplus_to_debt: number | null;
-          pension_enabled: boolean;
           real_return_growth: number | null;
           real_return_stability: number | null;
           retirement_age: number | null;
@@ -351,7 +350,6 @@ export type Database = {
           pct_surplus_invest_confirmed?: number | null;
           pct_surplus_invest_pending?: number | null;
           pct_surplus_to_debt?: number | null;
-          pension_enabled?: boolean;
           real_return_growth?: number | null;
           real_return_stability?: number | null;
           retirement_age?: number | null;
@@ -377,7 +375,6 @@ export type Database = {
           pct_surplus_invest_confirmed?: number | null;
           pct_surplus_invest_pending?: number | null;
           pct_surplus_to_debt?: number | null;
-          pension_enabled?: boolean;
           real_return_growth?: number | null;
           real_return_stability?: number | null;
           retirement_age?: number | null;
@@ -644,7 +641,6 @@ export type Database = {
           default_locale: string;
           enabled: boolean;
           name: string;
-          pension_module: string | null;
         };
         Insert: {
           code: string;
@@ -652,7 +648,6 @@ export type Database = {
           default_locale: string;
           enabled?: boolean;
           name: string;
-          pension_module?: string | null;
         };
         Update: {
           code?: string;
@@ -660,7 +655,6 @@ export type Database = {
           default_locale?: string;
           enabled?: boolean;
           name?: string;
-          pension_module?: string | null;
         };
         Relationships: [];
       };

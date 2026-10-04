@@ -20,7 +20,6 @@ export interface ProfileData {
     'birth_date' | 'sex' | 'dependents_count' | 'client_type' | 'country_code' | 'base_currency'
   >;
   readonly countryName: string;
-  readonly pensionAvailable: boolean;
   readonly settings: Row<'case_settings'> | null;
   /** Umbrales fiscales del país vigentes hoy: el asesor marca cuáles aplican al caso. */
   readonly thresholds: readonly ThresholdOption[];
@@ -36,7 +35,7 @@ export async function loadProfile(clientId: string): Promise<ProfileData | null>
     supabase
       .from('clients')
       .select(
-        'birth_date, sex, dependents_count, client_type, country_code, base_currency, country:countries(name, pension_module)',
+        'birth_date, sex, dependents_count, client_type, country_code, base_currency, country:countries(name)',
       )
       .eq('id', clientId)
       .maybeSingle(),
@@ -67,7 +66,6 @@ export async function loadProfile(clientId: string): Promise<ProfileData | null>
   return {
     client: profile,
     countryName: countryRow.name,
-    pensionAvailable: countryRow.pension_module !== null,
     settings: settings.data,
     thresholds: thresholds.data.flatMap((row) =>
       typeof row.value === 'number' ? [{ key: row.key, value: row.value, unit: row.unit }] : [],

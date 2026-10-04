@@ -19,5 +19,6 @@ Cada decisión que cambia la arquitectura, el modelo de datos o un resultado del
 | [0013](0013-meses-para-pagar-sin-configuracion-regional.md) | Meses para pagar una deuda sin depender de la configuración regional de Excel (H-28) | Aceptada |
 | [0014](0014-seguimiento-de-creditos-alimenta-el-diagnostico.md) | El seguimiento de créditos alimenta el diagnóstico (puente de la sección 7 del Panel) | Aceptada |
 | [0015](0015-cuotas-en-el-flujo-hasta-que-el-plan-salda-las-deudas.md) | Cuotas en el flujo hasta que el plan salda las deudas (modo nativo, H-03) | Aceptada |
+| [0016](0016-pension-fuera-de-la-plataforma.md) | La pensión queda fuera de la plataforma (se elimina F6) | Aceptada |
 
 Plantilla: [plantilla.md](plantilla.md).

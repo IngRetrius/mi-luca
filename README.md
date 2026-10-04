@@ -7,7 +7,7 @@ Estado al 02/10/2026: **fase 3 de 8 en curso**. Terminadas las fundaciones (F0),
 ## Qué hace
 
 - El asesor sigue el protocolo de asesoría por fases: cuestionario, procesamiento, prueba de realidad, diagnóstico, análisis, entrega y seguimiento.
-- La plataforma calcula todo lo que hoy calcula la plantilla (presupuesto, flujo anual, bolsillos, fondo de emergencia, deudas, inversión, pensión y resumen con semáforo).
+- La plataforma calcula todo lo que hoy calcula la plantilla (presupuesto, flujo anual, bolsillos, fondo de emergencia, deudas, inversión y resumen con semáforo), salvo la pensión, que se remite al profesional (ADR 0016).
 - El cliente tiene su propia cuenta: ve su plan, ajusta sus datos, registra su control mensual y marca sus tareas.
 - Cada plan entregado queda como una versión fija con fecha, para compararla con la situación actual en cada revisión.
 
