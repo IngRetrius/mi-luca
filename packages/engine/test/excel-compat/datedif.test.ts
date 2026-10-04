@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { datedifMonths, parseIsoDate } from '../../src/excel';
+import { datedifMonths, datedifYears, parseIsoDate } from '../../src/excel';
+import yearCases from './datedif-years.cases.json' with { type: 'json' };
+import yearExcel from './datedif-years.excel.json' with { type: 'json' };
 import cases from './datedif.cases.json' with { type: 'json' };
 import excel from './datedif.excel.json' with { type: 'json' };
 
@@ -12,6 +14,16 @@ describe(`datedifMonths frente a Excel ${excel.excel}`, () => {
     const expected = excelValue.get(id);
     expect(expected, `${id} sin resultado de Excel`).toBeDefined();
     expect(datedifMonths(start, end)).toBe(expected === '#NUM!' ? null : expected);
+  });
+});
+
+const excelYears = new Map(yearExcel.results.map((result) => [result.id, result.value]));
+
+describe(`datedifYears frente a Excel ${yearExcel.excel}`, () => {
+  it.each(yearCases)('$id: DATEDIF($start, $end, "y")', ({ id, start, end }) => {
+    const expected = excelYears.get(id);
+    expect(expected, `${id} sin resultado de Excel`).toBeDefined();
+    expect(datedifYears(start, end)).toBe(expected === '#NUM!' ? null : expected);
   });
 });
 

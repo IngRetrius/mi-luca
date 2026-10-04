@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { assetTypeSchema } from '@miluca/domain';
-import { COUNTRY_LOCALES, formatMoney, messages } from '@miluca/i18n';
+import { CONCENTRATION_THRESHOLD, NET_WORTH_GROUPS } from '@miluca/engine';
+import { COUNTRY_LOCALES, formatMoney, formatPercent, messages } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { FigureList } from '@/components/figure-list';
@@ -34,7 +35,10 @@ function loadError(retryHref: string) {
   );
 }
 
-/** Patrimonio (activos) con el saldo líquido que se reparte en los bolsillos (`Patrimonio!C33`). */
+/**
+ * Patrimonio (P-A10 y Mis datos): patrimonio neto, composición y concentración (RN-110) y los
+ * activos, con el saldo líquido que se reparte en los bolsillos (`Patrimonio!C33`).
+ */
 export async function AssetsScreen({ viewer, clientId }: { viewer: CaseEditor; clientId: string }) {
   const paths = assetPaths(viewer.role, clientId);
   const local = localText(viewer);
@@ -61,43 +65,80 @@ export async function AssetsScreen({ viewer, clientId }: { viewer: CaseEditor; c
   const money = (amount: number, currency = client.base_currency) =>
     formatMoney(amount, currency, locale);
 
+  const percent = (ratio: number) => formatPercent(ratio, locale, 1);
+  const { netWorth } = computed.result;
+  const nw = text.netWorth;
+  const concentrated = netWorth.concentration > CONCENTRATION_THRESHOLD;
+
   return (
     <Screen>
       {header}
-      {computed.rows.assets.length === 0 ? (
-        <p className="text-text-muted">{local.empty}</p>
-      ) : (
-        <>
-          <FigureList
-            figures={[{ label: text.liquidTotal, value: money(computed.result.liquidAssets) }]}
-          />
-          <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
-            {computed.rows.assets.map((asset) => {
-              const type = assetTypeSchema.catch('otro').parse(asset.asset_type);
-              return (
-                <li key={asset.id}>
-                  <Link
-                    href={paths.item(asset.id)}
-                    className={`flex min-h-12 items-start justify-between gap-3 rounded-xl p-4 hover:bg-surface ${focusRing}`}
-                  >
-                    <span className="flex min-w-0 flex-col gap-1">
-                      <span className="font-medium wrap-anywhere">{asset.name}</span>
-                      <span className="text-sm text-text-muted">
-                        {[text.types[type], asset.generates_income ? text.generatesIncome : null]
-                          .filter(Boolean)
-                          .join(' · ')}
+      <section aria-labelledby="net-worth-title" className="flex flex-col gap-2">
+        <h2 id="net-worth-title" className="font-semibold">
+          {nw.title}
+        </h2>
+        <FigureList
+          figures={[
+            { label: nw.totalAssets, value: money(netWorth.totalAssets) },
+            { label: nw.debts, value: money(netWorth.debts) },
+            { label: nw.netWorth, value: money(netWorth.netWorth) },
+          ]}
+        />
+        <h3 className="mt-2 text-sm font-medium">{nw.composition}</h3>
+        <FigureList
+          figures={NET_WORTH_GROUPS.map((group) => ({
+            label: nw.groups[group],
+            value: nw.share
+              .replace('{value}', money(netWorth.composition[group].value))
+              .replace('{share}', percent(netWorth.composition[group].share)),
+          }))}
+        />
+        <FigureList
+          figures={[{ label: nw.concentration, value: percent(netWorth.concentration) }]}
+        />
+        <p className="text-sm text-text-muted">
+          {concentrated ? nw.concentrationHigh : nw.concentrationOk}
+        </p>
+      </section>
+      <section aria-labelledby="assets-title" className="flex flex-col gap-2">
+        <h2 id="assets-title" className="font-semibold">
+          {nw.assetsTitle}
+        </h2>
+        {computed.rows.assets.length === 0 ? (
+          <p className="text-text-muted">{local.empty}</p>
+        ) : (
+          <>
+            <FigureList
+              figures={[{ label: text.liquidTotal, value: money(computed.result.liquidAssets) }]}
+            />
+            <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
+              {computed.rows.assets.map((asset) => {
+                const type = assetTypeSchema.catch('otro').parse(asset.asset_type);
+                return (
+                  <li key={asset.id}>
+                    <Link
+                      href={paths.item(asset.id)}
+                      className={`flex min-h-12 items-start justify-between gap-3 rounded-xl p-4 hover:bg-surface ${focusRing}`}
+                    >
+                      <span className="flex min-w-0 flex-col gap-1">
+                        <span className="font-medium wrap-anywhere">{asset.name}</span>
+                        <span className="text-sm text-text-muted">
+                          {[text.types[type], asset.generates_income ? text.generatesIncome : null]
+                            .filter(Boolean)
+                            .join(' · ')}
+                        </span>
                       </span>
-                    </span>
-                    <span className="shrink-0 text-right font-medium tabular-nums">
-                      {money(asset.value, asset.currency)}
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </>
-      )}
+                      <span className="shrink-0 text-right font-medium tabular-nums">
+                        {money(asset.value, asset.currency)}
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        )}
+      </section>
       <ScreenActions>
         <Link href={paths.add} className={`w-full ${primaryButton} ${linkButton}`}>
           {text.add}

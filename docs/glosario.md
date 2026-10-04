@@ -218,6 +218,11 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Seguro | `insurance` | |
 | ¿Lo tiene? (seguro) | `status` / `InsuranceStatus` | si, no, cotizando |
 | Prima anual cotizada | `annualPremiumQuoted` | |
+| Primas en cotización | `quotingPremiumsAnnual` | Parte de las primas nuevas que aún se cotiza (H-24) |
+| Tipo de seguro | `insurance_type` | hogar, arrendamiento, enfermedades_graves, renta_hospitalizacion, vida, complementario, desempleo, vehiculo, otro |
+| Años de apoyo, gasto a cubrir (seguro de vida) | `supportYears`, `annualToCover` / `life_support_years`, `life_annual_to_cover` | Los fija el asesor (H-10) |
+| Bolsillo de las primas nuevas | `insurancePocket` / `insurance_pocket_id` | |
+| Conceptos de la calculadora de viaje | `goal_trip_items`, `TRIP_CONCEPTS` | tiquete, alojamiento, comida, transporte, atracciones, seguro_viaje, compras |
 | Primas de seguros nuevos | `newPremiumsAnnual` | `Seguros!H16` |
 | Suma asegurada | `sumInsured` | |
 | Patrimonio | `netWorth` | |
@@ -225,13 +230,30 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Tipo de activo | `assetType` / `asset_type` | liquido, inmueble, vehiculo, otro |
 | Saldo líquido | `liquidAssets` | Cuentas, bolsillos y efectivo (`Patrimonio!C33`) |
 | Concentración | `concentration` | Inmuebles y vehículos sobre activos |
+| Patrimonio neto | `netWorth` | Activos, inversiones y por cobrar menos deudas (`Patrimonio!F30`) |
+| Grupo de la composición del patrimonio | `NetWorthGroup` | liquido, inversion, inmueble, vehiculo, por_cobrar, otro |
 | Inversión | `investment` | |
-| Perfil de riesgo | `riskProfile` | |
+| Inversiones actuales | `investments` / `currentInvestments` | Plataforma o tipo, sin número de cuenta |
+| Tramo (de una inversión) | `bucket` / `InvestmentBucket` | crecimiento, estabilidad; sin tramo cuenta solo en el total |
+| Perfil de riesgo | `riskProfile` / `risk_profile` | |
+| Nivel de riesgo | `RiskLevel` | no_invertir, conservador, moderado, tolerante |
+| Si su inversión bajara 15 % | `dropReaction` / `drop_reaction` | venderia, esperaria, invertiria_mas |
+| Experiencia invirtiendo | `experience` | ninguna, algo, bastante |
+| Plazo en que podría necesitar el dinero | `horizon` / `MoneyHorizon` | menos_3, de_3_a_7, mas_7 |
+| Condiciones de capacidad | `RiskCapacityInput` | variableIncome, dependentsWithoutLifeInsurance, pensionGap, emergencyFundIncomplete, nearRetirementWithoutPension |
+| Perfil final | `final` / `finalLevel` | El menor entre disposición y capacidad |
 | Disposición | `riskWillingness` | Lo que quiere asumir |
 | Capacidad | `riskCapacity` | Lo que puede asumir |
 | Crecimiento, estabilidad | `growth`, `stability` | |
 | Posición en el rango | `rangePosition` | |
 | Proyección ilustrativa | `projection` | |
+| Distribución de la inversión | `investmentPlan` | Mensual, anual, aporte único, objetivo y movimiento sugerido |
+| Rango en crecimiento por edad | `growthRanges` / `GrowthRangeBand` | `method.growth_ranges` |
+| Edad de retiro esperada | `retirementAge` / `retirement_age` | Por defecto, `method.retirement_age_by_sex` (supuesto, B16) |
+| Rendimiento real supuesto | `realReturnGrowth`, `realReturnStability` | Ilustrativo, no garantizado |
+| Bajada cerca del retiro, piso | `glideStep`, `growthFloor` | `Supuestos!C30:C31` |
+| Inversión, metas, seguros (rutas) | `/inversion`, `/inversion/perfil`, `/inversion/supuestos`, `/metas`, `/seguros`, `/seguros/supuestos` | Dentro de `/clientes/[id]`; las del cliente en `/mis-datos` sin los supuestos |
+| Escribir los supuestos del caso | `writeCaseSettings` | `server/case-settings.ts` |
 | Pensión | `pension` | |
 | Analizar la pensión de este cliente | `pension_enabled` / `pensionEnabled` | Apagado por defecto; lo activa el asesor (RN-120) |
 | Semanas cotizadas | `contributedWeeks` | |

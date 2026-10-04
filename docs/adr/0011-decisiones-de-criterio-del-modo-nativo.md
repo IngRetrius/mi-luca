@@ -44,22 +44,22 @@ Cada gasto puede marcarse "de salud". Si el cliente retira su consentimiento de 
 | H-06 Dos motores de deudas | Corregido: un solo simulador para la hoja Deudas y el plan de créditos, con horizonte, seguros y orden manual (el FRECH va en la tabla del crédito) | Hecho |
 | H-07 "Otro" se pierde solo en C | Corregido: escenario por ingreso, con la regla de la plantilla por defecto | Hecho |
 | H-08 Pensión de Colombia fija | Corregir con parámetros con fuente (B10) | F6 |
-| H-09 Desfase de un año en la proyección | Documentar | F5 |
-| H-10 Seguro de vida a 10 años | Corregir: años y gasto a cubrir editables por el asesor | F5 |
+| H-09 Desfase de un año en la proyección | Documentado: los años al retiro se cuentan desde la fecha de corte, como la plantilla | Hecho |
+| H-10 Seguro de vida a 10 años | Corregido: años y gasto a cubrir que fija el asesor (Supuestos de seguros); vacíos, los de la plantilla | Hecho |
 | H-11 Avance frente a la meta completa | Corregido: se muestran los dos avances | Hecho |
 | H-12 Aporte de terceros como ingreso | Corregido: pagador por gasto (ADR 0010, aceptada) | Hecho |
 | H-13 Control mensual con ahorro y umbral fijo | Corregir: umbral como parámetro y el ahorro aparte del gasto | F7 |
 | H-14 Fecha de corte `=TODAY()` | Corregido: fecha de corte explícita | Hecho |
 | H-15 Solo dos monedas | Corregido: multimoneda | Hecho |
-| H-16 Ingresos variables solo por tipo | Corregir: sugerido por tipo y editable por el asesor | F5 |
-| H-17 Meta que se repite ignora lo ahorrado | Documentar | F5 |
+| H-16 Ingresos variables solo por tipo | Corregido: sugerido por tipo y editable por el asesor en el perfil de riesgo; el historial registra quién lo cambió | Hecho |
+| H-17 Meta que se repite ignora lo ahorrado | Documentado: la pantalla de metas lo avisa cuando pasa | Hecho |
 | H-18 Orden avalancha sin el subsidio FRECH | Corregido: la tasa para el cliente con FRECH se muestra junto a la del banco (`frechClientRate`) | Hecho |
 | H-19 Escenarios de IBL derivados | Documentar y permitir escribir los tres | F6 |
 | H-20 Fechas fijas en el plan de acción | Corregir: tareas sugeridas según los módulos activos del cliente | F7 |
 | H-21 Cuotas como un solo gasto | Documentado: la fila automática suma las cuotas; el detalle está en Deudas | Hecho |
 | H-22 Varios pagos en un mes | Corregido | Hecho |
 | H-23 Ingresos promediados en créditos | Corregido: el Panel de créditos usa el ingreso del caso y el diagnóstico, el saldo de la tabla (ADR 0014) | Hecho |
-| H-24 Seguros en cotización en el presupuesto | Mantenerlos en el presupuesto (el plan supone que se toman) pero mostrarlos aparte como "en cotización" | F5 |
+| H-24 Seguros en cotización en el presupuesto | Corregido: siguen en el presupuesto (el plan supone que se toman) y la pantalla de seguros los muestra aparte | Hecho |
 | H-26 Sobrante con partidas o ingresos sin tipo | Reproducir la plantilla y bloquear la entrega hasta corregir los datos | Hecho |
 | H-27 Cobro sin saldo | La base exige saldo y cuota; el motor reproduce la plantilla para las pruebas | Hecho |
 | H-28 Meses para pagar con coma decimal | El motor cuenta los meses en los dos modos, como Excel con punto decimal (ADR 0013) | Hecho |

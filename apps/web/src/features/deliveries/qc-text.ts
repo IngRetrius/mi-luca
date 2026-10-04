@@ -30,5 +30,8 @@ export function qcMessage(
     .replace('{shortfall}', money(number('shortfall')))
     .replace('{positive}', money(number('positiveSum')))
     .replace('{count}', String(number('count')))
+    .replace('{growth}', percent(number('growthShare')))
+    .replace('{min}', percent(number('rangeMin')))
+    .replace('{max}', percent(number('rangeMax')))
     .replace('{currencies}', Array.isArray(currencies) ? currencies.join(', ') : '');
 }

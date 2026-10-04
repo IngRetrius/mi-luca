@@ -22,6 +22,19 @@ export function PlanAssumptions({
 }) {
   const percent = (value: number) => formatPercent(value, locale);
   const months = parameters.emergencyMonths;
+  // Un plan entregado antes de F5 no trae los supuestos de inversión: solo se muestran si están.
+  const investment: Partial<Pick<PlanParameters, 'retirementAge' | 'projection'>> = parameters;
+  const projection = investment.projection;
+  const investmentRows: readonly (readonly [AssumptionKey, string])[] =
+    typeof investment.retirementAge === 'number' && projection
+      ? [
+          ['retirementAge', text.years.replace('{value}', String(investment.retirementAge))],
+          ['realReturnGrowth', percent(projection.realReturnGrowth)],
+          ['realReturnStability', percent(projection.realReturnStability)],
+          ['glideStep', percent(projection.glideStep)],
+          ['growthFloor', percent(projection.growthFloor)],
+        ]
+      : [];
   const rows: readonly (readonly [AssumptionKey, string])[] = [
     [
       'emergencyMonths',
@@ -39,6 +52,7 @@ export function PlanAssumptions({
       'cushion',
       formatMoney(parameters.operatingCushion.amount, parameters.operatingCushion.currency, locale),
     ],
+    ...investmentRows,
   ];
 
   return (

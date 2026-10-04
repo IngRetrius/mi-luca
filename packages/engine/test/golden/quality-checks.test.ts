@@ -13,8 +13,21 @@ function failed(name: string, mode: 'compatible' | 'native' = 'compatible'): QcC
 }
 
 describe('qualityChecks con los casos de oro', () => {
-  it('C1 (Colombia) solo tiene pendiente la prueba de realidad', () => {
-    expect(failed('c1-colombia')).toEqual(['reality_check_done']);
+  it('C1 (Colombia) solo tiene pendientes el perfil de riesgo y la prueba de realidad', () => {
+    expect(failed('c1-colombia')).toEqual(['risk_profile_answered', 'reality_check_done']);
+  });
+
+  it('C10: perfil respondido y % dentro del rango; sin la edad no hay rango y bloquea', () => {
+    const golden = goldenCases.find((entry) => entry.case === 'c10-inversion')!;
+    const input = caseInput(golden);
+    const codes = (report: ReturnType<typeof qualityChecks>) =>
+      [...report.blocking, ...report.warnings].map((entry) => entry.code);
+    expect(codes(qualityChecks(input, compute(input, { mode: 'compatible' })))).not.toContain(
+      'growth_within_range',
+    );
+    const noAge = { ...input, profile: { ...input.profile, birthDate: null } };
+    const report = qualityChecks(noAge, compute(noAge, { mode: 'compatible' }));
+    expect(report.blocking.map((entry) => entry.code)).toEqual(['growth_within_range']);
   });
 
   it('C6: el sobrante no cuadra por el ingreso y la partida sin tipo (H-26)', () => {

@@ -10,7 +10,7 @@ import { missingRates } from '../currency';
  */
 export type QcSeverity = 'blocking' | 'note' | 'warning';
 
-/** Controles que ya se pueden evaluar (F3). Los de inversión, perfil y carta llegan con sus módulos. */
+/** Controles que ya se pueden evaluar (hasta F5). Los de la carta llegan con ella (F7). */
 export type QcCode =
   | 'surplus_balances'
   | 'pocket_contributions_match'
@@ -21,6 +21,9 @@ export type QcCode =
   | 'incomes_classified'
   | 'missing_rates'
   | 'no_investment_with_expensive_debt'
+  | 'risk_profile_answered'
+  | 'short_horizon_in_stability'
+  | 'growth_within_range'
   | 'reality_check_done'
   | 'reality_check_confirms'
   | 'third_party_counted_once';
@@ -46,6 +49,8 @@ export interface QcReport {
 
 /** Diferencia de importes por debajo de la cual dos cifras cuadran (04-motor, 7.1). */
 const TOLERANCE = 0.01;
+/** Lo mismo para razones (04-motor, 7.1). */
+const RATIO_TOLERANCE = 0.000001;
 
 function item(
   code: QcCode,
@@ -81,6 +86,8 @@ function monies(input: CaseInput): Money[] {
   for (const insurance of input.insurances) {
     if (insurance.annualPremiumQuoted) list.push(insurance.annualPremiumQuoted);
   }
+  for (const investment of input.investments) list.push(investment.balance);
+  if (input.lifeInsurance.annualToCover) list.push(input.lifeInsurance.annualToCover);
   list.push(input.parameters.operatingCushion);
   return list;
 }
@@ -121,6 +128,21 @@ export function qualityChecks(input: CaseInput, result: CaseResult): QcReport {
   const otherIncome = input.incomes.some((income) => income.kind === 'otro');
   const investing = summary.annualInvestment > TOLERANCE || summary.lumpSumInvestment > TOLERANCE;
 
+  // Perfil y rango (RN-112 a RN-114). El motor los arma así; el control protege la entrega si un
+  // dato falta (sin edad no hay rango) o si una versión futura rompe la regla.
+  const { profile, allocation } = result.investment;
+  const shortHorizon = input.riskProfile.answers.horizon === 'menos_3';
+  const finalIsMin =
+    profile.willingness === null ||
+    profile.final === Math.min(profile.willingness, profile.capacity);
+  const growth = allocation.growthShare;
+  const needsRange = (profile.final ?? 0) > 0 && !shortHorizon;
+  const inRange =
+    growth === 0
+      ? !needsRange || allocation.band !== null
+      : growth >= allocation.rangeMin - RATIO_TOLERANCE &&
+        growth <= allocation.rangeMax + RATIO_TOLERANCE;
+
   const items: QcItem[] = [
     item('surplus_balances', 'blocking', Math.abs(surplusGap) <= TOLERANCE, {
       difference: surplusGap,
@@ -145,6 +167,16 @@ export function qualityChecks(input: CaseInput, result: CaseResult): QcReport {
     }),
     item('missing_rates', 'blocking', currencies.length === 0, { currencies }),
     item('no_investment_with_expensive_debt', 'blocking', !(expensiveDebt.exists && investing)),
+    item('risk_profile_answered', 'warning', profile.willingness !== null),
+    item('short_horizon_in_stability', 'blocking', !(shortHorizon && growth > 0), {
+      growthShare: growth,
+    }),
+    item('growth_within_range', 'blocking', finalIsMin && inRange, {
+      growthShare: growth,
+      rangeMin: allocation.rangeMin,
+      rangeMax: allocation.rangeMax,
+      missingAge: needsRange && allocation.band === null ? 1 : 0,
+    }),
     item('reality_check_done', 'warning', realityCheck.status !== 'pendiente'),
     item('reality_check_confirms', 'note', realityCheck.status !== 'revisar_gastos', {
       difference: realityCheck.difference ?? 0,

@@ -30,11 +30,12 @@ Los valores quedan a nivel de celda. `adapters.ts` traduce las celdas a las entr
 | `c1-colombia`         | Caso real de Colombia (contratista con arriendos, sin deudas) llevado a la plantilla oficial y anonimizado (nombre, día de nacimiento, entidades, inmuebles, familiares, mascota, destino del viaje y conceptos de salud), corte 28/09/2026                                                                                          | Construido el 28/09/2026; aprobado el 02/10/2026 (A11, decisión delegada) |
 | `c4-deudas` | Sintético sobre la plantilla oficial, corte 28/09/2026 (`cambios.json`): ingreso en USD y arriendo, 8 deudas inspiradas en el caso 15.1 del protocolo con avalancha, dos tarjetas con la misma tasa, abono único que salda las dos y parte del vehículo, abonos desde una fecha, préstamos sin abonos, tasa 0 %, una cuota que no cubre el interés y un hipotecario de más de 120 meses | Listo |
 | `c9-bola-de-nieve` | C4 con bola de nieve, menos saldo líquido y dos préstamos con el mismo saldo (`cambios.json`) | Listo |
+| `c10-inversion` | Perfil de riesgo respondido, personas a cargo con el seguro de vida en cotización, bajada cerca del retiro hasta el piso, inversiones en dólares y sin tramo, cobros en la proyección y todos los tipos de activo (`cambios.json`) | Listo |
 | `c5-creditos` | Sintético sobre la plantilla de créditos, corte 28/09/2026 (`cambios.json`): los ocho créditos de C4 con datos de crédito y marcas de pago, y la corrección de H-28 en las 41 fórmulas con `">0.5"` (ADR 0013). Se registra aparte en `cases.ts` (`creditCases`), porque sus hojas son otras | Listo |
 
 Criterio de aceptación: diferencia absoluta máxima de 0,01 en importes; tolerancias de porcentajes, fechas y textos en `docs/04-motor-de-calculo.md`.
 
-Para regenerar un caso sintético (C4, C6, C7, C8, C9): `recalc.py` con `--edits packages/engine/test/golden/<caso>/cambios.json` y luego `golden.py` (sin `--forbid`: no tienen datos de clientes).
+Para regenerar un caso sintético (C4, C6, C7, C8, C9, C10): `recalc.py` con `--edits packages/engine/test/golden/<caso>/cambios.json` y luego `golden.py` (sin `--forbid`: no tienen datos de clientes).
 
 Solo se admiten casos anonimizados. Los libros originales de clientes quedan en `referencia/casos/`, fuera de git. Para agregar un caso: genera la carpeta y regístrala en `cases.ts`.
 

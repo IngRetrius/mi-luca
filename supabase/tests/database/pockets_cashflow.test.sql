@@ -32,8 +32,11 @@ select is((public.parameter_at('CO', 'method.pct_surplus_invest_pending', '2026-
 select is((public.parameter_at('ES', 'method.expensive_debt_threshold', '2026-09-28')).value, '0.2'::jsonb,
   'El umbral de deuda cara es común a todos los países');
 select is(
-  (select count(*)::int from public.country_parameters where key like 'method.%' and country_code is null), 6,
-  'La metodología tiene seis parámetros comunes');
+  (select count(*)::int from public.country_parameters where country_code is null
+   and key in ('method.emergency_months_by_client_type', 'method.expensive_debt_threshold',
+     'method.pct_surplus_invest_confirmed', 'method.pct_surplus_invest_pending', 'method.pct_surplus_to_debt',
+     'method.pct_excess_to_invest')), 6,
+  'La metodología tiene los seis parámetros comunes del fondo y del sobrante');
 
 -- Visitante sin sesión -------------------------------------------------------------------------
 

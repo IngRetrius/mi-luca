@@ -10,7 +10,7 @@ export interface AssetInput {
 
 /**
  * Saldo líquido disponible: cuentas, bolsillos y efectivo, en moneda base (RN-110). Es lo que se
- * reparte entre los bolsillos. El patrimonio completo llega en F5.
+ * reparte entre los bolsillos.
  *
  * @excel Patrimonio!C33
  */

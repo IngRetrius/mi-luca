@@ -18,7 +18,10 @@ type Row<T extends keyof Database['public']['Tables']> = Database['public']['Tab
 
 /** Las filas del caso completas, para las pantallas que las muestran además de calcularlas. */
 export interface LoadedCaseRows extends CaseRows {
-  readonly client: Pick<Row<'clients'>, 'base_currency' | 'country_code' | 'client_type'>;
+  readonly client: Pick<
+    Row<'clients'>,
+    'base_currency' | 'country_code' | 'client_type' | 'birth_date' | 'sex' | 'dependents_count'
+  >;
   readonly fxRates: readonly Row<'client_fx_rates'>[];
   readonly incomes: readonly Row<'incomes'>[];
   readonly budgetItems: readonly Row<'budget_items'>[];
@@ -29,6 +32,11 @@ export interface LoadedCaseRows extends CaseRows {
   readonly assets: readonly Row<'assets'>[];
   readonly debts: readonly Row<'debts'>[];
   readonly installments: readonly Row<'debt_installments'>[];
+  readonly goals: readonly Row<'goals'>[];
+  readonly tripItems: readonly Row<'goal_trip_items'>[];
+  readonly insurances: readonly Row<'insurances'>[];
+  readonly investments: readonly Row<'investments'>[];
+  readonly riskProfile: Row<'risk_profile'> | null;
   /** Ids de las versiones de `country_parameters` que usó el cálculo: van en el plan entregado. */
   readonly parameterIds: readonly string[];
 }
@@ -66,16 +74,21 @@ export async function loadCaseRows(clientId: string): Promise<LoadedCaseRows | n
     assets,
     debts,
     installments,
+    goals,
+    tripItems,
+    insurances,
+    investments,
+    riskProfile,
   ] = await Promise.all([
     supabase
       .from('clients')
-      .select('base_currency, country_code, client_type')
+      .select('base_currency, country_code, client_type, birth_date, sex, dependents_count')
       .eq('id', clientId)
       .maybeSingle(),
     supabase
       .from('case_settings')
       .select(
-        'cutoff_date, flow_year, compatibility_mode, fiscal_threshold_keys, emergency_months_override, expensive_debt_threshold, pct_surplus_invest_confirmed, pct_surplus_invest_pending, pct_surplus_to_debt, pct_excess_to_invest, operating_cushion, debt_method',
+        'cutoff_date, flow_year, compatibility_mode, fiscal_threshold_keys, emergency_months_override, expensive_debt_threshold, pct_surplus_invest_confirmed, pct_surplus_invest_pending, pct_surplus_to_debt, pct_excess_to_invest, operating_cushion, debt_method, real_return_growth, real_return_stability, retirement_age, growth_glide_step, growth_floor, life_support_years, life_annual_to_cover, insurance_pocket_id',
       )
       .eq('client_id', clientId)
       .maybeSingle(),
@@ -119,6 +132,21 @@ export async function loadCaseRows(clientId: string): Promise<LoadedCaseRows | n
       .select('*')
       .eq('client_id', clientId)
       .order('installment_number'),
+    supabase.from('goals').select('*').eq('client_id', clientId).order('sort_order').order('name'),
+    supabase.from('goal_trip_items').select('*').eq('client_id', clientId).order('sort_order'),
+    supabase
+      .from('insurances')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('sort_order')
+      .order('insurance_type'),
+    supabase
+      .from('investments')
+      .select('*')
+      .eq('client_id', clientId)
+      .order('sort_order')
+      .order('name'),
+    supabase.from('risk_profile').select('*').eq('client_id', clientId).maybeSingle(),
   ]);
   if (client.error || settings.error || fxRates.error || incomes.error) return null;
   if (socialSecurity.error || budgetItems.error || !client.data) return null;
@@ -126,6 +154,15 @@ export async function loadCaseRows(clientId: string): Promise<LoadedCaseRows | n
     return null;
   }
   if (debts.error || installments.error) return null;
+  if (
+    goals.error ||
+    tripItems.error ||
+    insurances.error ||
+    investments.error ||
+    riskProfile.error
+  ) {
+    return null;
+  }
   const profile = client.data;
 
   // Umbrales que el asesor marcó para este caso y parámetros de la metodología, vigentes en su
@@ -170,6 +207,11 @@ export async function loadCaseRows(clientId: string): Promise<LoadedCaseRows | n
     assets: assets.data,
     debts: debts.data,
     installments: installments.data,
+    goals: goals.data,
+    tripItems: tripItems.data,
+    insurances: insurances.data,
+    investments: investments.data,
+    riskProfile: riskProfile.data,
     methodology: toMethodology(
       Object.fromEntries(
         methodologyEntries.map(([name], index) => [name, methodology[index]?.data?.value]),

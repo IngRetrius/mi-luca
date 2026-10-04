@@ -2,11 +2,15 @@ export { ENGINE_VERSION } from './version';
 export { compute } from './compute';
 export type {
   CaseInput,
+  CaseProfile,
   CaseResult,
   CashflowResult,
   ComputeOptions,
   EngineMode,
+  InvestmentResult,
+  LifeInsuranceSettings,
   PlanParameters,
+  RiskProfileInput,
   SummaryFigures,
 } from './compute';
 export { diffKeyFigures, KEY_FIGURES, keyFigures } from './key-figures';
@@ -22,6 +26,7 @@ export * from './excel';
 export * from './goals';
 export * from './incomes';
 export * from './insurance';
+export * from './investment';
 export * from './net-worth';
 export * from './normalization';
 export * from './pockets';

@@ -1,0 +1,392 @@
+[
+  {
+    "sheet": "Supuestos",
+    "cell": "C7",
+    "value": "Caso sintético C10"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C8",
+    "date": "1974-06-15"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C9",
+    "value": "Hombre"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C10",
+    "value": "Independiente variable"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C11",
+    "value": 2
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C17",
+    "value": 4000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C30",
+    "value": 0.06
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "B6",
+    "value": "Honorarios"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "C6",
+    "value": "Laboral"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "E6",
+    "value": 12000000
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "B7",
+    "value": "Arriendo"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "C7",
+    "value": "Renta"
+  },
+  {
+    "sheet": "Ingresos",
+    "cell": "E7",
+    "value": 2000000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D14",
+    "value": 3000000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D15",
+    "value": 400000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D21",
+    "value": 300000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D48",
+    "value": 4000000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D50",
+    "value": 2000000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D53",
+    "value": 1200000
+  },
+  {
+    "sheet": "Presupuesto",
+    "cell": "D54",
+    "value": 1000000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "B13",
+    "value": "Crédito de vehículo"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "C13",
+    "value": "Vehículo"
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "D13",
+    "value": 10000000
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "E13",
+    "value": 0.12
+  },
+  {
+    "sheet": "Deudas",
+    "cell": "F13",
+    "value": 500000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "B46",
+    "value": "Socio"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C46",
+    "value": 30000000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "D46",
+    "value": 1000000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "E46",
+    "date": "2026-06-01"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "H46",
+    "value": 0.5
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "B47",
+    "value": "Hermana"
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "C47",
+    "value": 2000000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "D47",
+    "value": 500000
+  },
+  {
+    "sheet": "Supuestos",
+    "cell": "E47",
+    "date": "2028-03-01"
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "F6",
+    "value": "Sí"
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "F7",
+    "value": "No"
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "H7",
+    "value": 600000
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "F8",
+    "value": "No"
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "F9",
+    "value": "No"
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "F10",
+    "value": "Cotizando"
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "H10",
+    "value": 2400000
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "F11",
+    "value": "No"
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "F12",
+    "value": "No"
+  },
+  {
+    "sheet": "Seguros",
+    "cell": "F13",
+    "value": "No"
+  },
+  {
+    "sheet": "Inversión",
+    "cell": "B6",
+    "value": "Plataforma A"
+  },
+  {
+    "sheet": "Inversión",
+    "cell": "C6",
+    "value": "Crecimiento"
+  },
+  {
+    "sheet": "Inversión",
+    "cell": "D6",
+    "value": "USD"
+  },
+  {
+    "sheet": "Inversión",
+    "cell": "E6",
+    "value": 5000
+  },
+  {
+    "sheet": "Inversión",
+    "cell": "B7",
+    "value": "Fondo B"
+  },
+  {
+    "sheet": "Inversión",
+    "cell": "C7",
+    "value": "Estabilidad"
+  },
+  {
+    "sheet": "Inversión",
+    "cell": "E7",
+    "value": 20000000
+  },
+  {
+    "sheet": "Inversión",
+    "cell": "B8",
+    "value": "Cuenta de inversión"
+  },
+  {
+    "sheet": "Inversión",
+    "cell": "E8",
+    "value": 3000000
+  },
+  {
+    "sheet": "Inversión",
+    "cell": "C18",
+    "value": "Invertiría más"
+  },
+  {
+    "sheet": "Inversión",
+    "cell": "C19",
+    "value": "Bastante"
+  },
+  {
+    "sheet": "Inversión",
+    "cell": "C21",
+    "value": "Más de 7 años"
+  },
+  {
+    "sheet": "Inversión",
+    "cell": "C25",
+    "value": "No"
+  },
+  {
+    "sheet": "Inversión",
+    "cell": "C44",
+    "value": 0.8
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "B8",
+    "value": "Cuenta de ahorros"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "C8",
+    "value": "Líquido"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "D8",
+    "value": "COP"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "E8",
+    "value": 150000000
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "B9",
+    "value": "Dólares"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "C9",
+    "value": "Líquido"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "D9",
+    "value": "USD"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "E9",
+    "value": 2000
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "B10",
+    "value": "Apartamento"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "C10",
+    "value": "Inmueble"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "D10",
+    "value": "COP"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "E10",
+    "value": 400000000
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "B11",
+    "value": "Moto"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "C11",
+    "value": "Vehículo"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "D11",
+    "value": "COP"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "E11",
+    "value": 8000000
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "B12",
+    "value": "Aportes"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "C12",
+    "value": "Otro"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "D12",
+    "value": "COP"
+  },
+  {
+    "sheet": "Patrimonio",
+    "cell": "E12",
+    "value": 5000000
+  }
+]

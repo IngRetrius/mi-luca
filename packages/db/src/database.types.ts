@@ -315,12 +315,20 @@ export type Database = {
           expensive_debt_threshold: number | null;
           fiscal_threshold_keys: string[];
           flow_year: number | null;
+          growth_floor: number | null;
+          growth_glide_step: number | null;
+          insurance_pocket_id: string | null;
+          life_annual_to_cover: number | null;
+          life_support_years: number | null;
           operating_cushion: number;
           pct_excess_to_invest: number | null;
           pct_surplus_invest_confirmed: number | null;
           pct_surplus_invest_pending: number | null;
           pct_surplus_to_debt: number | null;
           pension_enabled: boolean;
+          real_return_growth: number | null;
+          real_return_stability: number | null;
+          retirement_age: number | null;
           updated_at: string;
           updated_by: string | null;
         };
@@ -333,12 +341,20 @@ export type Database = {
           expensive_debt_threshold?: number | null;
           fiscal_threshold_keys?: string[];
           flow_year?: number | null;
+          growth_floor?: number | null;
+          growth_glide_step?: number | null;
+          insurance_pocket_id?: string | null;
+          life_annual_to_cover?: number | null;
+          life_support_years?: number | null;
           operating_cushion?: number;
           pct_excess_to_invest?: number | null;
           pct_surplus_invest_confirmed?: number | null;
           pct_surplus_invest_pending?: number | null;
           pct_surplus_to_debt?: number | null;
           pension_enabled?: boolean;
+          real_return_growth?: number | null;
+          real_return_stability?: number | null;
+          retirement_age?: number | null;
           updated_at?: string;
           updated_by?: string | null;
         };
@@ -351,12 +367,20 @@ export type Database = {
           expensive_debt_threshold?: number | null;
           fiscal_threshold_keys?: string[];
           flow_year?: number | null;
+          growth_floor?: number | null;
+          growth_glide_step?: number | null;
+          insurance_pocket_id?: string | null;
+          life_annual_to_cover?: number | null;
+          life_support_years?: number | null;
           operating_cushion?: number;
           pct_excess_to_invest?: number | null;
           pct_surplus_invest_confirmed?: number | null;
           pct_surplus_invest_pending?: number | null;
           pct_surplus_to_debt?: number | null;
           pension_enabled?: boolean;
+          real_return_growth?: number | null;
+          real_return_stability?: number | null;
+          retirement_age?: number | null;
           updated_at?: string;
           updated_by?: string | null;
         };
@@ -367,6 +391,13 @@ export type Database = {
             isOneToOne: true;
             referencedRelation: 'clients';
             referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'case_settings_insurance_pocket_id_client_id_fkey';
+            columns: ['insurance_pocket_id', 'client_id'];
+            isOneToOne: false;
+            referencedRelation: 'pockets';
+            referencedColumns: ['id', 'client_id'];
           },
         ];
       };
@@ -829,6 +860,138 @@ export type Database = {
           },
         ];
       };
+      goal_trip_items: {
+        Row: {
+          client_id: string;
+          concept: string;
+          goal_id: string;
+          id: string;
+          is_lodging: boolean;
+          quantity: number;
+          sort_order: number;
+          unit_value: number;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          client_id: string;
+          concept: string;
+          goal_id: string;
+          id?: string;
+          is_lodging?: boolean;
+          quantity?: number;
+          sort_order?: number;
+          unit_value: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          client_id?: string;
+          concept?: string;
+          goal_id?: string;
+          id?: string;
+          is_lodging?: boolean;
+          quantity?: number;
+          sort_order?: number;
+          unit_value?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'goal_trip_items_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'goal_trip_items_goal_id_client_id_fkey';
+            columns: ['goal_id', 'client_id'];
+            isOneToOne: false;
+            referencedRelation: 'goals';
+            referencedColumns: ['id', 'client_id'];
+          },
+        ];
+      };
+      goals: {
+        Row: {
+          already_saved: number;
+          amount: number | null;
+          client_id: string;
+          currency: string;
+          id: string;
+          name: string;
+          note: string | null;
+          pocket_id: string | null;
+          repeat_every_years: number | null;
+          sort_order: number;
+          target_date: string | null;
+          trip_base_costs: number;
+          trip_currency: string | null;
+          trip_cushion_rate: number;
+          trip_lodging_tax_rate: number;
+          updated_at: string;
+          updated_by: string | null;
+          uses_trip_calculator: boolean;
+        };
+        Insert: {
+          already_saved?: number;
+          amount?: number | null;
+          client_id: string;
+          currency: string;
+          id?: string;
+          name: string;
+          note?: string | null;
+          pocket_id?: string | null;
+          repeat_every_years?: number | null;
+          sort_order?: number;
+          target_date?: string | null;
+          trip_base_costs?: number;
+          trip_currency?: string | null;
+          trip_cushion_rate?: number;
+          trip_lodging_tax_rate?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+          uses_trip_calculator?: boolean;
+        };
+        Update: {
+          already_saved?: number;
+          amount?: number | null;
+          client_id?: string;
+          currency?: string;
+          id?: string;
+          name?: string;
+          note?: string | null;
+          pocket_id?: string | null;
+          repeat_every_years?: number | null;
+          sort_order?: number;
+          target_date?: string | null;
+          trip_base_costs?: number;
+          trip_currency?: string | null;
+          trip_cushion_rate?: number;
+          trip_lodging_tax_rate?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+          uses_trip_calculator?: boolean;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'goals_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'goals_pocket_id_client_id_fkey';
+            columns: ['pocket_id', 'client_id'];
+            isOneToOne: false;
+            referencedRelation: 'pockets';
+            referencedColumns: ['id', 'client_id'];
+          },
+        ];
+      };
       incomes: {
         Row: {
           allocation: string;
@@ -881,6 +1044,106 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: 'incomes_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      insurances: {
+        Row: {
+          annual_premium_quoted: number | null;
+          beneficiaries_note: string | null;
+          client_id: string;
+          currency: string;
+          custom_name: string | null;
+          id: string;
+          insurance_type: string;
+          note: string | null;
+          sort_order: number;
+          status: string | null;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          annual_premium_quoted?: number | null;
+          beneficiaries_note?: string | null;
+          client_id: string;
+          currency: string;
+          custom_name?: string | null;
+          id?: string;
+          insurance_type: string;
+          note?: string | null;
+          sort_order?: number;
+          status?: string | null;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          annual_premium_quoted?: number | null;
+          beneficiaries_note?: string | null;
+          client_id?: string;
+          currency?: string;
+          custom_name?: string | null;
+          id?: string;
+          insurance_type?: string;
+          note?: string | null;
+          sort_order?: number;
+          status?: string | null;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'insurances_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      investments: {
+        Row: {
+          balance: number;
+          bucket: string | null;
+          client_id: string;
+          currency: string;
+          id: string;
+          name: string;
+          note: string | null;
+          sort_order: number;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          balance: number;
+          bucket?: string | null;
+          client_id: string;
+          currency: string;
+          id?: string;
+          name: string;
+          note?: string | null;
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          balance?: number;
+          bucket?: string | null;
+          client_id?: string;
+          currency?: string;
+          id?: string;
+          name?: string;
+          note?: string | null;
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'investments_client_id_fkey';
             columns: ['client_id'];
             isOneToOne: false;
             referencedRelation: 'clients';
@@ -1238,6 +1501,50 @@ export type Database = {
             foreignKeyName: 'receivables_client_id_fkey';
             columns: ['client_id'];
             isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      risk_profile: {
+        Row: {
+          client_id: string;
+          dependents_override: boolean | null;
+          drop_reaction: string | null;
+          experience: string | null;
+          horizon: string | null;
+          range_position: number;
+          updated_at: string;
+          updated_by: string | null;
+          variable_income_override: boolean | null;
+        };
+        Insert: {
+          client_id: string;
+          dependents_override?: boolean | null;
+          drop_reaction?: string | null;
+          experience?: string | null;
+          horizon?: string | null;
+          range_position?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+          variable_income_override?: boolean | null;
+        };
+        Update: {
+          client_id?: string;
+          dependents_override?: boolean | null;
+          drop_reaction?: string | null;
+          experience?: string | null;
+          horizon?: string | null;
+          range_position?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+          variable_income_override?: boolean | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'risk_profile_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: true;
             referencedRelation: 'clients';
             referencedColumns: ['id'];
           },

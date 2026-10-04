@@ -1,4 +1,12 @@
-import type { DebtMethod, IncomeScenario, IsoDate, Money, MonthFlags } from '@miluca/domain';
+import type {
+  ClientType,
+  DebtMethod,
+  IncomeScenario,
+  IsoDate,
+  Money,
+  MonthFlags,
+  RiskLevel,
+} from '@miluca/domain';
 
 import { automaticRows, computeBudget, type BudgetItemInput, type BudgetResult } from './budget';
 import {
@@ -42,7 +50,7 @@ import {
   type EmergencyFund,
   type EmergencyProgress,
 } from './emergency-fund';
-import { monthIndex, parseIsoDate } from './excel';
+import { datedifYears, monthIndex, parseIsoDate } from './excel';
 import { computeGoals, type GoalInput, type GoalsResult } from './goals';
 import {
   computeIncomes,
@@ -51,8 +59,32 @@ import {
   type IncomeInput,
   type IncomesResult,
 } from './incomes';
-import { computeInsurance, type InsuranceInput, type InsuranceResult } from './insurance';
-import { liquidAssets, type AssetInput } from './net-worth';
+import {
+  computeInsurance,
+  DEFAULT_SUPPORT_YEARS,
+  lifeInsuranceSum,
+  type InsuranceInput,
+  type InsuranceResult,
+  type LifeInsuranceSum,
+} from './insurance';
+import {
+  currentInvestments,
+  growthAllocation,
+  investmentPlan,
+  projection,
+  PROJECTION_YEARS,
+  riskProfile,
+  type CurrentInvestments,
+  type GrowthAllocation,
+  type GrowthRangeBand,
+  type InvestmentInput,
+  type InvestmentPlan,
+  type ProjectionParameters,
+  type ProjectionYear,
+  type RiskAnswers,
+  type RiskProfile,
+} from './investment';
+import { computeNetWorth, liquidAssets, type AssetInput, type NetWorth } from './net-worth';
 import { computePockets, type PocketInput, type PocketsResult } from './pockets';
 import {
   realityCheck,
@@ -87,11 +119,52 @@ export interface PlanParameters {
   readonly pctExcessToInvestment: number;
   /** Dinero que se queda en la cuenta operativa. @excel Supuestos!C32 */
   readonly operatingCushion: Money;
+  /**
+   * Edad de retiro esperada. La plantilla usa la edad de pensión por sexo; aquí llega resuelta
+   * (parámetro del país o valor del asesor). @excel Supuestos!C29
+   */
+  readonly retirementAge: number;
+  /** Rendimientos reales supuestos, bajada cerca del retiro y piso. @excel Supuestos!C27:C28, C30:C31 */
+  readonly projection: ProjectionParameters;
+  /** Rango en crecimiento por edad y perfil (RN-114). @excel Inversión!B36:I39 */
+  readonly growthRanges: readonly GrowthRangeBand[];
+}
+
+/** Datos de la persona que usa el cálculo; sin nombre ni documento. */
+export interface CaseProfile {
+  /** @excel Supuestos!C8 */
+  readonly birthDate: IsoDate | null;
+  /** Personas a cargo. @excel Supuestos!C11 */
+  readonly dependents: number;
+  /** @excel Supuestos!C10 */
+  readonly clientType: ClientType | null;
+}
+
+/** Perfil de riesgo: respuestas del cliente y criterio del asesor. */
+export interface RiskProfileInput {
+  readonly answers: RiskAnswers;
+  /**
+   * Condiciones de capacidad que la plantilla deja cambiar (`Inversión!C25:C26`); null es la
+   * sugerida (por tipo de cliente y por personas a cargo sin seguro de vida, H-16).
+   */
+  readonly variableIncome: boolean | null;
+  readonly dependentsWithoutLifeInsurance: boolean | null;
+  /** 0 es el mínimo del rango y 1 el máximo. @excel Inversión!C44 */
+  readonly rangePosition: number;
+}
+
+/** Datos del asesor para la suma asegurada de vida; solo cuentan en modo nativo (H-10). */
+export interface LifeInsuranceSettings {
+  /** Null: 10 años si hay personas a cargo, como la plantilla. */
+  readonly supportYears: number | null;
+  /** Null: el gasto anual del presupuesto. */
+  readonly annualToCover: Money | null;
 }
 
 /** Las entradas vivas de un cliente, ya en tipos del motor (04-motor, sección 2). */
 export interface CaseInput {
   readonly cutoffDate: IsoDate;
+  readonly profile: CaseProfile;
   /** Año que se proyecta mes a mes; null es el año siguiente al de corte. @excel Supuestos!C14 */
   readonly flowYear: number | null;
   readonly fx: FxContext;
@@ -105,12 +178,15 @@ export interface CaseInput {
   readonly insurances: readonly InsuranceInput[];
   /** Bolsillo de las primas de seguros nuevos. @excel Presupuesto!K7 */
   readonly insurancePocket: string | null;
+  readonly lifeInsurance: LifeInsuranceSettings;
   readonly debts: readonly DebtInput[];
   /** Orden de pago de las deudas. @excel Deudas!C6 */
   readonly debtMethod: DebtMethod;
   readonly receivables: readonly ReceivableInput[];
   readonly realityCheck: RealityCheckInput;
   readonly assets: readonly AssetInput[];
+  readonly investments: readonly InvestmentInput[];
+  readonly riskProfile: RiskProfileInput;
   /** Bolsillos generales, en orden. */
   readonly pockets: readonly PocketInput[];
   /** Umbrales fiscales que el asesor marcó como aplicables a este cliente. */
@@ -155,8 +231,29 @@ export interface SummaryFigures {
   readonly annualInvestment: number;
   /** Del excedente del saldo actual. @excel Resumen!C26 */
   readonly lumpSumInvestment: number;
+  /** @excel Resumen!C27 */
+  readonly riskProfile: RiskLevel | null;
+  /** @excel Resumen!C28 */
+  readonly growthShare: number;
+  /** @excel Resumen!C33 */
+  readonly netWorth: number;
+  /** Inmuebles y vehículos sobre activos. @excel Resumen!C34 */
+  readonly concentration: number;
   /** @excel Resumen!C35 */
   readonly realityCheck: RealityCheckStatus;
+}
+
+export interface InvestmentResult {
+  /** Edad en la fecha de corte; null sin fecha de nacimiento. @excel Supuestos!C13 */
+  readonly age: number | null;
+  readonly current: CurrentInvestments;
+  readonly profile: RiskProfile;
+  readonly allocation: GrowthAllocation;
+  readonly plan: InvestmentPlan;
+  /** @excel Inversión!C71 */
+  readonly yearsToRetirement: number;
+  /** Ilustrativa, no garantizada (RN-116). */
+  readonly projection: readonly ProjectionYear[];
 }
 
 export interface CashflowResult {
@@ -173,6 +270,8 @@ export interface CaseResult {
   readonly socialSecurityPayments: number;
   readonly goals: GoalsResult;
   readonly insurance: InsuranceResult;
+  /** @excel Seguros!C20:C24 */
+  readonly lifeInsurance: LifeInsuranceSum;
   readonly debts: DebtTotals;
   readonly expensiveDebt: ExpensiveDebt;
   /** Tabla de cada deuda con seguimiento cuota a cuota, en el orden de `debts`; null sin él. */
@@ -193,6 +292,8 @@ export interface CaseResult {
   readonly realityCheck: RealityCheck;
   /** @excel Patrimonio!C33 */
   readonly liquidAssets: number;
+  readonly netWorth: NetWorth;
+  readonly investment: InvestmentResult;
   readonly emergencyFund: EmergencyFund;
   readonly pockets: PocketsResult;
   readonly emergencyProgress: EmergencyProgress;
@@ -229,10 +330,10 @@ function debtMinimumsByMonth(
 }
 
 /**
- * Cálculo completo de lo que hay hasta F4, en el orden de la sección 4 de 04-motor: ingresos,
+ * Cálculo completo de lo que hay hasta F5, en el orden de la sección 4 de 04-motor: ingresos,
  * deudas, metas y seguros, presupuesto con filas automáticas, costo de vida, cuentas por cobrar,
  * flujo anual, prueba de realidad, destino del sobrante, fondo de emergencia, bolsillos, plan de
- * pago de deudas y Resumen.
+ * pago de deudas, patrimonio, suma asegurada de vida, inversión y Resumen.
  * Puro y determinista: misma entrada, mismo resultado.
  *
  * En modo compatible lo que pagan otros no suma al ingreso (la plantilla pide escribirlo como
@@ -420,6 +521,85 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
     chain;
   const { simulation } = chain;
 
+  // Patrimonio, seguro de vida e inversión (F5).
+  const age =
+    input.profile.birthDate === null
+      ? null
+      : datedifYears(input.profile.birthDate, input.cutoffDate);
+  const investmentsNow = currentInvestments(input.investments, fx);
+  const netWorth = computeNetWorth(
+    {
+      assets: input.assets,
+      investments: investmentsNow.total,
+      receivables: receivables.totalPending,
+      debts: debts.balance,
+    },
+    fx,
+  );
+  const dependents = input.profile.dependents > 0;
+  const lifeSettings = native ? input.lifeInsurance : { supportYears: null, annualToCover: null };
+  const lifeInsurance = lifeInsuranceSum({
+    debts: debts.balance,
+    annualToCover:
+      lifeSettings.annualToCover === null
+        ? budget.expensesWithoutSavings.annual
+        : toBaseCompat(lifeSettings.annualToCover, fx),
+    supportYears: lifeSettings.supportYears ?? (dependents ? DEFAULT_SUPPORT_YEARS : 0),
+    liquidAndInvestments: liquid + investmentsNow.total,
+  });
+
+  const { retirementAge } = parameters;
+  // La pensión llega en F6: hasta entonces no hay brecha ni semanas aseguradas.
+  const profile = riskProfile(
+    input.riskProfile.answers,
+    {
+      variableIncome:
+        input.riskProfile.variableIncome ?? input.profile.clientType === 'independiente_variable',
+      dependentsWithoutLifeInsurance:
+        input.riskProfile.dependentsWithoutLifeInsurance ??
+        (dependents && insurance.lifeStatus !== 'si'),
+      pensionGap: false,
+      emergencyFundIncomplete: progress.vsFullGoal < 0.999,
+      nearRetirementWithoutPension: age !== null && retirementAge - age < 5,
+    },
+    expensive.exists,
+  );
+  const allocation = growthAllocation({
+    age,
+    finalProfile: profile.final,
+    horizon: input.riskProfile.answers.horizon,
+    rangePosition: input.riskProfile.rangePosition,
+    ranges: parameters.growthRanges,
+  });
+  const plan = investmentPlan(
+    destination.totalToInvestment.total,
+    pockets.lumpSumToInvestment,
+    investmentsNow,
+    allocation.growthShare,
+  );
+  const yearsToRetirement = age === null ? 0 : Math.max(0, retirementAge - age);
+  // Abonos de cobros a inversión de cada año; con deuda cara van a deudas.
+  const receivablesByYear = Array.from({ length: PROJECTION_YEARS }, (_, k) =>
+    expensive.exists
+      ? 0
+      : computeReceivables(
+          input.receivables,
+          input.cutoffDate,
+          flowYear + k,
+          fx,
+        ).payments.forInvestment.reduce((sum, value) => sum + value, 0),
+  );
+  const investmentProjection = projection({
+    firstYear: flowYear,
+    birthYear: input.profile.birthDate === null ? null : parseIsoDate(input.profile.birthDate).year,
+    yearsToRetirement,
+    growthShare: allocation.growthShare,
+    startingBalance: plan.target.total,
+    annualContribution: destination.toInvestment.total,
+    receivablesByYear,
+    parameters: parameters.projection,
+  });
+
   const annualIncome = incomes.annual + (implied?.annual ?? 0);
   const annualExpenses = budget.expensesWithoutSavings.annual;
   const programmedSavings = budget.programmedSavings.annual;
@@ -432,6 +612,7 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
     socialSecurityPayments: ssPayments,
     goals,
     insurance,
+    lifeInsurance,
     debts,
     expensiveDebt: expensive,
     creditSchedules,
@@ -443,6 +624,16 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
     cashflow: { year: flowYear, flow, noIncome, destination },
     realityCheck: reality,
     liquidAssets: liquid,
+    netWorth,
+    investment: {
+      age,
+      current: investmentsNow,
+      profile,
+      allocation,
+      plan,
+      yearsToRetirement,
+      projection: investmentProjection,
+    },
     emergencyFund: fund,
     pockets,
     emergencyProgress: progress,
@@ -465,6 +656,10 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
       noIncomeMonthlyContribution: noIncome.equalContribution,
       annualInvestment: destination.totalToInvestment.total,
       lumpSumInvestment: pockets.lumpSumToInvestment,
+      riskProfile: profile.finalLevel,
+      growthShare: allocation.growthShare,
+      netWorth: netWorth.netWorth,
+      concentration: netWorth.concentration,
       realityCheck: reality.status,
     },
   };

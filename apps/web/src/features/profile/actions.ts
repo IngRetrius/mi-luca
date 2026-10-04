@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { withImpact } from '@/features/summary';
 import { createClient } from '@/lib/supabase/server';
 import { requireCaseEditor } from '@/server/case-access';
+import { writeCaseSettings } from '@/server/case-settings';
 
 import { parsePlanSettings, type PlanErrors, type PlanValues } from './plan-settings-validation';
 import { loadProfile } from './queries';
@@ -90,22 +91,9 @@ export async function savePlanSettings(
   }
   if (!parsed.ok) return { values: parsed.values, errors: parsed.errors, formError: null };
 
-  const supabase = await createClient();
   const { value: error } = await withImpact(
     clientId,
-    async () => {
-      // Sin upsert: la API no puede escribir `client_id` en una actualización (privilegios por columna).
-      const updated = await supabase
-        .from('case_settings')
-        .update(parsed.record)
-        .eq('client_id', clientId)
-        .select('client_id');
-      if (updated.error || updated.data.length > 0) return updated.error;
-      const { error: insertError } = await supabase
-        .from('case_settings')
-        .insert({ ...parsed.record, client_id: clientId });
-      return insertError;
-    },
+    () => writeCaseSettings(clientId, parsed.record),
     (outcome) => outcome === null,
   );
   if (error) {

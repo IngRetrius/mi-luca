@@ -59,7 +59,8 @@ gantt
 | F2 | 160 h, hasta comienzos de abril de 2027 | Terminada; queda el correo diario de cambios (C6), que espera a que la app envíe correos |
 | F3 | 160 h, hasta finales de junio de 2027 | Terminada en el código; falta el piloto con un caso real (criterio MVP) |
 | F4 | 160 h, hasta comienzos de septiembre de 2027 | Terminada en el código: deudas del diagnóstico (C4 y C9), créditos cuota a cuota, plan de pago y Panel (C5), correcciones del modo nativo y pantallas |
-| F5 a F8 | 440 h | Sin empezar |
+| F5 | 120 h, hasta comienzos de noviembre de 2027 | Terminada en el código: inversión, patrimonio completo, metas con la calculadora de viaje, seguros con la suma asegurada de vida y sus pantallas |
+| F6 a F8 | 320 h | Sin empezar |
 
 Con el agente de código, F0 a F2 avanzaron mucho más rápido que la estimación a 14 horas por semana, que suponía empezar el 5 de octubre de 2026. **Supuesto:** el calendario de arriba se mantiene como techo y se reestima al cerrar F3, con lo que tome realmente una fase que mezcla motor, base de datos y pantallas. Las horas del resto no cambian hasta entonces.
 
@@ -250,6 +251,15 @@ Estado al 03/10/2026: **F4 terminada en el código**. Los tres criterios de acep
 ### F5. Inversión, patrimonio, metas y seguros (120 horas)
 
 Criterios de aceptación: pruebas de oro de Inversión (perfil, rango, distribución, proyección), Patrimonio, Metas y Seguros en todos los casos; `Resumen!C25:C28`, `C33:C34`; toda proyección muestra "Ilustrativa, no garantizada"; ninguna pantalla nombra productos ni entidades.
+
+Avance:
+
+- [x] Motor (`ENGINE_VERSION` 0.15.0, sin cambios en los resultados anteriores): `investment` (`currentInvestments`, `riskProfile`, `growthAllocation`, `investmentPlan` y `projection`), `computeNetWorth`, `lifeInsuranceSum` y las primas en cotización aparte (H-24); `datedifYears` en `excel`, probado contra Excel. `compute` llena `Resumen!C27`, `C28`, `C33` y `C34`; cifras clave nuevas: % en crecimiento y patrimonio neto. En modo nativo, los años de apoyo y el gasto a cubrir del seguro de vida los fija el asesor (H-10). Controles de calidad del perfil y del rango.
+- [x] Caso de oro C10 (inversión), sintético sobre la plantilla oficial; `investment-net-worth.test.ts` compara Inversión (`F6:F14`, `D18:E32`, `C41:C47`, `C51:E56`, `B61:J71`), Patrimonio (`F6:F30`, `C33:D39`), `Seguros!C20:C24` y `Resumen!C27`, `C28`, `C33`, `C34` en los nueve casos. Metas y seguros ya estaban en verde desde F2 (C7).
+- [x] Base de datos: migración `investment_goals_insurance` (`goals`, `goal_trip_items`, `insurances`, `investments`, `risk_profile` y columnas de `case_settings`) con RLS, historial, guarda del criterio del asesor y pgTAP; parámetros de la metodología de la proyección, los rangos y la edad de retiro por defecto (supuesto, B16).
+- [x] Pantallas para asesor y cliente: Inversión (inversiones actuales, perfil de riesgo, cuánto va a crecimiento, distribución y proyección marcada "Ilustrativa, no garantizada", sin productos ni entidades), Perfil de riesgo (el cliente responde; el asesor fija dos condiciones y la posición), Supuestos de inversión (solo asesor), Metas con la calculadora de viaje, Seguros con la suma asegurada orientativa y Supuestos de seguros (solo asesor), y Patrimonio con el neto, la composición y la concentración. Accesos y cifras en la ficha y en Mis datos; los supuestos de inversión en el plan entregado. Verificado contra Supabase local (asesora en Chromium a 320 px con un error de validación por pantalla y el foco en él; cliente en WebKit de iPhone, sin el criterio del asesor), sin errores de consola, y revisado con `web-design-guidelines`.
+
+Estado al 03/10/2026: **F5 terminada en el código**. Los criterios se cumplen: pruebas de oro de Inversión, Patrimonio, Metas y Seguros en los nueve casos de la plantilla principal, `Resumen!C25:C28` y `C33:C34` en verde, la proyección dice "Ilustrativa, no garantizada" y ninguna pantalla nombra productos ni entidades. Las condiciones de capacidad que dependen de la pensión (brecha y semanas) llegan con F6.
 
 ### F6. Pensión por país (80 horas)
 

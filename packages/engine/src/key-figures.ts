@@ -8,8 +8,8 @@ import { DIAGNOSIS_HORIZON_MONTHS } from './debts';
 export type KeyFigureKind = 'amount' | 'ratio' | 'months';
 
 /**
- * Cifras clave (03-modelo, sección 7.4). Las demás (% en crecimiento, patrimonio) se agregan con
- * sus módulos. Importes anuales salvo los marcados "Monthly" y la meta del fondo, que es un saldo.
+ * Cifras clave (03-modelo, sección 7.4). Importes anuales salvo los marcados "Monthly" y los
+ * saldos (meta del fondo y patrimonio neto).
  */
 export const KEY_FIGURES = {
   annualIncome: 'amount',
@@ -28,6 +28,8 @@ export const KEY_FIGURES = {
   emergencyProgress: 'ratio',
   noIncomeShortfall: 'amount',
   annualInvestment: 'amount',
+  growthShare: 'ratio',
+  netWorth: 'amount',
 } as const satisfies Record<string, KeyFigureKind>;
 
 export type KeyFigureId = keyof typeof KEY_FIGURES;
@@ -85,6 +87,8 @@ export function keyFigures(result: CaseResult): KeyFigures {
     emergencyProgress: summary.emergencyProgress,
     noIncomeShortfall: summary.noIncomeShortfall,
     annualInvestment: summary.annualInvestment,
+    growthShare: summary.growthShare,
+    netWorth: summary.netWorth,
   };
 }
 

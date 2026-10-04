@@ -6,6 +6,7 @@ import { COUNTRY_LOCALES, formatMoney, messages } from '@miluca/i18n';
 import { Screen } from '@/components/screen';
 import { ModuleLink } from '@/components/back-link';
 import { focusRing, linkButton, secondaryButton } from '@/components/ui-classes';
+import { investmentSummary } from '@/features/investment';
 import { loadComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
 import { requireClient } from '@/server/viewer';
@@ -73,7 +74,27 @@ export default async function MyDataPage() {
     {
       href: '/mis-datos/patrimonio',
       title: text.assets,
-      summary: text.assetsSummary.replace('{amount}', money(result.liquidAssets)),
+      summary: text.assetsSummary.replace('{amount}', money(result.netWorth.netWorth)),
+    },
+    {
+      href: '/mis-datos/inversion',
+      title: text.investment,
+      summary: investmentSummary(text, computed),
+    },
+    {
+      href: '/mis-datos/metas',
+      title: text.goals,
+      summary:
+        computed.rows.goals.length === 0
+          ? text.goalsNone
+          : (computed.rows.goals.length === 1 ? text.goalsSummary.one : text.goalsSummary.other)
+              .replace('{count}', String(computed.rows.goals.length))
+              .replace('{amount}', money(result.goals.monthlyTotal)),
+    },
+    {
+      href: '/mis-datos/seguros',
+      title: text.insurance,
+      summary: text.insuranceSummary.replace('{amount}', money(result.insurance.newPremiumsAnnual)),
     },
     {
       href: '/mis-datos/deudas',

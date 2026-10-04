@@ -37,6 +37,21 @@ export function datedifMonths(start: IsoDate, end: IsoDate): number | null {
   return to.day < from.day ? months - 1 : months;
 }
 
+/**
+ * Años completos entre dos fechas, como `DATEDIF(inicio, fin, "y")`: el año cuenta solo si el mes
+ * y el día de la fecha final llegan a los de la inicial (del 29 de febrero al 28 de febrero de un
+ * año sin bisiesto no se cumple el año). Null donde Excel da #NUM!: fecha final anterior.
+ */
+export function datedifYears(start: IsoDate, end: IsoDate): number | null {
+  const from = parseIsoDate(start);
+  const to = parseIsoDate(end);
+  if (end < start) return null;
+  const years = to.year - from.year;
+  return to.month < from.month || (to.month === from.month && to.day < from.day)
+    ? years - 1
+    : years;
+}
+
 function isoDate({ year, month, day }: CalendarDate): IsoDate {
   return `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 }

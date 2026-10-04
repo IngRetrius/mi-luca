@@ -10,6 +10,7 @@ import { ModuleLink } from '@/components/back-link';
 import { focusRing, linkButton, secondaryButton } from '@/components/ui-classes';
 import { ClientStatusBadge, getClientDetail } from '@/features/clients';
 import { listDeliveries } from '@/features/deliveries';
+import { investmentSummary } from '@/features/investment';
 import {
   countryDateFormat,
   createInvitationLink,
@@ -129,6 +130,8 @@ const PROFILE_FIGURES: readonly KeyFigureId[] = [
   'emergencyProgress',
   'noIncomeShortfall',
   'annualInvestment',
+  'growthShare',
+  'netWorth',
 ];
 
 /** Datos del caso y cifras del plan calculadas por el motor con lo registrado hoy. */
@@ -201,7 +204,25 @@ function CaseData({
     {
       href: `${base}/patrimonio`,
       title: text.assets,
-      summary: text.assetsSummary.replace('{amount}', money(computed.result.liquidAssets)),
+      summary: text.assetsSummary.replace('{amount}', money(computed.result.netWorth.netWorth)),
+    },
+    {
+      href: `${base}/metas`,
+      title: text.goals,
+      summary:
+        computed.rows.goals.length === 0
+          ? text.goalsNone
+          : (computed.rows.goals.length === 1 ? text.goalsSummary.one : text.goalsSummary.other)
+              .replace('{count}', String(computed.rows.goals.length))
+              .replace('{amount}', money(computed.result.goals.monthlyTotal)),
+    },
+    {
+      href: `${base}/seguros`,
+      title: text.insurance,
+      summary: text.insuranceSummary.replace(
+        '{amount}',
+        money(computed.result.insurance.newPremiumsAnnual),
+      ),
     },
     {
       href: `${base}/deudas`,
@@ -256,6 +277,11 @@ function CaseData({
       href: `${base}/bolsillos`,
       title: text.pockets,
       summary: text.pocketsSummary.replace('{count}', String(pockets.withContribution)),
+    },
+    {
+      href: `${base}/inversion`,
+      title: text.investment,
+      summary: investmentSummary(text, computed),
     },
     {
       href: `${base}/entrega`,

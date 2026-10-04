@@ -151,7 +151,7 @@
       "budget": "Presupuesto",
       "budgetSummary": "{amount} de gasto al mes",
       "figuresTitle": "Cifras del plan",
-      "figuresNote": "Con los datos registrados hoy. Las cifras de inversión y patrimonio llegan con sus módulos.",
+      "figuresNote": "Con los datos registrados hoy.",
       "profile": "Perfil y supuestos",
       "profileSummary": "{type} · corte: {cutoff}",
       "today": "hoy",
@@ -176,13 +176,24 @@
       "debtsSummary": "{amount} en total",
       "debtsNone": "Ninguna",
       "assets": "Patrimonio",
-      "assetsSummary": "Saldo líquido de {amount}",
+      "assetsSummary": "Patrimonio neto de {amount}",
       "realityCheck": "Prueba de realidad",
       "planSettings": "Supuestos del plan",
       "planSettingsSummary": "Porcentajes, umbral de deuda cara y colchón",
       "delivery": "Entregar el plan",
       "deliverySummary": "{count} planes entregados",
-      "deliveryNone": "Control de calidad y entrega"
+      "deliveryNone": "Control de calidad y entrega",
+      "goals": "Metas",
+      "goalsSummary": {
+        "one": "1 meta · {amount} al mes",
+        "other": "{count} metas · {amount} al mes"
+      },
+      "goalsNone": "Ninguna",
+      "insurance": "Seguros",
+      "insuranceSummary": "Primas nuevas de {amount} al año",
+      "investment": "Inversión",
+      "investmentSummary": "Perfil {profile} · {growth} en crecimiento",
+      "investmentUnanswered": "Falta responder el perfil"
     }
   },
   "invitation": {
@@ -490,7 +501,9 @@
     "emergencyGoal": "Meta del fondo de emergencia",
     "emergencyProgress": "Avance del fondo de emergencia",
     "noIncomeShortfall": "Faltante de los meses sin ingreso",
-    "annualInvestment": "Inversión al año"
+    "annualInvestment": "Inversión al año",
+    "growthShare": "% en crecimiento",
+    "netWorth": "Patrimonio neto"
   },
   "budget": {
     "title": "Presupuesto",
@@ -739,14 +752,34 @@
       "tu": "Lo que tienes",
       "usted": "Lo que tiene"
     },
-    "assetsSummary": "Saldo líquido de {amount}",
+    "assetsSummary": "Patrimonio neto de {amount}",
     "realityCheck": "Prueba de realidad",
     "debts": {
       "tu": "Tus deudas",
       "usted": "Sus deudas"
     },
     "debtsSummary": "{amount} en total",
-    "debtsNone": "Ninguna"
+    "debtsNone": "Ninguna",
+    "goals": {
+      "tu": "Tus metas",
+      "usted": "Sus metas"
+    },
+    "goalsSummary": {
+      "one": "1 meta · {amount} al mes",
+      "other": "{count} metas · {amount} al mes"
+    },
+    "goalsNone": "Ninguna",
+    "insurance": {
+      "tu": "Tus seguros",
+      "usted": "Sus seguros"
+    },
+    "insuranceSummary": "Primas nuevas de {amount} al año",
+    "investment": {
+      "tu": "Tu inversión",
+      "usted": "Su inversión"
+    },
+    "investmentSummary": "Perfil {profile} · {growth} en crecimiento",
+    "investmentUnanswered": "Falta responder el perfil"
   },
   "currencies": {
     "title": "Monedas",
@@ -1492,7 +1525,7 @@
   },
   "assets": {
     "title": "Patrimonio",
-    "intro": "Lo que tiene el cliente. Lo líquido (cuentas, bolsillos y efectivo) es lo que se reparte en los bolsillos. Las inversiones y el patrimonio completo llegan después.",
+    "intro": "Lo que tiene el cliente. Lo líquido (cuentas, bolsillos y efectivo) es lo que se reparte en los bolsillos. Las inversiones se registran en Inversión y lo que le deben, en Cobros.",
     "back": "Ficha del cliente",
     "add": "Agregar activo",
     "empty": "Todavía no hay activos.",
@@ -1549,13 +1582,33 @@
         "usted": "Lo que tiene"
       },
       "intro": {
-        "tu": "Tus cuentas, bolsillos, efectivo, inmuebles y vehículos. Lo líquido es lo que se reparte en tus bolsillos.",
-        "usted": "Sus cuentas, bolsillos, efectivo, inmuebles y vehículos. Lo líquido es lo que se reparte en sus bolsillos."
+        "tu": "Tus cuentas, bolsillos, efectivo, inmuebles y vehículos. Lo líquido es lo que se reparte en tus bolsillos. Tus inversiones van en Inversión.",
+        "usted": "Sus cuentas, bolsillos, efectivo, inmuebles y vehículos. Lo líquido es lo que se reparte en sus bolsillos. Sus inversiones van en Inversión."
       },
       "empty": {
         "tu": "Todavía no registras lo que tienes.",
         "usted": "Todavía no registra lo que tiene."
       }
+    },
+    "netWorth": {
+      "title": "Patrimonio neto",
+      "totalAssets": "Total de activos",
+      "debts": "Deudas",
+      "netWorth": "Patrimonio neto",
+      "composition": "Composición",
+      "share": "{value} · {share}",
+      "groups": {
+        "liquido": "Líquido",
+        "inversion": "Inversiones",
+        "inmueble": "Inmuebles",
+        "vehiculo": "Vehículos",
+        "por_cobrar": "Por cobrar",
+        "otro": "Otros"
+      },
+      "concentration": "Concentración en inmuebles y vehículos",
+      "concentrationHigh": "Más de 80 % en inmuebles y vehículos: el patrimonio es poco líquido.",
+      "concentrationOk": "Referencia: más de 80 % es poco líquido.",
+      "assetsTitle": "Activos"
     }
   },
   "realityCheck": {
@@ -1654,7 +1707,12 @@
       "pctInvestPending": "Sobrante a inversión mientras la prueba no se confirma",
       "pctSurplusToDebt": "Sobrante a deudas cuando hay deuda cara",
       "pctExcessToInvest": "Excedente del saldo de hoy a inversión",
-      "cushion": "Colchón en la cuenta operativa"
+      "cushion": "Colchón en la cuenta operativa",
+      "retirementAge": "Edad de retiro esperada",
+      "realReturnGrowth": "Rendimiento real supuesto en crecimiento",
+      "realReturnStability": "Rendimiento real supuesto en estabilidad",
+      "glideStep": "Bajada anual del % en crecimiento cerca del retiro",
+      "growthFloor": "Piso del % en crecimiento"
     },
     "help": {
       "emergencyMonths": "Cuántos meses de gasto esencial cubre el fondo de emergencia en el peor escenario, si se pierden los ingresos. Se sugieren más meses cuanto menos estable es el ingreso. La meta nunca baja de un mes de lo esencial y, mientras haya deuda cara, se queda en ese mes.",
@@ -1663,8 +1721,14 @@
       "pctInvestPending": "Parte del sobrante que va a inversión mientras la prueba de realidad está pendiente o muestra gastos sin registrar. Es menor porque ese sobrante todavía no se ha visto en la cuenta.",
       "pctSurplusToDebt": "Con deuda cara no se invierte: esta parte del sobrante de cada mes va a pagarla. También se aplica al dinero de hoy que sobra después de llenar el fondo, los meses sin ingreso y los bolsillos.",
       "pctExcessToInvest": "Sin deuda cara, la parte del dinero de hoy que va a inversión como aporte único: lo que sobra del saldo líquido después de dejar el colchón y llenar el fondo, los meses sin ingreso y los bolsillos. Con deuda cara se usa el porcentaje de deudas.",
-      "cushion": "Dinero que se deja en la cuenta del día a día y no se reparte. El resto del saldo líquido va al fondo, a los meses sin ingreso, a los bolsillos y, si sobra, al excedente."
-    }
+      "cushion": "Dinero que se deja en la cuenta del día a día y no se reparte. El resto del saldo líquido va al fondo, a los meses sin ingreso, a los bolsillos y, si sobra, al excedente.",
+      "retirementAge": "Edad a la que el cliente espera dejar de trabajar. En los 10 años anteriores, el % en crecimiento baja poco a poco; con menos de 5 años y sin pensión asegurada, baja la capacidad de riesgo.",
+      "realReturnGrowth": "Rendimiento anual por encima de la inflación que se supone para el dinero en crecimiento en la proyección. Es ilustrativo y no está garantizado.",
+      "realReturnStability": "Rendimiento anual por encima de la inflación que se supone para el dinero en estabilidad en la proyección. Es ilustrativo y no está garantizado.",
+      "glideStep": "Puntos que baja cada año el % en crecimiento en los 10 años antes del retiro, para llegar a esa edad con menos riesgo.",
+      "growthFloor": "El % en crecimiento no baja de este piso, salvo que el de hoy ya sea menor."
+    },
+    "years": "{value} años"
   },
   "assistant": {
     "open": "Asistente (IA)",
@@ -1741,6 +1805,18 @@
       "no_investment_with_expensive_debt": {
         "ok": "Con deuda cara no se invierte.",
         "failed": "Hay deuda cara y el plan invierte. Revisa el destino del sobrante."
+      },
+      "risk_profile_answered": {
+        "ok": "El perfil de riesgo está respondido.",
+        "failed": "Falta responder el perfil de riesgo: mientras tanto, lo que se invierte va todo a estabilidad."
+      },
+      "short_horizon_in_stability": {
+        "ok": "El dinero que se necesita en menos de 3 años va todo a estabilidad.",
+        "failed": "El dinero se necesita en menos de 3 años y el plan pone {growth} en crecimiento."
+      },
+      "growth_within_range": {
+        "ok": "El % en crecimiento está dentro del rango de su edad y su perfil.",
+        "failed": "El % en crecimiento ({growth}) no está dentro del rango de su edad y su perfil ({min} a {max}). Si falta la fecha de nacimiento, regístrala en el perfil."
       },
       "reality_check_done": {
         "ok": "La prueba de realidad está hecha.",
@@ -1951,5 +2027,439 @@
     "one": "1 mes",
     "other": "{count} meses",
     "more": "Más de {count} meses"
+  },
+  "investment": {
+    "title": "Inversión",
+    "intro": "Inversiones actuales, perfil de riesgo, cuánto va a crecimiento y a estabilidad, y una proyección ilustrativa. No se nombran productos ni entidades.",
+    "back": "Ficha del cliente",
+    "illustrative": "Ilustrativa, no garantizada.",
+    "notAdvice": "Esto no es una recomendación de productos ni de entidades. Antes de invertir, revisa costos y riesgos con la entidad que se elija.",
+    "settingsLink": "Supuestos de inversión",
+    "settingsSummary": "Edad de retiro {age} años; rendimiento real supuesto {growth} en crecimiento y {stability} en estabilidad.",
+    "current": {
+      "title": "Inversiones actuales",
+      "empty": "Todavía no hay inversiones registradas.",
+      "add": "Agregar inversión",
+      "total": "Total invertido",
+      "growth": "En crecimiento",
+      "stability": "En estabilidad",
+      "noBucket": "Sin tramo"
+    },
+    "buckets": {
+      "crecimiento": "Crecimiento",
+      "estabilidad": "Estabilidad"
+    },
+    "bucketHints": {
+      "crecimiento": "Dinero para más de 3 años que puede subir y bajar.",
+      "estabilidad": "Dinero que se quiere estable y disponible."
+    },
+    "profile": {
+      "title": "Perfil de riesgo",
+      "answer": "Responder el perfil",
+      "edit": "Cambiar el perfil",
+      "willingness": "Disposición (lo que quiere asumir)",
+      "capacity": "Capacidad (lo que puede asumir)",
+      "final": "Perfil final (el menor de los dos)",
+      "unanswered": "Falta responder",
+      "conditionsTitle": "Condiciones que bajan la capacidad",
+      "conditionsMet": "Se cumplen {count} de 5.",
+      "expensiveDebt": "Hay deuda cara: primero se paga, luego se invierte.",
+      "conditions": {
+        "variableIncome": "Ingresos variables o contrato inestable",
+        "dependentsWithoutLifeInsurance": "Personas a cargo sin seguro de vida",
+        "pensionGap": "Brecha pensional",
+        "emergencyFundIncomplete": "Fondo de emergencia incompleto",
+        "nearRetirementWithoutPension": "Menos de 5 años para el retiro sin pensión asegurada"
+      },
+      "yes": "Sí",
+      "no": "No"
+    },
+    "levels": {
+      "no_invertir": "No invertir todavía",
+      "conservador": "Conservador",
+      "moderado": "Moderado",
+      "tolerante": "Tolerante"
+    },
+    "allocation": {
+      "title": "Cuánto va a crecimiento",
+      "range": "Rango orientativo según edad y perfil",
+      "rangeValue": "{min} a {max}",
+      "growth": "% en crecimiento",
+      "stability": "% en estabilidad",
+      "notes": {
+        "short_horizon": "El dinero se necesitaría en menos de 3 años: todo va a estabilidad.",
+        "stability_first": "Primero estabilidad: pagar la deuda cara o fortalecer la capacidad antes de invertir en crecimiento.",
+        "answer_profile": "Falta responder el perfil: mientras tanto, todo va a estabilidad."
+      },
+      "ageMissing": "Falta la fecha de nacimiento para saber el rango de su edad."
+    },
+    "plan": {
+      "title": "Distribución",
+      "intro": "La inversión del año sale del sobrante y de los abonos de lo que le deben; el aporte único, del excedente del saldo de hoy.",
+      "monthly": "Inversión al mes",
+      "annual": "Inversión al año",
+      "lumpSum": "Aporte único",
+      "current": "Invertido hoy",
+      "target": "Objetivo (invertido hoy más el aporte único)",
+      "movement": "Movimiento sugerido hacia el objetivo",
+      "movementHint": "Positivo: llevar dinero a ese tramo. Negativo: el tramo está por encima del objetivo. Los aportes nuevos pueden hacer el ajuste sin vender.",
+      "split": "Crecimiento {growth} · Estabilidad {stability}"
+    },
+    "projection": {
+      "title": "Proyección a 10 años",
+      "intro": "En dinero de hoy, con rendimientos reales supuestos. El % en crecimiento baja en los 10 años antes del retiro.",
+      "yearAge": "{year} · {age} años",
+      "year": "{year}",
+      "end": "Saldo al cierre",
+      "detail": "{growth} en crecimiento · aportes {contributions} · rendimiento {returns}"
+    },
+    "form": {
+      "newTitle": "Nueva inversión",
+      "editTitle": "Editar inversión",
+      "name": "Plataforma o tipo",
+      "nameHint": "Por ejemplo, Plataforma de inversión o Fondo de pensiones voluntarias. Sin números de cuenta.",
+      "bucket": "Tramo",
+      "bucketNone": "Sin definir",
+      "bucketNoneHint": "Cuenta en el total, no en los tramos.",
+      "balance": "Saldo",
+      "balanceHint": "El saldo de hoy.",
+      "currency": "Moneda",
+      "currencyHint": "Para otra moneda, registra antes su tasa en Monedas.",
+      "note": "Nota (opcional)",
+      "submit": "Guardar",
+      "submitting": "Guardando…",
+      "cancel": "Cancelar",
+      "deleteToggle": "Borrar esta inversión",
+      "deleteConfirm": "Sí, borrarla",
+      "deleteHint": "Se borra de la inversión y del patrimonio. El historial de cambios la conserva.",
+      "errors": {
+        "missingName": "Escribe la plataforma o el tipo.",
+        "tooLong": "Es demasiado largo.",
+        "looksLikeAccount": "Parece un número de cuenta. No lo necesitamos: escribe solo el nombre.",
+        "missingAmount": "Escribe el saldo.",
+        "invalidAmount": "Escribe un saldo de 0 o más, solo con números.",
+        "invalidCurrency": "Elige una moneda de la lista.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrala en Monedas y vuelve a intentarlo.",
+        "notAllowed": "No tienes permiso para cambiar este dato.",
+        "notFound": "Esta inversión ya no existe.",
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      }
+    },
+    "riskForm": {
+      "title": "Perfil de riesgo",
+      "intro": "Tres preguntas sobre lo que el cliente quiere asumir. Se pueden dejar sin responder.",
+      "dropReaction": "Si su inversión bajara 15 % en un año, ¿qué haría?",
+      "dropReactions": {
+        "venderia": "Vendería",
+        "esperaria": "Esperaría",
+        "invertiria_mas": "Invertiría más"
+      },
+      "experience": "¿Qué experiencia tiene invirtiendo?",
+      "experiences": {
+        "ninguna": "Ninguna",
+        "algo": "Algo",
+        "bastante": "Bastante"
+      },
+      "horizon": "¿En cuánto tiempo podría necesitar el dinero?",
+      "horizonHint": "No suma puntos: si es menos de 3 años, todo va a estabilidad.",
+      "horizons": {
+        "menos_3": "Menos de 3 años",
+        "de_3_a_7": "De 3 a 7 años",
+        "mas_7": "Más de 7 años"
+      },
+      "unanswered": "Sin responder",
+      "advisorTitle": "Criterio del asesor",
+      "variableIncome": "Ingresos variables o contrato inestable",
+      "dependents": "Personas a cargo sin seguro de vida",
+      "suggested": "La sugerida ({value})",
+      "yes": "Sí",
+      "no": "No",
+      "rangePosition": "Posición dentro del rango (%)",
+      "rangePositionHint": "0 es el mínimo del rango y 100 el máximo. Vacío: 50. Hacia el máximo si la pensión y las rentas cubren lo básico; hacia el mínimo si hay brecha, personas a cargo o metas cercanas.",
+      "submit": "Guardar",
+      "submitting": "Guardando…",
+      "cancel": "Cancelar",
+      "errors": {
+        "invalidPercent": "Escribe un número de 0 a 100.",
+        "missingRate": "No se pudo guardar. Intenta de nuevo en unos minutos.",
+        "notAllowed": "No tienes permiso para cambiar este dato.",
+        "notFound": "Este perfil ya no existe.",
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      },
+      "client": {
+        "intro": {
+          "tu": "Tres preguntas sobre cuánto riesgo quieres asumir. Puedes dejar alguna sin responder.",
+          "usted": "Tres preguntas sobre cuánto riesgo quiere asumir. Puede dejar alguna sin responder."
+        },
+        "dropReaction": {
+          "tu": "Si tu inversión bajara 15 % en un año, ¿qué harías?",
+          "usted": "Si su inversión bajara 15 % en un año, ¿qué haría?"
+        },
+        "experience": {
+          "tu": "¿Qué experiencia tienes invirtiendo?",
+          "usted": "¿Qué experiencia tiene invirtiendo?"
+        },
+        "horizon": {
+          "tu": "¿En cuánto tiempo podrías necesitar el dinero?",
+          "usted": "¿En cuánto tiempo podría necesitar el dinero?"
+        }
+      }
+    },
+    "settingsForm": {
+      "title": "Supuestos de inversión",
+      "intro": "Edad de retiro y supuestos de la proyección de este cliente. Vacío usa el valor de la metodología.",
+      "retirementAge": "Edad de retiro esperada",
+      "retirementAgeHint": "Vacío: {value} años (por defecto, la edad de pensión de la plantilla según el sexo). Escribe la del cliente.",
+      "realReturnGrowth": "Rendimiento real supuesto en crecimiento (%)",
+      "realReturnStability": "Rendimiento real supuesto en estabilidad (%)",
+      "glideStep": "Bajada anual del % en crecimiento cerca del retiro (puntos)",
+      "growthFloor": "Piso del % en crecimiento (%)",
+      "percentHint": "Vacío: {value}.",
+      "returnsNote": "Rendimientos ilustrativos, por encima de la inflación. No garantizados.",
+      "submit": "Guardar",
+      "submitting": "Guardando…",
+      "cancel": "Cancelar",
+      "errors": {
+        "invalidPercent": "Escribe un número de 0 a 100.",
+        "returnTooHigh": "Escribe un rendimiento de 0 a 50.",
+        "invalidAge": "Escribe una edad entera de 30 a 100.",
+        "missingRate": "No se pudo guardar. Intenta de nuevo en unos minutos.",
+        "notAllowed": "Solo el asesor cambia estos supuestos.",
+        "notFound": "Este cliente ya no existe.",
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      }
+    },
+    "client": {
+      "back": "Mis datos",
+      "title": {
+        "tu": "Tu inversión",
+        "usted": "Su inversión"
+      },
+      "intro": {
+        "tu": "Lo que tienes invertido, tu perfil de riesgo y cómo se reparte lo que inviertes. No te recomendamos productos ni entidades.",
+        "usted": "Lo que tiene invertido, su perfil de riesgo y cómo se reparte lo que invierte. No le recomendamos productos ni entidades."
+      },
+      "empty": {
+        "tu": "Todavía no registras inversiones.",
+        "usted": "Todavía no registra inversiones."
+      }
+    }
+  },
+  "goals": {
+    "title": "Metas",
+    "intro": "Metas con fecha o que se repiten. El aporte mensual de cada una entra al presupuesto como un bolsillo.",
+    "back": "Ficha del cliente",
+    "add": "Agregar meta",
+    "empty": "Todavía no hay metas.",
+    "monthlyTotal": "Aporte mensual a metas",
+    "monthly": "Aporte de {amount} al mes",
+    "byDate": "Para el {date}",
+    "repeats": {
+      "one": "Se repite cada año",
+      "other": "Se repite cada {years} años"
+    },
+    "value": "Valor {amount}",
+    "trip": "Con calculadora de viaje",
+    "noPocket": "Sin bolsillo: elige uno para que el aporte entre al presupuesto.",
+    "repeatNote": "Una meta que se repite no descuenta lo ya ahorrado (como la plantilla).",
+    "concepts": {
+      "tiquete": "Tiquete ida y vuelta con maleta",
+      "alojamiento": "Alojamiento por noche",
+      "comida": "Comida por día",
+      "transporte": "Transporte local",
+      "atracciones": "Atracciones",
+      "seguro_viaje": "Seguro de viaje",
+      "compras": "Compras y gastos varios"
+    },
+    "form": {
+      "newTitle": "Nueva meta",
+      "editTitle": "Editar meta",
+      "name": "Meta",
+      "nameHint": "Por ejemplo, Viaje, Computador o Cuota inicial.",
+      "pocket": "Bolsillo",
+      "pocketHint": "Donde se guarda el aporte. Los bolsillos se crean en Bolsillos.",
+      "pocketNone": "Sin bolsillo",
+      "amount": "Valor",
+      "amountHint": "Lo que cuesta la meta. Con la calculadora de viaje puede quedar vacío.",
+      "currency": "Moneda",
+      "alreadySaved": "Ya ahorrado (opcional)",
+      "targetDate": "Fecha objetivo",
+      "targetDateHint": "Para una meta con fecha.",
+      "repeatEveryYears": "Se repite cada (años)",
+      "repeatEveryYearsHint": "Para una meta que se repite, como un viaje cada 2 años. Si escribes los dos, manda la repetición.",
+      "usesTrip": "Usar la calculadora de viaje",
+      "usesTripHint": "Calcula el valor con los costos del viaje en otra moneda.",
+      "tripTitle": "Calculadora de viaje",
+      "tripCurrency": "Moneda del viaje",
+      "unitValue": "Valor unitario",
+      "quantity": "Cantidad",
+      "tripLodgingTax": "Impuestos del alojamiento (%)",
+      "tripCushion": "Colchón por tasa de cambio y comisiones (%)",
+      "tripCushionHint": "Vacío: 5 %.",
+      "tripBaseCosts": "Trayecto hasta el aeropuerto y visa ({currency})",
+      "tripBaseCostsHint": "En la moneda base, si aplican.",
+      "tripNote": "Busca precios reales y actuales.",
+      "note": "Nota (opcional)",
+      "submit": "Guardar",
+      "submitting": "Guardando…",
+      "cancel": "Cancelar",
+      "deleteToggle": "Borrar esta meta",
+      "deleteConfirm": "Sí, borrarla",
+      "deleteHint": "Se borra la meta y su aporte del presupuesto. El historial de cambios la conserva.",
+      "errors": {
+        "missingName": "Escribe la meta.",
+        "tooLong": "Es demasiado largo.",
+        "looksLikeAccount": "Parece un número de cuenta. No lo necesitamos.",
+        "missingAmount": "Escribe el valor o usa la calculadora de viaje.",
+        "invalidAmount": "Escribe un valor de 0 o más, solo con números.",
+        "invalidCurrency": "Elige una moneda de la lista.",
+        "invalidYears": "Escribe un número de años mayor que 0 y hasta 50.",
+        "invalidDate": "Escribe una fecha válida.",
+        "missingWhen": "Escribe la fecha objetivo o cada cuántos años se repite.",
+        "invalidPercent": "Escribe un número de 0 a 100.",
+        "invalidQuantity": "Escribe una cantidad de 0 o más.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrala en Monedas y vuelve a intentarlo.",
+        "notAllowed": "No tienes permiso para cambiar este dato.",
+        "notFound": "Esta meta ya no existe.",
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      }
+    },
+    "client": {
+      "back": "Mis datos",
+      "title": {
+        "tu": "Tus metas",
+        "usted": "Sus metas"
+      },
+      "intro": {
+        "tu": "Lo que quieres lograr, con fecha o cada tantos años. Lo que apartas cada mes entra a tu presupuesto.",
+        "usted": "Lo que quiere lograr, con fecha o cada tantos años. Lo que aparta cada mes entra a su presupuesto."
+      },
+      "empty": {
+        "tu": "Todavía no registras metas.",
+        "usted": "Todavía no registra metas."
+      }
+    }
+  },
+  "insurance": {
+    "title": "Seguros",
+    "intro": "Qué seguros tiene el cliente y las primas cotizadas de los que no tiene. Las primas de los seguros nuevos entran al presupuesto. No se recomiendan aseguradoras.",
+    "back": "Ficha del cliente",
+    "add": "Agregar otro seguro",
+    "unanswered": "Sin responder",
+    "answer": "Responder",
+    "statuses": {
+      "si": "Lo tiene",
+      "no": "No lo tiene",
+      "cotizando": "Cotizando"
+    },
+    "premium": "Prima anual {amount}",
+    "newPremiums": "Primas de seguros nuevos al año",
+    "newPremiumsMonthly": "Al mes, en el presupuesto",
+    "quoting": "De esas, en cotización",
+    "quotingNote": "Las primas en cotización entran al presupuesto como si ya se pagaran: el plan supone que se toman.",
+    "pendingNote": "Falta marcar qué seguros tiene el cliente.",
+    "noPocket": "Las primas de los seguros nuevos no tienen bolsillo. Elígelo en Supuestos de seguros.",
+    "types": {
+      "hogar": "Hogar para inmuebles",
+      "arrendamiento": "Arrendamiento",
+      "enfermedades_graves": "Enfermedades graves",
+      "renta_hospitalizacion": "Renta por hospitalización o incapacidad",
+      "vida": "Vida e incapacidad permanente",
+      "complementario": "Plan complementario o prepagada",
+      "desempleo": "Desempleo o protección de ingresos",
+      "vehiculo": "Vehículo (todo riesgo)",
+      "otro": "Otro"
+    },
+    "covers": {
+      "hogar": "Terremoto, incendio, inundación, daños y responsabilidad civil. Revisar qué cubre la póliza de la copropiedad.",
+      "arrendamiento": "Canon y administración si el arrendatario no paga. No cubre el inmueble desocupado.",
+      "enfermedades_graves": "Pago único al diagnóstico. Revisar la lista de enfermedades, preexistencias, carencias y edad máxima.",
+      "renta_hospitalizacion": "Valor diario mientras está hospitalizado o incapacitado. Complementa lo que paga el sistema de salud.",
+      "vida": "Pago a beneficiarios o al asegurado. La suma asegurada orientativa está abajo.",
+      "complementario": "Acceso a especialistas y menos copagos. Sube con la edad y puede excluir preexistencias.",
+      "desempleo": "Pago mensual si se pierde el ingreso. Limitado para contratistas e independientes.",
+      "vehiculo": "Daños y robo del vehículo. Confirmar quién lo paga hoy.",
+      "otro": ""
+    },
+    "life": {
+      "title": "Suma asegurada orientativa de vida",
+      "debts": "Deudas pendientes",
+      "annualToCover": "Gasto anual que se quiere cubrir",
+      "supportYears": "Años de apoyo a dependientes",
+      "liquid": "Saldo líquido e inversiones",
+      "sumInsured": "Suma asegurada orientativa",
+      "note": "Orientativa. Cotizar con 2 o 3 aseguradoras y comparar exclusiones.",
+      "years": "{years} años"
+    },
+    "settingsLink": "Supuestos de seguros",
+    "settingsSummary": "Años de apoyo, gasto a cubrir y bolsillo de las primas.",
+    "form": {
+      "newTitle": "Nuevo seguro",
+      "editTitle": "Editar seguro",
+      "insuranceType": "Seguro",
+      "customName": "Nombre del seguro",
+      "customNameHint": "Por ejemplo, Mascotas. Sin número de póliza.",
+      "status": "¿Lo tiene?",
+      "statusUnanswered": "Sin responder",
+      "premium": "Prima anual cotizada (opcional)",
+      "premiumHint": "Solo primas cotizadas: no se inventan. Si ya lo tiene, su costo va en el presupuesto.",
+      "currency": "Moneda",
+      "beneficiaries": "Beneficiarios (opcional)",
+      "beneficiariesHint": "Por ejemplo, hijos o pareja. Sin documentos.",
+      "note": "Nota (opcional)",
+      "submit": "Guardar",
+      "submitting": "Guardando…",
+      "cancel": "Cancelar",
+      "deleteToggle": "Borrar este seguro",
+      "deleteConfirm": "Sí, borrarlo",
+      "deleteHint": "Se borra del análisis. El historial de cambios lo conserva.",
+      "errors": {
+        "missingName": "Escribe el nombre del seguro.",
+        "tooLong": "Es demasiado largo.",
+        "looksLikeAccount": "Parece un número de póliza o de documento. No lo necesitamos.",
+        "invalidAmount": "Escribe una prima de 0 o más, solo con números.",
+        "invalidCurrency": "Elige una moneda de la lista.",
+        "duplicate": "Ese seguro ya está registrado. Edítalo desde la lista.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrala en Monedas y vuelve a intentarlo.",
+        "notAllowed": "No tienes permiso para cambiar este dato.",
+        "notFound": "Este seguro ya no existe.",
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      }
+    },
+    "settingsForm": {
+      "title": "Supuestos de seguros",
+      "intro": "Datos del asesor para la suma asegurada de vida y el bolsillo de las primas nuevas.",
+      "supportYears": "Años de apoyo a dependientes",
+      "supportYearsHint": "Vacío: 10 años si hay personas a cargo, como la plantilla.",
+      "annualToCover": "Gasto anual a cubrir ({currency})",
+      "annualToCoverHint": "Vacío: el gasto anual del presupuesto, que incluye los gastos del propio cliente.",
+      "nativeOnly": "Estos dos datos solo cuentan en modo nativo; en modo compatible se usa la regla de la plantilla.",
+      "pocket": "Bolsillo de las primas nuevas",
+      "pocketHint": "Las primas de los seguros que no tiene entran al presupuesto en este bolsillo.",
+      "pocketNone": "Sin bolsillo",
+      "submit": "Guardar",
+      "submitting": "Guardando…",
+      "cancel": "Cancelar",
+      "errors": {
+        "invalidYears": "Escribe un número de años de 0 a 60.",
+        "invalidAmount": "Escribe un valor de 0 o más, solo con números.",
+        "duplicate": "No se pudo guardar. Intenta de nuevo en unos minutos.",
+        "missingRate": "No se pudo guardar. Intenta de nuevo en unos minutos.",
+        "notAllowed": "Solo el asesor cambia estos supuestos.",
+        "notFound": "Este cliente ya no existe.",
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      }
+    },
+    "client": {
+      "back": "Mis datos",
+      "title": {
+        "tu": "Tus seguros",
+        "usted": "Sus seguros"
+      },
+      "intro": {
+        "tu": "Qué seguros tienes y lo que te cotizaron de los que no tienes. No te recomendamos aseguradoras.",
+        "usted": "Qué seguros tiene y lo que le cotizaron de los que no tiene. No le recomendamos aseguradoras."
+      }
+    }
   }
 }

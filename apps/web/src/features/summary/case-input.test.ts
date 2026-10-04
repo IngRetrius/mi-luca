@@ -28,6 +28,12 @@ const methodology = toMethodology({
   pctSurplusInvestPending: 0.5,
   pctSurplusToDebt: 0.9,
   pctExcessToInvest: 0.5,
+  realReturnGrowth: 0.05,
+  realReturnStability: 0.015,
+  growthGlideStep: 0.02,
+  growthFloor: 0.1,
+  growthRanges: undefined,
+  retirementAgeBySex: { mujer: 57, hombre: 62 },
 });
 
 /** Supuestos con todo vacío salvo lo que cada prueba fija. */
@@ -44,11 +50,26 @@ const settings = (overrides: Partial<NonNullable<CaseRows['settings']>>) => ({
   pct_excess_to_invest: null,
   operating_cushion: 0,
   debt_method: 'avalancha',
+  real_return_growth: null,
+  real_return_stability: null,
+  retirement_age: null,
+  growth_glide_step: null,
+  growth_floor: null,
+  life_support_years: null,
+  life_annual_to_cover: null,
+  insurance_pocket_id: null,
   ...overrides,
 });
 
 const rows: CaseRows = {
-  client: { base_currency: 'EUR', country_code: 'ES', client_type: 'empleado' },
+  client: {
+    base_currency: 'EUR',
+    country_code: 'ES',
+    client_type: 'empleado',
+    birth_date: '1990-05-01',
+    sex: null,
+    dependents_count: 0,
+  },
   settings: null,
   methodology,
   fxRates: [{ currency: 'USD', rate_to_base: 0.9 }],
@@ -73,6 +94,11 @@ const rows: CaseRows = {
   assets: [],
   debts: [],
   installments: [],
+  goals: [],
+  tripItems: [],
+  insurances: [],
+  investments: [],
+  riskProfile: null,
   thresholds: [{ key: 'tax.dependent_income_limit', value: 8000, unit: 'EUR' }],
 };
 
@@ -228,7 +254,7 @@ describe('toCaseInput', () => {
   it('sin supuestos del plan valen los de la metodología y los meses del tipo de cliente', () => {
     const { input } = toCaseInput(rows, '2026-10-01');
     expect(input.flowYear).toBeNull();
-    expect(input.parameters).toEqual({
+    expect(input.parameters).toMatchObject({
       emergencyMonths: 3,
       expensiveDebtThreshold: 0.2,
       pctInvestConfirmed: 0.7,
@@ -322,5 +348,91 @@ describe('toCaseInput', () => {
     expect(() =>
       toCaseInput({ ...rows, budgetItems: [item({ payer: 'vecino' })] }, '2026-10-01'),
     ).toThrow();
+  });
+
+  it('metas con calculadora de viaje, seguros, inversiones y perfil de riesgo (F5)', () => {
+    const { input } = toCaseInput(
+      {
+        ...rows,
+        client: { ...rows.client, sex: 'hombre', dependents_count: 2 },
+        settings: settings({ insurance_pocket_id: 'p-seguros', life_support_years: 15 }),
+        goals: [
+          {
+            id: 'g1',
+            pocket_id: 'p-viajes',
+            currency: 'EUR',
+            amount: null,
+            already_saved: 100,
+            repeat_every_years: 2,
+            target_date: null,
+            uses_trip_calculator: true,
+            trip_currency: 'USD',
+            trip_lodging_tax_rate: 0.1,
+            trip_cushion_rate: 0.05,
+            trip_base_costs: 50,
+          },
+        ],
+        tripItems: [
+          { goal_id: 'g1', unit_value: 80, quantity: 3, is_lodging: true },
+          { goal_id: 'otra', unit_value: 999, quantity: 1, is_lodging: false },
+        ],
+        insurances: [
+          {
+            insurance_type: 'vida',
+            status: 'cotizando',
+            currency: 'EUR',
+            annual_premium_quoted: 240,
+          },
+          { insurance_type: 'hogar', status: null, currency: 'EUR', annual_premium_quoted: null },
+        ],
+        investments: [{ bucket: 'crecimiento', currency: 'USD', balance: 1000 }],
+        riskProfile: {
+          drop_reaction: 'esperaria',
+          experience: 'algo',
+          horizon: 'mas_7',
+          variable_income_override: false,
+          dependents_override: null,
+          range_position: 0.8,
+        },
+      },
+      '2026-10-01',
+    );
+    expect(input.goals[0]?.trip).toEqual({
+      currency: 'USD',
+      items: [{ unitValue: 80, quantity: 3, isLodging: true }],
+      lodgingTaxRate: 0.1,
+      cushionRate: 0.05,
+      baseCurrencyCosts: [50],
+    });
+    expect(input.insurancePocket).toBe('p-seguros');
+    expect(input.insurances.map((row) => row.isLife)).toEqual([true, false]);
+    expect(input.lifeInsurance).toEqual({ supportYears: 15, annualToCover: null });
+    expect(input.profile).toEqual({
+      birthDate: '1990-05-01',
+      dependents: 2,
+      clientType: 'empleado',
+    });
+    expect(input.riskProfile).toEqual({
+      answers: { dropReaction: 'esperaria', experience: 'algo', horizon: 'mas_7' },
+      variableIncome: false,
+      dependentsWithoutLifeInsurance: null,
+      rangePosition: 0.8,
+    });
+    // Sin edad de retiro del asesor, la de la metodología por sexo; rangos de la plantilla.
+    expect(input.parameters.retirementAge).toBe(62);
+    expect(input.parameters.growthRanges).toHaveLength(4);
+    const result = compute(input, { mode: 'native' });
+    // Quiere moderado, pero tiene personas a cargo sin seguro de vida y el fondo sin completar.
+    expect(result.investment.profile.willingnessLevel).toBe('moderado');
+    expect(result.investment.profile.finalLevel).toBe('conservador');
+    expect(result.investment.current.total).toBeCloseTo(900, 9);
+  });
+
+  it('la edad de retiro del asesor manda; sin sexo, la de la plantilla para mujer', () => {
+    expect(
+      toCaseInput({ ...rows, settings: settings({ retirement_age: 67 }) }, '2026-10-01').input
+        .parameters.retirementAge,
+    ).toBe(67);
+    expect(toCaseInput(rows, '2026-10-01').input.parameters.retirementAge).toBe(57);
   });
 });

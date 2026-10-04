@@ -1,0 +1,61 @@
+{
+  "excel": "16.113.3",
+  "generated": "2026-10-03",
+  "results": [
+    {
+      "id": "mismo-dia",
+      "formula": "=DATEDIF(DATE(2000,9,28),DATE(2026,9,28),\"y\")",
+      "value": 26
+    },
+    {
+      "id": "un-dia-antes",
+      "formula": "=DATEDIF(DATE(2000,9,28),DATE(2026,9,27),\"y\")",
+      "value": 25
+    },
+    {
+      "id": "un-dia-despues",
+      "formula": "=DATEDIF(DATE(2000,9,28),DATE(2026,9,29),\"y\")",
+      "value": 26
+    },
+    {
+      "id": "29-feb-a-28-feb",
+      "formula": "=DATEDIF(DATE(2004,2,29),DATE(2025,2,28),\"y\")",
+      "value": 20
+    },
+    {
+      "id": "29-feb-a-1-mar",
+      "formula": "=DATEDIF(DATE(2004,2,29),DATE(2025,3,1),\"y\")",
+      "value": 21
+    },
+    {
+      "id": "29-feb-a-29-feb",
+      "formula": "=DATEDIF(DATE(2004,2,29),DATE(2024,2,29),\"y\")",
+      "value": 20
+    },
+    {
+      "id": "mes-anterior",
+      "formula": "=DATEDIF(DATE(1973,11,5),DATE(2026,9,28),\"y\")",
+      "value": 52
+    },
+    {
+      "id": "mes-siguiente",
+      "formula": "=DATEDIF(DATE(1973,8,5),DATE(2026,9,28),\"y\")",
+      "value": 53
+    },
+    {
+      "id": "cero",
+      "formula": "=DATEDIF(DATE(2026,9,28),DATE(2026,12,31),\"y\")",
+      "value": 0
+    },
+    {
+      "id": "fin-antes",
+      "formula": "=DATEDIF(DATE(2026,9,28),DATE(2026,9,27),\"y\")",
+      "value": "#NUM!"
+    },
+    {
+      "id": "31-dic",
+      "formula": "=DATEDIF(DATE(1990,12,31),DATE(2026,12,30),\"y\")",
+      "value": 35
+    }
+  ]
+}

@@ -5,12 +5,17 @@
  */
 import type {
   AssetType,
+  ClientType,
   DebtMethod,
+  DropReaction,
   ExpenseType,
   Frequency,
   IncomeKind,
   InsuranceStatus,
+  InvestingExperience,
+  InvestmentBucket,
   Money,
+  MoneyHorizon,
   MonthFlags,
   Payer,
 } from '@miluca/domain';
@@ -22,6 +27,12 @@ import { debtTotals, type DebtInput } from '../../src/debts';
 import { computeGoals, type GoalInput, type TripCostInput } from '../../src/goals';
 import type { IncomeInput } from '../../src/incomes';
 import { computeInsurance, type InsuranceInput } from '../../src/insurance';
+import {
+  DEFAULT_GROWTH_RANGES,
+  type GrowthRangeBand,
+  type InvestmentInput,
+  type RiskAnswers,
+} from '../../src/investment';
 import type { AssetInput } from '../../src/net-worth';
 import type { PocketInput } from '../../src/pockets';
 import type { RealityCheckInput } from '../../src/reality-check';
@@ -43,6 +54,10 @@ const TRIP_LODGING_ROW = 16;
 export const POCKET_ROWS = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17] as const;
 export const RECEIVABLE_ROWS = [46, 47, 48] as const;
 const ASSET_ROWS = Array.from({ length: 20 }, (_, i) => i + 8); // 8 a 27
+export const INVESTMENT_ROWS = [6, 7, 8, 9, 10, 11] as const;
+/** Fila del seguro de vida en Seguros (`Inversión!C26` la mira). */
+const LIFE_INSURANCE_ROW = 10;
+const GROWTH_RANGE_ROWS = [36, 37, 38, 39] as const;
 /** Bolsillo fijo de la fila automática de seguros (`Presupuesto!K7`) y el de las metas sin bolsillo. */
 const INSURANCE_POCKET = 'Seguros';
 const DEFAULT_GOAL_POCKET = 'Metas';
@@ -86,6 +101,38 @@ const ASSET_TYPES: Readonly<Record<string, AssetType>> = {
 const DEBT_METHODS: Readonly<Record<string, DebtMethod>> = {
   Avalancha: 'avalancha',
   'Bola de nieve': 'bola_de_nieve',
+};
+
+const CLIENT_TYPES: Readonly<Record<string, ClientType>> = {
+  Empleado: 'empleado',
+  Contratista: 'contratista',
+  'Independiente variable': 'independiente_variable',
+  Pensionado: 'pensionado',
+  Rentista: 'rentista',
+  Mixto: 'mixto',
+};
+
+const INVESTMENT_BUCKETS: Readonly<Record<string, InvestmentBucket>> = {
+  Crecimiento: 'crecimiento',
+  Estabilidad: 'estabilidad',
+};
+
+const DROP_REACTIONS: Readonly<Record<string, DropReaction>> = {
+  Vendería: 'venderia',
+  Esperaría: 'esperaria',
+  'Invertiría más': 'invertiria_mas',
+};
+
+const EXPERIENCES: Readonly<Record<string, InvestingExperience>> = {
+  Ninguna: 'ninguna',
+  Algo: 'algo',
+  Bastante: 'bastante',
+};
+
+const HORIZONS: Readonly<Record<string, MoneyHorizon>> = {
+  'Menos de 3 años': 'menos_3',
+  '3 a 7 años': 'de_3_a_7',
+  'Más de 7 años': 'mas_7',
 };
 
 const INSURANCE_STATUSES: Readonly<Record<string, InsuranceStatus>> = {
@@ -210,6 +257,7 @@ export function insuranceInput(golden: GoldenCase): InsuranceInput[] {
   return INSURANCE_ROWS.map((row) => ({
     status: label(cell(golden, `Seguros!F${row}`), INSURANCE_STATUSES, `Seguros!F${row}`),
     annualPremiumQuoted: baseMoney(golden, `Seguros!H${row}`),
+    isLife: row === LIFE_INSURANCE_ROW,
   }));
 }
 
@@ -335,7 +383,62 @@ export function planParameters(golden: GoldenCase): PlanParameters {
       amount: excelN(cell(golden, 'Supuestos!C32')),
       currency: fxContext(golden).baseCurrency,
     },
+    retirementAge: excelN(cell(golden, 'Supuestos!C29')),
+    projection: {
+      realReturnGrowth: excelN(cell(golden, 'Supuestos!C27')),
+      realReturnStability: excelN(cell(golden, 'Supuestos!C28')),
+      glideStep: excelN(cell(golden, 'Supuestos!C30')),
+      growthFloor: excelN(cell(golden, 'Supuestos!C31')),
+    },
+    growthRanges: growthRanges(golden),
   };
+}
+
+/**
+ * @excel Inversión!D36:I39. Las edades de cada tramo (`B36:B39`) son textos fijos de la hoja que
+ * el extractor no guarda: salen de la tabla por defecto.
+ */
+export function growthRanges(golden: GoldenCase): GrowthRangeBand[] {
+  const pair = (row: number, from: string, to: string): [number, number] => [
+    excelN(cell(golden, `Inversión!${from}${row}`)),
+    excelN(cell(golden, `Inversión!${to}${row}`)),
+  ];
+  return GROWTH_RANGE_ROWS.map((row, index) => ({
+    fromAge: DEFAULT_GROWTH_RANGES[index]!.fromAge,
+    conservative: pair(row, 'D', 'E'),
+    moderate: pair(row, 'F', 'G'),
+    tolerant: pair(row, 'H', 'I'),
+  }));
+}
+
+/** Inversiones actuales con saldo (filas 6 a 11). */
+export function investmentsInput(golden: GoldenCase): InvestmentInput[] {
+  const { baseCurrency } = fxContext(golden);
+  return INVESTMENT_ROWS.flatMap((row) => {
+    const balance = numberOrNull(golden, `Inversión!E${row}`);
+    if (balance === null) return [];
+    return [
+      {
+        bucket: label(cell(golden, `Inversión!C${row}`), INVESTMENT_BUCKETS, `Inversión!C${row}`),
+        balance: { amount: balance, currency: text(golden, `Inversión!D${row}`) ?? baseCurrency },
+      },
+    ];
+  });
+}
+
+/** @excel Inversión!C18, C19, C21 */
+export function riskAnswers(golden: GoldenCase): RiskAnswers {
+  return {
+    dropReaction: label(cell(golden, 'Inversión!C18'), DROP_REACTIONS, 'Inversión!C18'),
+    experience: label(cell(golden, 'Inversión!C19'), EXPERIENCES, 'Inversión!C19'),
+    horizon: label(cell(golden, 'Inversión!C21'), HORIZONS, 'Inversión!C21'),
+  };
+}
+
+/** Una condición de capacidad escrita a mano sobre la fórmula; null si quedó la fórmula. */
+function capacityOverride(golden: GoldenCase, address: string): boolean | null {
+  const value = golden.inputs['Inversión']?.[address];
+  return value === undefined ? null : value === 'Sí';
 }
 
 export function realityCheckInput(golden: GoldenCase): RealityCheckInput {
@@ -379,6 +482,11 @@ export function pocketsInput(golden: GoldenCase): PocketInput[] {
 export function caseInput(golden: GoldenCase, options: BudgetInputOptions = {}): CaseInput {
   return {
     cutoffDate: golden.cutoffDate,
+    profile: {
+      birthDate: isoDate(golden, 'Supuestos!C8'),
+      dependents: excelN(cell(golden, 'Supuestos!C11')),
+      clientType: label(cell(golden, 'Supuestos!C10'), CLIENT_TYPES, 'Supuestos!C10'),
+    },
     flowYear: excelN(cell(golden, 'Supuestos!C14')),
     fx: fxContext(golden),
     parameters: planParameters(golden),
@@ -388,11 +496,19 @@ export function caseInput(golden: GoldenCase, options: BudgetInputOptions = {}):
     goals: goalsInput(golden).filter((goal): goal is GoalInput => goal !== null),
     insurances: insuranceInput(golden),
     insurancePocket: INSURANCE_POCKET,
+    lifeInsurance: { supportYears: null, annualToCover: null },
     debts: debtsInput(golden),
     debtMethod: debtMethod(golden),
     receivables: receivablesInput(golden),
     realityCheck: realityCheckInput(golden),
     assets: assetsInput(golden),
+    investments: investmentsInput(golden),
+    riskProfile: {
+      answers: riskAnswers(golden),
+      variableIncome: capacityOverride(golden, 'C25'),
+      dependentsWithoutLifeInsurance: capacityOverride(golden, 'C26'),
+      rangePosition: excelN(cell(golden, 'Inversión!C44')),
+    },
     pockets: pocketsInput(golden),
     fiscalThresholds: [],
   };
