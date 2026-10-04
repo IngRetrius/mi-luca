@@ -51,7 +51,7 @@ gantt
 
 ### 2.1 Avance real
 
-| Fase | Estimado | Estado al 03/10/2026 |
+| Fase | Estimado | Estado al 04/10/2026 |
 |---|---|---|
 | F0 | 80 h, hasta mediados de noviembre de 2026 | Terminada salvo tareas del asesor: dominio y verificación de marca en Google (D3, D5) |
 | F1 | 120 h, hasta mediados de enero de 2027 | Terminada salvo el alta con Google en un navegador real, el correo de la invitación (C14) y exportar y borrar en P-C11 (F7) |
@@ -60,7 +60,8 @@ gantt
 | F4 | 160 h, hasta comienzos de septiembre de 2027 | Terminada en el código: deudas del diagnóstico (C4 y C9), créditos cuota a cuota, plan de pago y Panel (C5), correcciones del modo nativo y pantallas |
 | F5 | 120 h, hasta comienzos de noviembre de 2027 | Terminada en el código: inversión, patrimonio completo, metas con la calculadora de viaje, seguros con la suma asegurada de vida y sus pantallas |
 | F6 | 80 h | Eliminada el 04/10/2026: la pensión no entra en la plataforma (ADR 0016) |
-| F7 y F8 | 240 h | Sin empezar |
+| F7 | 160 h | Empezada: control mensual y plan de acción |
+| F8 | 80 h | Sin empezar |
 
 Con el agente de código, F0 a F2 avanzaron mucho más rápido que la estimación a 14 horas por semana, que suponía empezar el 5 de octubre de 2026. **Supuesto:** el calendario de arriba se mantiene como techo y se reestima al cerrar F3, con lo que tome realmente una fase que mezcla motor, base de datos y pantallas. Las horas del resto no cambian hasta entonces.
 
@@ -276,6 +277,16 @@ Criterios de aceptación:
 - La ficha de continuidad tiene todos los campos del Anexo C.
 - Control mensual y plan de acción funcionan en el celular del cliente.
 - Exportación de datos (JSON y Excel) completa; el borrado elimina todas las filas, archivos y la cuenta, verificado por prueba automática.
+
+Avance:
+
+- [x] Control mensual y plan de acción (ADR 0018): motor (`ENGINE_VERSION` 0.16.0) con `monthlyControl`, `suggestedActions` e `isOverdue`, probado con el caso de oro C11; tablas `monthly_control_entries` y `action_items` con RLS, guardas y pruebas pgTAP; P-C08 Control mensual y P-C09 Tareas para el cliente, las mismas pantallas para el asesor con las tareas sugeridas, el inicio del cliente con el gasto del mes y sus próximas tareas, y la sección Seguimiento en la ficha. Verificado contra Supabase local a 320 y 390 px y revisado con `web-design-guidelines`.
+- [ ] Notas y carta con cifras enlazadas (P-A13), PDF y entrega (P-A14).
+- [ ] Ficha de continuidad (Anexo C), comparación con el plan entregado y revisiones (P-A16).
+- [ ] Excel compatible (P-A18).
+- [ ] Avisos por correo (C6, C14).
+- [ ] Exportación y borrado (P-C11).
+- [ ] Herramienta de tareas para el agente de captura (ADR 0017): hoy no anota tareas ni gasto real.
 
 ### F8. Endurecimiento y lanzamiento (80 horas)
 

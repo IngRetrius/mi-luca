@@ -66,7 +66,15 @@
       "tu": "Tu asesor está preparando tu plan. Cuando lo entregue, lo verás aquí.",
       "usted": "Su asesor está preparando su plan. Cuando lo entregue, lo verá aquí."
     },
-    "privacyLink": "Privacidad y datos"
+    "privacyLink": "Privacidad y datos",
+    "spendingLink": "Registrar el gasto de este mes",
+    "tasksTitle": {
+      "tu": "Tus próximas tareas",
+      "usted": "Sus próximas tareas"
+    },
+    "tasksLink": "Ver todas las tareas",
+    "overdue": "Vencida",
+    "dueOn": "Antes del {date}"
   },
   "clients": {
     "title": "Clientes",
@@ -193,7 +201,15 @@
       "insuranceSummary": "Primas nuevas de {amount} al año",
       "investment": "Inversión",
       "investmentSummary": "Perfil {profile} · {growth} en crecimiento",
-      "investmentUnanswered": "Falta responder el perfil"
+      "investmentUnanswered": "Falta responder el perfil",
+      "followUpTitle": "Seguimiento",
+      "monthlyControl": "Control mensual",
+      "monthlyControlSummary": "{count} meses registrados en {year}",
+      "monthlyControlNone": "Sin gasto real registrado en {year}",
+      "actionPlan": "Plan de acción",
+      "actionPlanSummary": "{pending} pendientes de {total}",
+      "actionPlanOverdue": "{pending} pendientes de {total} · {overdue} vencidas",
+      "actionPlanNone": "Sin tareas"
     }
   },
   "invitation": {
@@ -2522,5 +2538,163 @@
         "usted": "Qué seguros tiene y lo que le cotizaron de los que no tiene. No le recomendamos aseguradoras."
       }
     }
+  },
+  "monthlyControl": {
+    "title": "Control mensual",
+    "intro": "El gasto real de cada mes por categoría, frente al presupuesto. El presupuesto mensual es el promedio: los gastos anuales se reparten en 12.",
+    "client": {
+      "intro": {
+        "tu": "Escribe cada mes cuánto gastaste en cada categoría. Se compara con tu presupuesto; lo que se pase más de 10 % por encima o por debajo se marca.",
+        "usted": "Escriba cada mes cuánto gastó en cada categoría. Se compara con su presupuesto; lo que se pase más de 10 % por encima o por debajo se marca."
+      },
+      "back": "Inicio"
+    },
+    "back": "Ficha del cliente",
+    "monthNav": "Elegir mes",
+    "previousMonth": "Mes anterior: {month}",
+    "nextMonth": "Mes siguiente: {month}",
+    "monthTitle": "{month} de {year}",
+    "empty": "Todavía no hay presupuesto por categoría. Cuando se registren los gastos del presupuesto, aparecerán aquí.",
+    "automaticCategories": {
+      "debts": "Deudas",
+      "insurance": "Seguros",
+      "goals": "Metas"
+    },
+    "outsideBudget": "Fuera del presupuesto",
+    "over": "{pct} por encima",
+    "under": "{pct} por debajo",
+    "onBudget": "Dentro del presupuesto",
+    "noBudget": "Sin presupuesto",
+    "form": {
+      "budget": "Presupuesto {amount}",
+      "currency": "Moneda de {category}",
+      "emptyHint": "Deja vacío lo que no registraste; 0 es un mes sin gasto.",
+      "total": "Total del mes: {real} de {budget}",
+      "totalNone": "Presupuesto del mes: {budget}",
+      "submit": "Guardar mes",
+      "submitting": "Guardando…",
+      "saved": "Mes guardado.",
+      "errors": {
+        "invalidAmount": "Escribe un valor de 0 o más, con hasta dos decimales.",
+        "invalidCurrency": "Elige una moneda con tasa registrada.",
+        "missingRate": "Falta la tasa de una moneda. Regístrala en Monedas.",
+        "notAllowed": "No tienes permiso para registrar este gasto.",
+        "unavailable": "No pudimos guardar. Revisa tu conexión e intenta de nuevo.",
+        "invalidMonth": "Ese mes no es válido."
+      }
+    },
+    "yearTitle": "Promedio de {year}",
+    "yearIntro": "Compara el promedio real de varios meses, no un mes aislado.",
+    "yearNone": "Todavía no hay meses registrados en {year}.",
+    "yearRow": "Promedio real {real} de {budget} · {months}",
+    "monthsCount": {
+      "one": "1 mes",
+      "other": "{count} meses"
+    },
+    "yearTotal": "Total"
+  },
+  "actionPlan": {
+    "title": "Plan de acción",
+    "intro": "Las tareas del plan con su responsable y fecha límite. El cliente marca las suyas como hechas desde la app.",
+    "back": "Ficha del cliente",
+    "client": {
+      "title": {
+        "tu": "Tus tareas",
+        "usted": "Sus tareas"
+      },
+      "intro": {
+        "tu": "Lo que acordaste con tu asesor. Toca “Marcar hecha” cuando termines una tarea.",
+        "usted": "Lo que acordó con su asesor. Toque “Marcar hecha” cuando termine una tarea."
+      },
+      "back": "Inicio",
+      "empty": {
+        "tu": "Tu asesor todavía no ha agregado tareas.",
+        "usted": "Su asesor todavía no ha agregado tareas."
+      }
+    },
+    "empty": "Todavía no hay tareas. Agrega las sugeridas o escribe una.",
+    "filterLabel": "Mostrar",
+    "filters": {
+      "pendientes": "Pendientes",
+      "hechas": "Hechas",
+      "todas": "Todas"
+    },
+    "emptyFilter": "No hay tareas en esta lista.",
+    "add": "Agregar tarea",
+    "addSuggested": "Agregar las tareas sugeridas",
+    "addSuggestedHint": {
+      "one": "Falta 1 tarea sugerida para este cliente, con su fecha límite contada desde la fecha de corte.",
+      "other": "Faltan {count} tareas sugeridas para este cliente, con su fecha límite contada desde la fecha de corte."
+    },
+    "addingSuggested": "Agregando…",
+    "markDone": "Marcar hecha",
+    "reopen": "Reabrir",
+    "working": "Guardando…",
+    "edit": "Editar",
+    "overdue": "Vencida",
+    "due": "Antes del {date}",
+    "noDue": "Sin fecha límite",
+    "doneOn": "Hecha el {date}",
+    "priorities": {
+      "alta": "Alta",
+      "media": "Media",
+      "baja": "Baja"
+    },
+    "owners": {
+      "cliente": "Cliente",
+      "asesor": "Asesor",
+      "contador": "Contador",
+      "abogado": "Abogado",
+      "aseguradora": "Aseguradora",
+      "administradora_pensiones": "Entidad de pensiones"
+    },
+    "statuses": {
+      "pendiente": "Pendiente",
+      "en_curso": "En curso",
+      "hecho": "Hecha"
+    },
+    "templates": {
+      "create_pockets": "Crear los bolsillos y repartir el saldo actual",
+      "automate_transfers": "Programar transferencias automáticas el día de pago",
+      "record_actual_spending": "Registrar cada mes el gasto real en Control mensual",
+      "complete_reality_check": "Completar la prueba de realidad del presupuesto",
+      "pay_debts_in_order": "Pagar las deudas en el orden del plan",
+      "quote_insurance": "Cotizar los seguros de prioridad alta",
+      "review_beneficiaries": "Revisar los beneficiarios de seguros, pensión y cuentas",
+      "consult_accountant": "Consultar al contador: renta, retenciones y beneficios tributarios",
+      "pension_projection": "Pedir la historia laboral y la proyección de la pensión a la entidad de pensiones",
+      "will_and_family_folder": "Evaluar el testamento y preparar la carpeta familiar",
+      "investment_profile": "Definir el perfil de inversión y la distribución",
+      "review_30_days": "Revisión de seguimiento a 30 días",
+      "review_90_days": "Revisión de seguimiento a 90 días",
+      "annual_review": "Revisión anual del plan"
+    },
+    "form": {
+      "newTitle": "Nueva tarea",
+      "editTitle": "Editar tarea",
+      "title": "Tarea",
+      "priority": "Prioridad",
+      "owner": "Responsable",
+      "dueDate": "Fecha límite (opcional)",
+      "status": "Estado",
+      "note": "Nota (opcional)",
+      "noteHint": "Por ejemplo, qué se hizo o qué falta.",
+      "submit": "Guardar",
+      "submitting": "Guardando…",
+      "cancel": "Cancelar",
+      "deleteToggle": "Borrar tarea",
+      "deleteHint": "La tarea desaparece de la lista del cliente.",
+      "deleteConfirm": "Sí, borrar la tarea",
+      "errors": {
+        "missingTitle": "Escribe la tarea.",
+        "tooLong": "Es demasiado largo.",
+        "invalidOption": "Elige una opción de la lista.",
+        "invalidDate": "Escribe una fecha válida.",
+        "notAllowed": "No tienes permiso para cambiar esta tarea.",
+        "notFound": "Esta tarea ya no existe.",
+        "unavailable": "No pudimos guardar. Revisa tu conexión e intenta de nuevo."
+      }
+    },
+    "priorityLabel": "Prioridad {priority}"
   }
 }

@@ -6,7 +6,8 @@ import { expect, test } from '@playwright/test';
 // monedas, y la edición con "Así cambia tu plan" (P-C06 y P-C07). En F3, el inicio con el plan
 // entregado y Mi plan (P-C05) con la comparación con hoy. Después de F3, la lista de gastos típicos
 // del país (P-A06b en Mis gastos). En F4, las deudas del cliente con su plan de pago y P-C10 (marcar cuotas pagadas). En F5,
-// inversión con el perfil de riesgo, metas con la calculadora de viaje y seguros.
+// inversión con el perfil de riesgo, metas con la calculadora de viaje y seguros. En F7, el control
+// mensual (P-C08), las tareas (P-C09) y las próximas tareas del inicio.
 
 for (const path of [
   '/instalar',
@@ -53,6 +54,9 @@ for (const path of [
   '/mis-datos/seguros',
   '/mis-datos/seguros/nuevo',
   '/mis-datos/seguros/00000000-0000-4000-8000-000000000001',
+  '/control-mensual',
+  '/tareas',
+  '/tareas/00000000-0000-4000-8000-000000000001',
 ]) {
   test(`${path} sin sesión lleva a Entrar con la ruta de retorno`, async ({ page }) => {
     await page.goto(path);

@@ -263,9 +263,14 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Resumen | `summary` | |
 | Semáforo: bien, atención, alerta | `ok`, `warning`, `alert` | |
 | Pendientes | `pendingItems` | |
-| Control mensual | `monthlyControl` | |
-| Plan de acción | `actionPlan` | |
-| Tarea | `actionItem` | |
+| Control mensual | `monthlyControl` / `monthly_control_entries` | Gasto real por categoría y mes (RN-133); `/control-mensual` y `/clientes/[id]/control-mensual` |
+| Gasto real registrado | `MonthlyControlEntry` | Un registro por categoría y mes; 0 es un mes sin gasto |
+| Desviación, por encima, por debajo | `deviation`, `over`, `under` | (real − presupuesto) / presupuesto; se marca si pasa de `MONTHLY_CONTROL_THRESHOLD` (10 %) |
+| Plan de acción | `actionPlan` | `/tareas` (P-C09) y `/clientes/[id]/plan-de-accion` |
+| Tarea | `actionItem` / `action_items` | |
+| Tarea sugerida | `suggestedActions`, `ACTION_TEMPLATES`, `suggestion_key` | Las 14 de la plantilla; en modo nativo, solo las que aplican (ADR 0018) |
+| Prioridad, responsable, estado de una tarea | `priority`, `owner_role`, `status` | alta, media, baja; cliente, asesor, contador, abogado, aseguradora, administradora_pensiones ("Entidad de pensiones"); pendiente, en_curso, hecho |
+| Tarea vencida | `isOverdue` | Fecha límite anterior a hoy y sin hacer |
 | Notas para el cliente | `clientNotes` | |
 | Carta de cierre | `closingLetter` | |
 | Ficha de continuidad | `continuitySheet` | |

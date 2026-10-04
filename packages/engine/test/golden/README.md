@@ -17,6 +17,7 @@ Los valores quedan a nivel de celda. `adapters.ts` traduce las celdas a las entr
 | `cashflow-pockets.test.ts`      | Flujo anual completo (filas 7 a 34, `T20:T27`, `B36`), cobros (`Supuestos!F46:I49`), prueba de realidad (`C38:C42`), deuda cara y carga (`Deudas!C22:C24`), saldo líquido (`Patrimonio!C33`), Fondo de emergencia (`C6:E25`), Bolsillos (`D6:G18`, `C21:C30`) y `Resumen!C14:C26` (salvo `C19`) y `C35` |
 | `goals-insurance-debts.test.ts` | Metas (F, J y K de las filas 6 a 10, `K11` y la calculadora `E17:E30`), Seguros (`I6:I16`, `H16`), Deudas (`D21`, `F21`) y el valor de las filas automáticas `Presupuesto!D6:D12`                                                                                                                       |
 | `debts-plan.test.ts` | Plan de pago de deudas: `Deudas!C8:C11`, tasa mensual, orden e intereses de cada deuda (`I`, `K`, `N`, `O`), la simulación mes a mes completa (filas 29 a 80), el resultado por orden (`D86:F93`), `N21:O21`, `H22`, `C26`, y los meses, fechas de salida, `C25` y `Resumen!C19` calculados con los saldos de Excel (H-28, ADR 0013) |
+| `monthly-control-action-plan.test.ts` | Control mensual (`C6:S23` y la fila 24, con el presupuesto por categoría del presupuesto calculado) y las fechas límite precargadas del Plan de acción (`F6:F19`, solo las filas con la tarea de la plantilla) con su prioridad y responsable |
 | `credit-schedule.test.ts` | Plantilla de créditos (caso C5): por cada crédito, `F7:F11`, la tabla de 360 cuotas (B:N y el estado de Q), el estado actual (`I6:I19`), los simuladores (`F22:G22`, `F23`) y el puente a la hoja Deudas (`Panel!D95:H102`) |
 | `credits-plan.test.ts` | Plantilla de créditos (C5): el plan de pago completo (`C7:C8`, `K12:P19`, `O20:P20`, `C21` y las filas 28 a 387 con el plan, solo con cuotas y los totales `AS:AU`) y el Panel (`B5:L5`, `D7:E7`, calendario `B25:F32`, tramos `K25:K28`, abono sugerido `G36:I43`, hitos `B48:G55` y deuda año por año `B60:F90`) |
 
@@ -31,11 +32,12 @@ Los valores quedan a nivel de celda. `adapters.ts` traduce las celdas a las entr
 | `c4-deudas` | Sintético sobre la plantilla oficial, corte 28/09/2026 (`cambios.json`): ingreso en USD y arriendo, 8 deudas inspiradas en el caso 15.1 del protocolo con avalancha, dos tarjetas con la misma tasa, abono único que salda las dos y parte del vehículo, abonos desde una fecha, préstamos sin abonos, tasa 0 %, una cuota que no cubre el interés y un hipotecario de más de 120 meses | Listo |
 | `c9-bola-de-nieve` | C4 con bola de nieve, menos saldo líquido y dos préstamos con el mismo saldo (`cambios.json`) | Listo |
 | `c10-inversion` | Perfil de riesgo respondido, personas a cargo con el seguro de vida en cotización, bajada cerca del retiro hasta el piso, inversiones en dólares y sin tramo, cobros en la proyección y todos los tipos de activo (`cambios.json`) | Listo |
+| `c11-seguimiento` | C6 con gasto real en Control mensual (meses vacíos, un 0, categoría sin presupuesto, 10 % justo, diciembre) y en Plan de acción una tarea hecha, una en curso, una fecha escrita a mano y una tarea nueva (`cambios.json`) | Listo |
 | `c5-creditos` | Sintético sobre la plantilla de créditos, corte 28/09/2026 (`cambios.json`): los ocho créditos de C4 con datos de crédito y marcas de pago, y la corrección de H-28 en las 41 fórmulas con `">0.5"` (ADR 0013). Se registra aparte en `cases.ts` (`creditCases`), porque sus hojas son otras | Listo |
 
 Criterio de aceptación: diferencia absoluta máxima de 0,01 en importes; tolerancias de porcentajes, fechas y textos en `docs/04-motor-de-calculo.md`.
 
-Para regenerar un caso sintético (C4, C6, C7, C8, C9, C10): `recalc.py` con `--edits packages/engine/test/golden/<caso>/cambios.json` y luego `golden.py` (sin `--forbid`: no tienen datos de clientes).
+Para regenerar un caso sintético (C4, C6, C7, C8, C9, C10, C11): `recalc.py` con `--edits packages/engine/test/golden/<caso>/cambios.json` y luego `golden.py` (sin `--forbid`: no tienen datos de clientes).
 
 Solo se admiten casos anonimizados. Los libros originales de clientes quedan en `referencia/casos/`, fuera de git. Para agregar un caso: genera la carpeta y regístrala en `cases.ts`.
 

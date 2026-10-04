@@ -480,28 +480,33 @@ create table public.reality_check (
 
 create table public.monthly_control_entries (
   client_id   uuid not null references public.clients(id) on delete cascade,
-  year        smallint not null,
+  year        smallint not null check (year between 2000 and 2100),
   month       smallint not null check (month between 1 and 12),
-  category    text not null,
+  category    text not null,                -- categoría del presupuesto o de una fila automática
   currency    char(3) not null,
-  amount      numeric(18,2) not null,
-  recorded_by uuid references auth.users(id),
-  recorded_at timestamptz not null default now(),
+  amount      numeric(18,2) not null check (amount >= 0),   -- 0 es un mes registrado sin gasto
+  updated_at  timestamptz not null default now(),
+  updated_by  uuid,
   primary key (client_id, year, month, category)
 );
 
 create table public.action_items (
-  id           uuid primary key default gen_random_uuid(),
-  client_id    uuid not null references public.clients(id) on delete cascade,
-  title        text not null,
-  priority     text not null check (priority in ('alta', 'media', 'baja')),
-  owner_role   text not null check (owner_role in ('cliente', 'asesor', 'contador', 'abogado', 'aseguradora',
-                 'administradora_pensiones')),
-  due_date     date,
-  status       text not null default 'pendiente' check (status in ('pendiente', 'en_curso', 'hecho')),
-  note         text,
-  completed_at timestamptz,
-  completed_by uuid references auth.users(id)
+  id             uuid primary key default gen_random_uuid(),
+  client_id      uuid not null references public.clients(id) on delete cascade,
+  suggestion_key text,                        -- tarea sugerida de la que nace (ACTION_TEMPLATES)
+  title          text not null,
+  priority       text not null check (priority in ('alta', 'media', 'baja')),
+  owner_role     text not null check (owner_role in ('cliente', 'asesor', 'contador', 'abogado', 'aseguradora',
+                   'administradora_pensiones')),
+  due_date       date,
+  status         text not null default 'pendiente' check (status in ('pendiente', 'en_curso', 'hecho')),
+  note           text,
+  completed_at   timestamptz,                 -- los pone la base al marcarla hecha
+  completed_by   uuid,
+  sort_order     int not null default 0,
+  updated_at     timestamptz not null default now(),
+  updated_by     uuid,
+  unique (client_id, suggestion_key)
 );
 
 create table public.client_documents (       -- notas para el cliente, borrador de carta
@@ -880,4 +885,5 @@ Diferencias con el borrador de las secciones 3.1, 4 y 5:
 34. **Créditos.** El seguimiento cuota a cuota vive en `debts` (no hay tabla aparte): con fecha de la primera cuota, el motor arma la tabla de la hoja "Crédito" de la plantilla de créditos y el diagnóstico usa su saldo y su cuota de hoy (ADR 0014). `debt_installments` guarda solo lo que el cliente marca: pagada con su fecha real, cuota distinta y abono extra; una marca vacía se borra. La llave compuesta `(debt_id, client_id)` impide marcar la deuda de otro cliente. Cliente y asesor la editan (matriz de permisos). Del borrador cambian: `has_arrears` no se guarda (las cuotas vencidas sin marcar las calcula el motor con la fecha de corte) y la fecha de pago exige la cuota pagada.
 35. **Inversión, metas y seguros (F5).** Metas, seguros, inversiones y las respuestas del perfil de riesgo los editan cliente y asesor; las dos condiciones de capacidad que la plantilla deja cambiar (`variable_income_override`, `dependents_override`, vacías = la sugerida) y la posición en el rango son del asesor, con guarda propia `private.guard_risk_profile_advisor_columns()` porque `range_position` tiene valor por defecto (0,5). Del borrador cambian: la calculadora de viaje guarda en `goals` su moneda, impuestos del alojamiento, colchón y costos en moneda base, y en `goal_trip_items` los conceptos fijos de la plantilla (sin `kind`); `goal_trip_items` lleva la llave compuesta `(goal_id, client_id)`; `insurances` tiene un catálogo cerrado (`insurance_type`), uno por tipo salvo "otro", que lleva nombre; `life_insurance_inputs` pasa a `case_settings` (`life_support_years`, `life_annual_to_cover` en moneda base) junto con `insurance_pocket_id`, el bolsillo de las primas nuevas; `capacity_overrides` se reemplaza por dos columnas. Los rendimientos, la bajada cerca del retiro, el piso, los rangos y la edad de retiro por sexo son parámetros comunes de la metodología (`method.*`, fuente interna I1 e I2); el asesor fija otro valor por cliente en `case_settings`. La edad de retiro por defecto es un supuesto (B16). La tasa de una moneda usada en metas (también la del viaje), seguros o inversiones no se borra.
 36. **Sin pensión (ADR 0016).** La migración `remove_pension` quita la marca por cliente `case_settings.pension_enabled` y el módulo por país `countries.pension_module`; nada más los usaba. `pension_inputs` nunca se creó. El historial conserva los valores anteriores.
+37. **Control mensual y plan de acción (F7, ADR 0018).** Migración `monthly_control_action_plan`. El control mensual lo escriben cliente y asesor, con la tasa de la moneda obligatoria (`check_currency`) y la tasa en uso protegida (`guard_fx_rate`). A diferencia de la nota 25, la pantalla guarda el mes con `upsert`: `authenticated` puede actualizar también las columnas de la llave y la política vuelve a exigir el acceso al cliente de la fila resultante. Las tareas las crea y borra solo el asesor (políticas de `insert` y `delete`); el cliente cambia estado y nota, y la guarda genérica rechaza que cambie título, prioridad, responsable, fecha límite, orden o la llave de la sugerida. `private.stamp_action_item_completion()` pone y quita `completed_at` y `completed_by`. Cada sugerida se agrega una vez (`unique (client_id, suggestion_key)`).
 Sin pendientes de F1 en el modelo de datos.

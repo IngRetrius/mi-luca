@@ -21,5 +21,6 @@ Cada decisión que cambia la arquitectura, el modelo de datos o un resultado del
 | [0015](0015-cuotas-en-el-flujo-hasta-que-el-plan-salda-las-deudas.md) | Cuotas en el flujo hasta que el plan salda las deudas (modo nativo, H-03) | Aceptada |
 | [0016](0016-pension-fuera-de-la-plataforma.md) | La pensión queda fuera de la plataforma (se elimina F6) | Aceptada |
 | [0017](0017-agente-de-captura-que-anota-en-el-plan.md) | Agente de captura en un botón flotante: el asesor le cuenta lo que dice el cliente y lo anota en el plan, con las reglas de cada pantalla | Aceptada |
+| [0018](0018-control-mensual-y-plan-de-accion.md) | Control mensual con las categorías del cliente y tareas sugeridas que aplican (H-13, H-20) | Aceptada |
 
 Plantilla: [plantilla.md](plantilla.md).

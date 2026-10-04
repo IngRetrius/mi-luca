@@ -2,15 +2,17 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import type { KeyFigureId } from '@miluca/engine';
+import { isOverdue, type KeyFigureId } from '@miluca/engine';
 import { COUNTRY_LOCALES, formatDate, formatMoney, messages } from '@miluca/i18n';
 
 import { Screen } from '@/components/screen';
 import { ModuleLink } from '@/components/back-link';
 import { focusRing, linkButton, secondaryButton } from '@/components/ui-classes';
+import { loadActionItems, type ActionItemRow } from '@/features/action-plan';
 import { ClientStatusBadge, getClientDetail } from '@/features/clients';
 import { listDeliveries } from '@/features/deliveries';
 import { investmentSummary } from '@/features/investment';
+import { loadControlEntries } from '@/features/monthly-control';
 import {
   countryDateFormat,
   createInvitationLink,
@@ -19,6 +21,7 @@ import {
   revokeInvitation,
 } from '@/features/invitations';
 import { formatKeyFigure, loadComputedCase, type ComputedCase } from '@/features/summary';
+import { todayIn } from '@/lib/dates';
 import { requireAdvisor } from '@/server/viewer';
 
 const t = messages.es;
@@ -43,12 +46,15 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
   const { id } = await params;
   await requireAdvisor(`/clientes/${id}`);
   // Independientes: el perfil y su invitación abierta se piden a la vez.
-  const [client, openInvitation, computed, deliveries] = await Promise.all([
-    getClientDetail(id),
-    getOpenInvitation(id),
-    loadComputedCase(id),
-    listDeliveries(id),
-  ]);
+  const [client, openInvitation, computed, deliveries, actionItems, controlEntries] =
+    await Promise.all([
+      getClientDetail(id),
+      getOpenInvitation(id),
+      loadComputedCase(id),
+      listDeliveries(id),
+      loadActionItems(id),
+      loadControlEntries(id),
+    ]);
   if (client === 'not-found') notFound();
   // Solo se invita a un perfil que nadie ha aceptado (RLS vuelve a exigirlo).
   const canInvite =
@@ -81,6 +87,7 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
             clientId={client.id}
             computed={computed}
             deliveredCount={deliveries?.length ?? 0}
+            followUp={{ actionItems, controlEntries }}
           />
           <section
             aria-labelledby="invitation-title"
@@ -139,10 +146,15 @@ function CaseData({
   clientId,
   computed,
   deliveredCount,
+  followUp,
 }: {
   clientId: string;
   computed: ComputedCase | null;
   deliveredCount: number;
+  followUp: {
+    readonly actionItems: readonly ActionItemRow[] | null;
+    readonly controlEntries: readonly { readonly year: number; readonly month: number }[] | null;
+  };
 }) {
   const text = t.clientProfile.caseData;
   if (!computed) {
@@ -260,6 +272,43 @@ function CaseData({
     },
   ];
   const { cashflow, emergencyFund, pockets } = computed.result;
+  const today = todayIn(client.country_code);
+  const year = Number(today.slice(0, 4));
+  const recordedMonths = new Set(
+    (followUp.controlEntries ?? [])
+      .filter((entry) => entry.year === year)
+      .map((entry) => entry.month),
+  ).size;
+  const tasks = followUp.actionItems ?? [];
+  const pendingTasks = tasks.filter((item) => item.status !== 'hecho');
+  const overdueTasks = pendingTasks.filter((item) =>
+    isOverdue({ dueDate: item.due_date, status: 'pendiente' }, today),
+  ).length;
+  const followUpModules = [
+    {
+      href: `${base}/plan-de-accion`,
+      title: text.actionPlan,
+      summary:
+        followUp.actionItems === null
+          ? t.common.loadError
+          : tasks.length === 0
+            ? text.actionPlanNone
+            : (overdueTasks > 0 ? text.actionPlanOverdue : text.actionPlanSummary)
+                .replace('{pending}', String(pendingTasks.length))
+                .replace('{total}', String(tasks.length))
+                .replace('{overdue}', String(overdueTasks)),
+    },
+    {
+      href: `${base}/control-mensual`,
+      title: text.monthlyControl,
+      summary:
+        followUp.controlEntries === null
+          ? t.common.loadError
+          : (recordedMonths === 0 ? text.monthlyControlNone : text.monthlyControlSummary)
+              .replace('{count}', String(recordedMonths))
+              .replace('{year}', String(year)),
+    },
+  ];
   const analysis = [
     {
       href: `${base}/flujo`,
@@ -312,6 +361,18 @@ function CaseData({
         </h2>
         <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
           {analysis.map((module) => (
+            <li key={module.href}>
+              <ModuleLink {...module} />
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section aria-labelledby="follow-up-title" className="flex flex-col gap-2">
+        <h2 id="follow-up-title" className="font-semibold">
+          {text.followUpTitle}
+        </h2>
+        <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
+          {followUpModules.map((module) => (
             <li key={module.href}>
               <ModuleLink {...module} />
             </li>

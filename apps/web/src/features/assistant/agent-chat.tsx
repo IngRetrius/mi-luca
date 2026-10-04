@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useId, useRef, useState, useTransition, type KeyboardEvent } from 'react';
 
 import type { Messages } from '@miluca/i18n';
@@ -127,29 +127,43 @@ function Receipt({
  */
 export function AgentChat({ clientId, text }: { clientId: string; text: AgentChatText }) {
   const router = useRouter();
-  const pathname = usePathname();
   // En el celular el botón va justo encima de la barra de acciones fija de la pantalla
   // (ScreenActions), para no tapar la acción principal. Su alto cambia con cada pantalla y con su
-  // contenido; se pasa por una variable de CSS, sin volver a pintar el componente.
+  // contenido; se pasa por una variable de CSS, sin volver a pintar el componente. La barra llega
+  // con la pantalla, que puede cargar después que el layout (streaming): se busca cada vez que
+  // cambia el contenido de la página.
   const liftRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const holder = liftRef.current;
-    const bar = document.querySelector<HTMLElement>('[data-screen-actions]');
     if (!holder) return;
-    if (!bar) {
-      holder.style.removeProperty('--agent-lift');
-      return;
-    }
-    const update = () =>
-      holder.style.setProperty(
-        '--agent-lift',
-        `calc(${bar.getBoundingClientRect().height}px + 0.75rem)`,
-      );
-    update();
-    const observer = new ResizeObserver(update);
-    observer.observe(bar);
-    return () => observer.disconnect();
-  }, [pathname]);
+    let bar: HTMLElement | null = null;
+    const update = () => {
+      if (bar) {
+        holder.style.setProperty(
+          '--agent-lift',
+          `calc(${bar.getBoundingClientRect().height}px + 0.75rem)`,
+        );
+      } else {
+        holder.style.removeProperty('--agent-lift');
+      }
+    };
+    const resize = new ResizeObserver(update);
+    const find = () => {
+      const next = document.querySelector<HTMLElement>('[data-screen-actions]');
+      if (next === bar) return;
+      if (bar) resize.unobserve(bar);
+      bar = next;
+      if (bar) resize.observe(bar);
+      update();
+    };
+    find();
+    const mutations = new MutationObserver(find);
+    mutations.observe(document.body, { childList: true, subtree: true });
+    return () => {
+      mutations.disconnect();
+      resize.disconnect();
+    };
+  }, []);
   const [open, setOpen] = useState(false);
   const [entries, setEntries] = useState<readonly Entry[]>([]);
   const [history, setHistory] = useState<readonly AgentMessage[]>([]);

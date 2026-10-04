@@ -3,6 +3,65 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      action_items: {
+        Row: {
+          client_id: string;
+          completed_at: string | null;
+          completed_by: string | null;
+          due_date: string | null;
+          id: string;
+          note: string | null;
+          owner_role: string;
+          priority: string;
+          sort_order: number;
+          status: string;
+          suggestion_key: string | null;
+          title: string;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          client_id: string;
+          completed_at?: string | null;
+          completed_by?: string | null;
+          due_date?: string | null;
+          id?: string;
+          note?: string | null;
+          owner_role: string;
+          priority: string;
+          sort_order?: number;
+          status?: string;
+          suggestion_key?: string | null;
+          title: string;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          client_id?: string;
+          completed_at?: string | null;
+          completed_by?: string | null;
+          due_date?: string | null;
+          id?: string;
+          note?: string | null;
+          owner_role?: string;
+          priority?: string;
+          sort_order?: number;
+          status?: string;
+          suggestion_key?: string | null;
+          title?: string;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'action_items_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       advisor_client_access: {
         Row: {
           advisor_id: string;
@@ -1240,6 +1299,47 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'countries';
             referencedColumns: ['code'];
+          },
+        ];
+      };
+      monthly_control_entries: {
+        Row: {
+          amount: number;
+          category: string;
+          client_id: string;
+          currency: string;
+          month: number;
+          updated_at: string;
+          updated_by: string | null;
+          year: number;
+        };
+        Insert: {
+          amount: number;
+          category: string;
+          client_id: string;
+          currency: string;
+          month: number;
+          updated_at?: string;
+          updated_by?: string | null;
+          year: number;
+        };
+        Update: {
+          amount?: number;
+          category?: string;
+          client_id?: string;
+          currency?: string;
+          month?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+          year?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'monthly_control_entries_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
           },
         ];
       };

@@ -83,3 +83,17 @@ export function excelSerial(date: IsoDate): number {
   const { year, month, day } = parseIsoDate(date);
   return (Date.UTC(year, month - 1, day) - Date.UTC(1899, 11, 30)) / 86_400_000;
 }
+
+/**
+ * La fecha `days` días después (o antes, si es negativo), como `fecha + días` en Excel. Usa la
+ * fecha que recibe, nunca la del sistema.
+ */
+export function addDays(date: IsoDate, days: number): IsoDate {
+  const { year, month, day } = parseIsoDate(date);
+  const moved = new Date(Date.UTC(year, month - 1, day + Math.trunc(days)));
+  return isoDate({
+    year: moved.getUTCFullYear(),
+    month: moved.getUTCMonth() + 1,
+    day: moved.getUTCDate(),
+  });
+}

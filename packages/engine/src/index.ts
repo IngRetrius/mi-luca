@@ -15,6 +15,7 @@ export type {
 } from './compute';
 export { diffKeyFigures, KEY_FIGURES, keyFigures } from './key-figures';
 export type { KeyFigureDelta, KeyFigureId, KeyFigureKind, KeyFigures } from './key-figures';
+export * from './action-plan';
 export * from './currency';
 export * from './budget';
 export * from './cashflow';
@@ -27,6 +28,7 @@ export * from './goals';
 export * from './incomes';
 export * from './insurance';
 export * from './investment';
+export * from './monthly-control';
 export * from './net-worth';
 export * from './normalization';
 export * from './pockets';

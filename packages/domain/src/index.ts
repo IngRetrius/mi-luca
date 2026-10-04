@@ -1,3 +1,5 @@
+export { actionOwnerSchema, actionPrioritySchema, actionStatusSchema } from './action-plan';
+export type { ActionOwner, ActionPriority, ActionStatus } from './action-plan';
 export { assetTypeSchema } from './asset';
 export type { AssetType } from './asset';
 export {

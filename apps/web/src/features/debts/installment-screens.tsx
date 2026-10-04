@@ -6,6 +6,7 @@ import { COUNTRY_LOCALES, formatDate, formatMoney, formatPercent, messages } fro
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { FigureList } from '@/components/figure-list';
+import { RowSubmitButton } from '@/components/row-submit-button';
 import { Screen } from '@/components/screen';
 import { StatusLabel, type Status } from '@/components/status';
 import { focusRing } from '@/components/ui-classes';
@@ -15,7 +16,6 @@ import type { CaseEditor } from '@/server/case-access';
 
 import { markInstallmentPaid, saveInstallment } from './actions';
 import { InstallmentForm } from './installment-form';
-import { MarkPaidButton } from './mark-paid-button';
 import { debtPaths } from './paths';
 
 const t = messages.es;
@@ -226,7 +226,7 @@ export async function InstallmentsScreen({
                 <div className="flex shrink-0 items-center gap-2">
                   {row.status === 'vencida' || row.status === 'proxima' ? (
                     <form action={markInstallmentPaid.bind(null, clientId, debtId, row.number)}>
-                      <MarkPaidButton
+                      <RowSubmitButton
                         label={text.markPaid}
                         pendingLabel={text.marking}
                         describedBy={labelId}

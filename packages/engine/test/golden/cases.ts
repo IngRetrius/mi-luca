@@ -6,6 +6,9 @@
 import c10Case from './c10-inversion/case.json' with { type: 'json' };
 import c10Expected from './c10-inversion/expected.json' with { type: 'json' };
 import c10Inputs from './c10-inversion/inputs.json' with { type: 'json' };
+import c11Case from './c11-seguimiento/case.json' with { type: 'json' };
+import c11Expected from './c11-seguimiento/expected.json' with { type: 'json' };
+import c11Inputs from './c11-seguimiento/inputs.json' with { type: 'json' };
 import c1Case from './c1-colombia/case.json' with { type: 'json' };
 import c1Expected from './c1-colombia/expected.json' with { type: 'json' };
 import c1Inputs from './c1-colombia/inputs.json' with { type: 'json' };
@@ -58,6 +61,7 @@ export const goldenCases: readonly GoldenCase[] = [
   { ...c8Case, inputs: c8Inputs as Sheets, expected: c8Expected as Sheets },
   { ...c9Case, inputs: c9Inputs as Sheets, expected: c9Expected as Sheets },
   { ...c10Case, inputs: c10Inputs as Sheets, expected: c10Expected as Sheets },
+  { ...c11Case, inputs: c11Inputs as Sheets, expected: c11Expected as Sheets },
 ];
 
 /** Casos sobre la plantilla de créditos (`Plantilla_Creditos.xlsx`): otras hojas y otras pruebas. */
