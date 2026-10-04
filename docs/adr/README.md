@@ -15,10 +15,11 @@ Cada decisión que cambia la arquitectura, el modelo de datos o un resultado del
 | [0009](0009-google-y-correo-con-contrasena.md) | Inicio de sesión con Google y con correo y contraseña; Apple aplazado | Aceptada |
 | [0010](0010-pagador-por-gasto.md) | Pagador por gasto y aporte implícito de terceros (modo nativo, H-12) | Aceptada |
 | [0011](0011-decisiones-de-criterio-del-modo-nativo.md) | Decisiones de criterio del modo nativo y del mantenimiento del plan por el cliente | Aceptada |
-| [0012](0012-asistente-de-ia-del-asesor.md) | Asistente de IA del asesor con Claude Haiku, desde el servidor (la prueba con Ollama local quedó como alternativa) | Aceptada |
+| [0012](0012-asistente-de-ia-del-asesor.md) | Asistente de IA del asesor con Claude Haiku, desde el servidor (la prueba con Ollama local quedó como alternativa) | Aceptada; para el agente de captura la amplía 0017 |
 | [0013](0013-meses-para-pagar-sin-configuracion-regional.md) | Meses para pagar una deuda sin depender de la configuración regional de Excel (H-28) | Aceptada |
 | [0014](0014-seguimiento-de-creditos-alimenta-el-diagnostico.md) | El seguimiento de créditos alimenta el diagnóstico (puente de la sección 7 del Panel) | Aceptada |
 | [0015](0015-cuotas-en-el-flujo-hasta-que-el-plan-salda-las-deudas.md) | Cuotas en el flujo hasta que el plan salda las deudas (modo nativo, H-03) | Aceptada |
 | [0016](0016-pension-fuera-de-la-plataforma.md) | La pensión queda fuera de la plataforma (se elimina F6) | Aceptada |
+| [0017](0017-agente-de-captura-que-anota-en-el-plan.md) | Agente de captura en un botón flotante: el asesor le cuenta lo que dice el cliente y lo anota en el plan, con las reglas de cada pantalla | Aceptada |
 
 Plantilla: [plantilla.md](plantilla.md).

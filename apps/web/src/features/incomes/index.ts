@@ -6,3 +6,4 @@ export {
   SocialSecurityScreen,
 } from './income-screens';
 export { incomePaths } from './paths';
+export { parseIncome } from './validation';

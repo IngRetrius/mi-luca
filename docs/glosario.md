@@ -124,6 +124,10 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Banco | `bank` | Solo el nombre de la entidad |
 | Bolsillo | `pocket` | |
 | Asistente (IA) | `CaptureAssistant`, `proposeCapture`, `features/assistant/` | ADR 0012; Claude Haiku 4.5 (`CAPTURE_MODEL`) desde el servidor (`askClaude`, `server-only`) |
+| Agente de captura (botón flotante) | `AgentChat`, `sendToAgent`, `undoAgentAction`, `features/assistant/agent/` | ADR 0017; `claude-opus-5-5` (`AGENT_MODEL`); vive en `app/clientes/[id]/layout.tsx` |
+| Herramientas del agente | `AGENT_TOOLS` (`update_profile`, `save_income`, `save_expense`, `save_debt`, `save_goal`, `save_insurance`, `save_asset`, `save_investment`, `save_receivable`, `save_pocket`, `save_fx_rate`, `save_risk_answers`, `save_reality_check`) | Cada una guarda con el validador de su pantalla (`saveEntity`) |
+| Estado del caso (para el agente) | `caseSnapshot` | Una línea por registro con su id, sin el nombre del cliente |
+| Guardado del agente | `AgentAction` (`entity`, `op`, `key`, `previous`) | Tarjeta del chat con Ver y Deshacer (`undoEntity`) |
 | Propuesta del asistente | `CaptureProposal`, `CaptureItem` (`key`, `amount`, `frequency`, `quote`), `CaptureUnmatched` | `parseCaptureResponse` la valida contra la lista; `captureConcepts` arma la lista en el servidor |
 | Qué hace la lista con cada propuesta | `CaptureStatus` (`ready`, `frequencyDiffers`, `noFrequency`, `needsDays`, `noAmount`, `present`) | `planCapture`; solo `ready` escribe el valor |
 | Ayuda de un dato | `Help`, `HelpButton`, `HelpPanel` | `src/components/help.tsx`; en un campo, `Field` con `help` |
