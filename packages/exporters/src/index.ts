@@ -3,3 +3,5 @@
 
 export const EXPORT_FORMATS = ['xlsx', 'pdf', 'txt'] as const;
 export type ExportFormat = (typeof EXPORT_FORMATS)[number];
+
+export * from './documents';

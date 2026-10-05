@@ -22,5 +22,8 @@ Cada decisión que cambia la arquitectura, el modelo de datos o un resultado del
 | [0016](0016-pension-fuera-de-la-plataforma.md) | La pensión queda fuera de la plataforma (se elimina F6) | Aceptada |
 | [0017](0017-agente-de-captura-que-anota-en-el-plan.md) | Agente de captura en un botón flotante: el asesor le cuenta lo que dice el cliente y lo anota en el plan, con las reglas de cada pantalla | Aceptada |
 | [0018](0018-control-mensual-y-plan-de-accion.md) | Control mensual con las categorías del cliente y tareas sugeridas que aplican (H-13, H-20) | Aceptada |
+| [0019](0019-carta-y-notas-con-cifras-enlazadas.md) | Carta de cierre y notas con cifras enlazadas que se congelan al entregar | Aceptada |
+| [0020](0020-pdf-del-plan-al-pedirlo.md) | El PDF del plan entregado se genera al pedirlo, sin guardarlo en Storage | Aceptada |
+| [0021](0021-seguimiento-y-ficha-de-continuidad.md) | Seguimiento con las revisiones del plan de acción y ficha de continuidad armada con los datos | Aceptada |
 
 Plantilla: [plantilla.md](plantilla.md).

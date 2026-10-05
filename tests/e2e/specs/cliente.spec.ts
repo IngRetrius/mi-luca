@@ -7,7 +7,8 @@ import { expect, test } from '@playwright/test';
 // entregado y Mi plan (P-C05) con la comparación con hoy. Después de F3, la lista de gastos típicos
 // del país (P-A06b en Mis gastos). En F4, las deudas del cliente con su plan de pago y P-C10 (marcar cuotas pagadas). En F5,
 // inversión con el perfil de riesgo, metas con la calculadora de viaje y seguros. En F7, el control
-// mensual (P-C08), las tareas (P-C09) y las próximas tareas del inicio.
+// mensual (P-C08), las tareas (P-C09), las próximas tareas del inicio, y en Mi plan las notas
+// publicadas y la carta por secciones.
 
 for (const path of [
   '/instalar',
@@ -63,3 +64,8 @@ for (const path of [
     await expect(page).toHaveURL(`/entrar?next=${encodeURIComponent(path)}`);
   });
 }
+
+test('el PDF del plan sin sesión lleva a Entrar y vuelve a Mi plan', async ({ page }) => {
+  await page.goto('/mi-plan/pdf');
+  await expect(page).toHaveURL(`/entrar?next=${encodeURIComponent('/mi-plan')}`);
+});

@@ -11,6 +11,8 @@ import { focusRing, linkButton, secondaryButton } from '@/components/ui-classes'
 import { loadActionItems, type ActionItemRow } from '@/features/action-plan';
 import { ClientStatusBadge, getClientDetail } from '@/features/clients';
 import { listDeliveries } from '@/features/deliveries';
+import { loadDocuments, writtenCount, type ClientDocument } from '@/features/documents';
+import { nextReview } from '@/features/follow-up';
 import { investmentSummary } from '@/features/investment';
 import { loadControlEntries } from '@/features/monthly-control';
 import {
@@ -46,7 +48,7 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
   const { id } = await params;
   await requireAdvisor(`/clientes/${id}`);
   // Independientes: el perfil y su invitación abierta se piden a la vez.
-  const [client, openInvitation, computed, deliveries, actionItems, controlEntries] =
+  const [client, openInvitation, computed, deliveries, actionItems, controlEntries, documents] =
     await Promise.all([
       getClientDetail(id),
       getOpenInvitation(id),
@@ -54,6 +56,7 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
       listDeliveries(id),
       loadActionItems(id),
       loadControlEntries(id),
+      loadDocuments(id),
     ]);
   if (client === 'not-found') notFound();
   // Solo se invita a un perfil que nadie ha aceptado (RLS vuelve a exigirlo).
@@ -88,6 +91,7 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
             computed={computed}
             deliveredCount={deliveries?.length ?? 0}
             followUp={{ actionItems, controlEntries }}
+            documents={documents}
           />
           <section
             aria-labelledby="invitation-title"
@@ -147,6 +151,7 @@ function CaseData({
   computed,
   deliveredCount,
   followUp,
+  documents,
 }: {
   clientId: string;
   computed: ComputedCase | null;
@@ -155,6 +160,7 @@ function CaseData({
     readonly actionItems: readonly ActionItemRow[] | null;
     readonly controlEntries: readonly { readonly year: number; readonly month: number }[] | null;
   };
+  documents: Partial<Record<'carta' | 'notas', ClientDocument>> | null;
 }) {
   const text = t.clientProfile.caseData;
   if (!computed) {
@@ -284,7 +290,21 @@ function CaseData({
   const overdueTasks = pendingTasks.filter((item) =>
     isOverdue({ dueDate: item.due_date, status: 'pendiente' }, today),
   ).length;
+  const review = nextReview(tasks);
   const followUpModules = [
+    {
+      href: `${base}/seguimiento`,
+      title: text.followUp,
+      summary:
+        followUp.actionItems === null
+          ? t.common.loadError
+          : !review?.due_date
+            ? text.followUpNone
+            : (review.due_date < today ? text.followUpOverdue : text.followUpNext).replace(
+                '{date}',
+                formatDate(review.due_date, locale, 'UTC'),
+              ),
+    },
     {
       href: `${base}/plan-de-accion`,
       title: text.actionPlan,
@@ -331,6 +351,16 @@ function CaseData({
       href: `${base}/inversion`,
       title: text.investment,
       summary: investmentSummary(text, computed),
+    },
+    {
+      href: `${base}/carta`,
+      title: text.letter,
+      summary: letterSummary(documents),
+    },
+    {
+      href: `${base}/notas`,
+      title: text.notes,
+      summary: notesSummary(documents, locale, client.country_code),
     },
     {
       href: `${base}/entrega`,
@@ -398,6 +428,32 @@ function CaseData({
       </section>
     </>
   );
+}
+
+function letterSummary(documents: Partial<Record<'carta' | 'notas', ClientDocument>> | null) {
+  const summary = t.documents.summary;
+  if (!documents) return t.common.loadError;
+  const letter = documents.carta;
+  const { written, total } = writtenCount('carta', letter?.content ?? {});
+  return written === 0
+    ? summary.letterNone
+    : summary.letterSome.replace('{count}', String(written)).replace('{total}', String(total));
+}
+
+function notesSummary(
+  documents: Partial<Record<'carta' | 'notas', ClientDocument>> | null,
+  locale: string,
+  countryCode: string,
+) {
+  const summary = t.documents.summary;
+  if (!documents) return t.common.loadError;
+  const notes = documents.notas;
+  if (!notes) return summary.notesNone;
+  if (notes.status === 'publicado' && notes.publishedAt) {
+    const day = todayIn(countryCode, new Date(notes.publishedAt));
+    return summary.notesPublished.replace('{date}', formatDate(day, locale, 'UTC'));
+  }
+  return summary.notesDraft;
 }
 
 function describeInvitation(

@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
     '@miluca/db',
     '@miluca/domain',
     '@miluca/engine',
+    '@miluca/exporters',
     '@miluca/i18n',
     '@miluca/ui',
   ],

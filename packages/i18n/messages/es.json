@@ -209,7 +209,13 @@
       "actionPlan": "Plan de acción",
       "actionPlanSummary": "{pending} pendientes de {total}",
       "actionPlanOverdue": "{pending} pendientes de {total} · {overdue} vencidas",
-      "actionPlanNone": "Sin tareas"
+      "actionPlanNone": "Sin tareas",
+      "letter": "Carta de cierre",
+      "notes": "Notas para el cliente",
+      "followUp": "Revisiones y ficha de continuidad",
+      "followUpNext": "Próxima revisión el {date}",
+      "followUpOverdue": "Revisión vencida desde el {date}",
+      "followUpNone": "Sin revisiones programadas"
     }
   },
   "invitation": {
@@ -1967,7 +1973,13 @@
     "today": "Hoy",
     "noChanges": "Las cifras de hoy son iguales a las del plan entregado.",
     "versions": "Versiones",
-    "scope": "Esta plataforma no recomienda productos ni entidades. Los temas de impuestos, pensión y sucesión se confirman con el profesional correspondiente."
+    "scope": "Esta plataforma no recomienda productos ni entidades. Los temas de impuestos, pensión y sucesión se confirman con el profesional correspondiente.",
+    "pdf": {
+      "download": "Descargar en PDF",
+      "downloadHint": "La carta, las notas y las cifras de este plan, tal como se entregaron.",
+      "pageLabel": "Página {page} de {total}",
+      "fileName": "MiLuca - {label}"
+    }
   },
   "myPlan": {
     "title": {
@@ -2696,5 +2708,303 @@
       }
     },
     "priorityLabel": "Prioridad {priority}"
+  },
+  "documents": {
+    "back": "Ficha del cliente",
+    "letter": {
+      "title": "Carta de cierre",
+      "intro": "Lo que el cliente lee con su plan, con la estructura de la sección 11 del protocolo. Las cifras se escriben como marcadores: cambian si cambian los datos y quedan fijas al entregar el plan.",
+      "deliveryNote": "La carta llega al cliente con el plan entregado."
+    },
+    "notes": {
+      "title": "Notas para el cliente",
+      "intro": "Un texto corto que el cliente ve en Mi plan cuando lo publicas, por ejemplo después de una reunión. Las cifras se actualizan solas hasta que se entrega el plan.",
+      "published": "Publicadas el {date}",
+      "draft": "Borrador: el cliente no las ve",
+      "none": "Sin notas"
+    },
+    "sections": {
+      "executive_summary": {
+        "tu": "Resumen",
+        "usted": "Resumen"
+      },
+      "opening": {
+        "tu": "Apertura",
+        "usted": "Apertura"
+      },
+      "today": {
+        "tu": "1. Cómo estás hoy",
+        "usted": "1. Cómo está hoy"
+      },
+      "strengths": {
+        "tu": "2. Lo que estás haciendo bien",
+        "usted": "2. Lo que está haciendo bien"
+      },
+      "attention": {
+        "tu": "3. Lo que debes tener presente",
+        "usted": "3. Lo que debe tener presente"
+      },
+      "action_plan": {
+        "tu": "4. Tu plan de acción",
+        "usted": "4. Su plan de acción"
+      },
+      "calendar": {
+        "tu": "5. Tu calendario",
+        "usted": "5. Su calendario"
+      },
+      "tracking": {
+        "tu": "6. Cómo saber que vas bien",
+        "usted": "6. Cómo saber que va bien"
+      },
+      "scope": {
+        "tu": "7. Alcance de esta asesoría",
+        "usted": "7. Alcance de esta asesoría"
+      },
+      "closing": {
+        "tu": "8. Para cerrar",
+        "usted": "8. Para cerrar"
+      },
+      "body": {
+        "tu": "Notas",
+        "usted": "Notas"
+      }
+    },
+    "hints": {
+      "executive_summary": "De tres a cinco líneas: la situación en una frase, las tres acciones prioritarias y el resultado esperado.",
+      "opening": "Saludo por el nombre y propósito de la carta.",
+      "today": "Los indicadores principales y un contexto breve.",
+      "strengths": "Fortalezas, explicadas.",
+      "attention": "Puntos de atención con su porqué, sin alarmismo.",
+      "action_plan": "Reparto del saldo y bolsillos, aportes, deudas si aplica, inversión (perfil, rango por edad y distribución) y protección (seguros y sucesión).",
+      "calendar": "Próximos 30 días, 90 días y 12 meses, y fechas clave (fin de deudas, metas).",
+      "tracking": "Indicadores de seguimiento con su valor meta.",
+      "scope": "Se basa en la información entregada; cifras estimadas en valores de hoy; sin recomendar productos; impuestos, pensión y temas legales con el profesional.",
+      "closing": "Resumen positivo, pendientes y próxima revisión.",
+      "body": "Escribe un párrafo por idea; una línea que empieza con “- ” es una viñeta."
+    },
+    "defaults": {
+      "scope": {
+        "tu": "Este plan se basa en la información que me compartiste. Las cifras son estimaciones en valores de hoy, ilustrativas y no garantizadas. No incluye recomendaciones de productos ni de entidades financieras. Los temas de impuestos, pensión y asuntos legales debes validarlos con un contador, con tu entidad de pensiones y con un abogado.",
+        "usted": "Este plan se basa en la información que me compartió. Las cifras son estimaciones en valores de hoy, ilustrativas y no garantizadas. No incluye recomendaciones de productos ni de entidades financieras. Los temas de impuestos, pensión y asuntos legales debe validarlos con un contador, con su entidad de pensiones y con un abogado."
+      }
+    },
+    "editor": {
+      "insertFigure": "Insertar cifra",
+      "insertFigureIn": "Insertar cifra en {section}",
+      "dialogTitle": "Insertar cifra",
+      "dialogIntro": "Va donde dejaste el cursor. El valor es el de hoy; al entregar el plan queda fijo.",
+      "close": "Cerrar",
+      "formatHint": "Una línea vacía separa párrafos; una línea que empieza con “- ” es una viñeta.",
+      "preview": "Ver como el cliente",
+      "edit": "Volver a editar",
+      "previewEmpty": "Todavía no hay nada escrito.",
+      "save": "Guardar borrador",
+      "saving": "Guardando…",
+      "saved": "Guardado.",
+      "publish": "Guardar y publicar",
+      "unpublish": "Dejar de mostrar al cliente",
+      "errors": {
+        "tooLong": "Es demasiado largo: divídelo en otra sección o acórtalo.",
+        "unknownMarkers": "Estas cifras no existen: {markers}. Usa “Insertar cifra”.",
+        "notAllowed": "Solo el asesor escribe la carta y las notas.",
+        "unavailable": "No pudimos guardar. Revisa tu conexión e intenta de nuevo."
+      }
+    },
+    "summary": {
+      "letterNone": "Sin escribir",
+      "letterSome": "{count} de {total} partes escritas",
+      "notesPublished": "Publicadas el {date}",
+      "notesDraft": "Borrador",
+      "notesNone": "Sin notas"
+    },
+    "delivery": {
+      "title": "Va con el plan",
+      "letter": "Carta: {status}",
+      "notes": "Notas: {status}",
+      "notesNotPublished": "sin publicar, no van",
+      "editLetter": "Escribir la carta",
+      "editNotes": "Escribir las notas"
+    },
+    "view": {
+      "letterTitle": {
+        "tu": "Carta de tu asesor",
+        "usted": "Carta de su asesor"
+      },
+      "notesTitle": {
+        "tu": "Notas de tu asesor",
+        "usted": "Notas de su asesor"
+      },
+      "letterTitleAdvisor": "Carta de cierre",
+      "notesTitleAdvisor": "Notas entregadas",
+      "notesPublished": "Publicadas el {date}",
+      "notesDeliveredTitle": "Notas con este plan"
+    }
+  },
+  "followUp": {
+    "title": "Seguimiento",
+    "intro": "Lo entregado frente a hoy, las revisiones del plan y la ficha de continuidad.",
+    "back": "Ficha del cliente",
+    "plan": {
+      "title": "Frente al plan entregado",
+      "delivered": "Último plan: {label}, entregado el {date}.",
+      "view": "Ver el plan entregado",
+      "none": "Aún no hay un plan entregado. El seguimiento compara con el último que entregues.",
+      "deliver": "Entregar el plan"
+    },
+    "progress": {
+      "title": "Cómo va",
+      "spending": "Gasto real de {year}",
+      "spendingLink": "Ver el control mensual",
+      "tasks": "Plan de acción",
+      "tasksLink": "Ver el plan de acción"
+    },
+    "reviews": {
+      "title": "Revisiones",
+      "intro": "Cada revisión es una tarea del asesor en el plan de acción, con la fecha contada desde la fecha de corte. La fecha se cambia en la tarea.",
+      "items": {
+        "review_30_days": {
+          "title": "A los 30 días",
+          "checks": "Bolsillos creados y transferencias automáticas, gasto real frente al presupuesto en el control mensual y tareas del plan de acción."
+        },
+        "review_90_days": {
+          "title": "A los 90 días",
+          "checks": "Prueba de realidad completa, ajuste del % a inversión, cotizaciones de seguros y respuesta del contador y de la entidad de pensiones."
+        },
+        "annual_review": {
+          "title": "Anual",
+          "checks": "Antes de los meses sin ingreso o en diciembre: actualizar salario mínimo, tasas de cambio, precios, valor de inmuebles, primas, saldos, deudas y cuentas por cobrar; revisar metas y beneficiarios; rebalancear la inversión y ajustar el % en crecimiento a la nueva edad."
+        }
+      },
+      "states": {
+        "sin_programar": "Sin programar",
+        "programada": "Programada para el {date}",
+        "programadaNoDate": "Programada, sin fecha",
+        "vencida": "Vencida desde el {date}",
+        "hecha": "Hecha el {date}"
+      },
+      "schedule": "Programar las revisiones que faltan",
+      "scheduling": "Programando…",
+      "openTask": "Ver la tarea",
+      "lifeEventsTitle": "Eventos de vida",
+      "lifeEvents": "Ante un cambio de trabajo, un nacimiento, una separación, una herencia, una enfermedad o la compra de vivienda, revisa todo el plan."
+    },
+    "sheet": {
+      "title": "Ficha de continuidad",
+      "intro": "Dónde quedó el trabajo, con los datos de hoy. Cópiala para tus notas o para la próxima sesión.",
+      "copy": "Copiar la ficha",
+      "copied": "Ficha copiada.",
+      "copyFailed": "No se pudo copiar. Selecciona el texto de la ficha y cópialo.",
+      "edit": "Cambiar sucesión y decisiones",
+      "heading": "FICHA DE CONTINUIDAD - {name} - {date}",
+      "labels": {
+        "profile": "Perfil",
+        "incomes": "Ingresos",
+        "spending": "Gasto mensual promedio",
+        "programmedSavings": "Ahorro programado",
+        "surplus": "Sobrante anual",
+        "debts": "Deudas",
+        "emergencyFund": "Fondo de emergencia",
+        "pockets": "Bolsillos",
+        "riskProfile": "Perfil de riesgo",
+        "investment": "Inversión",
+        "pension": "Pensión",
+        "insurance": "Seguros",
+        "succession": "Sucesión",
+        "assumptions": "Supuestos clave",
+        "decisions": "Decisiones tomadas",
+        "pending": "Pendientes",
+        "files": "Archivos",
+        "nextReview": "Próxima revisión"
+      },
+      "values": {
+        "age": "{age} años",
+        "ageUnknown": "edad sin dato",
+        "noDependents": "sin personas a cargo",
+        "dependents": {
+          "one": "1 persona a cargo",
+          "other": "{count} personas a cargo"
+        },
+        "income": "{name}: {amount}, {payments}",
+        "payments": {
+          "one": "1 pago al año",
+          "other": "{count} pagos al año"
+        },
+        "noIncomes": "Sin ingresos registrados",
+        "spending": "{total} en total · {essential} esencial",
+        "programmedSavings": "{annual} al año ({monthly} al mes)",
+        "surplus": "{amount} · prueba de realidad {status}",
+        "realityCheck": {
+          "pendiente": "pendiente",
+          "confirmada": "hecha",
+          "revisar_gastos": "hecha, con gastos por revisar"
+        },
+        "noDebts": "Sin deudas",
+        "debts": "saldo total {total} · deuda cara {expensive} · {payoff}",
+        "debtsNoExpensive": "saldo total {total} · sin deuda cara",
+        "payoff": "salida estimada en {month}",
+        "payoffBeyond": "salida en más de 120 meses",
+        "emergencyFund": "meta {goal} · saldo actual {balance}",
+        "fundComplete": "se completa con el sobrante en {month}",
+        "pocket": "{name}: {amount} al mes",
+        "noPockets": "Sin bolsillos con aporte",
+        "riskProfile": "disposición {willingness} · capacidad {capacity} · perfil final {final}",
+        "levels": {
+          "no_invertir": "no invertir todavía",
+          "conservador": "conservador",
+          "moderado": "moderado",
+          "tolerante": "tolerante"
+        },
+        "unanswered": "sin responder",
+        "investment": "saldo {balance} · aporte {monthly} al mes · {growth} en crecimiento y {stability} en estabilidad",
+        "investmentToday": "lo invertido hoy: {growth} en crecimiento y {stability} en estabilidad",
+        "horizon": "plazo de uso: {horizon}",
+        "horizonUnanswered": "plazo de uso sin responder",
+        "horizons": {
+          "menos_3": "menos de 3 años",
+          "de_3_a_7": "de 3 a 7 años",
+          "mas_7": "más de 7 años"
+        },
+        "pension": "No se analiza en la plataforma; se revisa con la entidad de pensiones.",
+        "insurance": "vigentes: {current} · en cotización: {quoting}",
+        "none": "ninguno",
+        "succession": "testamento: {will} · beneficiarios revisados: {beneficiaries}",
+        "yes": "sí",
+        "no": "no",
+        "unknown": "sin dato",
+        "fx": "tasa de cambio {rates}",
+        "rate": "1 {currency} = {rate}",
+        "noFx": "sin otras monedas que {currency}",
+        "minimumWage": "salario mínimo {amount}",
+        "pctToInvestment": "{pct} del sobrante a inversión",
+        "noDecisions": "Ninguna anotada",
+        "pendingItem": "{title} ({owner}, antes del {date})",
+        "pendingItemNoDate": "{title} ({owner}, sin fecha límite)",
+        "noPending": "Ninguno",
+        "files": "último plan entregado: {label}, del {date}",
+        "noFiles": "Sin plan entregado",
+        "noReview": "Sin programar"
+      }
+    },
+    "notesForm": {
+      "title": "Sucesión y decisiones",
+      "intro": "Lo que la ficha de continuidad no saca de los datos del plan.",
+      "will": "¿El cliente tiene testamento?",
+      "beneficiaries": "¿El cliente revisó los beneficiarios de seguros, pensión y cuentas?",
+      "options": {
+        "si": "Sí",
+        "no": "No",
+        "sin_dato": "Sin dato"
+      },
+      "decisions": "Decisiones tomadas",
+      "decisionsHint": "Una por línea. Por ejemplo, qué se decidió sobre el fondo, las deudas o la inversión.",
+      "submit": "Guardar",
+      "submitting": "Guardando…",
+      "cancel": "Cancelar",
+      "errors": {
+        "tooLong": "Escribe 4.000 caracteres como máximo.",
+        "notAllowed": "No tienes permiso para cambiar estos datos.",
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      }
+    }
   }
 }

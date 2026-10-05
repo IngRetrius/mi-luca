@@ -4,8 +4,6 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import { actionStatusSchema } from '@miluca/domain';
-import { suggestedActions } from '@miluca/engine';
-import { messages } from '@miluca/i18n';
 
 import { loadComputedCase } from '@/features/summary';
 import { createClient } from '@/lib/supabase/server';
@@ -13,7 +11,7 @@ import { isUuid, requireCaseEditor } from '@/server/case-access';
 import { requireAdvisor } from '@/server/viewer';
 
 import { actionPlanPaths } from './paths';
-import { suggestionContext } from './suggestions';
+import { suggestedActionRows } from './suggestions';
 import { parseActionItem, type ActionItemErrors, type ActionItemValues } from './validation';
 
 export type ActionItemFormError = 'notAllowed' | 'notFound' | 'unavailable';
@@ -111,22 +109,11 @@ export async function addSuggestedActions(clientId: string): Promise<void> {
   await requireAdvisor(paths.list);
   const computed = await loadComputedCase(clientId);
   if (computed) {
-    const templates = messages.es.actionPlan.templates;
-    const rows = suggestedActions(computed.input.cutoffDate, suggestionContext(computed)).map(
-      (action, index) => ({
-        client_id: clientId,
-        suggestion_key: action.key,
-        title: templates[action.key],
-        priority: action.priority,
-        owner_role: action.owner,
-        due_date: action.dueDate,
-        sort_order: index,
-      }),
-    );
     const supabase = await createClient();
-    await supabase
-      .from('action_items')
-      .upsert(rows, { onConflict: 'client_id,suggestion_key', ignoreDuplicates: true });
+    await supabase.from('action_items').upsert(suggestedActionRows(clientId, computed), {
+      onConflict: 'client_id,suggestion_key',
+      ignoreDuplicates: true,
+    });
   }
   revalidatePath(paths.list);
 }

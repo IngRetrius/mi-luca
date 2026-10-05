@@ -1,4 +1,5 @@
-import type { ActionPlanContext } from '@miluca/engine';
+import { suggestedActions, type ActionPlanContext, type ActionTemplateKey } from '@miluca/engine';
+import { messages } from '@miluca/i18n';
 
 import type { ComputedCase } from '@/features/summary';
 
@@ -15,4 +16,28 @@ export function suggestionContext(
     hasNewInsurance: computed.rows.insurances.some((insurance) => insurance.status !== 'si'),
     realityCheckConfirmed: computed.result.realityCheck.status === 'confirmada',
   };
+}
+
+/**
+ * Filas de `action_items` para las tareas sugeridas que aplican, con su fecha límite contada desde
+ * la fecha de corte. Con `only`, solo esas llaves (las revisiones de P-A16), con el mismo orden que
+ * tendrían en la lista completa.
+ */
+export function suggestedActionRows(
+  clientId: string,
+  computed: Pick<ComputedCase, 'mode' | 'rows' | 'result' | 'input'>,
+  only?: readonly ActionTemplateKey[],
+) {
+  const templates = messages.es.actionPlan.templates;
+  return suggestedActions(computed.input.cutoffDate, suggestionContext(computed))
+    .map((action, index) => ({
+      client_id: clientId,
+      suggestion_key: action.key,
+      title: templates[action.key],
+      priority: action.priority,
+      owner_role: action.owner,
+      due_date: action.dueDate,
+      sort_order: index,
+    }))
+    .filter((row) => !only || only.includes(row.suggestion_key));
 }

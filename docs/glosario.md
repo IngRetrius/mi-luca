@@ -271,9 +271,18 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Tarea sugerida | `suggestedActions`, `ACTION_TEMPLATES`, `suggestion_key` | Las 14 de la plantilla; en modo nativo, solo las que aplican (ADR 0018) |
 | Prioridad, responsable, estado de una tarea | `priority`, `owner_role`, `status` | alta, media, baja; cliente, asesor, contador, abogado, aseguradora, administradora_pensiones ("Entidad de pensiones"); pendiente, en_curso, hecho |
 | Tarea vencida | `isOverdue` | Fecha límite anterior a hoy y sin hacer |
-| Notas para el cliente | `clientNotes` | |
-| Carta de cierre | `closingLetter` | |
-| Ficha de continuidad | `continuitySheet` | |
+| Notas para el cliente | `notas` (`client_documents.kind`), `NOTES_SECTIONS` | Se publican aparte (`status` publicado, `published_at`); `/clientes/[id]/notas` |
+| Carta de cierre | `carta` (`client_documents.kind`), `LETTER_SECTIONS` | Partes de la sección 11 del protocolo; va con el plan entregado; `/clientes/[id]/carta` |
+| Marcador de cifra | `FIGURE_MARKERS`, `figureMarker`, `fillFigures` | `{{sobrante_anual}}` en el texto; se cambia por el valor escrito (ADR 0019) |
+| Insertar cifra, ver como el cliente | `insertableFigures`, `DocumentEditor` | P-A13 |
+| PDF del plan entregado | `renderLetterPdf`, `deliveryPdfResponse` | `/mi-plan/pdf` y `/clientes/[id]/planes/[deliveryId]/pdf`; se genera al pedirlo (ADR 0020) |
+| Documentos entregados | `plan_deliveries.documents`, `DeliveredDocuments` | Carta y notas publicadas con las cifras fijas del día de la entrega |
+| Seguimiento | `followUp` | P-A16, `/clientes/[id]/seguimiento` (ADR 0021) |
+| Revisión a 30 días, a 90 días, anual | `review_30_days`, `review_90_days`, `annual_review` (`REVIEW_KEYS`) | Tareas sugeridas del plan de acción; `reviews`, `nextReview` |
+| Próxima revisión | `nextReview` | La revisión sin hacer con la fecha más temprana, aunque esté vencida |
+| Programar las revisiones | `scheduleReviews` | Agrega las que faltan, con la fecha desde la fecha de corte |
+| Ficha de continuidad | `continuitySheet`, `continuityText` | Anexo C del protocolo; se arma al verla con los datos de hoy |
+| Sucesión y decisiones | `continuity_notes` / `ContinuityNotes` | Testamento (`has_will`), beneficiarios revisados (`beneficiaries_reviewed`) y decisiones tomadas (`decisions`); null es "sin dato"; `/clientes/[id]/seguimiento/ficha` |
 | Plan entregado | `planDelivery` | Versión fija |
 | Cifras clave | `keyFigures` | |
 | Antes y después | `changeImpact` / `change_impacts` | Registro de los cambios que movieron cifras clave |

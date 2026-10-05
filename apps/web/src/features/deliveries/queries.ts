@@ -2,6 +2,8 @@ import 'server-only';
 
 import type { CaseResult, KeyFigures, PlanParameters } from '@miluca/engine';
 
+import { deliveredDocuments, type DeliveredDocuments } from '@/features/documents';
+
 import { createClient } from '@/lib/supabase/server';
 
 /** Un plan entregado en la lista: sin las fotos grandes. */
@@ -23,6 +25,8 @@ export interface Delivery extends DeliverySummary {
   readonly pocketNames: readonly string[];
   /** Supuestos con que se calculó (`inputs.parameters`); null si la entrega no los trae. */
   readonly parameters: PlanParameters | null;
+  /** La carta y las notas con las cifras del día de la entrega; vacías en entregas anteriores. */
+  readonly documents: DeliveredDocuments;
 }
 
 const PARAMETER_NUMBERS = [
@@ -63,18 +67,25 @@ export async function listDeliveries(clientId: string): Promise<DeliverySummary[
   }));
 }
 
-/** Un plan entregado; null si no existe, no hay acceso o falla la consulta. */
-export async function loadDelivery(clientId: string, deliveryId: string): Promise<Delivery | null> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from('plan_deliveries')
-    .select(
-      'id, label, delivered_at, cutoff_date, engine_version, base_currency:inputs->fx->>baseCurrency, parameters:inputs->parameters, results, key_figures, labels',
-    )
-    .eq('client_id', clientId)
-    .eq('id', deliveryId)
-    .maybeSingle();
-  if (error || !data) return null;
+const DELIVERY_COLUMNS =
+  'id, label, delivered_at, cutoff_date, engine_version, base_currency:inputs->fx->>baseCurrency, parameters:inputs->parameters, results, key_figures, labels, documents';
+
+/** Lo que devuelve `DELIVERY_COLUMNS`; las fotos en JSON se leen como las escribió la entrega. */
+interface DeliveryRow {
+  readonly id: string;
+  readonly label: string;
+  readonly delivered_at: string;
+  readonly cutoff_date: string;
+  readonly engine_version: string;
+  readonly base_currency: unknown;
+  readonly parameters: unknown;
+  readonly results: unknown;
+  readonly key_figures: unknown;
+  readonly labels: unknown;
+  readonly documents: unknown;
+}
+
+function toDelivery(data: DeliveryRow): Delivery {
   const labels = data.labels as { pockets?: string[] } | null;
   return {
     id: data.id,
@@ -84,9 +95,39 @@ export async function loadDelivery(clientId: string, deliveryId: string): Promis
     engineVersion: data.engine_version,
     baseCurrency: String(data.base_currency ?? ''),
     // Lo escribió el motor de esta misma app al entregar (versión en `engineVersion`).
-    results: data.results as unknown as CaseResult,
-    keyFigures: data.key_figures as unknown as Partial<KeyFigures>,
+    results: data.results as CaseResult,
+    keyFigures: data.key_figures as Partial<KeyFigures>,
     pocketNames: labels?.pockets ?? [],
     parameters: planParameters(data.parameters),
+    documents: deliveredDocuments(data.documents),
   };
+}
+
+/** Un plan entregado; null si no existe, no hay acceso o falla la consulta. */
+export async function loadDelivery(clientId: string, deliveryId: string): Promise<Delivery | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('plan_deliveries')
+    .select(DELIVERY_COLUMNS)
+    .eq('client_id', clientId)
+    .eq('id', deliveryId)
+    .maybeSingle();
+  return error || !data ? null : toDelivery(data);
+}
+
+/**
+ * El último plan entregado, para comparar con hoy (P-A16). Null si no hay ninguno; undefined si
+ * falla la consulta.
+ */
+export async function loadLatestDelivery(clientId: string): Promise<Delivery | null | undefined> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('plan_deliveries')
+    .select(DELIVERY_COLUMNS)
+    .eq('client_id', clientId)
+    .order('delivered_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error) return undefined;
+  return data ? toDelivery(data) : null;
 }

@@ -47,7 +47,7 @@ flowchart LR
   subgraph Supabase["Supabase (us-east-2, Ohio)"]
     AUTH["Auth<br/>Google y contraseña"]
     DB[("Postgres<br/>RLS, auditoría")]
-    ST["Storage<br/>PDF de planes entregados"]
+    ST["Storage<br/>exportaciones de datos"]
     CRON["pg_cron / Edge Functions<br/>limpieza y recordatorios"]
   end
   GOOG["Google OAuth"]
@@ -91,7 +91,7 @@ Versiones fijadas en la fase 0 (28/09/2026): Node.js 24 LTS, pnpm 12.6, Next.js 
 | Autenticación | Supabase Auth + `@supabase/ssr` (PKCE, cookies) [F17] | Sesión compartida entre servidor y navegador |
 | Correo | Resend como SMTP de Supabase y para correos propios [F14][F25] | El correo incluido de Supabase no es para producción |
 | Excel | ExcelJS sobre una copia de la plantilla | Exportación compatible celda a celda |
-| PDF | @react-pdf/renderer | Funciona en funciones sin servidor, sin navegador embebido |
+| PDF | @react-pdf/renderer | Funciona en funciones sin servidor, sin navegador embebido. El del plan entregado se genera al pedirlo (ADR 0020) |
 | Pruebas | Vitest (motor y componentes), Playwright (extremo a extremo), pgTAP (RLS) | Cada capa con su herramienta |
 | Errores | Sentry con depuración de datos personales (fase 8) | Diagnóstico sin exponer datos de clientes |
 

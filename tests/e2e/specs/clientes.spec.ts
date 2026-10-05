@@ -8,8 +8,9 @@ import { expect, test } from '@playwright/test';
 // plan, con sus errores y el foco en el primero; después de F3, la lista de gastos típicos del país,
 // P-A06b; en F4, deudas con su plan de pago y el método, y el seguimiento cuota a cuota; en F5, inversión con perfil,
 // supuestos y proyección, metas con la calculadora de viaje, seguros con la suma asegurada de vida y el
-// patrimonio completo; en F7, control mensual y plan de acción con las tareas sugeridas) se verificó
-// contra Supabase local.
+// patrimonio completo; en F7, control mensual y plan de acción con las tareas sugeridas, la carta y
+// las notas con sus cifras, publicadas y entregadas con el plan, y el seguimiento con las revisiones
+// y la ficha de continuidad) se verificó contra Supabase local.
 
 const CLIENT = '00000000-0000-4000-8000-000000000001';
 
@@ -71,6 +72,10 @@ for (const path of [
   `/clientes/${CLIENT}/plan-de-accion`,
   `/clientes/${CLIENT}/plan-de-accion/nueva`,
   `/clientes/${CLIENT}/plan-de-accion/${CLIENT}`,
+  `/clientes/${CLIENT}/carta`,
+  `/clientes/${CLIENT}/notas`,
+  `/clientes/${CLIENT}/seguimiento`,
+  `/clientes/${CLIENT}/seguimiento/ficha`,
   `/clientes/${CLIENT}/entrega`,
   `/clientes/${CLIENT}/planes/${CLIENT}`,
 ]) {
@@ -83,6 +88,12 @@ for (const path of [
     );
   });
 }
+
+test('el PDF de un plan entregado sin sesión lleva a Entrar y vuelve al plan', async ({ page }) => {
+  const plan = `/clientes/${CLIENT}/planes/${CLIENT}`;
+  await page.goto(`${plan}/pdf`);
+  await expect(page).toHaveURL(`/entrar?next=${encodeURIComponent(plan)}`);
+});
 
 test('una ruta que no existe muestra la página en español', async ({ page }) => {
   const response = await page.goto('/ruta-que-no-existe');

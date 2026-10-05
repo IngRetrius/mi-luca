@@ -5,7 +5,10 @@ import { redirect } from 'next/navigation';
 
 import type { Json } from '@miluca/db';
 import { ENGINE_VERSION, qualityChecks } from '@miluca/engine';
+import { COUNTRY_LOCALES } from '@miluca/i18n';
 
+import { getClientDetail } from '@/features/clients';
+import { figureValues, loadDocuments, readySections } from '@/features/documents';
 import { loadComputedCase } from '@/features/summary';
 import { createClient } from '@/lib/supabase/server';
 import { requireCaseEditor } from '@/server/case-access';
@@ -22,7 +25,8 @@ export interface DeliveryState {
  * P-A14 Entregar el plan: vuelve a calcular el caso y su control de calidad en el servidor (no se
  * fía de lo que mostró la pantalla), exige una nota en cada punto que la pide y guarda la foto
  * inmutable del plan: entradas, nombres de los bolsillos, resultados, cifras clave, control de
- * calidad con sus notas, versión del motor y parámetros usados (RN-137).
+ * calidad con sus notas, versión del motor y parámetros usados (RN-137). La carta y las notas
+ * publicadas van con las cifras ya puestas: quedan fijas aunque cambien los datos (P-A13).
  */
 export async function deliverPlan(
   clientId: string,
@@ -31,7 +35,11 @@ export async function deliverPlan(
 ): Promise<DeliveryState> {
   const path = `/clientes/${clientId}/entrega`;
   const viewer = await requireCaseEditor(clientId, path);
-  const computed = await loadComputedCase(clientId);
+  const [computed, client, documents] = await Promise.all([
+    loadComputedCase(clientId),
+    getClientDetail(clientId),
+    loadDocuments(clientId),
+  ]);
   const report = computed ? qualityChecks(computed.input, computed.result) : null;
   const parsed = parseDelivery(formData, {
     required: report?.needNote.map((item) => item.code) ?? [],
@@ -40,7 +48,9 @@ export async function deliverPlan(
   if (viewer.role !== 'advisor') {
     return { values: parsed.values, errors: {}, formError: 'notAllowed' };
   }
-  if (!computed || !report) return { values: parsed.values, errors: {}, formError: 'unavailable' };
+  if (!computed || !report || !documents || !client || client === 'not-found') {
+    return { values: parsed.values, errors: {}, formError: 'unavailable' };
+  }
   if (!parsed.ok) return { values: parsed.values, errors: parsed.errors, formError: null };
   if (report.blocking.length > 0) {
     return { values: parsed.values, errors: {}, formError: 'blocked' };
@@ -50,6 +60,16 @@ export async function deliverPlan(
   const json = (value: unknown) => value as NonNullable<Json>;
   // Nombres de los bolsillos generales en el orden de `result.pockets.general`.
   const pocketName = new Map(computed.rows.pockets.map((pocket) => [pocket.id, pocket.name]));
+  const values = figureValues(computed.figures, {
+    locale: COUNTRY_LOCALES[client.countryCode]?.locale ?? 'es',
+    currency: client.baseCurrency,
+  });
+  const ready = (kind: 'carta' | 'notas') => {
+    const document = documents[kind];
+    // Las notas en borrador no son para el cliente: no van.
+    if (!document || (kind === 'notas' && document.status !== 'publicado')) return [];
+    return readySections(kind, document.content, client.formOfAddress, values);
+  };
   const { data, error } = await supabase
     .from('plan_deliveries')
     .insert({
@@ -65,6 +85,7 @@ export async function deliverPlan(
       }),
       results: json(computed.result),
       key_figures: json(computed.figures),
+      documents: json({ version: 1, letter: ready('carta'), notes: ready('notas') }),
       qc_report: json({ items: report.items, notes: parsed.values.notes }),
     })
     .select('id')

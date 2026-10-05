@@ -1,4 +1,7 @@
 {
   "extends": "@miluca/config/tsconfig/library.json",
-  "include": ["src", "test", "*.ts", "*.js"]
+  "include": ["src", "test", "*.ts", "*.js"],
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  }
 }

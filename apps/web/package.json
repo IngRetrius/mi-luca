@@ -16,6 +16,7 @@
     "@miluca/db": "workspace:*",
     "@miluca/domain": "workspace:*",
     "@miluca/engine": "workspace:*",
+    "@miluca/exporters": "workspace:*",
     "@miluca/i18n": "workspace:*",
     "@miluca/ui": "workspace:*",
     "@supabase/ssr": "^0.12.7",

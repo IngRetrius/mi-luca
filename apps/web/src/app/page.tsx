@@ -16,6 +16,7 @@ import {
 import { loadActionItems, type ActionItemRow } from '@/features/action-plan';
 import { SignOutButton } from '@/features/auth';
 import { listDeliveries } from '@/features/deliveries';
+import { loadDocuments } from '@/features/documents';
 import { withAddress, type FormOfAddress } from '@/lib/address';
 import { todayIn } from '@/lib/dates';
 import { homePath, requireViewer } from '@/server/viewer';
@@ -35,11 +36,14 @@ const NEXT_TASKS = 3;
 export default async function HomePage() {
   const viewer = await requireViewer();
   if (viewer.role !== 'client') redirect(homePath(viewer));
-  const [deliveries, actionItems] = await Promise.all([
+  const [deliveries, actionItems, documents] = await Promise.all([
     listDeliveries(viewer.clientId),
     loadActionItems(viewer.clientId),
+    loadDocuments(viewer.clientId),
   ]);
   const delivered = (deliveries?.length ?? 0) > 0;
+  // RLS: el cliente solo recibe las notas publicadas.
+  const notesPublished = documents?.notas !== undefined;
   const nextTasks = (actionItems ?? [])
     .filter((item) => item.status !== 'hecho')
     .slice(0, NEXT_TASKS);
@@ -62,6 +66,10 @@ export default async function HomePage() {
       {delivered ? (
         <Link href="/mi-plan" className={`w-full ${primaryButton} ${linkButton}`}>
           {t.myPlan.link[viewer.formOfAddress]}
+        </Link>
+      ) : notesPublished ? (
+        <Link href="/mi-plan" className={`w-full ${primaryButton} ${linkButton}`}>
+          {t.documents.view.notesTitle[viewer.formOfAddress]}
         </Link>
       ) : null}
       <Link href="/control-mensual" className={`w-full ${secondaryButton} ${linkButton}`}>

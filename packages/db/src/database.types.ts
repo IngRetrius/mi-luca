@@ -510,6 +510,47 @@ export type Database = {
           },
         ];
       };
+      client_documents: {
+        Row: {
+          client_id: string;
+          content: NonNullable<Json>;
+          id: string;
+          kind: string;
+          published_at: string | null;
+          status: string;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          client_id: string;
+          content?: NonNullable<Json>;
+          id?: string;
+          kind: string;
+          published_at?: string | null;
+          status?: string;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          client_id?: string;
+          content?: NonNullable<Json>;
+          id?: string;
+          kind?: string;
+          published_at?: string | null;
+          status?: string;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'client_documents_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       client_fx_rates: {
         Row: {
           as_of: string;
@@ -689,6 +730,41 @@ export type Database = {
             columns: ['legal_text_id'];
             isOneToOne: false;
             referencedRelation: 'legal_texts';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      continuity_notes: {
+        Row: {
+          beneficiaries_reviewed: boolean | null;
+          client_id: string;
+          decisions: string;
+          has_will: boolean | null;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          beneficiaries_reviewed?: boolean | null;
+          client_id: string;
+          decisions?: string;
+          has_will?: boolean | null;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          beneficiaries_reviewed?: boolean | null;
+          client_id?: string;
+          decisions?: string;
+          has_will?: boolean | null;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'continuity_notes_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: true;
+            referencedRelation: 'clients';
             referencedColumns: ['id'];
           },
         ];

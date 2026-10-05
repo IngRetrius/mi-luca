@@ -60,7 +60,7 @@ gantt
 | F4 | 160 h, hasta comienzos de septiembre de 2027 | Terminada en el código: deudas del diagnóstico (C4 y C9), créditos cuota a cuota, plan de pago y Panel (C5), correcciones del modo nativo y pantallas |
 | F5 | 120 h, hasta comienzos de noviembre de 2027 | Terminada en el código: inversión, patrimonio completo, metas con la calculadora de viaje, seguros con la suma asegurada de vida y sus pantallas |
 | F6 | 80 h | Eliminada el 04/10/2026: la pensión no entra en la plataforma (ADR 0016) |
-| F7 | 160 h | Empezada: control mensual y plan de acción |
+| F7 | 160 h | Empezada: control mensual, plan de acción, carta y notas, PDF del plan, y seguimiento con la ficha de continuidad |
 | F8 | 80 h | Sin empezar |
 
 Con el agente de código, F0 a F2 avanzaron mucho más rápido que la estimación a 14 horas por semana, que suponía empezar el 5 de octubre de 2026. **Supuesto:** el calendario de arriba se mantiene como techo y se reestima al cerrar F3, con lo que tome realmente una fase que mezcla motor, base de datos y pantallas. Las horas del resto no cambian hasta entonces.
@@ -237,7 +237,7 @@ Avance:
 - [x] Casos de oro C4 (avalancha, 8 deudas inspiradas en el caso 15.1) y C9 (bola de nieve); la prueba `debts-plan.test.ts` compara la hoja Deudas completa en los ocho casos. Se comprobó que falla con errores provocados en el reparto del abono único y en el desempate.
 - [x] Hallazgo H-28 (ADR 0013): con coma decimal, la plantilla da 1 mes para pagar cualquier deuda; el motor da los meses reales.
 - [x] Modo nativo (`ENGINE_VERSION` 0.14.0): cuotas en el flujo hasta que el plan salda las deudas (H-03, ADR 0015), con el control de calidad del sobrante ajustado; seguros de los créditos en seguimiento pagados cada mes en el plan del diagnóstico (H-05); tasa para el cliente con FRECH junto a la del banco (H-18). Cifra clave "Meses para salir de la deuda cara" en la ficha, en el antes y después y en el plan entregado, con un formateador único de cifras clave en la app.
-- [ ] Créditos cuota a cuota (360 meses), marcas de pago, panel y caso C5 (plantilla de créditos).
+- [x] Créditos cuota a cuota (360 meses), marcas de pago, panel y caso C5 (plantilla de créditos).
 - [x] Base de datos: `debts` con RLS, historial, guarda del orden manual y moneda en uso; `case_settings.debt_method` (migración `debts`, 24 pruebas pgTAP). La app calcula el caso con las deudas: la fila automática de cuotas del presupuesto ya no vale 0.
 - [x] Pantallas: Deudas del asesor (P-A10) con el método de pago y el plan, alta y edición con el orden manual; las deudas del cliente en Mis datos, que edita sin cambiar método ni orden, con el antes y después para el asesor. Verificado contra Supabase local (asesora en Chromium a 320 px con un error de validación y el foco en él, y los tres métodos; cliente en WebKit de iPhone) y revisado con `web-design-guidelines`.
 - [x] A pedido del asesor (03/10/2026): "¿Y si se abona más?" en Deudas, para asesor y cliente. `debtWhatIf` en el motor (`ENGINE_VERSION` 0.11.0, sin cambios en los resultados del plan) compara el plan con un pago adicional al mes y un abono único que entran por el mismo orden de pago y respetan las restricciones de abono: salida de cada deuda y de todas, meses que se adelantan, ahorro en intereses y salida de la deuda cara, con lo que queda libre en el flujo al lado. Se calcula en el navegador y no se guarda. Verificado contra Supabase local (asesora a 320 px, valor mal escrito, extra mayor que lo libre y abono único; cliente en iPhone) y revisado con `web-design-guidelines`.
@@ -281,8 +281,9 @@ Criterios de aceptación:
 Avance:
 
 - [x] Control mensual y plan de acción (ADR 0018): motor (`ENGINE_VERSION` 0.16.0) con `monthlyControl`, `suggestedActions` e `isOverdue`, probado con el caso de oro C11; tablas `monthly_control_entries` y `action_items` con RLS, guardas y pruebas pgTAP; P-C08 Control mensual y P-C09 Tareas para el cliente, las mismas pantallas para el asesor con las tareas sugeridas, el inicio del cliente con el gasto del mes y sus próximas tareas, y la sección Seguimiento en la ficha. Verificado contra Supabase local a 320 y 390 px y revisado con `web-design-guidelines`.
-- [ ] Notas y carta con cifras enlazadas (P-A13), PDF y entrega (P-A14).
-- [ ] Ficha de continuidad (Anexo C), comparación con el plan entregado y revisiones (P-A16).
+- [x] Notas y carta con cifras enlazadas (P-A13, ADR 0019): tabla `client_documents` con RLS y pruebas pgTAP; editor por secciones de la sección 11 del protocolo con "Insertar cifra" y "Ver como el cliente"; notas que el asesor publica y el cliente lee en Mi plan con las cifras de hoy; la carta y las notas publicadas quedan fijas en el plan entregado y el cliente lee la carta por secciones plegables. Verificado contra Supabase local a 320 y 390 px y revisado con `web-design-guidelines`.
+- [x] Carta en PDF (P-A14, ADR 0020): `@miluca/exporters/pdf` arma el PDF del plan entregado (carta, notas y cifras, en el trato del cliente, con pie de página y número de página) al descargarlo desde Mi plan o desde el plan entregado del asesor; sin Storage. Verificado contra Supabase local: el cliente y la asesora bajan el mismo archivo, una versión ajena da 404 y sin sesión lleva a Entrar.
+- [x] Seguimiento (P-A16, ADR 0021): el último plan entregado frente a hoy, el gasto real del año y el avance de las tareas; revisiones a 30 días, 90 días y anual como tareas del plan de acción, con lo que hay que revisar en cada una, "Programar las revisiones que faltan" y la próxima en la ficha del cliente; ficha de continuidad con todos los campos del Anexo C, armada con los datos de hoy y lista para copiar, y tabla `continuity_notes` (testamento, beneficiarios revisados y decisiones tomadas) con RLS y pruebas pgTAP. Verificado contra Supabase local a 320 y 390 px y revisado con `web-design-guidelines`.
 - [ ] Excel compatible (P-A18).
 - [ ] Avisos por correo (C6, C14).
 - [ ] Exportación y borrado (P-C11).

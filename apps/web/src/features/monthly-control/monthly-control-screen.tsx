@@ -1,35 +1,24 @@
 import Link from 'next/link';
 
-import {
-  deviation,
-  deviationAlert,
-  monthlyControl,
-  type MonthlyControlFigures,
-  type MonthlyControlResult,
-} from '@miluca/engine';
-import { COUNTRY_LOCALES, formatMoney, formatPercent, messages } from '@miluca/i18n';
+import type { MonthlyControlFigures, MonthlyControlResult } from '@miluca/engine';
+import { COUNTRY_LOCALES, formatMoney, messages } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { Screen } from '@/components/screen';
 import { StatusLabel } from '@/components/status';
 import { focusRing } from '@/components/ui-classes';
-import { loadComputedCase, type ComputedCase } from '@/features/summary';
+import { loadComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
 import { amountToText } from '@/lib/amount';
 import { monthNames, todayIn } from '@/lib/dates';
 import type { CaseEditor } from '@/server/case-access';
 
 import { saveMonth } from './actions';
-import {
-  controlCategories,
-  monthParam,
-  parseMonthParam,
-  shiftMonth,
-  type CalendarMonth,
-} from './control-view';
-import { MonthForm, type MonthRow, type MonthRowDeviation } from './month-form';
+import { monthParam, parseMonthParam, shiftMonth, type CalendarMonth } from './control-view';
+import { MonthForm, type MonthRow } from './month-form';
 import { monthlyControlPaths } from './paths';
-import { loadControlEntries, type MonthlyControlEntryRow } from './queries';
+import { loadControlEntries } from './queries';
+import { deviationText, yearControl } from './year-control';
 
 const t = messages.es;
 const text = t.monthlyControl;
@@ -50,55 +39,6 @@ const chevron = (direction: 'left' | 'right') => (
     />
   </svg>
 );
-
-/** El control del año con las categorías del presupuesto del cliente (motor). */
-function yearControl(
-  computed: ComputedCase,
-  entries: readonly MonthlyControlEntryRow[],
-): MonthlyControlResult {
-  const { result, input, rows } = computed;
-  const automatic = result.budgetItems.length - input.budgetItems.length;
-  const monthly = (index: number) => result.budget.rows[index]?.monthlyAverage ?? 0;
-  const { categories, budgetItems } = controlCategories({
-    automatic: {
-      debts: monthly(0),
-      insurance: monthly(1),
-      goals: Array.from({ length: Math.max(automatic - 2, 0) }, (_, index) => monthly(index + 2)),
-    },
-    items: rows.budgetItems.flatMap((item) => {
-      const row = computed.budgetRowById.get(item.id);
-      return row ? [{ category: item.category, monthlyAverage: row.monthlyAverage }] : [];
-    }),
-    recorded: [...new Set(entries.map((entry) => entry.category))],
-    labels: text.automaticCategories,
-  });
-  return monthlyControl(
-    categories,
-    budgetItems,
-    entries.map((entry) => ({
-      category: entry.category,
-      month: entry.month,
-      amount: { amount: entry.amount, currency: entry.currency },
-    })),
-    input.fx,
-  );
-}
-
-/** Desviación escrita con el porcentaje redondeado; con estado si pasa del umbral. */
-function deviationText(
-  real: number | null,
-  budget: number,
-  locale: string,
-): MonthRowDeviation | null {
-  if (real === null) return null;
-  const value = deviation(real, budget);
-  if (value === null) return { label: text.noBudget, status: null };
-  const alert = deviationAlert(value);
-  const pct = formatPercent(Math.abs(value), locale, 0);
-  if (alert === 'over') return { label: text.over.replace('{pct}', pct), status: 'warning' };
-  if (alert === 'under') return { label: text.under.replace('{pct}', pct), status: 'warning' };
-  return { label: text.onBudget, status: null };
-}
 
 /** P-C08 Control mensual (cliente y asesor): el mes elegido para registrar y el promedio del año. */
 export async function MonthlyControlScreen({

@@ -45,6 +45,7 @@ erDiagram
   CLIENTS ||--o{ MONTHLY_CONTROL_ENTRIES : ""
   CLIENTS ||--o{ ACTION_ITEMS : ""
   CLIENTS ||--o{ CLIENT_DOCUMENTS : "notas, carta"
+  CLIENTS ||--o| CONTINUITY_NOTES : "sucesión y decisiones"
   CLIENTS ||--o{ PLAN_DELIVERIES : "versiones fijas"
   CLIENTS ||--o{ AUDIT_LOG : "historial"
   CLIENTS ||--o{ CHANGE_IMPACTS : "antes y después"
@@ -509,14 +510,26 @@ create table public.action_items (
   unique (client_id, suggestion_key)
 );
 
-create table public.client_documents (       -- notas para el cliente, borrador de carta
+create table public.client_documents (       -- notas para el cliente y carta de cierre
   id           uuid primary key default gen_random_uuid(),
   client_id    uuid not null references public.clients(id) on delete cascade,
   kind         text not null check (kind in ('notas', 'carta')),
   status       text not null default 'borrador' check (status in ('borrador', 'publicado')),
-  body         text not null,                -- Markdown con marcadores {{cifra:summary.annualSurplus}}
+  content      jsonb not null default '{}',  -- texto por sección, con marcadores {{sobrante_anual}}
+  published_at timestamptz,                  -- lo pone la base al publicar
   updated_at   timestamptz not null default now(),
-  updated_by   uuid references auth.users(id)
+  updated_by   uuid,
+  unique (client_id, kind),
+  check (kind = 'notas' or status = 'borrador') -- la carta llega con el plan entregado
+);
+
+create table public.continuity_notes (        -- lo que la ficha de continuidad no saca del plan
+  client_id              uuid primary key references public.clients(id) on delete cascade,
+  has_will               boolean,               -- null: sin dato
+  beneficiaries_reviewed boolean,               -- null: sin dato
+  decisions              text not null default '' check (length(decisions) <= 4000), -- una por línea
+  updated_at             timestamptz not null default now(),
+  updated_by             uuid
 );
 ```
 
@@ -535,9 +548,9 @@ create table public.plan_deliveries (
   inputs             jsonb not null,                -- CaseInput completo
   results            jsonb not null,                -- CaseResult completo
   key_figures        jsonb not null,                -- cifras para comparar entre revisiones
-  documents          jsonb not null,                -- notas y carta ya resueltas (con cifras, sin marcadores)
+  documents          jsonb not null,                -- carta y notas publicadas ya resueltas: { version, letter, notes }
   qc_report          jsonb not null,                -- resultado del control de calidad
-  pdf_path           text,                          -- Storage: deliveries/{client_id}/{id}.pdf
+  pdf_path           text,                          -- vacío: el PDF se genera al pedirlo (ADR 0020)
   sha256             text not null                  -- huella de inputs + results + documents
 );
 
@@ -765,6 +778,7 @@ Los consentimientos se registran en la misma transacción desde la acción de se
 | Plan de acción: crear, fechas, prioridad, responsable | Sí | No | Sí | Sí | |
 | Plan de acción: estado y nota | Sí | Sí | Sí | Sí | El cliente marca sus tareas como hechas |
 | Notas para el cliente y carta de cierre | Solo publicadas | No | Sí | Sí | |
+| Ficha de continuidad: testamento, beneficiarios revisados, decisiones tomadas | Sí | No | Sí | Sí | El resto de la ficha sale de los datos |
 | Planes entregados | Sí | No | Sí | Crear, nunca editar | Inmutables |
 | Historial de cambios y antes y después | Sí | No | Sí | No | Solo lo escribe el sistema |
 | Consentimientos | Sí | Otorgar y retirar | Sí | No | Del cliente |
@@ -791,7 +805,7 @@ Los consentimientos se registran en la misma transacción desde la acción de se
 ## 8. Planes entregados frente a datos vivos
 
 - Entregar un plan ejecuta el control de calidad; si hay errores bloqueantes, no se puede entregar.
-- La entrega guarda en `plan_deliveries` las entradas, los parámetros usados (por id), los resultados, las cifras clave, los documentos ya resueltos (las cifras reemplazan a los marcadores) y el PDF en Storage.
+- La entrega guarda en `plan_deliveries` las entradas, los parámetros usados (por id), los resultados, las cifras clave, los documentos ya resueltos (las cifras reemplazan a los marcadores) y nada más: el PDF se genera al pedirlo con esos documentos (ADR 0020).
 - La vista "Comparar con el plan entregado" muestra las cifras clave del plan elegido frente a las actuales.
 - Nada modifica un plan entregado. Una corrección genera una nueva entrega.
 
@@ -811,7 +825,7 @@ Qué conserva el asesor tras la revocación o el borrado (por ejemplo, copia de 
 
 | Bucket | Privado | Ruta | Política |
 |---|---|---|---|
-| `deliveries` | Sí | `{client_id}/{delivery_id}.pdf` | Lectura si `private.can_access` del primer segmento de la ruta; escritura solo del servidor |
+| ~~`deliveries`~~ | | | No se crea: el PDF del plan entregado se genera al pedirlo (ADR 0020) |
 | `exports` | Sí | `{client_id}/{request_id}.zip` | Lectura solo del dueño; borrado automático a los 7 días |
 
 ## 11. Estado de la implementación
@@ -886,4 +900,6 @@ Diferencias con el borrador de las secciones 3.1, 4 y 5:
 35. **Inversión, metas y seguros (F5).** Metas, seguros, inversiones y las respuestas del perfil de riesgo los editan cliente y asesor; las dos condiciones de capacidad que la plantilla deja cambiar (`variable_income_override`, `dependents_override`, vacías = la sugerida) y la posición en el rango son del asesor, con guarda propia `private.guard_risk_profile_advisor_columns()` porque `range_position` tiene valor por defecto (0,5). Del borrador cambian: la calculadora de viaje guarda en `goals` su moneda, impuestos del alojamiento, colchón y costos en moneda base, y en `goal_trip_items` los conceptos fijos de la plantilla (sin `kind`); `goal_trip_items` lleva la llave compuesta `(goal_id, client_id)`; `insurances` tiene un catálogo cerrado (`insurance_type`), uno por tipo salvo "otro", que lleva nombre; `life_insurance_inputs` pasa a `case_settings` (`life_support_years`, `life_annual_to_cover` en moneda base) junto con `insurance_pocket_id`, el bolsillo de las primas nuevas; `capacity_overrides` se reemplaza por dos columnas. Los rendimientos, la bajada cerca del retiro, el piso, los rangos y la edad de retiro por sexo son parámetros comunes de la metodología (`method.*`, fuente interna I1 e I2); el asesor fija otro valor por cliente en `case_settings`. La edad de retiro por defecto es un supuesto (B16). La tasa de una moneda usada en metas (también la del viaje), seguros o inversiones no se borra.
 36. **Sin pensión (ADR 0016).** La migración `remove_pension` quita la marca por cliente `case_settings.pension_enabled` y el módulo por país `countries.pension_module`; nada más los usaba. `pension_inputs` nunca se creó. El historial conserva los valores anteriores.
 37. **Control mensual y plan de acción (F7, ADR 0018).** Migración `monthly_control_action_plan`. El control mensual lo escriben cliente y asesor, con la tasa de la moneda obligatoria (`check_currency`) y la tasa en uso protegida (`guard_fx_rate`). A diferencia de la nota 25, la pantalla guarda el mes con `upsert`: `authenticated` puede actualizar también las columnas de la llave y la política vuelve a exigir el acceso al cliente de la fila resultante. Las tareas las crea y borra solo el asesor (políticas de `insert` y `delete`); el cliente cambia estado y nota, y la guarda genérica rechaza que cambie título, prioridad, responsable, fecha límite, orden o la llave de la sugerida. `private.stamp_action_item_completion()` pone y quita `completed_at` y `completed_by`. Cada sugerida se agrega una vez (`unique (client_id, suggestion_key)`).
+38. **Carta y notas (F7, ADR 0019).** Migración `client_documents`. El texto va por secciones en `content` (un objeto), no en un Markdown con encabezados. Solo el asesor escribe; el cliente lee las notas publicadas. La carta no se publica: la restricción `kind = 'notas' or status = 'borrador'` lo impide, y llega al cliente dentro de `plan_deliveries.documents`, con los títulos en su trato y las cifras escritas. `private.stamp_document_publication()` pone `published_at` al publicar y cada vez que cambia el texto publicado.
+39. **Seguimiento y ficha de continuidad (F7, ADR 0021).** Migración `continuity_notes`. Las revisiones a 30 días, 90 días y anual no tienen tabla: son las tareas sugeridas del plan de acción con esas llaves. La ficha del Anexo C se arma al verla con los datos de hoy; solo se guarda lo que no sale de ellos, en una fila por cliente que escribe el asesor (sin borrado: se va con el cliente). Como en la nota 37, el guardado es un `upsert`, por eso `authenticated` puede actualizar también `client_id`.
 Sin pendientes de F1 en el modelo de datos.

@@ -7,12 +7,14 @@ import { COUNTRY_LOCALES, formatDate, formatMoney, formatPercent, messages } fro
 import { BackLink, LoadError } from '@/components/back-link';
 import { Screen } from '@/components/screen';
 import { StatusLabel, type Status } from '@/components/status';
-import { focusRing } from '@/components/ui-classes';
+import { focusRing, linkButton, textButton } from '@/components/ui-classes';
+import { documentPaths, loadDocuments, writtenCount } from '@/features/documents';
 import { loadComputedCase } from '@/features/summary';
 import { todayIn } from '@/lib/dates';
 
 import { deliverPlan } from './actions';
 import { DeliveryForm, type NoteRequest } from './delivery-form';
+import { PdfLink } from './pdf-link';
 import { PlanView } from './plan-view';
 import { qcMessage } from './qc-text';
 import { listDeliveries, loadDelivery } from './queries';
@@ -29,9 +31,10 @@ const STATUS: Readonly<Record<QcItem['severity'], Status>> = {
 /** P-A12 Control de calidad y P-A14 Entregar el plan, con los planes ya entregados. */
 export async function DeliveryScreen({ clientId }: { clientId: string }) {
   const back = `/clientes/${clientId}`;
-  const [computed, deliveries] = await Promise.all([
+  const [computed, deliveries, documents] = await Promise.all([
     loadComputedCase(clientId),
     listDeliveries(clientId),
+    loadDocuments(clientId),
   ]);
   const header = (
     <>
@@ -134,6 +137,13 @@ export async function DeliveryScreen({ clientId }: { clientId: string }) {
         )}
       </section>
 
+      <WithThePlan
+        clientId={clientId}
+        documents={documents}
+        locale={locale}
+        countryCode={client.country_code}
+      />
+
       {report.blocking.length > 0 ? (
         <section
           aria-labelledby="blocked-title"
@@ -154,6 +164,59 @@ export async function DeliveryScreen({ clientId }: { clientId: string }) {
         />
       )}
     </Screen>
+  );
+}
+
+/** P-A14 "Se enviará al cliente": la carta y las notas publicadas, con el enlace para escribirlas. */
+function WithThePlan({
+  clientId,
+  documents,
+  locale,
+  countryCode,
+}: {
+  clientId: string;
+  documents: Awaited<ReturnType<typeof loadDocuments>>;
+  locale: string;
+  countryCode: string;
+}) {
+  const local = t.documents.delivery;
+  const summary = t.documents.summary;
+  const paths = documentPaths(clientId);
+  if (!documents) return <p role="alert">{t.common.loadError}</p>;
+  const { written, total } = writtenCount('carta', documents.carta?.content ?? {});
+  const letter =
+    written === 0
+      ? summary.letterNone
+      : summary.letterSome.replace('{count}', String(written)).replace('{total}', String(total));
+  const notes = documents.notas;
+  const notesStatus = !notes
+    ? summary.notesNone
+    : notes.status === 'publicado' && notes.publishedAt
+      ? summary.notesPublished.replace(
+          '{date}',
+          formatDate(todayIn(countryCode, new Date(notes.publishedAt)), locale, 'UTC'),
+        )
+      : local.notesNotPublished;
+  return (
+    <section aria-labelledby="with-plan-title" className="flex flex-col gap-2">
+      <h2 id="with-plan-title" className="font-semibold">
+        {local.title}
+      </h2>
+      <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
+        <li className="flex flex-wrap items-center justify-between gap-x-3 p-4">
+          <span className="text-sm">{local.letter.replace('{status}', letter)}</span>
+          <Link href={paths.letter} className={`${textButton} ${linkButton}`}>
+            {local.editLetter}
+          </Link>
+        </li>
+        <li className="flex flex-wrap items-center justify-between gap-x-3 p-4">
+          <span className="text-sm">{local.notes.replace('{status}', notesStatus)}</span>
+          <Link href={paths.notes} className={`${textButton} ${linkButton}`}>
+            {local.editNotes}
+          </Link>
+        </li>
+      </ul>
+    </section>
   );
 }
 
@@ -178,11 +241,16 @@ export async function AdvisorDeliveredPlanScreen({
     <Screen>
       <BackLink href={back} label={text.title} />
       <h1 className="text-2xl font-semibold text-balance wrap-anywhere">{delivery.label}</h1>
+      <PdfLink href={`/clientes/${clientId}/planes/${delivery.id}/pdf`} />
       <PlanView
         delivery={delivery}
         today={computed?.figures ?? null}
         locale={locale}
         currency={delivery.baseCurrency}
+        documentTitles={{
+          letter: t.documents.view.letterTitleAdvisor,
+          notes: t.documents.view.notesTitleAdvisor,
+        }}
       />
     </Screen>
   );

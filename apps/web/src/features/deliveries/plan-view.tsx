@@ -1,36 +1,15 @@
-import { diffKeyFigures, type CaseResult, type KeyFigureId, type KeyFigures } from '@miluca/engine';
+import type { CaseResult, KeyFigures } from '@miluca/engine';
 import { formatDate, formatMoney, messages } from '@miluca/i18n';
 
 import { FigureList } from '@/components/figure-list';
-import { formatKeyFigure } from '@/features/summary';
+import { DocumentSections } from '@/features/documents';
 
 import { PlanAssumptions } from './plan-assumptions';
+import { PlanComparison } from './plan-comparison';
+import { formatFigure, PLAN_FIGURES } from './plan-figures';
 import type { Delivery } from './queries';
 
 const t = messages.es;
-
-/** Las cifras que muestra un plan entregado, en el orden del Resumen. */
-const PLAN_FIGURES: readonly KeyFigureId[] = [
-  'annualIncome',
-  'annualExpenses',
-  'programmedSavings',
-  'annualSurplus',
-  'savingsRate',
-  'ownSavingsRate',
-  'emergencyGoal',
-  'emergencyProgress',
-  'noIncomeShortfall',
-  'annualInvestment',
-];
-
-export function formatFigure(
-  id: KeyFigureId,
-  value: number | null | undefined,
-  locale: string,
-  currency: string,
-): string {
-  return formatKeyFigure(id, value, { locale, currency, months: messages.es.keyFigureMonths });
-}
 
 function formatMonth(date: string, locale: string): string {
   return new Intl.DateTimeFormat(locale, {
@@ -42,20 +21,24 @@ function formatMonth(date: string, locale: string): string {
 
 /**
  * Un plan entregado por secciones (P-C05): cifras, fondo, bolsillos, el año del flujo, los
- * supuestos con su explicación y la comparación con hoy. Lee solo lo que se guardó el día de la entrega (`results`), así lo
- * entregado no cambia aunque cambien los datos. Textos neutros: lo usan el asesor y el cliente.
+ * supuestos con su explicación y la comparación con hoy, después de la carta y las notas que se
+ * entregaron con él. Lee solo lo que se guardó el día de la entrega (`results`, `documents`), así lo
+ * entregado no cambia aunque cambien los datos. Textos neutros salvo los títulos de la carta y las
+ * notas, que da quien llama: lo usan el asesor y el cliente.
  */
 export function PlanView({
   delivery,
   today,
   locale,
   currency,
+  documentTitles,
 }: {
   delivery: Delivery;
   /** Cifras clave con los datos de hoy; null si no se pudieron calcular. */
   today: KeyFigures | null;
   locale: string;
   currency: string;
+  documentTitles: { readonly letter: string; readonly notes: string };
 }) {
   const text = t.plan;
   const money = (amount: number) => formatMoney(amount, currency, locale);
@@ -66,9 +49,6 @@ export function PlanView({
   const pockets = results.pockets;
   const plan = results.savingsPlan;
   const redMonths = results.cashflow.flow.balance.months.filter((value) => value < 0).length;
-  const changed = today
-    ? new Set(diffKeyFigures(figures, today).map((delta) => delta.id))
-    : new Set<KeyFigureId>();
   // Con el plan secuencial (modo nativo) el fondo no recibe un aporte fijo: se llena con el
   // sobrante hasta completarse. Se dice cuándo, en vez del aporte de 12 meses de la plantilla.
   const fundNote = plan?.completionMonth
@@ -100,6 +80,24 @@ export function PlanView({
         </p>
         <p>{text.currencyNote.replace('{currency}', currency)}</p>
       </div>
+
+      {delivery.documents.letter.length > 0 ? (
+        <section aria-labelledby="plan-letter" className="flex flex-col gap-2">
+          <h2 id="plan-letter" className="font-semibold">
+            {documentTitles.letter}
+          </h2>
+          <DocumentSections sections={delivery.documents.letter} collapsible />
+        </section>
+      ) : null}
+
+      {delivery.documents.notes.length > 0 ? (
+        <section aria-labelledby="plan-notes" className="flex flex-col gap-2">
+          <h2 id="plan-notes" className="font-semibold">
+            {documentTitles.notes}
+          </h2>
+          <DocumentSections sections={delivery.documents.notes} />
+        </section>
+      ) : null}
 
       <section
         aria-labelledby="plan-figures"
@@ -185,27 +183,7 @@ export function PlanView({
             {text.compareTitle}
           </h2>
           <p className="text-sm text-text-muted">{text.compareIntro}</p>
-          {changed.size === 0 ? (
-            <p className="text-sm">{text.noChanges}</p>
-          ) : (
-            <ul className="flex flex-col gap-3">
-              {shown
-                .filter((id) => changed.has(id))
-                .map((id) => (
-                  <li key={id} className="flex flex-col gap-1 text-sm">
-                    <span className="font-medium">{t.keyFigures[id]}</span>
-                    <span className="flex flex-wrap justify-between gap-x-3 tabular-nums">
-                      <span>
-                        {text.delivered}: {formatFigure(id, figures[id], locale, currency)}
-                      </span>
-                      <span>
-                        {text.today}: {formatFigure(id, today[id], locale, currency)}
-                      </span>
-                    </span>
-                  </li>
-                ))}
-            </ul>
-          )}
+          <PlanComparison delivered={figures} today={today} locale={locale} currency={currency} />
         </section>
       ) : null}
 
