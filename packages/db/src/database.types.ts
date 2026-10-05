@@ -1585,6 +1585,132 @@ export type Database = {
           },
         ];
       };
+      proposal_adjustments: {
+        Row: {
+          amount: number | null;
+          applied: boolean;
+          budget_item_id: string | null;
+          client_id: string;
+          concept: string;
+          currency: string;
+          decision: string;
+          frequency: string | null;
+          from_amount: number | null;
+          id: string;
+          kind: string;
+          proposal_id: string;
+          reason: string | null;
+          sort_order: number;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          amount?: number | null;
+          applied?: boolean;
+          budget_item_id?: string | null;
+          client_id: string;
+          concept: string;
+          currency: string;
+          decision?: string;
+          frequency?: string | null;
+          from_amount?: number | null;
+          id?: string;
+          kind: string;
+          proposal_id: string;
+          reason?: string | null;
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          amount?: number | null;
+          applied?: boolean;
+          budget_item_id?: string | null;
+          client_id?: string;
+          concept?: string;
+          currency?: string;
+          decision?: string;
+          frequency?: string | null;
+          from_amount?: number | null;
+          id?: string;
+          kind?: string;
+          proposal_id?: string;
+          reason?: string | null;
+          sort_order?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'proposal_adjustments_budget_item_id_client_id_fkey';
+            columns: ['budget_item_id', 'client_id'];
+            isOneToOne: false;
+            referencedRelation: 'budget_items';
+            referencedColumns: ['id', 'client_id'];
+          },
+          {
+            foreignKeyName: 'proposal_adjustments_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'proposal_adjustments_proposal_id_client_id_fkey';
+            columns: ['proposal_id', 'client_id'];
+            isOneToOne: false;
+            referencedRelation: 'proposals';
+            referencedColumns: ['id', 'client_id'];
+          },
+        ];
+      };
+      proposals: {
+        Row: {
+          after_figures: Json | null;
+          applied_at: string | null;
+          applied_by: string | null;
+          before_figures: Json | null;
+          client_id: string;
+          created_at: string;
+          id: string;
+          status: string;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          after_figures?: Json | null;
+          applied_at?: string | null;
+          applied_by?: string | null;
+          before_figures?: Json | null;
+          client_id: string;
+          created_at?: string;
+          id?: string;
+          status?: string;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          after_figures?: Json | null;
+          applied_at?: string | null;
+          applied_by?: string | null;
+          before_figures?: Json | null;
+          client_id?: string;
+          created_at?: string;
+          id?: string;
+          status?: string;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'proposals_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       reality_check: {
         Row: {
           client_id: string;
@@ -1792,6 +1918,10 @@ export type Database = {
       accept_invitation: {
         Args: { p_granted_texts?: string[]; p_token: string; p_user_agent?: string };
         Returns: string;
+      };
+      apply_proposal: {
+        Args: { p_after: Json; p_before: Json; p_proposal: string; p_tasks: Json };
+        Returns: undefined;
       };
       create_client: {
         Args: {

@@ -9,8 +9,9 @@ import { expect, test } from '@playwright/test';
 // P-A06b; en F4, deudas con su plan de pago y el método, y el seguimiento cuota a cuota; en F5, inversión con perfil,
 // supuestos y proyección, metas con la calculadora de viaje, seguros con la suma asegurada de vida y el
 // patrimonio completo; en F7, control mensual y plan de acción con las tareas sugeridas, la carta y
-// las notas con sus cifras, publicadas y entregadas con el plan, y el seguimiento con las revisiones
-// y la ficha de continuidad) se verificó contra Supabase local.
+// las notas con sus cifras, publicadas y entregadas con el plan, el seguimiento con las revisiones
+// y la ficha de continuidad, y la propuesta del asesor con sus ajustes aplicados) se verificó contra
+// Supabase local.
 
 const CLIENT = '00000000-0000-4000-8000-000000000001';
 
@@ -76,6 +77,10 @@ for (const path of [
   `/clientes/${CLIENT}/notas`,
   `/clientes/${CLIENT}/seguimiento`,
   `/clientes/${CLIENT}/seguimiento/ficha`,
+  `/clientes/${CLIENT}/propuesta`,
+  `/clientes/${CLIENT}/propuesta/nuevo`,
+  `/clientes/${CLIENT}/propuesta/aplicar`,
+  `/clientes/${CLIENT}/propuesta/${CLIENT}`,
   `/clientes/${CLIENT}/entrega`,
   `/clientes/${CLIENT}/planes/${CLIENT}`,
 ]) {

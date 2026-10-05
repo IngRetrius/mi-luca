@@ -85,7 +85,11 @@
     "myInvestment": "Mi inversión",
     "myDebts": "Mis deudas",
     "myGoals": "Mis metas",
-    "myInsurances": "Mis seguros"
+    "myInsurances": "Mis seguros",
+    "proposal": "Propuesta",
+    "newAdjustment": "Nuevo ajuste",
+    "adjustment": "Ajuste",
+    "applyProposal": "Aplicar la propuesta"
   },
   "language": {
     "label": "Idioma",
@@ -292,6 +296,13 @@
       "investment": "Inversión",
       "investmentSummary": "Perfil {profile} · {growth} en crecimiento",
       "investmentUnanswered": "Falta responder el perfil",
+      "proposal": "Propuesta",
+      "proposalDraft": {
+        "one": "1 ajuste en curso",
+        "other": "{count} ajustes en curso"
+      },
+      "proposalApplied": "Última aplicada el {date}",
+      "proposalNone": "Sin propuesta",
       "followUpTitle": "Seguimiento",
       "monthlyControl": "Control mensual",
       "monthlyControlSummary": "{count} meses registrados en {year}",
@@ -2810,6 +2821,117 @@
       }
     },
     "priorityLabel": "Prioridad {priority}"
+  },
+  "proposal": {
+    "title": "Propuesta",
+    "intro": "Ajustes al presupuesto para mostrar en la sesión. El cliente decide cada uno; nada cambia hasta aplicar lo aceptado.",
+    "back": "Ficha del cliente",
+    "comparisonTitle": "Hoy y con la propuesta",
+    "figure": "Cifra",
+    "today": "Hoy",
+    "withProposal": "Con la propuesta",
+    "illustrative": "Ilustrativo: el plan con los ajustes que no están descartados, calculado con los datos de hoy. El sobrante puede cambiar más que la suma de los ajustes: si el cliente sale antes de una deuda, también deja de pagar su cuota.",
+    "adjustmentsTitle": "Ajustes",
+    "empty": "Todavía no hay ajustes. Agrega uno desde un gasto del presupuesto o parte del nivel básico que propusiste.",
+    "add": "Agregar ajuste",
+    "fromBasic": "Partir del nivel básico",
+    "fromBasicHint": "Agrega un ajuste por cada gasto con nivel básico propuesto que aún no está en la propuesta.",
+    "fromBasicWorking": "Agregando…",
+    "removal": "Se quita",
+    "change": "{from} → {to}",
+    "spendLess": "{amount} menos de gasto al mes",
+    "spendMore": "{amount} más de gasto al mes",
+    "saveMore": "{amount} más de ahorro al mes",
+    "saveLess": "{amount} menos de ahorro al mes",
+    "effectNone": "No cambia el gasto al mes",
+    "missingItem": "Este gasto ya no está en el presupuesto: no se aplica.",
+    "currencyChanged": "El gasto cambió de moneda: edita el ajuste para aplicarlo.",
+    "decisionLabel": "Decisión del cliente",
+    "decisions": {
+      "pendiente": "Pendiente",
+      "aceptado": "Acepta",
+      "descartado": "Descarta"
+    },
+    "decisionWorking": "Guardando…",
+    "edit": "Editar",
+    "applyButton": "Aplicar lo aceptado ({count})",
+    "applyNone": "Marca qué acepta el cliente para poder aplicar.",
+    "appliedNotice": "Propuesta aplicada: el presupuesto y las tareas del cliente ya la reflejan.",
+    "appliedTitle": "Propuestas aplicadas",
+    "appliedItem": {
+      "one": "{date} · 1 ajuste aplicado",
+      "other": "{date} · {count} ajustes aplicados"
+    },
+    "appliedSurplus": "Sobrante al año: {before} → {after}",
+    "discardToggle": "Descartar la propuesta",
+    "discardHint": "Se borran todos sus ajustes. Los datos del cliente no cambian.",
+    "discardConfirm": "Sí, descartarla",
+    "taskTitle": "Ajustar {concept} a {amount} ({frequency})",
+    "taskTitleNoFrequency": "Ajustar {concept} a {amount}",
+    "taskTitleRemove": "Dejar de pagar {concept}",
+    "form": {
+      "newTitle": "Nuevo ajuste",
+      "editTitle": "Editar ajuste",
+      "item": "Gasto",
+      "itemHint": "Los gastos del presupuesto, con su valor de hoy.",
+      "itemPlaceholder": "Elige un gasto",
+      "itemOption": "{concept} · {amount} · {frequency}",
+      "current": "Hoy: {amount} · {frequency}",
+      "kind": "Qué propones",
+      "kinds": {
+        "ajustar": "Cambiar el valor",
+        "quitar": "Quitar el gasto"
+      },
+      "amount": "Valor nuevo por pago",
+      "amountHint": "En la misma moneda y con la misma frecuencia del gasto. Puede ser más o menos que hoy.",
+      "reason": "Por qué (opcional)",
+      "reasonHint": "Lo que gana el cliente con el ajuste. Va como nota de su tarea.",
+      "submit": "Guardar",
+      "submitting": "Guardando…",
+      "cancel": "Cancelar",
+      "deleteToggle": "Borrar el ajuste",
+      "deleteHint": "Sale de la propuesta. El gasto no cambia.",
+      "deleteConfirm": "Sí, borrarlo",
+      "errors": {
+        "missingItem": "Elige un gasto de la lista.",
+        "invalidKind": "Elige qué propones.",
+        "invalidAmount": "Escribe un valor de 0 o más, solo con números.",
+        "sameAmount": "Es el mismo valor de hoy: escribe otro o quita el gasto.",
+        "duplicate": "Ese gasto ya tiene un ajuste en la propuesta: edítalo desde la lista.",
+        "tooLong": "Es demasiado largo.",
+        "notAllowed": "No tienes permiso para cambiar la propuesta.",
+        "notFound": "Este ajuste ya no existe.",
+        "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
+      }
+    },
+    "applyScreen": {
+      "title": "Aplicar lo aceptado",
+      "intro": "Esto cambia el presupuesto del cliente y le crea una tarea por cada ajuste aceptado. Queda en el historial de cambios.",
+      "changes": "Cambian en el presupuesto",
+      "removals": "Se quitan del presupuesto",
+      "tasks": {
+        "one": "Se crea 1 tarea para el cliente, con fecha límite el {date}.",
+        "other": "Se crean {count} tareas para el cliente, con fecha límite el {date}."
+      },
+      "pending": {
+        "one": "1 ajuste pendiente pasa a una propuesta nueva, para seguir conversándolo.",
+        "other": "{count} ajustes pendientes pasan a una propuesta nueva, para seguir conversándolos."
+      },
+      "discarded": {
+        "one": "1 ajuste descartado queda en el registro sin aplicarse.",
+        "other": "{count} ajustes descartados quedan en el registro sin aplicarse."
+      },
+      "submit": "Aplicar",
+      "submitting": "Aplicando…",
+      "cancel": "Volver a la propuesta",
+      "errors": {
+        "nothingAccepted": "No hay ajustes aceptados para aplicar.",
+        "currencyChanged": "Un gasto cambió de moneda. Revisa su ajuste y vuelve a intentarlo.",
+        "notFound": "La propuesta ya se aplicó o se descartó.",
+        "notAllowed": "No tienes permiso para aplicar la propuesta.",
+        "unavailable": "No se pudo aplicar. Intenta de nuevo en unos minutos."
+      }
+    }
   },
   "documents": {
     "back": "Ficha del cliente",

@@ -46,7 +46,8 @@ flowchart TD
   A7 --> A8[P-A08 Fase 5: prueba de realidad]
   A8 --> A9[P-A09 Fase 6: diagnóstico con semáforo]
   A9 --> A10[P-A10 Fase 7: análisis por módulo]
-  A10 --> A11[P-A12 Fase 9: control de calidad]
+  A10 --> A10b[P-A25 Propuesta: ajustes que el cliente decide]
+  A10b --> A11[P-A12 Fase 9: control de calidad]
   A11 -->|Bloqueantes| A10
   A11 -->|Sin bloqueantes| A12[P-A13 Fase 10: notas y carta]
   A12 --> A13[P-A14 Entregar plan]
@@ -66,6 +67,7 @@ La fase 8 del protocolo (llenar el Excel) desaparece: los datos viven en la plat
 | 5. Prueba de realidad | P-A08 | Escribe saldos de hace N meses y de hoy; ve el estado y el % a inversión que resulta |
 | 6. Diagnóstico | P-A09 | Revisa indicadores con semáforo; escribe fortalezas y puntos de atención |
 | 7. Análisis | P-A10, P-A11 | Flujo, bolsillos, fondo, deudas, metas, seguros, inversión, cobros, costo de vida, lista para contador y abogado (la pensión se remite al profesional, ADR 0016) |
+| 7. Análisis (recomendaciones) | P-A25 | Arma la propuesta: ajustes a los gastos con su porqué, comparados con el plan de hoy; anota qué acepta el cliente y aplica lo aceptado, que crea sus tareas; lo pendiente sigue en una propuesta nueva (ADR 0024) |
 | 9. Control de calidad | P-A12 | Ve bloqueantes y advertencias; justifica advertencias con nota |
 | 10. Carta de cierre | P-A13 | Redacta notas y carta con cifras enlazadas; previsualiza como el cliente |
 | Entrega | P-A14 | Congela la versión, genera el PDF y avisa al cliente |
@@ -136,6 +138,7 @@ flowchart TD
 | P-A08 | Prueba de realidad | Tres campos, resultado y efecto en el % a inversión |
 | P-A09 | Diagnóstico | Indicadores con semáforo; campos de fortalezas y puntos de atención |
 | P-A10 | Análisis | Pestañas: Flujo, Bolsillos, Fondo, Deudas, Metas, Seguros, Inversión, Cobros, Profesionales. Sin pensión: la plataforma no la analiza (ADR 0016) |
+| P-A25 | Propuesta del asesor | Solo el asesor (ADR 0024). Ajustes a los gastos (cambiar el valor o quitar) con su porqué; "Partir del nivel básico"; cifras clave de hoy frente a la propuesta y, en cada ajuste, lo que cambia ese gasto al mes; decisión del cliente por ajuste; "Aplicar lo aceptado" con su confirmación; propuestas aplicadas |
 | P-A11 | Costo de vida | Tres niveles por partida; el asesor edita el básico; totales por pagador y sin temporales; umbrales fiscales |
 | P-A12 | Control de calidad | Resultado de `qualityChecks`: bloqueantes, advertencias, nota por advertencia |
 | P-A13 | Notas y carta | Editor por secciones; botón "Insertar cifra"; vista como el cliente; publicar notas |
@@ -333,6 +336,46 @@ El texto "entra de nuevo con tu cuenta" responde a que iOS no comparte la sesió
 ```
 
 Las cifras de los wireframes son ilustrativas (toman la sección 15 del protocolo).
+
+### P-A25 Propuesta del asesor
+
+En el celular, una columna; desde el escritorio, la comparación a la derecha y los ajustes a la izquierda.
+
+```
+┌──────────────────────────────────────┐
+│ ◂ Ficha del cliente                  │
+│ Propuesta                            │
+│ Ajustes al presupuesto para mostrar  │
+│ en la sesión. El cliente decide cada │
+│ uno; nada cambia hasta aplicarlos.   │
+├──────────────────────────────────────┤
+│ Hoy → Con la propuesta  Ilustrativo  │
+│ Gasto al mes      4.850.000 4.550.000│
+│ Sobrante al año   1.800.000 5.400.000│
+│ Tasa de ahorro         4 %      12 % │
+│ Deuda cara         38 meses 29 meses │
+├──────────────────────────────────────┤
+│ Ajustes (3)        [Agregar ajuste]  │
+│ Salidas · Mensual                    │
+│ 200.000 → 150.000                    │
+│ 50.000 menos de gasto al mes         │
+│ "Dos salidas menos y llegas al viaje"│
+│ ( Pendiente | Acepta | Descarta )    │
+│ ──────────────────────────────────── │
+│ Suscripción B · Mensual · Quitar     │
+│ 45.000 menos de gasto al mes         │
+│ ( Pendiente | Acepta | Descarta )    │
+│ [Partir del nivel básico]            │
+├──────────────────────────────────────┤
+│ Propuestas aplicadas                 │
+│ 05/10/2026 · 2 ajustes · sobrante    │
+│ 1.800.000 → 4.900.000 al año         │
+├──────────────────────────────────────┤
+│ [ Aplicar lo aceptado (2) ]          │
+└──────────────────────────────────────┘
+```
+
+"Aplicar lo aceptado" lleva a una confirmación: qué gastos cambian o se borran, cuántas tareas se crean para el cliente, qué pasa a una propuesta nueva (lo pendiente) y qué queda solo en el registro (lo descartado). Agregar o editar un ajuste es un formulario aparte: el gasto (agrupado por categoría, con su valor de hoy), cambiar el valor o quitarlo, el valor nuevo por pago y el porqué.
 
 ### P-A13 Notas y carta
 

@@ -309,6 +309,13 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Idioma de la interfaz | `Language` (`es`, `en`), `LANGUAGES`, `getLanguage` | ADR 0022; se elige con `LanguageSwitcher` (`setLanguage`, cookie `miluca-lang`) o sale de `Accept-Language` (`negotiateLanguage`) |
 | Textos en el idioma de la petición | `getMessages`, `pageMetadata`, `pageTitle` | `src/server/i18n.ts`; títulos de página con `generateMetadata` |
 | Textos para quien lee | `messagesFor`, `MessagesAudience` (`address`, `country`) | Capas `USTED_MESSAGES` (`es-usted.json`) y `COUNTRY_MESSAGES` (`es-ES.json`) sobre `es.json` |
+| Propuesta del asesor | `proposals` / `ProposalRow`, `Proposals` | ADR 0024; una en borrador por cliente, aplicada queda fija |
+| Ajuste de la propuesta | `proposal_adjustments` / `AdjustmentRow`, `ScenarioAdjustment`; `kind` (`ajustar`, `quitar`) | Cambia el valor por pago de un gasto o lo quita |
+| Porqué del ajuste | `reason` | Va como nota de la tarea al aplicar |
+| Decisión del cliente | `decision` (`pendiente`, `aceptado`, `descartado`) | La anota el asesor en la sesión; lo pendiente pasa a una propuesta nueva al aplicar |
+| Aplicar la propuesta | `apply_proposal` / `applyProposal` | Pasa lo aceptado al presupuesto y crea las tareas, en una transacción |
+| Plan con la propuesta | `rowsWithProposal`, `computeProposal`, `compareProposal` | Las filas del cliente con los ajustes, calculadas por el motor sin guardar |
+| Cambio del gasto al mes | `monthlyChange` | Lo que cambia el propio gasto con su ajuste, en moneda base |
 | Textos sin persona | `getBaseMessages` | Solo el idioma: layout raíz, títulos de página y lo que solo ve el asesor |
 | Textos del caso | `getCaseMessages` | Con el país del cliente aunque los pida el asesor: carta, tareas sugeridas, PDF |
 | Diferencia en dinero de la prueba de realidad | `gapMonthly` | Real menos esperado, al mes; se muestra si el esperado es 0 o menos |

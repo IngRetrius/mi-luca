@@ -619,6 +619,52 @@ create table public.deletion_receipts (             -- evidencia de borrado sin 
 );
 ```
 
+### 3.6 Propuesta del asesor (ADR 0024)
+
+```sql
+create table public.proposals (                  -- una en borrador por cliente; aplicada, fija
+  id             uuid primary key default gen_random_uuid(),
+  client_id      uuid not null references public.clients(id) on delete cascade,
+  status         text not null default 'borrador' check (status in ('borrador', 'aplicada')),
+  before_figures jsonb,                          -- cifras clave al aplicar (antes y después)
+  after_figures  jsonb,
+  applied_at     timestamptz,
+  applied_by     uuid,
+  created_at     timestamptz not null default now(),
+  updated_at     timestamptz not null default now(),
+  updated_by     uuid,
+  unique (id, client_id),
+  check ((status = 'aplicada') = (applied_at is not null))
+);
+create unique index proposals_one_draft on public.proposals (client_id) where status = 'borrador';
+
+create table public.proposal_adjustments (
+  id             uuid primary key default gen_random_uuid(),
+  proposal_id    uuid not null,
+  client_id      uuid not null references public.clients(id) on delete cascade,
+  budget_item_id uuid,                           -- null si el gasto ya no existe
+  kind           text not null check (kind in ('ajustar', 'quitar')),
+  amount         numeric(18, 2) check (amount >= 0), -- valor nuevo por pago; null al quitar
+  concept        text not null,                  -- del gasto al proponer y al aplicar, para el registro
+  currency       char(3) not null,               -- la del gasto
+  frequency      text,
+  from_amount    numeric(18, 2),                 -- valor por pago del gasto
+  reason         text check (length(reason) <= 500), -- el porqué; nota de la tarea al aplicar
+  decision       text not null default 'pendiente' check (decision in ('pendiente', 'aceptado', 'descartado')),
+  applied        boolean not null default false, -- lo pone apply_proposal
+  sort_order     int not null default 0,
+  updated_at     timestamptz not null default now(),
+  updated_by     uuid,
+  unique (proposal_id, budget_item_id),
+  check ((kind = 'quitar') = (amount is null)),
+  foreign key (proposal_id, client_id) references public.proposals(id, client_id) on delete cascade,
+  foreign key (budget_item_id, client_id) references public.budget_items(id, client_id)
+    on delete set null (budget_item_id)
+);
+```
+
+`public.apply_proposal(p_proposal, p_before, p_after, p_tasks)` aplica en una transacción los ajustes aceptados (cambia el valor o borra el gasto), crea las tareas que le pasa la app (con sus textos en el idioma de quien aplica), deja la propuesta aplicada con las cifras de antes y después y copia lo pendiente a una propuesta nueva en borrador.
+
 ## 4. Funciones de apoyo para RLS
 
 ```sql
@@ -778,6 +824,7 @@ Los consentimientos se registran en la misma transacción desde la acción de se
 | Plan de acción: crear, fechas, prioridad, responsable | Sí | No | Sí | Sí | |
 | Plan de acción: estado y nota | Sí | Sí | Sí | Sí | El cliente marca sus tareas como hechas |
 | Notas para el cliente y carta de cierre | Solo publicadas | No | Sí | Sí | |
+| Propuesta del asesor: ajustes, porqué y decisión del cliente | No (ve el resultado: presupuesto y tareas) | No | Sí | Sí, mientras está en borrador | Aplicada, no se cambia ni se borra (ADR 0024) |
 | Ficha de continuidad: testamento, beneficiarios revisados, decisiones tomadas | Sí | No | Sí | Sí | El resto de la ficha sale de los datos |
 | Planes entregados | Sí | No | Sí | Crear, nunca editar | Inmutables |
 | Historial de cambios y antes y después | Sí | No | Sí | No | Solo lo escribe el sistema |
@@ -793,7 +840,8 @@ Los consentimientos se registran en la misma transacción desde la acción de se
 | Niveles de costo de vida (esencial, básico, actual) | No son copias: el nivel esencial sale de la marca `essential`, el básico de `basic_amount` y el actual de `amount`. El motor calcula los tres a la vez. | MVP |
 | Escenarios del fondo de emergencia (A, B, C) | Calculados por el motor; opcionalmente `incomes.lost_in_scenario` en modo nativo. | MVP |
 | Sensibilidad a la tasa de cambio | Calculada. | Fase 3 |
-| Simulaciones "qué pasa si" (comprar carro, cambiar de trabajo) | Tabla futura `what_if_scenarios (id, client_id, name, patch jsonb)`: un parche JSON sobre las entradas vivas; el motor aplica el parche y calcula. No duplica tablas. | Posterior al MVP |
+| Propuesta del asesor (ajustes a los gastos que el cliente decide) | `proposals` y `proposal_adjustments` (sección 3.6): cada ajuste apunta a su gasto; la app aplica los ajustes sobre las filas y el motor calcula como siempre. Reemplaza la tabla futura `what_if_scenarios` (ADR 0024) | F7 |
+| Simulaciones "qué pasa si" (comprar carro, cambiar de trabajo) | Nuevos tipos de ajuste en la propuesta (`kind`), sin tablas nuevas | Posterior al MVP |
 
 ## 7. Historial de cambios y tabla de antes y después
 
@@ -902,4 +950,6 @@ Diferencias con el borrador de las secciones 3.1, 4 y 5:
 37. **Control mensual y plan de acción (F7, ADR 0018).** Migración `monthly_control_action_plan`. El control mensual lo escriben cliente y asesor, con la tasa de la moneda obligatoria (`check_currency`) y la tasa en uso protegida (`guard_fx_rate`). A diferencia de la nota 25, la pantalla guarda el mes con `upsert`: `authenticated` puede actualizar también las columnas de la llave y la política vuelve a exigir el acceso al cliente de la fila resultante. Las tareas las crea y borra solo el asesor (políticas de `insert` y `delete`); el cliente cambia estado y nota, y la guarda genérica rechaza que cambie título, prioridad, responsable, fecha límite, orden o la llave de la sugerida. `private.stamp_action_item_completion()` pone y quita `completed_at` y `completed_by`. Cada sugerida se agrega una vez (`unique (client_id, suggestion_key)`).
 38. **Carta y notas (F7, ADR 0019).** Migración `client_documents`. El texto va por secciones en `content` (un objeto), no en un Markdown con encabezados. Solo el asesor escribe; el cliente lee las notas publicadas. La carta no se publica: la restricción `kind = 'notas' or status = 'borrador'` lo impide, y llega al cliente dentro de `plan_deliveries.documents`, con los títulos en su trato y las cifras escritas. `private.stamp_document_publication()` pone `published_at` al publicar y cada vez que cambia el texto publicado.
 39. **Seguimiento y ficha de continuidad (F7, ADR 0021).** Migración `continuity_notes`. Las revisiones a 30 días, 90 días y anual no tienen tabla: son las tareas sugeridas del plan de acción con esas llaves. La ficha del Anexo C se arma al verla con los datos de hoy; solo se guarda lo que no sale de ellos, en una fila por cliente que escribe el asesor (sin borrado: se va con el cliente). Como en la nota 37, el guardado es un `upsert`, por eso `authenticated` puede actualizar también `client_id`.
+40. **Propuesta del asesor (F7, ADR 0024).** Migración `proposals`. Solo el asesor del cliente ve y escribe (el cliente ve el resultado en su presupuesto y sus tareas). Una propuesta en borrador por cliente (`proposals_one_draft`); nadie la cambia desde la API (`authenticated` no tiene `update`): solo `apply_proposal`, con `security definer` porque escribe gastos, tareas y la propuesta en una transacción, comprueba `private.is_advisor_of` y filtra todo por el cliente. Las políticas de `proposal_adjustments` exigen la propuesta en borrador, así que lo aplicado queda fijo; una aplicada no se borra (la política de `delete` exige borrador) y se va con el perfil. `budget_items` gana `unique (id, client_id)` para la llave compuesta; borrar un gasto deja sus ajustes sin gasto (`on delete set null (budget_item_id)`), con el concepto y el valor guardados para el registro. Historial en las dos tablas.
+
 Sin pendientes de F1 en el modelo de datos.

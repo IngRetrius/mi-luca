@@ -85,7 +85,11 @@
     "myInvestment": "My investment",
     "myDebts": "My debts",
     "myGoals": "My goals",
-    "myInsurances": "My insurance"
+    "myInsurances": "My insurance",
+    "proposal": "Proposal",
+    "newAdjustment": "New adjustment",
+    "adjustment": "Adjustment",
+    "applyProposal": "Apply the proposal"
   },
   "language": {
     "label": "Language",
@@ -292,6 +296,13 @@
       "investment": "Investment",
       "investmentSummary": "Profile: {profile} · {growth} in growth",
       "investmentUnanswered": "The profile is not answered yet",
+      "proposal": "Proposal",
+      "proposalDraft": {
+        "one": "1 adjustment in progress",
+        "other": "{count} adjustments in progress"
+      },
+      "proposalApplied": "Last applied on {date}",
+      "proposalNone": "No proposal",
       "followUpTitle": "Follow-up",
       "monthlyControl": "Monthly tracking",
       "monthlyControlSummary": "{count} months recorded in {year}",
@@ -2810,6 +2821,117 @@
       }
     },
     "priorityLabel": "{priority} priority"
+  },
+  "proposal": {
+    "title": "Proposal",
+    "intro": "Budget adjustments to show during the session. The client decides on each one; nothing changes until you apply what was accepted.",
+    "back": "Client file",
+    "comparisonTitle": "Today and with the proposal",
+    "figure": "Figure",
+    "today": "Today",
+    "withProposal": "With the proposal",
+    "illustrative": "Illustrative: the plan with the adjustments that are not discarded, calculated with today's data. The surplus can change more than the sum of the adjustments: if the client pays off a debt earlier, they also stop paying its instalment.",
+    "adjustmentsTitle": "Adjustments",
+    "empty": "There are no adjustments yet. Add one from a budget expense or start from the basic level you proposed.",
+    "add": "Add adjustment",
+    "fromBasic": "Start from the basic level",
+    "fromBasicHint": "Adds an adjustment for each expense with a proposed basic level that is not in the proposal yet.",
+    "fromBasicWorking": "Adding…",
+    "removal": "Removed",
+    "change": "{from} → {to}",
+    "spendLess": "{amount} less spending per month",
+    "spendMore": "{amount} more spending per month",
+    "saveMore": "{amount} more savings per month",
+    "saveLess": "{amount} less savings per month",
+    "effectNone": "Monthly spending does not change",
+    "missingItem": "This expense is no longer in the budget: it will not be applied.",
+    "currencyChanged": "The expense changed currency: edit the adjustment to apply it.",
+    "decisionLabel": "Client's decision",
+    "decisions": {
+      "pendiente": "Pending",
+      "aceptado": "Accepts",
+      "descartado": "Declines"
+    },
+    "decisionWorking": "Saving…",
+    "edit": "Edit",
+    "applyButton": "Apply what was accepted ({count})",
+    "applyNone": "Mark what the client accepts to be able to apply it.",
+    "appliedNotice": "Proposal applied: the client's budget and tasks now reflect it.",
+    "appliedTitle": "Applied proposals",
+    "appliedItem": {
+      "one": "{date} · 1 adjustment applied",
+      "other": "{date} · {count} adjustments applied"
+    },
+    "appliedSurplus": "Annual surplus: {before} → {after}",
+    "discardToggle": "Discard the proposal",
+    "discardHint": "All its adjustments are deleted. The client's data does not change.",
+    "discardConfirm": "Yes, discard it",
+    "taskTitle": "Adjust {concept} to {amount} ({frequency})",
+    "taskTitleNoFrequency": "Adjust {concept} to {amount}",
+    "taskTitleRemove": "Stop paying for {concept}",
+    "form": {
+      "newTitle": "New adjustment",
+      "editTitle": "Edit adjustment",
+      "item": "Expense",
+      "itemHint": "The budget expenses, with today's amount.",
+      "itemPlaceholder": "Choose an expense",
+      "itemOption": "{concept} · {amount} · {frequency}",
+      "current": "Today: {amount} · {frequency}",
+      "kind": "What you propose",
+      "kinds": {
+        "ajustar": "Change the amount",
+        "quitar": "Remove the expense"
+      },
+      "amount": "New amount per payment",
+      "amountHint": "In the same currency and with the same frequency as the expense. It can be more or less than today.",
+      "reason": "Why (optional)",
+      "reasonHint": "What the client gains with the adjustment. It becomes the note of their task.",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "deleteToggle": "Delete the adjustment",
+      "deleteHint": "It leaves the proposal. The expense does not change.",
+      "deleteConfirm": "Yes, delete it",
+      "errors": {
+        "missingItem": "Choose an expense from the list.",
+        "invalidKind": "Choose what you propose.",
+        "invalidAmount": "Enter an amount of 0 or more, using numbers only.",
+        "sameAmount": "It is the same amount as today: enter another one or remove the expense.",
+        "duplicate": "That expense already has an adjustment in the proposal: edit it from the list.",
+        "tooLong": "It is too long.",
+        "notAllowed": "You do not have permission to change the proposal.",
+        "notFound": "This adjustment no longer exists.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      }
+    },
+    "applyScreen": {
+      "title": "Apply what was accepted",
+      "intro": "This changes the client's budget and creates a task for each accepted adjustment. It is recorded in the change history.",
+      "changes": "Change in the budget",
+      "removals": "Removed from the budget",
+      "tasks": {
+        "one": "1 task is created for the client, due on {date}.",
+        "other": "{count} tasks are created for the client, due on {date}."
+      },
+      "pending": {
+        "one": "1 pending adjustment moves to a new proposal, to keep discussing it.",
+        "other": "{count} pending adjustments move to a new proposal, to keep discussing them."
+      },
+      "discarded": {
+        "one": "1 declined adjustment stays in the record without being applied.",
+        "other": "{count} declined adjustments stay in the record without being applied."
+      },
+      "submit": "Apply",
+      "submitting": "Applying…",
+      "cancel": "Back to the proposal",
+      "errors": {
+        "nothingAccepted": "There are no accepted adjustments to apply.",
+        "currencyChanged": "An expense changed currency. Review its adjustment and try again.",
+        "notFound": "The proposal was already applied or discarded.",
+        "notAllowed": "You do not have permission to apply the proposal.",
+        "unavailable": "It could not be applied. Try again in a few minutes."
+      }
+    }
   },
   "documents": {
     "back": "Client file",

@@ -28,6 +28,7 @@ import {
   revokeInvitation,
 } from '@/features/invitations';
 import { loadControlEntries } from '@/features/monthly-control';
+import { loadProposals, proposalPaths, type Proposals } from '@/features/proposals';
 import { formatKeyFigure, loadComputedCase, type ComputedCase } from '@/features/summary';
 import { todayIn } from '@/lib/dates';
 import { getLanguage, getLocale, getMessages, pageMetadata } from '@/server/i18n';
@@ -54,16 +55,25 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
   const { id } = await params;
   await requireAdvisor(`/clientes/${id}`);
   // Independientes: el perfil y su invitación abierta se piden a la vez.
-  const [client, openInvitation, computed, deliveries, actionItems, controlEntries, documents] =
-    await Promise.all([
-      getClientDetail(id),
-      getOpenInvitation(id),
-      loadComputedCase(id),
-      listDeliveries(id),
-      loadActionItems(id),
-      loadControlEntries(id),
-      loadDocuments(id),
-    ]);
+  const [
+    client,
+    openInvitation,
+    computed,
+    deliveries,
+    actionItems,
+    controlEntries,
+    documents,
+    proposals,
+  ] = await Promise.all([
+    getClientDetail(id),
+    getOpenInvitation(id),
+    loadComputedCase(id),
+    listDeliveries(id),
+    loadActionItems(id),
+    loadControlEntries(id),
+    loadDocuments(id),
+    loadProposals(id),
+  ]);
   if (client === 'not-found') notFound();
   // Solo se invita a un perfil que nadie ha aceptado (RLS vuelve a exigirlo).
   const canInvite =
@@ -98,6 +108,7 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
             deliveredCount={deliveries?.length ?? 0}
             followUp={{ actionItems, controlEntries }}
             documents={documents}
+            proposals={proposals}
           >
             <section
               aria-labelledby="invitation-title"
@@ -139,6 +150,31 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
   );
 }
 
+/** La propuesta en curso (sus ajustes) o, si no hay, la última aplicada. */
+function proposalSummary(
+  t: Messages,
+  proposals: Proposals | null,
+  locale: string,
+  countryCode: string,
+): string {
+  const text = t.clientProfile.caseData;
+  if (!proposals) return t.common.loadError;
+  const count = proposals.draft?.adjustments.length ?? 0;
+  if (count > 0) {
+    return (count === 1 ? text.proposalDraft.one : text.proposalDraft.other).replace(
+      '{count}',
+      String(count),
+    );
+  }
+  const last = proposals.applied[0]?.applied_at;
+  if (!last) return text.proposalNone;
+  // El día en que se aplicó, en el país del cliente.
+  return text.proposalApplied.replace(
+    '{date}',
+    formatDate(todayIn(countryCode, new Date(last)), locale, 'UTC'),
+  );
+}
+
 // Cifras de la ficha: las del Resumen que ya calcula el motor.
 const PROFILE_FIGURES: readonly KeyFigureId[] = [
   'annualIncome',
@@ -164,6 +200,7 @@ async function CaseData({
   deliveredCount,
   followUp,
   documents,
+  proposals,
   children,
 }: {
   clientId: string;
@@ -174,6 +211,7 @@ async function CaseData({
     readonly controlEntries: readonly { readonly year: number; readonly month: number }[] | null;
   };
   documents: Partial<Record<'carta' | 'notas', ClientDocument>> | null;
+  proposals: Proposals | null;
   /** Lo que va en la columna lateral bajo las cifras (la invitación). */
   children: ReactNode;
 }) {
@@ -370,6 +408,11 @@ async function CaseData({
       href: `${base}/inversion`,
       title: text.investment,
       summary: investmentSummary(text, computed, t.investment.levels),
+    },
+    {
+      href: proposalPaths(clientId).page,
+      title: text.proposal,
+      summary: proposalSummary(t, proposals, locale, client.country_code),
     },
     {
       href: `${base}/carta`,

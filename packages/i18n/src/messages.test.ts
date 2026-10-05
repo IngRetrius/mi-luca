@@ -61,7 +61,7 @@ describe('textos en usted', () => {
   it('los errores que ve el cliente no le hablan de tú', () => {
     // Pantallas solo del asesor, o anteriores a tener perfil de cliente (sin trato todavía).
     const notForClients =
-      /^\.(newClient|clientProfile|planSettings|delivery|documents|followUp|assistant|recovery|auth|invitation\.access)\.|\.settingsForm\./;
+      /^\.(newClient|clientProfile|planSettings|delivery|documents|followUp|assistant|proposal|recovery|auth|invitation\.access)\.|\.settingsForm\./;
     const tu =
       /\b(Escribe|escribe|Elige|elige|Revisa|revisa|Intenta|intenta|tienes|tu|tus|Regístrala|vuelve|Marca|Cámbialos|edítala|Edítalo|déjalo|deja|usa)\b/;
     const overlaid = new Map(flatten(messagesFor('es', { address: 'usted' })));
