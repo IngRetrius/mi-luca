@@ -71,8 +71,7 @@ export async function DocumentEditorScreen({
   // Una carta nueva trae escrito el alcance (sección 7 del protocolo), en el trato del cliente y
   // con el vocabulario de su país.
   const defaults = (await getCaseMessages({ country: client.countryCode })).documents.defaults;
-  const initial =
-    document?.content ?? (kind === 'carta' ? { scope: defaults.scope[address] } : {});
+  const initial = document?.content ?? (kind === 'carta' ? { scope: defaults.scope[address] } : {});
   const published = document?.status === 'publicado';
   const status =
     kind === 'carta'
