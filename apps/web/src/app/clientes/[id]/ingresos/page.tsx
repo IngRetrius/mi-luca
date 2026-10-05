@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { IncomesScreen } from '@/features/incomes';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Ingresos | MiLuca' };
+export const generateMetadata = pageMetadata('incomes');
 
 /** Ingresos del cliente (P-A04, bloque B). */
 export default async function AdvisorIncomesPage({ params }: PageProps<'/clientes/[id]/ingresos'>) {

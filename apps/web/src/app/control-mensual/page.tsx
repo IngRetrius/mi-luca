@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { MonthlyControlScreen } from '@/features/monthly-control';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Control mensual | MiLuca' };
+export const generateMetadata = pageMetadata('monthlyControl');
 
 /** P-C08 Control mensual del cliente. */
 export default async function MyMonthlyControlPage({

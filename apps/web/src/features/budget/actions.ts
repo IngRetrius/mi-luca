@@ -9,12 +9,14 @@ import { allowedCurrencies } from '@/features/currencies';
 import { withImpact } from '@/features/summary';
 import { createClient } from '@/lib/supabase/server';
 import { isUuid, requireCaseEditor } from '@/server/case-access';
+import { getLanguage } from '@/server/i18n';
 
 import {
   catalogValues,
   comparableName,
   missingPockets,
   parseCatalogSelection,
+  pocketAliases,
   type CatalogErrors,
   type CatalogValues,
 } from './catalog';
@@ -146,7 +148,9 @@ export async function addCatalogItems(
   }
 
   const present = new Set(items.data.map((row) => comparableName(row.concept)));
-  const parsed = parseCatalogSelection(formData, budgetCatalog(client.data.country_code), present);
+  const country = client.data.country_code;
+  const catalog = budgetCatalog(country, await getLanguage());
+  const parsed = parseCatalogSelection(formData, catalog, present, country);
   if (!parsed.ok) {
     const formError = parsed.nothingPicked ? 'nothingPicked' : null;
     return { values: parsed.values, errors: parsed.errors, formError };
@@ -181,7 +185,11 @@ export async function addCatalogItems(
           frequency: item.frequency,
           duration_days: durationDays,
           expense_type: item.expenseType,
-          pocket_id: item.pocket ? (pocketIds.get(comparableName(item.pocket)) ?? null) : null,
+          pocket_id: item.pocket
+            ? (pocketAliases(item.pocket)
+                .map((alias) => pocketIds.get(alias))
+                .find((id) => id !== undefined) ?? null)
+            : null,
           essential: item.essential,
           is_health: item.health,
           sort_order: order,

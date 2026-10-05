@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { ReceivableFormScreen } from '@/features/receivables';
 import { isUuid } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Cobro | MiLuca' };
+export const generateMetadata = pageMetadata('receivable');
 
 /** Editar un cobro. */
 export default async function MyReceivablePage({

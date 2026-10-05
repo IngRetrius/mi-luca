@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { SpecialPocketScreen } from '@/features/pockets';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Bolsillo: Fondo de emergencia | MiLuca' };
+export const generateMetadata = pageMetadata('emergencyFundPocket');
 
 /** Banco del bolsillo: Fondo de emergencia. */
 export default async function AdvisorFundPocketPage({

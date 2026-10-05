@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { PlanSettingsScreen } from '@/features/profile';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Supuestos del plan | MiLuca' };
+export const generateMetadata = pageMetadata('planSettings');
 
 /** Supuestos del plan del caso: criterio del asesor. */
 export default async function AdvisorPlanSettingsPage({

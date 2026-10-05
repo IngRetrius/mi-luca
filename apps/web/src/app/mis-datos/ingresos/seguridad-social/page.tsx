@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { SocialSecurityScreen } from '@/features/incomes';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Meses con seguridad social | MiLuca' };
+export const generateMetadata = pageMetadata('socialSecurityMonths');
 
 /** Meses con seguridad social del cliente. */
 export default async function MySocialSecurityPage() {

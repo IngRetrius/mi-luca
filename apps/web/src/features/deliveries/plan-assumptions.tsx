@@ -1,25 +1,25 @@
 import type { PlanParameters } from '@miluca/engine';
-import { formatMoney, formatPercent, messages } from '@miluca/i18n';
+import { formatMoney, formatPercent, type Messages } from '@miluca/i18n';
 
 import { Help, HelpButton, HelpPanel } from '@/components/help';
 import { amountToText } from '@/lib/amount';
+import { getMessages } from '@/server/i18n';
 
-const t = messages.es;
-const text = t.assumptions;
-
-type AssumptionKey = keyof typeof text.labels;
+type AssumptionKey = keyof Messages['assumptions']['labels'];
 
 /**
  * Los supuestos con que se calculó un plan entregado, cada uno con su explicación (decisión del
  * 02/10/2026: el asesor y el cliente los ven). Solo lectura: se cambian en Supuestos del plan.
  */
-export function PlanAssumptions({
+export async function PlanAssumptions({
   parameters,
   locale,
 }: {
   parameters: PlanParameters;
   locale: string;
 }) {
+  const t = await getMessages();
+  const text = t.assumptions;
   const percent = (value: number) => formatPercent(value, locale);
   const months = parameters.emergencyMonths;
   // Un plan entregado antes de F5 no trae los supuestos de inversión: solo se muestran si están.

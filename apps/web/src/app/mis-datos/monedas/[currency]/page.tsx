@@ -1,10 +1,10 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { FxRateScreen } from '@/features/currencies';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Tasa de cambio | MiLuca' };
+export const generateMetadata = pageMetadata('fxRate');
 
 /** El cliente cambia o borra la tasa de una moneda. */
 export default async function MyCurrencyPage({

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { COUNTRY_LOCALES, formatDate, formatMoney, messages } from '@miluca/i18n';
+import { formatDate, formatMoney, type Messages } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { FigureList } from '@/components/figure-list';
@@ -11,24 +11,23 @@ import { loadComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
 import { amountToText, percentToText } from '@/lib/amount';
 import type { CaseEditor } from '@/server/case-access';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { deleteGoal, saveGoal } from './actions';
 import { GoalForm } from './goal-form';
 import { goalPaths } from './paths';
 import { TRIP_CONCEPTS, type TripConcept, type TripItemValues } from './validation';
 
-const t = messages.es;
-const text = t.goals;
-
 /** Textos según quién mira: el asesor habla del cliente; el cliente, en su trato. */
-function localText(viewer: CaseEditor) {
+function localText(t: Messages, viewer: CaseEditor) {
+  const text = t.goals;
   if (viewer.role === 'advisor') {
     return { title: text.title, intro: text.intro, back: text.back, empty: text.empty };
   }
   return withAddress(text.client, viewer.formOfAddress);
 }
 
-function loadError(retryHref: string) {
+function loadError(t: Messages, retryHref: string) {
   return (
     <LoadError message={t.common.loadError} retryLabel={t.common.retry} retryHref={retryHref} />
   );
@@ -36,8 +35,10 @@ function loadError(retryHref: string) {
 
 /** Metas (P-A10 y Mis datos): valor, fecha o repetición, aporte mensual y bolsillo de cada una. */
 export async function GoalsScreen({ viewer, clientId }: { viewer: CaseEditor; clientId: string }) {
+  const t = await getMessages();
+  const text = t.goals;
   const paths = goalPaths(viewer.role, clientId);
-  const local = localText(viewer);
+  const local = localText(t, viewer);
   const computed = await loadComputedCase(clientId);
   const header = (
     <>
@@ -52,12 +53,12 @@ export async function GoalsScreen({ viewer, clientId }: { viewer: CaseEditor; cl
     return (
       <Screen>
         {header}
-        {loadError(paths.list)}
+        {loadError(t, paths.list)}
       </Screen>
     );
   }
   const { client, goals, pockets } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const money = (amount: number) => formatMoney(amount, client.base_currency, locale);
   const pocketName = new Map(pockets.map((pocket) => [pocket.id, pocket.name]));
   const results = computed.result.goals;
@@ -139,22 +140,24 @@ export async function GoalFormScreen({
   clientId: string;
   goalId: string | null;
 }) {
+  const t = await getMessages();
+  const text = t.goals;
   const paths = goalPaths(viewer.role, clientId);
-  const local = localText(viewer);
+  const local = localText(t, viewer);
   const title = goalId ? text.form.editTitle : text.form.newTitle;
   const computed = await loadComputedCase(clientId);
   if (!computed) {
     return (
       <Screen>
         <h1 className="text-2xl font-semibold text-balance">{title}</h1>
-        {loadError(goalId ? paths.item(goalId) : paths.add)}
+        {loadError(t, goalId ? paths.item(goalId) : paths.add)}
       </Screen>
     );
   }
   const row = goalId ? computed.rows.goals.find((goal) => goal.id === goalId) : null;
   if (goalId && !row) notFound();
   const { client, fxRates, pockets, tripItems } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const saved = tripItems.filter((item) => item.goal_id === goalId);
   const items = Object.fromEntries(
     TRIP_CONCEPTS.map(({ key, quantity }) => {

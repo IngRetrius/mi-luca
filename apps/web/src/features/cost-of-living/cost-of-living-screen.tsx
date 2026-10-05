@@ -1,18 +1,16 @@
 import Link from 'next/link';
 
 import type { CostLevel } from '@miluca/engine';
-import { COUNTRY_LOCALES, formatMoney, messages } from '@miluca/i18n';
+import { categoryLabel, formatMoney, localeLanguage } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { Screen } from '@/components/screen';
 import { focusRing } from '@/components/ui-classes';
 import { budgetPaths } from '@/features/budget';
 import { loadComputedCase } from '@/features/summary';
+import { getLocale, getMessages } from '@/server/i18n';
 
-const t = messages.es;
-const text = t.costOfLiving;
 const LEVELS: readonly CostLevel[] = ['essential', 'basic', 'current'];
-const THRESHOLD_LABELS: Readonly<Record<string, string>> = t.profile.thresholdLabels;
 
 /**
  * P-A11 Costo de vida: tres niveles (esencial, básico y actual), lo que paga cada pagador, el
@@ -20,6 +18,8 @@ const THRESHOLD_LABELS: Readonly<Record<string, string>> = t.profile.thresholdLa
  * (RN-030 a RN-032). El nivel básico se edita en cada partida del presupuesto.
  */
 export async function CostOfLivingScreen({ clientId }: { clientId: string }) {
+  const t = await getMessages();
+  const text = t.costOfLiving;
   const back = `/clientes/${clientId}`;
   const budget = budgetPaths('advisor', clientId);
   const computed = await loadComputedCase(clientId);
@@ -46,7 +46,7 @@ export async function CostOfLivingScreen({ clientId }: { clientId: string }) {
   }
 
   const { client } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const money = (amount: number) => formatMoney(amount, client.base_currency, locale);
   const { costOfLiving } = computed.result;
   // Las partidas que suman y no son ahorro: el costo de vida no incluye el ahorro.
@@ -127,7 +127,9 @@ export async function CostOfLivingScreen({ clientId }: { clientId: string }) {
                   className="flex flex-col gap-2 rounded-xl border border-border p-4"
                 >
                   <p className="font-medium">
-                    {THRESHOLD_LABELS[threshold.code] ?? threshold.code}
+                    {(t.profile.thresholdLabels as Readonly<Record<string, string>>)[
+                      threshold.code
+                    ] ?? threshold.code}
                   </p>
                   <p className="text-sm text-text-muted">
                     {text.limit.replace('{amount}', money(threshold.annualLimit))}
@@ -163,7 +165,9 @@ export async function CostOfLivingScreen({ clientId }: { clientId: string }) {
                   >
                     <span className="flex flex-col">
                       <span className="font-medium wrap-anywhere">{item.concept}</span>
-                      <span className="text-sm text-text-muted wrap-anywhere">{item.category}</span>
+                      <span className="text-sm text-text-muted wrap-anywhere">
+                        {categoryLabel(item.category, localeLanguage(locale))}
+                      </span>
                     </span>
                     <dl className="grid grid-cols-3 gap-2 text-sm">
                       {LEVELS.map((level) => (

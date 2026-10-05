@@ -1,15 +1,16 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { budgetCatalog, COUNTRY_LOCALES, formatMoney, messages } from '@miluca/i18n';
+import { budgetCatalog, categoryLabel, formatMoney, localeLanguage } from '@miluca/i18n';
 
-import { Screen, ScreenActions } from '@/components/screen';
 import { BackLink, LoadError as SharedLoadError } from '@/components/back-link';
+import { Screen, ScreenActions, WideScreen } from '@/components/screen';
 import { linkButton, primaryButton, secondaryButton } from '@/components/ui-classes';
 import { loadComputedCase, toCaseInput, type ComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
 import { todayIn } from '@/lib/dates';
 import type { CaseEditor } from '@/server/case-access';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { deleteBudgetItem, saveBudgetItem } from './actions';
 import { BudgetFilters } from './budget-filters';
@@ -20,9 +21,8 @@ import { budgetFormText } from './form-text';
 import { budgetValuesFromRow, emptyBudgetValues } from './form-values';
 import { budgetPaths } from './paths';
 
-const t = messages.es;
-
-function LoadError({ retryHref }: { retryHref: string }) {
+async function LoadError({ retryHref }: { retryHref: string }) {
+  const t = await getMessages();
   return (
     <SharedLoadError
       message={t.common.loadError}
@@ -32,8 +32,8 @@ function LoadError({ retryHref }: { retryHref: string }) {
   );
 }
 
-function localeOf(computed: ComputedCase): string {
-  return COUNTRY_LOCALES[computed.rows.client.country_code]?.locale ?? 'es';
+function localeOf(computed: ComputedCase): Promise<string> {
+  return getLocale(computed.rows.client.country_code);
 }
 
 /**
@@ -49,6 +49,7 @@ export async function BudgetScreen({
   clientId: string;
   searchParams: Record<string, string | string[] | undefined>;
 }) {
+  const t = await getMessages();
   const paths = budgetPaths(viewer.role, clientId);
   const computed = await loadComputedCase(clientId);
   const advisor = viewer.role === 'advisor';
@@ -59,23 +60,27 @@ export async function BudgetScreen({
 
   if (!computed) {
     return (
-      <Screen>
+      <WideScreen>
         <BackLink {...back} />
         <h1 className="text-2xl font-semibold text-balance">
           {clientText?.title ?? t.budget.title}
         </h1>
         <LoadError retryHref={paths.list} />
-      </Screen>
+      </WideScreen>
     );
   }
 
-  const locale = localeOf(computed);
+  const locale = await localeOf(computed);
   const currency = computed.rows.client.base_currency;
   const filters = advisor ? parseBudgetFilters(searchParams) : parseBudgetFilters({});
   const monthlyById = new Map(
     [...computed.budgetRowById].map(([id, row]) => [id, row.monthlyAverage]),
   );
-  const groups = budgetView(computed.rows.budgetItems, monthlyById, filters);
+  const language = localeLanguage(locale);
+  const groups = budgetView(computed.rows.budgetItems, monthlyById, filters).map((group) => ({
+    ...group,
+    category: categoryLabel(group.category, language),
+  }));
   const { budget } = computed.result;
   const money = (amount: number) => formatMoney(amount, currency, locale);
   const empty = computed.rows.budgetItems.length === 0;
@@ -92,7 +97,7 @@ export async function BudgetScreen({
   ] as const;
 
   return (
-    <Screen>
+    <WideScreen>
       <BackLink {...back} />
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold text-balance">
@@ -158,7 +163,7 @@ export async function BudgetScreen({
           </Link>
         ) : null}
       </ScreenActions>
-    </Screen>
+    </WideScreen>
   );
 }
 
@@ -175,6 +180,7 @@ export async function BudgetItemScreen({
   clientId: string;
   itemId: string | null;
 }) {
+  const t = await getMessages();
   const paths = budgetPaths(viewer.role, clientId);
   const computed = await loadComputedCase(clientId);
   const title = itemId ? t.budget.form.editTitle : t.budget.form.newTitle;
@@ -189,7 +195,7 @@ export async function BudgetItemScreen({
   const row = itemId ? computed.rows.budgetItems.find((item) => item.id === itemId) : null;
   if (itemId && !row) notFound();
 
-  const locale = localeOf(computed);
+  const locale = await localeOf(computed);
   const { client, fxRates } = computed.rows;
   const currencies = [client.base_currency, ...fxRates.map((rate) => rate.currency)];
   // El caso sin la partida que se edita: la vista previa le suma la del formulario.

@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { InvestmentScreen } from '@/features/investment';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Inversión | MiLuca' };
+export const generateMetadata = pageMetadata('investment');
 
 /** Inversión del cliente: inversiones actuales, perfil, distribución y proyección. */
 export default async function AdvisorInvestmentPage({

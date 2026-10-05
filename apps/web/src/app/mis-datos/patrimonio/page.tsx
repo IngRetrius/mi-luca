@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { AssetsScreen } from '@/features/net-worth';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Lo que tienes | MiLuca' };
+export const generateMetadata = pageMetadata('myAssets');
 
 /** Lo que tiene el cliente. */
 export default async function MyAssetsPage() {

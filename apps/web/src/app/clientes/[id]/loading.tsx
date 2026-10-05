@@ -1,14 +1,12 @@
-import { messages } from '@miluca/i18n';
-
 import { Screen } from '@/components/screen';
-
-const t = messages.es;
+import { getMessages } from '@/server/i18n';
 
 // Esqueleto de la ficha y de sus pantallas (presupuesto, flujo, bolsillos…). Sin título propio:
 // el de /clientes ("Clientes") anunciaba otra pantalla mientras cargaba esta.
 const rows = [0, 1, 2, 3];
 
-export default function ClientCaseLoading() {
+export default async function ClientCaseLoading() {
+  const t = await getMessages();
   return (
     <Screen>
       <div aria-busy="true" className="flex flex-col gap-6">

@@ -1,0 +1,85 @@
+{
+  "install": {
+    "other": {
+      "tu": "En el móvil, abre MiLuca en Safari (iPhone) o en Chrome (Android) y agrégala a la pantalla de inicio desde el menú del navegador.",
+      "usted": "En el móvil, abra MiLuca en Safari (iPhone) o en Chrome (Android) y agréguela a la pantalla de inicio desde el menú del navegador."
+    }
+  },
+  "budget": {
+    "form": {
+      "conceptHint": "Por ejemplo, Supermercado o Alquiler."
+    }
+  },
+  "incomes": {
+    "form": {
+      "nameHint": "Por ejemplo, Nómina o Alquiler del piso.",
+      "paymentsHint": "0 si ese mes no llega; 2 si llega doble, por ejemplo con una paga extra.",
+      "lostInHint": "Para el fondo de emergencia. Por ejemplo, un aporte fijo de la familia o un alquiler seguro se mantienen siempre."
+    }
+  },
+  "profile": {
+    "rules": {
+      "empleado": "Pagas extra: repartirlas entre bolsillos anuales, deudas y ahorro según prioridad.",
+      "rentista": "Las rentas son el ingreso principal: revisar los meses sin inquilino y quién paga la comunidad y el IBI."
+    }
+  },
+  "pockets": {
+    "intro": "Para qué se guarda cada euro: meta del año, aporte al mes y saldo de hoy.",
+    "client": {
+      "intro": {
+        "tu": "Para qué guardas cada euro: meta del año, aporte al mes y saldo de hoy. Si cambias algo, tu plan se recalcula y tu asesor lo ve.",
+        "usted": "Para qué guarda cada euro: meta del año, aporte al mes y saldo de hoy. Si cambia algo, su plan se recalcula y su asesor lo ve."
+      }
+    }
+  },
+  "debts": {
+    "types": {
+      "libre_inversion": "Préstamo personal",
+      "libranza": "Préstamo con descuento en nómina"
+    },
+    "itemSummary": "{rate} TAE · cuota de {payment}",
+    "form": {
+      "nameHint": "Por ejemplo Tarjeta principal o Préstamo del coche. Sin números de tarjeta ni de préstamo.",
+      "rateHint": "La que aparece en el contrato o en el extracto como TAE. Un préstamo sin intereses es 0.",
+      "acceptsExtraHint": "No, por ejemplo, en un préstamo familiar que no conviene adelantar.",
+      "frechPoints": "FRECH, solo en Colombia: puntos de tasa que cubre el gobierno (opcional)",
+      "frechUntil": "FRECH, solo en Colombia: cobertura hasta la cuota N.º"
+    }
+  },
+  "assets": {
+    "typeHints": {
+      "inmueble": "Casa, piso, local o terreno.",
+      "vehiculo": "Coche o moto.",
+      "otro": "Aportes en cooperativas y lo demás."
+    },
+    "form": {
+      "nameHint": "Por ejemplo, Cuenta de ahorro en Banco A o Piso. Sin números de cuenta.",
+      "generatesIncomeHint": "Por ejemplo, un local alquilado."
+    }
+  },
+  "insurance": {
+    "types": {
+      "arrendamiento": "Impago de alquiler",
+      "complementario": "Seguro médico privado o complementario"
+    },
+    "covers": {
+      "arrendamiento": "Alquiler y comunidad si el inquilino no paga. No cubre la vivienda vacía."
+    }
+  },
+  "actionPlan": {
+    "owners": {
+      "contador": "Asesor fiscal"
+    },
+    "templates": {
+      "consult_accountant": "Consultar al asesor fiscal: renta, retenciones y deducciones"
+    }
+  },
+  "documents": {
+    "defaults": {
+      "scope": {
+        "tu": "Este plan se basa en la información que me compartiste. Las cifras son estimaciones en valores de hoy, ilustrativas y no garantizadas. No incluye recomendaciones de productos ni de entidades financieras. Los temas de impuestos, pensión y asuntos legales debes validarlos con un asesor fiscal, con tu entidad de pensiones y con un abogado.",
+        "usted": "Este plan se basa en la información que me compartió. Las cifras son estimaciones en valores de hoy, ilustrativas y no garantizadas. No incluye recomendaciones de productos ni de entidades financieras. Los temas de impuestos, pensión y asuntos legales debe validarlos con un asesor fiscal, con su entidad de pensiones y con un abogado."
+      }
+    }
+  }
+}

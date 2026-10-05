@@ -1,23 +1,22 @@
-import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import Link from 'next/link';
-
-import { messages } from '@miluca/i18n';
 
 import { Screen, ScreenActions } from '@/components/screen';
 import { linkButton, primaryButton, secondaryButton } from '@/components/ui-classes';
 import { InstallGuide } from '@/features/install';
 import { withAddress } from '@/lib/address';
 import { detectPlatform } from '@/lib/pwa';
+import { getMessages, pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Agregar a inicio | MiLuca' };
+export const generateMetadata = pageMetadata('install');
 
 /** P-C03 Agregar a inicio: llega aquí el cliente justo después de aceptar la invitación. */
 export default async function InstallPage() {
+  const messages = await getMessages();
   // Independientes: la sesión y la cabecera del navegador se resuelven a la vez.
   const [viewer, requestHeaders] = await Promise.all([requireClient('/instalar'), headers()]);
-  const t = withAddress(messages.es.install, viewer.formOfAddress);
+  const t = withAddress(messages.install, viewer.formOfAddress);
   const platform = detectPlatform(requestHeaders.get('user-agent'));
 
   return (

@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { CreditsPanelScreen } from '@/features/debts';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Panel de créditos | MiLuca' };
+export const generateMetadata = pageMetadata('creditsPanel');
 
 /** Panel de créditos del cliente, visto por el asesor. */
 export default async function AdvisorCreditsPanelPage({

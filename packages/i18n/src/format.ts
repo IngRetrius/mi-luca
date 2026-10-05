@@ -1,5 +1,7 @@
 import type { CurrencyCode } from '@miluca/domain';
 
+import { numberLocale } from './languages';
+
 /**
  * Decimales que se muestran por moneda cuando la costumbre local difiere de ISO 4217.
  * En Colombia los pesos se muestran sin decimales (1.750.905), aunque ISO define dos.
@@ -14,7 +16,10 @@ export interface MoneyFormatOptions {
   readonly decimals?: number;
 }
 
-/** Formatea un importe con el formato del país del cliente. */
+/**
+ * Formatea un importe con el formato del país del cliente, en cualquier idioma de la interfaz:
+ * `en-CO` y `es-CO` dan lo mismo (`numberLocale`).
+ */
 export function formatMoney(
   amount: number,
   currency: CurrencyCode,
@@ -22,7 +27,7 @@ export function formatMoney(
   options: MoneyFormatOptions = {},
 ): string {
   const decimals = options.decimals ?? DISPLAY_DECIMALS[currency];
-  return new Intl.NumberFormat(locale, {
+  return new Intl.NumberFormat(numberLocale(locale), {
     style: 'currency',
     currency,
     currencyDisplay: 'symbol',
@@ -33,9 +38,9 @@ export function formatMoney(
   }).format(amount);
 }
 
-/** Formatea una razón (0,305) como porcentaje (30,5 %). */
+/** Formatea una razón (0,305) como porcentaje (30,5 %), con el formato del país. */
 export function formatPercent(ratio: number, locale: string, decimals = 1): string {
-  return new Intl.NumberFormat(locale, {
+  return new Intl.NumberFormat(numberLocale(locale), {
     style: 'percent',
     minimumFractionDigits: 0,
     maximumFractionDigits: decimals,
@@ -43,7 +48,8 @@ export function formatPercent(ratio: number, locale: string, decimals = 1): stri
 }
 
 /**
- * Formatea una fecha con día, mes y año en letras ("6 de octubre de 2026"). La zona horaria es la
+ * Formatea una fecha con día, mes y año en letras ("6 de octubre de 2026"; con `en-CO`,
+ * "October 6, 2026"): el idioma sale del locale y no del país. La zona horaria es la
  * del país del cliente: el servidor corre en UTC y, sin ella, una fecha cerca de la medianoche
  * saldría con el día equivocado.
  */

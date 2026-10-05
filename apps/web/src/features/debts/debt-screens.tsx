@@ -8,7 +8,7 @@ import {
   type CreditSchedule,
   type DebtSimulation,
 } from '@miluca/engine';
-import { COUNTRY_LOCALES, formatDate, formatMoney, formatPercent, messages } from '@miluca/i18n';
+import { formatDate, formatMoney, formatPercent, type Messages } from '@miluca/i18n';
 
 import { BackLink, LoadError, ModuleLink } from '@/components/back-link';
 import { FigureList } from '@/components/figure-list';
@@ -19,6 +19,7 @@ import { loadComputedCase, type ComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
 import { amountToText } from '@/lib/amount';
 import type { CaseEditor } from '@/server/case-access';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { deleteDebt, saveDebt, saveDebtMethod } from './actions';
 import { DebtForm } from './debt-form';
@@ -27,11 +28,9 @@ import { DebtWhatIf } from './debt-what-if';
 import { debtPaths } from './paths';
 import type { DebtType } from './validation';
 
-const t = messages.es;
-const text = t.debts;
-
 /** Textos según quién mira: el asesor habla del cliente; el cliente, en su trato. */
-function localText(viewer: CaseEditor) {
+function localText(t: Messages, viewer: CaseEditor) {
+  const text = t.debts;
   if (viewer.role === 'advisor') {
     return { title: text.title, intro: text.intro, back: text.back, empty: text.empty };
   }
@@ -39,7 +38,7 @@ function localText(viewer: CaseEditor) {
   return { title: client.title, intro: client.intro, back: client.back, empty: client.empty };
 }
 
-function loadError(retryHref: string) {
+function loadError(t: Messages, retryHref: string) {
   return (
     <LoadError message={t.common.loadError} retryLabel={t.common.retry} retryHref={retryHref} />
   );
@@ -54,7 +53,8 @@ function formatMonth(date: string, locale: string): string {
   }).format(new Date(`${date}T00:00:00Z`));
 }
 
-function payoffText(debt: DebtSimulation['debts'][number], locale: string): string {
+function payoffText(t: Messages, debt: DebtSimulation['debts'][number], locale: string): string {
+  const text = t.debts;
   if (debt.exceedsHorizon) {
     return text.plan.exceeds.replace('{months}', String(DIAGNOSIS_HORIZON_MONTHS));
   }
@@ -71,7 +71,7 @@ function payoffText(debt: DebtSimulation['debts'][number], locale: string): stri
  * Plan de pago (RN-091 a RN-094): método, pago total, extra y abono único, y cada deuda en su orden
  * con su salida e intereses. Proyección ilustrativa (regla 11 de CLAUDE.md).
  */
-function DebtPlan({
+async function DebtPlan({
   viewer,
   clientId,
   computed,
@@ -82,6 +82,8 @@ function DebtPlan({
   computed: ComputedCase;
   locale: string;
 }) {
+  const t = await getMessages();
+  const text = t.debts;
   const { client, debts } = computed.rows;
   const money = (amount: number) => formatMoney(amount, client.base_currency, locale);
   const { simulation } = computed.result.debtPlan;
@@ -133,7 +135,7 @@ function DebtPlan({
               <span className="font-medium wrap-anywhere">
                 {text.plan.orderLabel.replace('{order}', String(debt.order))} {row.name}
               </span>
-              <span className="text-sm">{payoffText(debt, locale)}</span>
+              <span className="text-sm">{payoffText(t, debt, locale)}</span>
               <span className="text-sm text-text-muted tabular-nums">
                 {text.plan.interest.replace('{amount}', money(debt.interestWithPlan ?? 0))}
               </span>
@@ -173,7 +175,8 @@ function DebtPlan({
 }
 
 /** "Con FRECH: 6,3 % EA hasta la cuota 84" para un crédito en seguimiento con FRECH (H-18). */
-function frechText(credit: CreditInput | null, locale: string): string | null {
+function frechText(t: Messages, credit: CreditInput | null, locale: string): string | null {
+  const text = t.debts;
   const rate = credit ? frechClientRate(credit) : null;
   if (rate === null || !credit) return null;
   return text.frechSummary
@@ -182,7 +185,7 @@ function frechText(credit: CreditInput | null, locale: string): string | null {
 }
 
 /** La línea de seguimiento de una deuda: próxima cuota o vencidas sin marcar, y sus cuotas. */
-function TrackingLine({
+async function TrackingLine({
   schedule,
   href,
   money,
@@ -193,6 +196,8 @@ function TrackingLine({
   money: (amount: number) => string;
   date: (value: string) => string;
 }) {
+  const t = await getMessages();
+  const text = t.debts;
   if (!schedule) return null;
   const tracking = text.tracking;
   const summary =
@@ -227,8 +232,10 @@ function TrackingLine({
 
 /** Deudas (P-A10, pestaña Deudas; Mis datos del cliente): inventario, totales y plan de pago. */
 export async function DebtsScreen({ viewer, clientId }: { viewer: CaseEditor; clientId: string }) {
+  const t = await getMessages();
+  const text = t.debts;
   const paths = debtPaths(viewer.role, clientId);
-  const local = localText(viewer);
+  const local = localText(t, viewer);
   const computed = await loadComputedCase(clientId);
   const header = (
     <>
@@ -243,12 +250,12 @@ export async function DebtsScreen({ viewer, clientId }: { viewer: CaseEditor; cl
     return (
       <Screen>
         {header}
-        {loadError(paths.list)}
+        {loadError(t, paths.list)}
       </Screen>
     );
   }
   const { client, debts } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const money = (amount: number, currency = client.base_currency) =>
     formatMoney(amount, currency, locale);
   const { result } = computed;
@@ -304,7 +311,7 @@ export async function DebtsScreen({ viewer, clientId }: { viewer: CaseEditor; cl
                             row.currency,
                           ),
                         ),
-                      frechText(computed.input.debts[index]?.tracking?.credit ?? null, locale),
+                      frechText(t, computed.input.debts[index]?.tracking?.credit ?? null, locale),
                       !row.accepts_extra
                         ? text.noExtra
                         : row.extra_from_date
@@ -384,22 +391,24 @@ export async function DebtFormScreen({
   clientId: string;
   debtId: string | null;
 }) {
+  const t = await getMessages();
+  const text = t.debts;
   const paths = debtPaths(viewer.role, clientId);
-  const local = localText(viewer);
+  const local = localText(t, viewer);
   const title = debtId ? text.form.editTitle : text.form.newTitle;
   const computed = await loadComputedCase(clientId);
   if (!computed) {
     return (
       <Screen>
         <h1 className="text-2xl font-semibold text-balance">{title}</h1>
-        {loadError(debtId ? paths.item(debtId) : paths.add)}
+        {loadError(t, debtId ? paths.item(debtId) : paths.add)}
       </Screen>
     );
   }
   const row = debtId ? computed.rows.debts.find((item) => item.id === debtId) : null;
   if (debtId && !row) notFound();
   const { client, fxRates } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const ratePercent = row ? amountToText(row.annual_rate * 100, locale, 4) : '';
 
   return (

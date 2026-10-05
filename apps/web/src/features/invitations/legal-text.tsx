@@ -1,4 +1,6 @@
-import { formatDate, messages } from '@miluca/i18n';
+import { formatDate } from '@miluca/i18n';
+
+import { getLanguage, getMessages } from '@/server/i18n';
 
 import type { LegalText as LegalTextData } from './queries';
 
@@ -29,7 +31,7 @@ export function toBlocks(body: string): Block[] {
 }
 
 /** Un texto legal tal como se acepta: título, versión, fecha y cuerpo. */
-export function LegalText({
+export async function LegalText({
   text,
   headingId,
   locale,
@@ -40,18 +42,26 @@ export function LegalText({
   locale: string;
   timeZone: string;
 }) {
+  const [t, language] = await Promise.all([getMessages(), getLanguage()]);
   const blocks = toBlocks(text.body);
   return (
     <div className="flex flex-col gap-2">
-      <h2 id={headingId} className="text-lg font-semibold text-balance">
+      <h2 id={headingId} lang="es" className="text-lg font-semibold text-balance">
         {text.title}
       </h2>
       <p className="text-sm text-text-muted">
-        {messages.es.invitation.consent.version
+        {t.invitation.consent.version
           .replace('{version}', text.version)
           .replace('{date}', formatDate(text.publishedAt, locale, timeZone))}
       </p>
-      <div className="flex flex-col gap-3 rounded-xl border border-border p-4 wrap-break-word">
+      {/* Los textos legales aprobados existen solo en español (ADR 0022). */}
+      {language === 'es' ? null : (
+        <p className="text-sm text-text-muted">{t.invitation.consent.spanishOnly}</p>
+      )}
+      <div
+        lang="es"
+        className="flex flex-col gap-3 rounded-xl border border-border p-4 wrap-break-word"
+      >
         {blocks.map((block, index) =>
           block.type === 'list' ? (
             <ul key={index} className="flex list-disc flex-col gap-1 pl-5">

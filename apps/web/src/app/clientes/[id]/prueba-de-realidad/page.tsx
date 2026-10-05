@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { RealityCheckScreen } from '@/features/reality-check';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Prueba de realidad | MiLuca' };
+export const generateMetadata = pageMetadata('realityCheck');
 
 /** P-A08 Prueba de realidad. */
 export default async function AdvisorRealityCheckPage({

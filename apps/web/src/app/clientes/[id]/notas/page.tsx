@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { DocumentEditorScreen } from '@/features/documents';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Notas para el cliente | MiLuca' };
+export const generateMetadata = pageMetadata('clientNotes');
 
 /** P-A13 Notas para el cliente. */
 export default async function AdvisorNotesPage({ params }: PageProps<'/clientes/[id]/notas'>) {

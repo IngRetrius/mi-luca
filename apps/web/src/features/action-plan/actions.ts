@@ -8,6 +8,7 @@ import { actionStatusSchema } from '@miluca/domain';
 import { loadComputedCase } from '@/features/summary';
 import { createClient } from '@/lib/supabase/server';
 import { isUuid, requireCaseEditor } from '@/server/case-access';
+import { getCaseMessages } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
 import { actionPlanPaths } from './paths';
@@ -109,11 +110,16 @@ export async function addSuggestedActions(clientId: string): Promise<void> {
   await requireAdvisor(paths.list);
   const computed = await loadComputedCase(clientId);
   if (computed) {
-    const supabase = await createClient();
-    await supabase.from('action_items').upsert(suggestedActionRows(clientId, computed), {
-      onConflict: 'client_id,suggestion_key',
-      ignoreDuplicates: true,
-    });
+    const [supabase, t] = await Promise.all([
+      createClient(),
+      getCaseMessages({ country: computed.rows.client.country_code }),
+    ]);
+    await supabase
+      .from('action_items')
+      .upsert(suggestedActionRows(clientId, computed, t.actionPlan.templates), {
+        onConflict: 'client_id,suggestion_key',
+        ignoreDuplicates: true,
+      });
   }
   revalidatePath(paths.list);
 }

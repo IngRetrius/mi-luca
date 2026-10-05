@@ -10,7 +10,7 @@ Cada caso es diferente. El país del cliente solo fija la moneda base, el format
 
 ## Reglas
 
-1. **Idioma.** Textos del producto y documentación en español, sin emojis. Identificadores de código en inglés según `docs/glosario.md`. Si falta un término, agrégalo al glosario en el mismo cambio.
+1. **Idioma.** Documentación en español y textos del producto en español e inglés (`packages/i18n/messages/es.json` y `en.json`, con las mismas claves; ADR 0022), sin emojis. Identificadores de código en inglés según `docs/glosario.md`. Si falta un término, agrégalo al glosario en el mismo cambio.
 2. **No inventar.** Si algo es ambiguo, anótalo en `docs/07-preguntas-abiertas.md`, usa un supuesto marcado como tal y sigue.
 3. **Fuentes.** Todo dato externo (precios, límites, normativa, parámetros de país) se registra en `docs/fuentes.md` con URL y fecha de consulta.
 4. **Datos de clientes.** Nunca copies datos de `referencia/casos/` a código, pruebas, documentación ni mensajes de commit. Las pruebas usan solo casos anonimizados.

@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { messages } from '@miluca/i18n';
+import type { Messages } from '@miluca/i18n';
 
 import { parseBudgetItem } from '@/features/budget';
 import { parseFxRate } from '@/features/currencies';
@@ -31,8 +31,6 @@ import {
   type ToolInput,
 } from './fields';
 
-const t = messages.es;
-
 /** Lo que puede anotar el agente; cada uno es una herramienta y una tabla. */
 export type AgentEntityKind =
   | 'profile'
@@ -62,6 +60,8 @@ export interface AgentContext {
   readonly currencies: string[];
   readonly pocketIds: string[];
   readonly bankIds: string[];
+  /** Textos en el idioma del asesor: errores y resúmenes que ve en el chat. */
+  readonly t: Messages;
 }
 
 type ParseOutcome =
@@ -93,7 +93,7 @@ export interface EntitySpec {
   ): Promise<{ readonly key: string | null; readonly error: { code?: string } | null }>;
   /** Deshace un alta. */
   remove(ctx: AgentContext, key: string): Promise<{ code?: string } | null>;
-  summary(record: Readonly<Record<string, unknown>>): string;
+  summary(record: Readonly<Record<string, unknown>>, t: Messages): string;
   href(clientId: string, key: string): string;
 }
 
@@ -280,8 +280,8 @@ const income = recordEntity({
     };
   },
   parse: (form, ctx) =>
-    outcome(parseIncome(form, { currencies: ctx.currencies }), t.incomes.form.errors),
-  summary: (record) =>
+    outcome(parseIncome(form, { currencies: ctx.currencies }), ctx.t.incomes.form.errors),
+  summary: (record, t) =>
     joined(
       `${t.assistant.agent.entities.income}: ${String(record.name)}`,
       `${money(record, 'amount')} ${t.assistant.agent.perPayment}`,
@@ -351,13 +351,13 @@ const expense = recordEntity({
       advisor: false,
       pocketIds: ctx.pocketIds,
     });
-    if (!parsed.ok) return outcome(parsed, t.budget.form.errors);
+    if (!parsed.ok) return outcome(parsed, ctx.t.budget.form.errors);
     const record: Record<string, unknown> = { ...parsed.record };
     delete record.basic_amount;
     delete record.is_proposed;
     return { ok: true, record };
   },
-  summary: (record) => {
+  summary: (record, t) => {
     const frequency = String(record.frequency ?? '') as keyof typeof t.budget.frequencies;
     return joined(
       `${t.assistant.agent.entities.expense}: ${String(record.concept)}`,
@@ -434,8 +434,11 @@ const debt = recordEntity({
     ]),
   // Como el cliente: el lugar en el orden manual es criterio aparte y queda como esté.
   parse: (form, ctx) =>
-    outcome(parseDebt(form, { currencies: ctx.currencies, advisor: false }), t.debts.form.errors),
-  summary: (record) =>
+    outcome(
+      parseDebt(form, { currencies: ctx.currencies, advisor: false }),
+      ctx.t.debts.form.errors,
+    ),
+  summary: (record, t) =>
     joined(
       `${t.assistant.agent.entities.debt}: ${String(record.name)}`,
       `${t.assistant.agent.balance} ${money(record, 'balance')}`,
@@ -488,9 +491,9 @@ const goal = recordEntity({
   parse: (form, ctx) =>
     outcome(
       parseGoal(form, { currencies: ctx.currencies, pocketIds: ctx.pocketIds }),
-      t.goals.form.errors,
+      ctx.t.goals.form.errors,
     ),
-  summary: (record) =>
+  summary: (record, t) =>
     joined(
       `${t.assistant.agent.entities.goal}: ${String(record.name)}`,
       money(record, 'amount'),
@@ -530,8 +533,8 @@ const insurance: EntitySpec = {
         ['note', str(input, 'note')],
       ]),
     parse: (form, ctx) =>
-      outcome(parseInsurance(form, { currencies: ctx.currencies }), t.insurance.form.errors),
-    summary: (record) => {
+      outcome(parseInsurance(form, { currencies: ctx.currencies }), ctx.t.insurance.form.errors),
+    summary: (record, t) => {
       const type = String(record.insurance_type) as keyof typeof t.insurance.types;
       const status = String(record.status ?? '') as keyof typeof t.insurance.statuses;
       return joined(
@@ -586,8 +589,8 @@ const asset = recordEntity({
       ['note', str(input, 'note')],
     ]),
   parse: (form, ctx) =>
-    outcome(parseAsset(form, { currencies: ctx.currencies }), t.assets.form.errors),
-  summary: (record) =>
+    outcome(parseAsset(form, { currencies: ctx.currencies }), ctx.t.assets.form.errors),
+  summary: (record, t) =>
     joined(`${t.assistant.agent.entities.asset}: ${String(record.name)}`, money(record, 'value')),
   href: (clientId, key) => `/clientes/${clientId}/patrimonio/${key}`,
 });
@@ -616,8 +619,8 @@ const investment = recordEntity({
       ['note', str(input, 'note')],
     ]),
   parse: (form, ctx) =>
-    outcome(parseInvestment(form, { currencies: ctx.currencies }), t.investment.form.errors),
-  summary: (record) =>
+    outcome(parseInvestment(form, { currencies: ctx.currencies }), ctx.t.investment.form.errors),
+  summary: (record, t) =>
     joined(
       `${t.assistant.agent.entities.investment}: ${String(record.name)}`,
       money(record, 'balance'),
@@ -659,9 +662,9 @@ const receivable = recordEntity({
   parse: (form, ctx) =>
     outcome(
       parseReceivable(form, { currencies: ctx.currencies, advisor: false }),
-      t.receivables.form.errors,
+      ctx.t.receivables.form.errors,
     ),
-  summary: (record) =>
+  summary: (record, t) =>
     joined(
       `${t.assistant.agent.entities.receivable}: ${String(record.debtor_label)}`,
       `${t.assistant.agent.balance} ${money(record, 'balance')}`,
@@ -699,9 +702,9 @@ const pocket: EntitySpec = {
     parse: (form, ctx) =>
       outcome(
         parsePocket(form, { currencies: ctx.currencies, bankIds: ctx.bankIds }),
-        t.pockets.form.errors,
+        ctx.t.pockets.form.errors,
       ),
-    summary: (record) => `${t.assistant.agent.entities.pocket}: ${String(record.name)}`,
+    summary: (record, t) => `${t.assistant.agent.entities.pocket}: ${String(record.name)}`,
     href: (clientId, key) => `/clientes/${clientId}/bolsillos/${key}`,
   }),
   // Solo bolsillos generales: el del fondo y el de meses sin ingreso tienen su pantalla.
@@ -758,7 +761,7 @@ const fxRate: EntitySpec = {
         fixedCurrency: editing ? currency : null,
         today: ctx.today,
       }),
-      t.currencies.form.errors,
+      ctx.t.currencies.form.errors,
     );
   },
   write: async (ctx, key, record) => {
@@ -787,7 +790,7 @@ const fxRate: EntitySpec = {
       .eq('currency', key);
     return error;
   },
-  summary: (record) =>
+  summary: (record, t) =>
     `${t.assistant.agent.entities.fxRate}: 1 ${String(record.currency)} = ${amountText(Number(record.rate_to_base), 8).replace('.', ',')}`,
   href: (clientId, key) => `/clientes/${clientId}/monedas/${key}`,
 };
@@ -830,7 +833,7 @@ const profile: EntitySpec = {
     const parsed = parseProfile(form, { today: ctx.today, availableThresholds: [] });
     return parsed.ok
       ? { ok: true, record: parsed.record.client }
-      : { ok: false, errors: errorList(parsed.errors, t.profile.errors) };
+      : { ok: false, errors: errorList(parsed.errors, ctx.t.profile.errors) };
   },
   write: async (ctx, _key, record) => {
     const { error } = await ctx.supabase
@@ -841,7 +844,7 @@ const profile: EntitySpec = {
   },
   // El perfil siempre existe: deshacer es volver a lo de antes, no borrar.
   remove: async () => null,
-  summary: (record) => {
+  summary: (record, t) => {
     const type = String(record.client_type ?? 'none') as keyof typeof t.profile.types;
     return joined(
       t.assistant.agent.entities.profile,
@@ -879,10 +882,10 @@ const riskAnswers: EntitySpec = {
       ['horizon', code(input, 'horizon')],
     ]),
   // Solo las respuestas: las condiciones y la posición en el rango son criterio del asesor.
-  parse: (form) => {
+  parse: (form, ctx) => {
     const parsed = parseRiskProfile(form);
     if (!parsed.ok) {
-      return { ok: false, errors: errorList(parsed.errors, t.investment.riskForm.errors) };
+      return { ok: false, errors: errorList(parsed.errors, ctx.t.investment.riskForm.errors) };
     }
     return { ok: true, record: { ...parsed.answers } };
   },
@@ -905,7 +908,7 @@ const riskAnswers: EntitySpec = {
       .eq('client_id', ctx.clientId);
     return error;
   },
-  summary: (record) => {
+  summary: (record, t) => {
     const form = t.investment.riskForm;
     return joined(
       t.assistant.agent.entities.riskAnswers,
@@ -955,7 +958,10 @@ const realityCheck: EntitySpec = {
       ['currency', str(input, 'currency')?.toUpperCase()],
     ]),
   parse: (form, ctx) =>
-    outcome(parseRealityCheck(form, { currencies: ctx.currencies }), t.realityCheck.form.errors),
+    outcome(
+      parseRealityCheck(form, { currencies: ctx.currencies }),
+      ctx.t.realityCheck.form.errors,
+    ),
   write: async (ctx, _key, record) => {
     const updated = await ctx.supabase
       .from('reality_check')
@@ -975,7 +981,7 @@ const realityCheck: EntitySpec = {
       .eq('client_id', ctx.clientId);
     return error;
   },
-  summary: (record) =>
+  summary: (record, t) =>
     joined(
       t.assistant.agent.entities.realityCheck,
       record.savings_today === null
@@ -1024,7 +1030,7 @@ export type SaveResult =
   | { readonly ok: true; readonly action: AgentAction; readonly message: string }
   | { readonly ok: false; readonly message: string };
 
-function writeFailure(error: { code?: string }): string {
+function writeFailure(error: { code?: string }, t: Messages): string {
   // 23514: falta la tasa o un valor fuera de rango; 23505: ya existe; 42501: permisos.
   if (error.code === '23514') return t.assistant.agent.failures.check;
   if (error.code === '23505') return t.assistant.agent.failures.duplicate;
@@ -1045,6 +1051,7 @@ export async function saveEntity(
   ctx: AgentContext,
   input: ToolInput,
 ): Promise<SaveResult> {
+  const { t } = ctx;
   const key = await entity.key(ctx, input);
   const row = key === null ? null : await entity.load(ctx, key);
   if (key !== null && row === null && !entity.singleton && entity.kind !== 'fxRate') {
@@ -1063,7 +1070,7 @@ export async function saveEntity(
   }
   const editing = row !== null;
   const { key: savedKey, error } = await entity.write(ctx, editing ? key : null, parsed.record);
-  if (error || savedKey === null) return { ok: false, message: writeFailure(error ?? {}) };
+  if (error || savedKey === null) return { ok: false, message: writeFailure(error ?? {}, t) };
 
   // Lo nuevo queda disponible para lo que siga en el mismo turno.
   if (entity.kind === 'pocket' && !editing) ctx.pocketIds.push(savedKey);
@@ -1074,7 +1081,7 @@ export async function saveEntity(
     op: editing ? 'update' : 'create',
     key: savedKey,
     previous: row,
-    summary: entity.summary(parsed.record),
+    summary: entity.summary(parsed.record, t),
     href: entity.href(ctx.clientId, savedKey),
   };
   return {

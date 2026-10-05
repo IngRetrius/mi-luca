@@ -1,14 +1,14 @@
-import { messages } from '@miluca/i18n';
-
 import { secondaryButton } from '@/components/ui-classes';
+import { getMessages } from '@/server/i18n';
 
 import { signOut } from './actions';
 
-export function SignOutButton() {
+export async function SignOutButton() {
+  const t = await getMessages();
   return (
     <form action={signOut}>
       <button type="submit" className={secondaryButton}>
-        {messages.es.auth.signOut}
+        {t.auth.signOut}
       </button>
     </form>
   );

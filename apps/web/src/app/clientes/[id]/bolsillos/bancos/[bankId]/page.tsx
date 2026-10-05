@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { BankFormScreen } from '@/features/pockets';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Banco | MiLuca' };
+export const generateMetadata = pageMetadata('bank');
 
 /** Editar un banco. */
 export default async function AdvisorBankPage({

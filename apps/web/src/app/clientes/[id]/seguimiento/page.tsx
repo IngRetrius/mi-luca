@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { FollowUpScreen } from '@/features/follow-up';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Seguimiento | MiLuca' };
+export const generateMetadata = pageMetadata('followUp');
 
 /** P-A16 Seguimiento. */
 export default async function AdvisorFollowUpPage({

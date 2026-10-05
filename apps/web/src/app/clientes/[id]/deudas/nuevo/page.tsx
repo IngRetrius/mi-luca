@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { DebtFormScreen } from '@/features/debts';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Nueva deuda | MiLuca' };
+export const generateMetadata = pageMetadata('newDebt');
 
 /** Registrar una deuda. */
 export default async function AdvisorNewDebtPage({

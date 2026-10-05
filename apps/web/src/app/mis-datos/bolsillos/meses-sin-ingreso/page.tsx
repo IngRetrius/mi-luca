@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { SpecialPocketScreen } from '@/features/pockets';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Bolsillo: Meses sin ingreso | MiLuca' };
+export const generateMetadata = pageMetadata('noIncomePocket');
 
 /** Banco del bolsillo de meses sin ingreso. */
 export default async function MyNoIncomePocketPage() {

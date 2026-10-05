@@ -4,6 +4,96 @@
     "tagline": "Planificación financiera personal",
     "underConstruction": "Estamos construyendo tu plataforma. Muy pronto podrás ver tu plan aquí."
   },
+  "pageTitle": {
+    "home": "MiLuca",
+    "signIn": "Entrar",
+    "recovery": "Recuperar contraseña",
+    "noInvitation": "Sin invitación",
+    "invitation": "Invitación",
+    "install": "Agregar a inicio",
+    "privacy": "Privacidad y datos",
+    "clients": "Clientes",
+    "newClient": "Nuevo cliente",
+    "client": "Cliente",
+    "profile": "Perfil y supuestos",
+    "planSettings": "Supuestos del plan",
+    "incomes": "Ingresos",
+    "newIncome": "Nuevo ingreso",
+    "editIncome": "Editar ingreso",
+    "socialSecurityMonths": "Meses con seguridad social",
+    "baseIncome": "Ingreso base",
+    "budget": "Presupuesto",
+    "newExpense": "Nuevo gasto",
+    "editExpense": "Editar gasto",
+    "catalog": "Gastos típicos",
+    "costOfLiving": "Costo de vida",
+    "currencies": "Monedas",
+    "newCurrency": "Nueva moneda",
+    "fxRate": "Tasa de cambio",
+    "cashflow": "Flujo anual",
+    "emergencyFund": "Fondo de emergencia",
+    "pockets": "Bolsillos",
+    "pocket": "Bolsillo",
+    "newPocket": "Nuevo bolsillo",
+    "emergencyFundPocket": "Bolsillo: Fondo de emergencia",
+    "noIncomePocket": "Bolsillo: Meses sin ingreso",
+    "banks": "Bancos",
+    "bank": "Banco",
+    "newBank": "Nuevo banco",
+    "banksAndPockets": "Bancos y bolsillos",
+    "debts": "Deudas",
+    "debt": "Deuda",
+    "newDebt": "Nueva deuda",
+    "installments": "Cuotas",
+    "installment": "Cuota",
+    "creditsPanel": "Panel de créditos",
+    "receivables": "Cuentas por cobrar",
+    "receivable": "Cobro",
+    "newReceivable": "Nuevo cobro",
+    "netWorth": "Patrimonio",
+    "asset": "Activo",
+    "newAsset": "Nuevo activo",
+    "realityCheck": "Prueba de realidad",
+    "investment": "Inversión",
+    "newInvestment": "Nueva inversión",
+    "riskProfile": "Perfil de riesgo",
+    "investmentSettings": "Supuestos de inversión",
+    "goals": "Metas",
+    "goal": "Meta",
+    "newGoal": "Nueva meta",
+    "insurances": "Seguros",
+    "insurance": "Seguro",
+    "newInsurance": "Nuevo seguro",
+    "insuranceSettings": "Supuestos de seguros",
+    "delivery": "Entregar el plan",
+    "deliveredPlan": "Plan entregado",
+    "closingLetter": "Carta de cierre",
+    "clientNotes": "Notas para el cliente",
+    "followUp": "Seguimiento",
+    "continuitySheet": "Sucesión y decisiones",
+    "actionPlan": "Plan de acción",
+    "task": "Tarea",
+    "newTask": "Nueva tarea",
+    "tasks": "Tareas",
+    "monthlyControl": "Control mensual",
+    "myPlan": "Mi plan",
+    "myData": "Mis datos",
+    "myIncomes": "Mis ingresos",
+    "myExpenses": "Mis gastos",
+    "myAssets": "Lo que tengo",
+    "myReceivables": "Lo que me deben",
+    "myInvestment": "Mi inversión",
+    "myDebts": "Mis deudas",
+    "myGoals": "Mis metas",
+    "myInsurances": "Mis seguros"
+  },
+  "language": {
+    "label": "Idioma",
+    "names": {
+      "es": "Español",
+      "en": "English"
+    }
+  },
   "auth": {
     "signInIntro": "Entra a tu planificación financiera.",
     "continueWithGoogle": "Continuar con Google",
@@ -46,7 +136,7 @@
     "backHome": "Ir al inicio",
     "error": {
       "title": "Algo salió mal",
-      "body": "No pudimos mostrar esta pantalla. Intenta de nuevo; si sigue fallando, vuelve al inicio.",
+      "body": "No pudimos mostrar esta pantalla. Si al intentarlo de nuevo sigue fallando, lo mejor es volver al inicio.",
       "retry": "Intentar de nuevo",
       "backHome": "Ir al inicio"
     },
@@ -263,6 +353,7 @@
         "usted": "Lea el texto. Para usar MiLuca necesita aceptarlo."
       },
       "version": "Versión {version}, publicada el {date}",
+      "spanishOnly": "Este texto está en español.",
       "accept": "Acepto el tratamiento de mis datos personales según este texto.",
       "sensitiveIntro": {
         "tu": "Es opcional. Solo hace falta si tu presupuesto incluye gastos de salud. Puedes continuar sin aceptarlo.",
@@ -1305,6 +1396,7 @@
       "debtor": "Quién le debe",
       "debtorHint": "Basta con la relación, por ejemplo Hermana o Amigo.",
       "balance": "Saldo que le deben",
+      "balanceHint": "Lo que le debían antes del primer pago. Desde la fecha del primer pago, las cuotas se descuentan solas.",
       "payment": "Cuota mensual",
       "currency": "Moneda",
       "currencyHint": "Saldo y cuota van en la misma moneda. Para otra, registra antes su tasa en Monedas.",
@@ -1354,6 +1446,10 @@
       "balance": {
         "tu": "Saldo que te deben",
         "usted": "Saldo que le deben"
+      },
+      "balanceHint": {
+        "tu": "Lo que te debían antes del primer pago. Desde la fecha del primer pago, las cuotas se descuentan solas.",
+        "usted": "Lo que le debían antes del primer pago. Desde la fecha del primer pago, las cuotas se descuentan solas."
       }
     }
   },
@@ -1644,6 +1740,8 @@
     "expected": "Ahorro esperado al mes",
     "expectedHint": "Sobrante y ahorro programado del plan, por mes.",
     "difference": "Diferencia",
+    "differenceInMoney": "Como el plan no deja ahorro, la diferencia va en dinero al mes.",
+    "noExpected": "El plan no deja ahorro esperado: no hay con qué comparar.",
     "pctToInvestment": "Del sobrante a inversión",
     "rule": "Se confirma si el ahorro real llega al 85 % del esperado.",
     "statusHints": {
@@ -1876,7 +1974,7 @@
       },
       "items_have_pocket": {
         "ok": "Cada gasto tipo bolsillo tiene su bolsillo.",
-        "failed": "Gastos tipo bolsillo sin bolsillo: {count}. Elígelo en el presupuesto."
+        "failed": "Gastos tipo bolsillo sin bolsillo: {count}. Elígelo en cada gasto del presupuesto; el de un aporte a una meta, en Metas, y el de las primas de seguros nuevos, en Supuestos de seguros."
       },
       "incomes_classified": {
         "ok": "Todos los ingresos tienen tipo.",
@@ -2559,7 +2657,11 @@
         "tu": "Escribe cada mes cuánto gastaste en cada categoría. Se compara con tu presupuesto; lo que se pase más de 10 % por encima o por debajo se marca.",
         "usted": "Escriba cada mes cuánto gastó en cada categoría. Se compara con su presupuesto; lo que se pase más de 10 % por encima o por debajo se marca."
       },
-      "back": "Inicio"
+      "back": "Inicio",
+      "emptyHint": {
+        "tu": "Deja vacío lo que no registraste; 0 es un mes sin gasto.",
+        "usted": "Deje vacío lo que no registró; 0 es un mes sin gasto."
+      }
     },
     "back": "Ficha del cliente",
     "monthNav": "Elegir mes",

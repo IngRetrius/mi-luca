@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { COUNTRY_LOCALES, messages } from '@miluca/i18n';
+import { type Messages } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { Screen, ScreenActions } from '@/components/screen';
@@ -11,6 +11,7 @@ import { loadCaseRows } from '@/features/summary';
 import { withAddress } from '@/lib/address';
 import { amountToText } from '@/lib/amount';
 import type { CaseEditor } from '@/server/case-access';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { deleteBank, deletePocket, saveBank, savePocket, saveSpecialPocket } from './actions';
 import { BankForm } from './bank-form';
@@ -18,9 +19,7 @@ import { pocketPaths, type SpecialPocketKind } from './paths';
 import { PocketForm } from './pocket-form';
 import { SpecialPocketForm } from './special-pocket-form';
 
-const t = messages.es;
-
-function loadError(retryHref: string) {
+function loadError(t: Messages, retryHref: string) {
   return (
     <LoadError message={t.common.loadError} retryLabel={t.common.retry} retryHref={retryHref} />
   );
@@ -36,6 +35,7 @@ export async function PocketFormScreen({
   clientId: string;
   pocketId: string | null;
 }) {
+  const t = await getMessages();
   const text =
     viewer.role === 'advisor'
       ? t.pockets.form
@@ -50,7 +50,7 @@ export async function PocketFormScreen({
     return (
       <Screen>
         <h1 className="text-2xl font-semibold text-balance">{title}</h1>
-        {loadError(pocketId ? paths.item(pocketId) : paths.add)}
+        {loadError(t, pocketId ? paths.item(pocketId) : paths.add)}
       </Screen>
     );
   }
@@ -58,7 +58,7 @@ export async function PocketFormScreen({
     ? rows.pockets.find((row) => row.id === pocketId && row.kind === 'general')
     : null;
   if (pocketId && !pocket) notFound();
-  const locale = COUNTRY_LOCALES[rows.client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(rows.client.country_code);
   const currencies = [rows.client.base_currency, ...rows.fxRates.map((rate) => rate.currency)];
 
   return (
@@ -87,6 +87,7 @@ export async function PocketFormScreen({
 
 /** Bancos del cliente con cuántos bolsillos tiene cada uno frente a su límite (RN-073). */
 export async function BanksScreen({ viewer, clientId }: { viewer: CaseEditor; clientId: string }) {
+  const t = await getMessages();
   const text = t.banks;
   const paths = pocketPaths(viewer.role, clientId);
   const rows = await loadCaseRows(clientId);
@@ -103,7 +104,7 @@ export async function BanksScreen({ viewer, clientId }: { viewer: CaseEditor; cl
     return (
       <Screen>
         {header}
-        {loadError(paths.banks)}
+        {loadError(t, paths.banks)}
       </Screen>
     );
   }
@@ -172,6 +173,7 @@ export async function BankFormScreen({
   clientId: string;
   bankId: string | null;
 }) {
+  const t = await getMessages();
   const text = t.banks.form;
   const paths = pocketPaths(viewer.role, clientId);
   const title = bankId ? text.editTitle : text.newTitle;
@@ -180,7 +182,7 @@ export async function BankFormScreen({
     return (
       <Screen>
         <h1 className="text-2xl font-semibold text-balance">{title}</h1>
-        {loadError(paths.bank(bankId))}
+        {loadError(t, paths.bank(bankId))}
       </Screen>
     );
   }
@@ -217,6 +219,7 @@ export async function SpecialPocketScreen({
   clientId: string;
   kind: SpecialPocketKind;
 }) {
+  const t = await getMessages();
   const paths = pocketPaths(viewer.role, clientId);
   const name = kind === 'emergencia' ? t.pockets.emergency : t.pockets.noIncome;
   const title = t.pockets.special.title.replace('{name}', name);
@@ -225,7 +228,7 @@ export async function SpecialPocketScreen({
     return (
       <Screen>
         <h1 className="text-2xl font-semibold text-balance">{title}</h1>
-        {loadError(paths.special(kind))}
+        {loadError(t, paths.special(kind))}
       </Screen>
     );
   }

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { COUNTRY_LOCALES, formatDate, formatMoney, formatPercent, messages } from '@miluca/i18n';
+import { formatDate, formatMoney, formatPercent, type Messages } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { FigureList } from '@/components/figure-list';
@@ -11,16 +11,15 @@ import { loadComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
 import { amountToText, percentToText } from '@/lib/amount';
 import type { CaseEditor } from '@/server/case-access';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { deleteReceivable, saveReceivable } from './actions';
 import { receivablePaths } from './paths';
 import { ReceivableForm } from './receivable-form';
 
-const t = messages.es;
-const text = t.receivables;
-
 /** Textos según quién mira: el asesor habla del cliente; el cliente, en su trato. */
-function localText(viewer: CaseEditor) {
+function localText(t: Messages, viewer: CaseEditor) {
+  const text = t.receivables;
   if (viewer.role === 'advisor') {
     return {
       title: text.title,
@@ -37,12 +36,17 @@ function localText(viewer: CaseEditor) {
     intro: client.intro,
     back: client.back,
     empty: client.empty,
-    form: { ...text.form, debtor: client.debtor, balance: client.balance },
+    form: {
+      ...text.form,
+      debtor: client.debtor,
+      balance: client.balance,
+      balanceHint: client.balanceHint,
+    },
     pctNote: client.pctNote,
   };
 }
 
-function loadError(retryHref: string) {
+function loadError(t: Messages, retryHref: string) {
   return (
     <LoadError message={t.common.loadError} retryLabel={t.common.retry} retryHref={retryHref} />
   );
@@ -56,8 +60,10 @@ export async function ReceivablesScreen({
   viewer: CaseEditor;
   clientId: string;
 }) {
+  const t = await getMessages();
+  const text = t.receivables;
   const paths = receivablePaths(viewer.role, clientId);
-  const local = localText(viewer);
+  const local = localText(t, viewer);
   const computed = await loadComputedCase(clientId);
   const header = (
     <>
@@ -72,12 +78,12 @@ export async function ReceivablesScreen({
     return (
       <Screen>
         {header}
-        {loadError(paths.list)}
+        {loadError(t, paths.list)}
       </Screen>
     );
   }
   const { client } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const money = (amount: number, currency = client.base_currency) =>
     formatMoney(amount, currency, locale);
   const { receivables } = computed.result;
@@ -151,15 +157,17 @@ export async function ReceivableFormScreen({
   clientId: string;
   receivableId: string | null;
 }) {
+  const t = await getMessages();
+  const text = t.receivables;
   const paths = receivablePaths(viewer.role, clientId);
-  const local = localText(viewer);
+  const local = localText(t, viewer);
   const title = receivableId ? text.form.editTitle : text.form.newTitle;
   const computed = await loadComputedCase(clientId);
   if (!computed) {
     return (
       <Screen>
         <h1 className="text-2xl font-semibold text-balance">{title}</h1>
-        {loadError(receivableId ? paths.item(receivableId) : paths.add)}
+        {loadError(t, receivableId ? paths.item(receivableId) : paths.add)}
       </Screen>
     );
   }
@@ -168,7 +176,7 @@ export async function ReceivableFormScreen({
     : null;
   if (receivableId && !row) notFound();
   const { client, fxRates } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
 
   return (
     <Screen>

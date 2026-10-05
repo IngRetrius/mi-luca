@@ -5,13 +5,13 @@ import { redirect } from 'next/navigation';
 
 import type { Json } from '@miluca/db';
 import { ENGINE_VERSION, qualityChecks } from '@miluca/engine';
-import { COUNTRY_LOCALES } from '@miluca/i18n';
 
 import { getClientDetail } from '@/features/clients';
 import { figureValues, loadDocuments, readySections } from '@/features/documents';
 import { loadComputedCase } from '@/features/summary';
 import { createClient } from '@/lib/supabase/server';
 import { requireCaseEditor } from '@/server/case-access';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { parseDelivery, type DeliveryErrors, type DeliveryValues } from './validation';
 
@@ -56,19 +56,30 @@ export async function deliverPlan(
     return { values: parsed.values, errors: {}, formError: 'blocked' };
   }
 
-  const supabase = await createClient();
+  const [supabase, t, locale] = await Promise.all([
+    createClient(),
+    getMessages(),
+    getLocale(client.countryCode),
+  ]);
   const json = (value: unknown) => value as NonNullable<Json>;
   // Nombres de los bolsillos generales en el orden de `result.pockets.general`.
   const pocketName = new Map(computed.rows.pockets.map((pocket) => [pocket.id, pocket.name]));
   const values = figureValues(computed.figures, {
-    locale: COUNTRY_LOCALES[client.countryCode]?.locale ?? 'es',
+    locale,
     currency: client.baseCurrency,
+    months: t.keyFigureMonths,
   });
   const ready = (kind: 'carta' | 'notas') => {
     const document = documents[kind];
     // Las notas en borrador no son para el cliente: no van.
     if (!document || (kind === 'notas' && document.status !== 'publicado')) return [];
-    return readySections(kind, document.content, client.formOfAddress, values);
+    return readySections(
+      kind,
+      document.content,
+      client.formOfAddress,
+      values,
+      t.documents.sections,
+    );
   };
   const { data, error } = await supabase
     .from('plan_deliveries')

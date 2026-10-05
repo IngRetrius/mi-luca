@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { InsuranceScreen } from '@/features/insurance';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Seguros | MiLuca' };
+export const generateMetadata = pageMetadata('insurances');
 
 /** Seguros del cliente y suma asegurada orientativa de vida. */
 export default async function AdvisorInsurancePage({

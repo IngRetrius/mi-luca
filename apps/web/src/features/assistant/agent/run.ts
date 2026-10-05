@@ -1,6 +1,7 @@
 import 'server-only';
 
 import Anthropic from '@anthropic-ai/sdk';
+import type { Language } from '@miluca/i18n';
 
 import type { AgentAction } from './entities';
 import { AGENT_SYSTEM_PROMPT } from './prompt';
@@ -12,6 +13,9 @@ import { AGENT_TOOLS } from './tools';
  * difícil, pero sí de varios pasos con herramientas.
  */
 export const AGENT_MODEL = 'claude-opus-5-5';
+
+/** Nombre del idioma de respuesta en la etiqueta del mensaje, como lo lee el modelo. */
+const LANGUAGE_NAMES: Readonly<Record<Language, string>> = { es: 'español', en: 'inglés' };
 
 /** Ida y vuelta con herramientas por mensaje del asesor; acota el costo si algo se enreda. */
 const MAX_STEPS = 8;
@@ -58,6 +62,8 @@ export async function runAgentTurn(input: {
   readonly history: readonly AgentMessage[];
   readonly notes: string;
   readonly snapshot: string;
+  /** Idioma de la pantalla del asesor, en que responde el agente (ADR 0022). */
+  readonly language: Language;
   readonly execute: (name: string, input: unknown) => Promise<ToolExecution>;
 }): Promise<AgentTurn> {
   if (!process.env.ANTHROPIC_API_KEY) return { status: 'notConfigured' };
@@ -70,7 +76,7 @@ export async function runAgentTurn(input: {
       content: [
         {
           type: 'text',
-          text: `<estado_del_caso>\n${input.snapshot}\n</estado_del_caso>\n\n<notas_del_asesor>\n${input.notes}\n</notas_del_asesor>`,
+          text: `<estado_del_caso>\n${input.snapshot}\n</estado_del_caso>\n\n<notas_del_asesor>\n${input.notes}\n</notas_del_asesor>\n\n<idioma_de_respuesta>${LANGUAGE_NAMES[input.language]}</idioma_de_respuesta>`,
         },
       ],
     },

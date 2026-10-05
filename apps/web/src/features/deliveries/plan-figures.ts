@@ -1,5 +1,5 @@
 import type { KeyFigureId } from '@miluca/engine';
-import { messages } from '@miluca/i18n';
+import type { Messages } from '@miluca/i18n';
 
 import { formatKeyFigure } from '@/features/summary';
 
@@ -22,6 +22,7 @@ export function formatFigure(
   value: number | null | undefined,
   locale: string,
   currency: string,
+  months: Messages['keyFigureMonths'],
 ): string {
-  return formatKeyFigure(id, value, { locale, currency, months: messages.es.keyFigureMonths });
+  return formatKeyFigure(id, value, { locale, currency, months });
 }

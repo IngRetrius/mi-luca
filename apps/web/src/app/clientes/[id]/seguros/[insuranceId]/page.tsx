@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { InsuranceFormScreen } from '@/features/insurance';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Seguro | MiLuca' };
+export const generateMetadata = pageMetadata('insurance');
 
 /** Editar un seguro. */
 export default async function AdvisorInsuranceItemPage({

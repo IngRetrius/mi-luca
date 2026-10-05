@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { ActionItemFormScreen } from '@/features/action-plan';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Tarea | MiLuca' };
+export const generateMetadata = pageMetadata('task');
 
 /** P-C09: estado y nota de una tarea. */
 export default async function MyTaskPage({ params }: PageProps<'/tareas/[itemId]'>) {

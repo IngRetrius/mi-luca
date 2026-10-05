@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { CostOfLivingScreen } from '@/features/cost-of-living';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Costo de vida | MiLuca' };
+export const generateMetadata = pageMetadata('costOfLiving');
 
 /** P-A11 Costo de vida del cliente. */
 export default async function AdvisorCostOfLivingPage({

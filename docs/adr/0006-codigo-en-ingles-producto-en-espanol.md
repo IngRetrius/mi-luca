@@ -1,6 +1,6 @@
 # 0006. Código en inglés, producto y documentación en español
 
-- Estado: Aceptada el 02/10/2026 (el asesor delegó la decisión; implementada y en uso)
+- Estado: Aceptada el 02/10/2026 (el asesor delegó la decisión; implementada y en uso). Ampliada por ADR 0022: la interfaz también está en inglés.
 - Fecha: 2026-09-28
 
 ## Contexto

@@ -18,10 +18,14 @@ export function qcMessage(
     return typeof value === 'number' ? value : 0;
   };
   const currencies = item.detail.currencies;
+  // Con un plan sin ahorro esperado, el porcentaje de la plantilla no dice nada ("969 %"): la
+  // diferencia de la prueba de realidad va en dinero al mes (G10).
   const difference =
-    item.code === 'reality_check_confirms'
-      ? percent(number('difference'))
-      : money(Math.abs(number('difference')));
+    item.code !== 'reality_check_confirms'
+      ? money(Math.abs(number('difference')))
+      : typeof item.detail.expectedMonthly === 'number' && item.detail.expectedMonthly <= 0
+        ? money(number('gapMonthly'))
+        : percent(number('difference'));
   return template
     .replace('{difference}', difference)
     .replace('{budget}', money(number('budgetMonthly')))

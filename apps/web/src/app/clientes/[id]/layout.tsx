@@ -1,7 +1,6 @@
-import { messages } from '@miluca/i18n';
-
 import { AgentChat } from '@/features/assistant/client';
 import { isUuid } from '@/server/case-access';
+import { getBaseMessages } from '@/server/i18n';
 import { getViewer } from '@/server/viewer';
 
 /**
@@ -18,12 +17,13 @@ export default async function ClientCaseLayout({
   children,
   params,
 }: LayoutProps<'/clientes/[id]'>) {
+  const t = await getBaseMessages();
   const [{ id }, viewer] = await Promise.all([params, getViewer()]);
   return (
     <>
       {children}
       {viewer?.role === 'advisor' && isUuid(id) ? (
-        <AgentChat clientId={id} text={messages.es.assistant.agent} />
+        <AgentChat clientId={id} text={t.assistant.agent} />
       ) : null}
     </>
   );

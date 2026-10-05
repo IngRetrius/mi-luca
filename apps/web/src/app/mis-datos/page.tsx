@@ -1,25 +1,30 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { COUNTRY_LOCALES, formatMoney, messages } from '@miluca/i18n';
+import { formatMoney } from '@miluca/i18n';
 
-import { Screen } from '@/components/screen';
 import { ModuleLink } from '@/components/back-link';
-import { focusRing, linkButton, secondaryButton } from '@/components/ui-classes';
+import { Screen, WideScreen } from '@/components/screen';
+import {
+  focusRing,
+  gridList,
+  gridListItem,
+  linkButton,
+  secondaryButton,
+} from '@/components/ui-classes';
 import { investmentSummary } from '@/features/investment';
 import { loadComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
+import { getLocale, getMessages, pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-const t = messages.es;
-
-export const metadata: Metadata = { title: 'Mis datos | MiLuca' };
+export const generateMetadata = pageMetadata('myData');
 
 /**
  * P-C06 Mis datos: los módulos que el cliente puede editar, con su total. Después de la asesoría
  * el cliente mantiene sus datos y el plan se recalcula; los demás módulos se suman cuando existan.
  */
 export default async function MyDataPage() {
+  const t = await getMessages();
   const viewer = await requireClient('/mis-datos');
   const text = withAddress(t.myData, viewer.formOfAddress);
   const computed = await loadComputedCase(viewer.clientId);
@@ -39,7 +44,7 @@ export default async function MyDataPage() {
   }
 
   const { client, budgetItems } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const monthly = computed.result.budget.expensesWithoutSavings.monthly;
   const money = (amount: number) => formatMoney(amount, client.base_currency, locale);
   const { incomes: incomeRows, fxRates } = computed.rows;
@@ -79,7 +84,7 @@ export default async function MyDataPage() {
     {
       href: '/mis-datos/inversion',
       title: text.investment,
-      summary: investmentSummary(text, computed),
+      summary: investmentSummary(text, computed, t.investment.levels),
     },
     {
       href: '/mis-datos/metas',
@@ -121,7 +126,7 @@ export default async function MyDataPage() {
   ];
 
   return (
-    <Screen>
+    <WideScreen>
       <Link
         href="/"
         className={`-ml-2 inline-flex min-h-12 items-center self-start rounded-xl px-2 text-link hover:underline ${focusRing}`}
@@ -132,13 +137,13 @@ export default async function MyDataPage() {
         <h1 className="text-2xl font-semibold text-balance">{text.title}</h1>
         <p className="text-text-muted">{text.intro}</p>
       </div>
-      <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
+      <ul className={`${gridList} md:grid-cols-2 lg:grid-cols-3`}>
         {modules.map((module) => (
-          <li key={module.href}>
+          <li key={module.href} className={gridListItem}>
             <ModuleLink {...module} />
           </li>
         ))}
       </ul>
-    </Screen>
+    </WideScreen>
   );
 }

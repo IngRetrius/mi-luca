@@ -127,11 +127,11 @@ function Receipt({
  */
 export function AgentChat({ clientId, text }: { clientId: string; text: AgentChatText }) {
   const router = useRouter();
-  // En el celular el botón va justo encima de la barra de acciones fija de la pantalla
-  // (ScreenActions), para no tapar la acción principal. Su alto cambia con cada pantalla y con su
-  // contenido; se pasa por una variable de CSS, sin volver a pintar el componente. La barra llega
-  // con la pantalla, que puede cargar después que el layout (streaming): se busca cada vez que
-  // cambia el contenido de la página.
+  // El botón va justo encima de la barra de acciones fija de la pantalla (ScreenActions), para no
+  // tapar la acción principal: en el celular la barra ocupa todo el ancho y desde la tableta sus
+  // botones van a la derecha. Su alto cambia con cada pantalla y con su contenido; se pasa por una
+  // variable de CSS, sin volver a pintar el componente. La barra llega con la pantalla, que puede
+  // cargar después que el layout (streaming): se busca cada vez que cambia el contenido de la página.
   const liftRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const holder = liftRef.current;
@@ -313,7 +313,7 @@ export function AgentChat({ clientId, text }: { clientId: string; text: AgentCha
             aria-expanded={false}
             aria-controls={panelId}
             onClick={() => setOpen(true)}
-            className={`fixed right-4 bottom-[var(--agent-lift,max(1rem,env(safe-area-inset-bottom)))] z-40 inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-5 font-medium text-on-primary shadow-md transition-colors hover:bg-primary/90 active:bg-primary/80 md:right-6 md:bottom-6 ${focusRing}`}
+            className={`fixed right-4 bottom-[var(--agent-lift,max(1rem,env(safe-area-inset-bottom)))] z-40 inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-5 font-medium text-on-primary shadow-md transition-colors hover:bg-primary/90 active:bg-primary/80 md:right-6 ${focusRing}`}
           >
             {chatIcon}
             {text.open}

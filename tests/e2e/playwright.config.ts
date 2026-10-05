@@ -14,10 +14,21 @@ export default defineConfig({
     locale: 'es-CO',
     trace: 'retain-on-failure',
   },
-  // Mobile-first: se prueba solo en tamaños de celular.
+  // Primero el celular: todas las pruebas corren en iPhone y Android. El diseño adaptable (ADR 0023)
+  // se prueba además en tableta y escritorio.
   projects: [
     { name: 'iphone', use: { ...devices['iPhone 13'] } },
     { name: 'android', use: { ...devices['Pixel 7'] } },
+    {
+      name: 'tablet',
+      use: { ...devices['iPad (gen 7)'] },
+      testMatch: /(adaptable|idioma)\.spec\.ts/,
+    },
+    {
+      name: 'desktop',
+      use: { ...devices['Desktop Chrome'] },
+      testMatch: /(adaptable|idioma)\.spec\.ts/,
+    },
   ],
   webServer: {
     // Se llama a Next.js con Node directamente: si se arranca con pnpm, la señal de cierre no llega

@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { EmergencyFundScreen } from '@/features/emergency-fund';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Fondo de emergencia | MiLuca' };
+export const generateMetadata = pageMetadata('emergencyFund');
 
 /** P-A10 Análisis, pestaña Fondo. */
 export default async function AdvisorEmergencyFundPage({

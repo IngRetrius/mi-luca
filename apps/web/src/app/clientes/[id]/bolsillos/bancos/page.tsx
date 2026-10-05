@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { BanksScreen } from '@/features/pockets';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Bancos | MiLuca' };
+export const generateMetadata = pageMetadata('banks');
 
 /** Bancos del cliente y sus bolsillos. */
 export default async function AdvisorBanksPage({

@@ -30,3 +30,14 @@ export const choiceCard = `flex min-h-12 cursor-pointer items-center gap-3 round
 
 /** Radio dentro de `choiceCard`, con el color primario de los tokens. */
 export const choiceInput = 'size-5 shrink-0 accent-primary';
+
+/**
+ * Lista de enlaces o filas pares: en el celular, un recuadro con divisores; desde la tableta,
+ * tarjetas en rejilla (se elige el número de columnas con `md:grid-cols-*`). Cada `<li>` lleva
+ * `gridListItem`.
+ */
+export const gridList =
+  'flex flex-col divide-y divide-border rounded-xl border border-border md:grid md:gap-3 md:divide-y-0 md:rounded-none md:border-0';
+
+/** Elemento de `gridList`: tarjeta con borde propio desde la tableta. */
+export const gridListItem = 'md:rounded-xl md:border md:border-border';

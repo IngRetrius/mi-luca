@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { InvestmentSettingsScreen } from '@/features/investment';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Supuestos de inversión | MiLuca' };
+export const generateMetadata = pageMetadata('investmentSettings');
 
 /** Edad de retiro y supuestos de la proyección: criterio del asesor. */
 export default async function AdvisorInvestmentSettingsPage({

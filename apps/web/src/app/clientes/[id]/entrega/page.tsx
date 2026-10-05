@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { DeliveryScreen } from '@/features/deliveries';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Entregar el plan | MiLuca' };
+export const generateMetadata = pageMetadata('delivery');
 
 /** P-A12 Control de calidad y P-A14 Entregar el plan. */
 export default async function AdvisorDeliveryPage({ params }: PageProps<'/clientes/[id]/entrega'>) {

@@ -207,6 +207,8 @@ export async function saveSpecialPocket(
     .select('id');
   let error = updated.error;
   if (!error && (updated.data?.length ?? 0) === 0) {
+    // Nombre guardado, en español como los demás valores de catálogo (ADR 0022): las pantallas
+    // muestran el bolsillo especial por su tipo, en el idioma de cada quien.
     const name =
       kind === 'emergencia' ? messages.es.pockets.emergency : messages.es.pockets.noIncome;
     ({ error } = await supabase.from('pockets').insert({

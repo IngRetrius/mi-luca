@@ -13,7 +13,7 @@ import {
   moneyHorizonSchema,
   payerSchema,
 } from '@miluca/domain';
-import { messages } from '@miluca/i18n';
+import { BUDGET_CATEGORIES } from '@miluca/i18n';
 
 import { DEBT_TYPES } from '@/features/debts';
 import { INSURANCE_TYPES } from '@/features/insurance';
@@ -106,7 +106,10 @@ export const AGENT_TOOLS: readonly Tool[] = [
     {
       id: ID,
       concept: text('Concepto: Arriendo, Mercado, Gasolina, Colegio…'),
-      category: oneOf(messages.es.budget.categories, 'Categoría del presupuesto.'),
+      category: oneOf(
+        BUDGET_CATEGORIES,
+        'Categoría del presupuesto, con su valor de la lista aunque el asesor escriba en otro idioma.',
+      ),
       amount: number('Valor de cada pago, sin separadores de miles. No lo conviertas a mensual.'),
       currency: CURRENCY,
       frequency: oneOf(
@@ -230,10 +233,14 @@ export const AGENT_TOOLS: readonly Tool[] = [
   tool('save_receivable', 'Anota o corrige dinero que le deben al cliente y le pagan por cuotas.', {
     id: ID,
     debtor: text('Quién debe, sin nombre completo: un hermano, un amigo, un socio.'),
-    balance: number('Saldo que le deben.'),
+    balance: number(
+      'Lo que le debían al empezar a pagar, antes del primer pago, tal como se dijo. No restes lo ya pagado: la app descuenta sola las cuotas desde la fecha del primer pago. Si solo se sabe lo que falta hoy, manda eso sin fecha del primer pago.',
+    ),
     monthly_payment: number('Cuota mensual que le pagan.'),
     currency: CURRENCY,
-    first_payment_date: date('Fecha del primer pago, AAAA-MM-DD.'),
+    first_payment_date: date(
+      'Fecha del primer pago, AAAA-MM-DD. Desde ella la app cuenta las cuotas ya pagadas.',
+    ),
     note: NOTE,
   }),
   tool(

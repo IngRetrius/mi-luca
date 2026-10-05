@@ -4,7 +4,7 @@ import {
   monthlyControl,
   type MonthlyControlResult,
 } from '@miluca/engine';
-import { formatPercent, messages } from '@miluca/i18n';
+import { AUTOMATIC_CATEGORIES, formatPercent, type Messages } from '@miluca/i18n';
 
 import type { ComputedCase } from '@/features/summary';
 
@@ -12,9 +12,7 @@ import { controlCategories } from './control-view';
 import type { MonthRowDeviation } from './month-form';
 import type { MonthlyControlEntryRow } from './queries';
 
-const text = messages.es.monthlyControl;
-
-/** El control del año con las categorías del presupuesto del cliente (motor). */
+/** El control del año con las categorías del presupuesto del cliente (motor), con su valor canónico. */
 export function yearControl(
   computed: ComputedCase,
   entries: readonly MonthlyControlEntryRow[],
@@ -33,7 +31,8 @@ export function yearControl(
       return row ? [{ category: item.category, monthlyAverage: row.monthlyAverage }] : [];
     }),
     recorded: [...new Set(entries.map((entry) => entry.category))],
-    labels: text.automaticCategories,
+    // Valores canónicos: son la llave de lo guardado; cada pantalla los muestra en su idioma.
+    labels: AUTOMATIC_CATEGORIES,
   });
   return monthlyControl(
     categories,
@@ -52,6 +51,7 @@ export function deviationText(
   real: number | null,
   budget: number,
   locale: string,
+  text: Messages['monthlyControl'],
 ): MonthRowDeviation | null {
   if (real === null) return null;
   const value = deviation(real, budget);

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import type { MonthlyControlFigures, MonthlyControlResult } from '@miluca/engine';
-import { COUNTRY_LOCALES, formatMoney, messages } from '@miluca/i18n';
+import { categoryLabel, formatMoney } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { Screen } from '@/components/screen';
@@ -12,6 +12,7 @@ import { withAddress } from '@/lib/address';
 import { amountToText } from '@/lib/amount';
 import { monthNames, todayIn } from '@/lib/dates';
 import type { CaseEditor } from '@/server/case-access';
+import { getLanguage, getLocale, getMessages } from '@/server/i18n';
 
 import { saveMonth } from './actions';
 import { monthParam, parseMonthParam, shiftMonth, type CalendarMonth } from './control-view';
@@ -19,9 +20,6 @@ import { MonthForm, type MonthRow } from './month-form';
 import { monthlyControlPaths } from './paths';
 import { loadControlEntries } from './queries';
 import { deviationText, yearControl } from './year-control';
-
-const t = messages.es;
-const text = t.monthlyControl;
 
 const chevron = (direction: 'left' | 'right') => (
   <svg
@@ -50,6 +48,8 @@ export async function MonthlyControlScreen({
   clientId: string;
   searchParams: Record<string, string | string[] | undefined>;
 }) {
+  const [t, language] = await Promise.all([getMessages(), getLanguage()]);
+  const text = t.monthlyControl;
   const paths = monthlyControlPaths(viewer.role, clientId);
   const local =
     viewer.role === 'advisor'
@@ -82,7 +82,7 @@ export async function MonthlyControlScreen({
   }
 
   const { client, fxRates } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const money = (amount: number) => formatMoney(amount, client.base_currency, locale);
   const selected = parseMonthParam(searchParams.mes, todayIn(client.country_code));
   const yearEntries = entries.filter((entry) => entry.year === selected.year);
@@ -103,12 +103,13 @@ export async function MonthlyControlScreen({
     const saved = savedThisMonth.get(row.category);
     return {
       category: row.category,
+      label: categoryLabel(row.category, language),
       budget: text.form.budget.replace('{amount}', money(row.monthlyBudget)),
       initial: {
         amount: saved ? amountToText(saved.amount, locale) : '',
         currency: saved?.currency ?? client.base_currency,
       },
-      deviation: deviationText(row.months[index] ?? null, row.monthlyBudget, locale),
+      deviation: deviationText(row.months[index] ?? null, row.monthlyBudget, locale, text),
     };
   });
   const monthTotal = control.total.months[index] ?? null;
@@ -145,7 +146,10 @@ export async function MonthlyControlScreen({
           key={monthParam(selected)}
           text={{
             currency: text.form.currency,
-            emptyHint: text.form.emptyHint,
+            emptyHint:
+              viewer.role === 'advisor'
+                ? text.form.emptyHint
+                : text.client.emptyHint[viewer.formOfAddress],
             submit: text.form.submit,
             submitting: text.form.submitting,
             saved: text.form.saved,
@@ -163,7 +167,7 @@ export async function MonthlyControlScreen({
 }
 
 /** El promedio del año por categoría (`Control mensual!P:S`), solo de las que tienen registros. */
-function YearSummary({
+async function YearSummary({
   control,
   year,
   money,
@@ -174,9 +178,11 @@ function YearSummary({
   money: (amount: number) => string;
   locale: string;
 }) {
+  const [t, language] = await Promise.all([getMessages(), getLanguage()]);
+  const text = t.monthlyControl;
   const recorded = control.rows.filter((row) => row.monthsRecorded > 0);
   const line = (figures: MonthlyControlFigures, months: number) => {
-    const status = deviationText(figures.averageReal, figures.monthlyBudget, locale);
+    const status = deviationText(figures.averageReal, figures.monthlyBudget, locale, text);
     return (
       <>
         <span className="text-sm text-text-muted tabular-nums">
@@ -217,7 +223,9 @@ function YearSummary({
           <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
             {recorded.map((row) => (
               <li key={row.category} className="flex flex-col gap-1 p-4">
-                <span className="font-medium wrap-anywhere">{row.category}</span>
+                <span className="font-medium wrap-anywhere">
+                  {categoryLabel(row.category, language)}
+                </span>
                 {line(row, row.monthsRecorded)}
               </li>
             ))}

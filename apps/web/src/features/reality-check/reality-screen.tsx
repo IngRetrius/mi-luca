@@ -1,5 +1,5 @@
 import type { RealityCheckStatus } from '@miluca/engine';
-import { COUNTRY_LOCALES, formatMoney, formatPercent, messages } from '@miluca/i18n';
+import { formatMoney, formatPercent } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { FigureList } from '@/components/figure-list';
@@ -9,13 +9,11 @@ import { loadComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
 import { amountToText } from '@/lib/amount';
 import type { CaseEditor } from '@/server/case-access';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { saveRealityCheck } from './actions';
 import { realityCheckPath } from './paths';
 import { RealityForm } from './reality-form';
-
-const t = messages.es;
-const text = t.realityCheck;
 
 /** Semáforo del estado, como `Resumen!D35`. */
 const STATUS: Readonly<Record<RealityCheckStatus, Status>> = {
@@ -32,6 +30,8 @@ export async function RealityCheckScreen({
   viewer: CaseEditor;
   clientId: string;
 }) {
+  const t = await getMessages();
+  const text = t.realityCheck;
   const path = realityCheckPath(viewer.role, clientId);
   const back = viewer.role === 'advisor' ? `/clientes/${clientId}` : '/mis-datos';
   const forClient =
@@ -62,10 +62,23 @@ export async function RealityCheckScreen({
     );
   }
   const { client, fxRates, realityCheck: row } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const money = (amount: number) => formatMoney(amount, client.base_currency, locale);
   const result = computed.result.realityCheck;
   const status = STATUS[result.status];
+  // Con un plan sin ahorro esperado, el porcentaje de la plantilla (`Supuestos!C40`) no dice nada
+  // ("969 %"): la diferencia va en dinero al mes (G10). El estado no cambia.
+  const inMoney = result.expectedMonthly <= 0;
+  const difference =
+    result.actualMonthly === null
+      ? '—'
+      : inMoney
+        ? money(result.actualMonthly - result.expectedMonthly)
+        : formatPercent(result.difference ?? 0, locale);
+  const statusHint =
+    result.status === 'pendiente' && result.actualMonthly !== null
+      ? text.noExpected
+      : local.statusHints[result.status];
 
   return (
     <Screen>
@@ -80,7 +93,7 @@ export async function RealityCheckScreen({
           </h2>
           <StatusLabel status={status} label={text.status[result.status]} />
         </div>
-        <p className="text-sm">{local.statusHints[result.status]}</p>
+        <p className="text-sm">{statusHint}</p>
         <FigureList
           figures={[
             {
@@ -88,10 +101,7 @@ export async function RealityCheckScreen({
               value: result.actualMonthly === null ? '—' : money(result.actualMonthly),
             },
             { label: text.expected, value: money(result.expectedMonthly) },
-            {
-              label: text.difference,
-              value: result.difference === null ? '—' : formatPercent(result.difference, locale),
-            },
+            { label: text.difference, value: difference },
             {
               label: text.pctToInvestment,
               value: formatPercent(result.pctToInvestment, locale, 0),
@@ -99,7 +109,7 @@ export async function RealityCheckScreen({
           ]}
         />
         <p className="text-sm text-text-muted">
-          {text.expectedHint} {text.rule}
+          {text.expectedHint} {inMoney ? text.differenceInMoney : text.rule}
         </p>
       </section>
 

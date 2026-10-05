@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { ReceivableFormScreen } from '@/features/receivables';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Nuevo cobro | MiLuca' };
+export const generateMetadata = pageMetadata('newReceivable');
 
 /** Registrar un cobro. */
 export default async function MyNewReceivablePage() {

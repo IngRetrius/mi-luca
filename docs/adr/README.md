@@ -25,5 +25,7 @@ Cada decisión que cambia la arquitectura, el modelo de datos o un resultado del
 | [0019](0019-carta-y-notas-con-cifras-enlazadas.md) | Carta de cierre y notas con cifras enlazadas que se congelan al entregar | Aceptada |
 | [0020](0020-pdf-del-plan-al-pedirlo.md) | El PDF del plan entregado se genera al pedirlo, sin guardarlo en Storage | Aceptada |
 | [0021](0021-seguimiento-y-ficha-de-continuidad.md) | Seguimiento con las revisiones del plan de acción y ficha de continuidad armada con los datos | Aceptada |
+| [0022](0022-interfaz-en-espanol-e-ingles.md) | Interfaz en español e inglés, elegida por cada persona (cookie o idioma del navegador); cifras con el formato del país | Aceptada |
+| [0023](0023-diseno-adaptable-del-celular-al-escritorio.md) | Diseño adaptable: igual en el celular, columna de lectura en la tableta y rejillas en el escritorio | Aceptada |
 
 Plantilla: [plantilla.md](plantilla.md).

@@ -50,7 +50,7 @@ miluca/
 | Una pantalla o formulario de un módulo | `apps/web/src/features/<modulo>/` | `app/` (allí solo se arma la ruta) |
 | Una ruta nueva | `apps/web/src/app/` | |
 | Un botón, campo o tabla genérica | `packages/ui/` | `features/` |
-| Un texto visible | `packages/i18n/messages/es.json` | Escrito a mano en el componente |
+| Un texto visible | `packages/i18n/messages/es.json` y `en.json`, con las mismas claves (ADR 0022) | Escrito a mano en el componente |
 | Una consulta o escritura a la base | `apps/web/src/features/<modulo>/server/` | Componentes de cliente |
 | Una regla de permiso | Política RLS o disparador en `supabase/migrations/` | Solo en la interfaz |
 | Un parámetro de país | `supabase/seed/` (con fuente y fecha) | Constante en el código |
@@ -128,7 +128,7 @@ Estas reglas se hacen cumplir con reglas de lint de importación en `packages/co
 2. Funciones puras y pruebas en `packages/engine/src/<modulo>/`; celdas que reproduce en el mapa de las pruebas de oro.
 3. Migración con tabla, RLS, guarda de columnas si aplica, disparador de auditoría e índice por `client_id`; prueba pgTAP.
 4. Carpeta en `apps/web/src/features/<modulo>/` con consultas, acciones y componentes.
-5. Textos en `packages/i18n/messages/es.json`.
+5. Textos en `packages/i18n/messages/es.json` y `en.json` (mismas claves; la verificación de tipos falla si falta uno).
 6. Fila en la matriz de permisos (`03-modelo-de-datos.md`) y en el glosario.
 7. Si cambia un resultado de la plantilla, ADR.
 

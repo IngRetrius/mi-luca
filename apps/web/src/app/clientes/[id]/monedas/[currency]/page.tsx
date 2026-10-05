@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { FxRateScreen } from '@/features/currencies';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Tasa de cambio | MiLuca' };
+export const generateMetadata = pageMetadata('fxRate');
 
 /** P-A19: cambiar o borrar la tasa de una moneda. */
 export default async function AdvisorCurrencyPage({

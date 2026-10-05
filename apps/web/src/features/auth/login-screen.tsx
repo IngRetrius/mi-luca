@@ -1,14 +1,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { messages } from '@miluca/i18n';
-
 import { focusRing } from '@/components/ui-classes';
+import { LanguageSwitcher } from '@/features/language';
+import { getMessages } from '@/server/i18n';
 
 import { GoogleButton } from './google-button';
 import { PasswordForm } from './password-form';
-
-const t = messages.es;
 
 export type LoginError = 'google' | 'unavailable';
 
@@ -17,7 +15,14 @@ export function parseLoginError(value: unknown): LoginError | undefined {
 }
 
 /** P-G01 Entrar: Google o correo y contraseña. El acceso es solo por invitación. */
-export function LoginScreen({ next, error }: { next: string; error?: LoginError | undefined }) {
+export async function LoginScreen({
+  next,
+  error,
+}: {
+  next: string;
+  error?: LoginError | undefined;
+}) {
+  const t = await getMessages();
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 px-4 py-10">
       <header className="flex flex-col items-center gap-3 text-center">
@@ -46,6 +51,7 @@ export function LoginScreen({ next, error }: { next: string; error?: LoginError 
         {t.auth.forgotPassword}
       </Link>
       <p className="text-center text-sm text-text-muted">{t.auth.invitationOnly}</p>
+      <LanguageSwitcher className="justify-center" />
     </main>
   );
 }

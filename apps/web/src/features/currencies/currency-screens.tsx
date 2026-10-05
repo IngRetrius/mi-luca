@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { COUNTRY_LOCALES, formatDate, messages } from '@miluca/i18n';
+import { formatDate, type Messages } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { Screen, ScreenActions } from '@/components/screen';
@@ -11,15 +11,14 @@ import { withAddress } from '@/lib/address';
 import { amountToText } from '@/lib/amount';
 import { todayIn } from '@/lib/dates';
 import type { CaseEditor } from '@/server/case-access';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { deleteFxRate, saveFxRate, type FxRateFormError } from './actions';
 import { FxRateForm, type FxRateFormText } from './fx-rate-form';
 import { currencyPaths } from './paths';
 
-const t = messages.es;
-const text = t.currencies;
-
-function screenText(viewer: CaseEditor) {
+function screenText(t: Messages, viewer: CaseEditor) {
+  const text = t.currencies;
   if (viewer.role === 'advisor') {
     return { intro: text.intro, back: { href: '', label: text.back }, form: text.form };
   }
@@ -39,10 +38,13 @@ export async function CurrenciesScreen({
   viewer: CaseEditor;
   clientId: string;
 }) {
+  const t = await getMessages();
+  const text = t.currencies;
   const paths = currencyPaths(viewer.role, clientId);
-  const local = screenText(viewer);
+  const local = screenText(t, viewer);
   const back = viewer.role === 'advisor' ? `/clientes/${clientId}` : local.back.href;
   const computed = await loadComputedCase(clientId);
+  const locale = computed ? await getLocale(computed.rows.client.country_code) : '';
 
   return (
     <Screen>
@@ -61,7 +63,6 @@ export async function CurrenciesScreen({
           ) : (
             <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
               {computed.rows.fxRates.map((rate) => {
-                const locale = COUNTRY_LOCALES[computed.rows.client.country_code]?.locale ?? 'es';
                 return (
                   <li key={rate.currency}>
                     <Link
@@ -118,8 +119,10 @@ export async function FxRateScreen({
   currency: string | null;
   errorParam: string | undefined;
 }) {
+  const t = await getMessages();
+  const text = t.currencies;
   const paths = currencyPaths(viewer.role, clientId);
-  const local = screenText(viewer);
+  const local = screenText(t, viewer);
   const title = currency ? text.form.editTitle.replace('{currency}', currency) : text.form.newTitle;
   const computed = await loadComputedCase(clientId);
   if (!computed) {
@@ -137,7 +140,7 @@ export async function FxRateScreen({
   const { client, fxRates } = computed.rows;
   const rate = currency ? fxRates.find((row) => row.currency === currency) : null;
   if (currency && !rate) notFound();
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const formText: FxRateFormText = { form: local.form, commonCurrencies: text.common };
   const initialError = FORM_ERRORS.find((error) => error === errorParam) ?? null;
 

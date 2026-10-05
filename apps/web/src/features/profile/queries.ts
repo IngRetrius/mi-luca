@@ -1,10 +1,12 @@
 import 'server-only';
 
 import type { Database } from '@miluca/db';
+import { countryLabel } from '@miluca/i18n';
 
 import { emergencyMonthsByType, METHODOLOGY_KEYS } from '@/features/summary';
 import { todayIn } from '@/lib/dates';
 import { createClient } from '@/lib/supabase/server';
+import { getLanguage } from '@/server/i18n';
 
 type Row<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row'];
 
@@ -30,7 +32,7 @@ export interface ProfileData {
 
 /** Perfil, supuestos del caso y opciones del país para P-A04 bloque A y P-A05. Null si falla. */
 export async function loadProfile(clientId: string): Promise<ProfileData | null> {
-  const supabase = await createClient();
+  const [supabase, language] = await Promise.all([createClient(), getLanguage()]);
   const [client, settings] = await Promise.all([
     supabase
       .from('clients')
@@ -65,7 +67,7 @@ export async function loadProfile(clientId: string): Promise<ProfileData | null>
   const { country: countryRow, ...profile } = client.data;
   return {
     client: profile,
-    countryName: countryRow.name,
+    countryName: countryLabel(country, language, countryRow.name),
     settings: settings.data,
     thresholds: thresholds.data.flatMap((row) =>
       typeof row.value === 'number' ? [{ key: row.key, value: row.value, unit: row.unit }] : [],

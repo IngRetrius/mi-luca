@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { InvestmentFormScreen } from '@/features/investment';
 import { isUuid } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Inversión | MiLuca' };
+export const generateMetadata = pageMetadata('investment');
 
 /** Editar una inversión actual. */
 export default async function MyInvestmentItemPage({

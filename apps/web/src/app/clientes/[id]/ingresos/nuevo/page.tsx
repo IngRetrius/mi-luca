@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { IncomeScreen } from '@/features/incomes';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Nuevo ingreso | MiLuca' };
+export const generateMetadata = pageMetadata('newIncome');
 
 /** Alta de un ingreso. */
 export default async function AdvisorNewIncomePage({

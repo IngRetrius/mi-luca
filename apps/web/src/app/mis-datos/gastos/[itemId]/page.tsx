@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { BudgetItemScreen } from '@/features/budget';
 import { isUuid } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Editar gasto | MiLuca' };
+export const generateMetadata = pageMetadata('editExpense');
 
 /** P-C07: el cliente edita un gasto y ve el impacto antes de guardar. */
 export default async function MyExpensePage({ params }: PageProps<'/mis-datos/gastos/[itemId]'>) {

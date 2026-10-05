@@ -1,6 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-import { toBlocks } from './legal-text';
+// El componente lee el idioma en el servidor; la función que se prueba no.
+vi.mock('server-only', () => ({}));
+
+const { toBlocks } = await import('./legal-text');
 
 describe('toBlocks', () => {
   it('separa párrafos por líneas en blanco y une las líneas de un mismo párrafo', () => {

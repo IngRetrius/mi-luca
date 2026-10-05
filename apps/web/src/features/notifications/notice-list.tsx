@@ -1,24 +1,25 @@
 import Link from 'next/link';
 
 import { KEY_FIGURES, type KeyFigureDelta } from '@miluca/engine';
-import { formatDate, messages } from '@miluca/i18n';
+import { formatDate } from '@miluca/i18n';
 
 import { focusRing, textButton } from '@/components/ui-classes';
 import { formatKeyFigure } from '@/features/summary';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { markNoticeRead } from './actions';
 import type { ChangeNotice, Notice } from './queries';
-
-const t = messages.es;
 
 // Cuántas cifras del antes y después caben en el aviso; el resto se ve en la ficha.
 const MAX_DELTAS = 4;
 
 /**
  * Avisos sin ver, arriba de P-A01. Sin JavaScript también funciona: marcar como visto es un
- * formulario de servidor. Las fechas van en Colombia, donde trabaja el asesor (**Supuesto**).
+ * formulario de servidor. Las fechas van en la hora de Colombia, donde trabaja el asesor
+ * (**Supuesto**), y en el idioma de su pantalla.
  */
-export function NoticeList({ notices }: { notices: readonly Notice[] }) {
+export async function NoticeList({ notices }: { notices: readonly Notice[] }) {
+  const [t, dateLocale] = await Promise.all([getMessages(), getLocale('CO')]);
   if (notices.length === 0) return null;
   return (
     <section aria-labelledby="notices-title" className="flex flex-col gap-2">
@@ -33,7 +34,7 @@ export function NoticeList({ notices }: { notices: readonly Notice[] }) {
               <ChangeDeltas notice={notice} />
             ) : null}
             <p className="text-sm text-text-muted">
-              {formatDate(notice.createdAt, 'es-CO', 'America/Bogota')}
+              {formatDate(notice.createdAt, dateLocale, 'America/Bogota')}
             </p>
             <form action={markNoticeRead.bind(null, notice.id)}>
               <button type="submit" className={`-ml-3 ${textButton}`}>
@@ -47,7 +48,8 @@ export function NoticeList({ notices }: { notices: readonly Notice[] }) {
   );
 }
 
-function NoticeMessage({ notice }: { notice: Notice }) {
+async function NoticeMessage({ notice }: { notice: Notice }) {
+  const t = await getMessages();
   const accepted = notice.kind === 'invitacion_aceptada';
   if (!notice.clientName || !notice.clientId) {
     return <p>{accepted ? t.notifications.acceptedUnknown : t.notifications.changedUnknown}</p>;
@@ -71,7 +73,8 @@ function NoticeMessage({ notice }: { notice: Notice }) {
 }
 
 /** Antes y después de las cifras clave que movió el cambio. */
-function ChangeDeltas({ notice }: { notice: ChangeNotice }) {
+async function ChangeDeltas({ notice }: { notice: ChangeNotice }) {
+  const t = await getMessages();
   const format = (delta: KeyFigureDelta, value: number | null) => {
     if (value === null) return '—';
     if (KEY_FIGURES[delta.id] === 'amount' && !notice.currency) return String(value);

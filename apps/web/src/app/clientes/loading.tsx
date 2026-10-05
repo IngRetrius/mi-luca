@@ -1,15 +1,13 @@
-import { messages } from '@miluca/i18n';
-
-import { Screen } from '@/components/screen';
-
-const t = messages.es;
+import { WideScreen } from '@/components/screen';
+import { getMessages } from '@/server/i18n';
 
 // Tres filas con la forma de la lista mientras llegan los datos (sin parpadeo si se reduce el movimiento).
 const rows = [0, 1, 2];
 
-export default function ClientsLoading() {
+export default async function ClientsLoading() {
+  const t = await getMessages();
   return (
-    <Screen>
+    <WideScreen>
       <h1 className="text-2xl font-semibold">{t.clients.title}</h1>
       <div
         aria-busy="true"
@@ -22,6 +20,6 @@ export default function ClientsLoading() {
           <div key={row} className="h-16 bg-surface motion-safe:animate-pulse" />
         ))}
       </div>
-    </Screen>
+    </WideScreen>
   );
 }

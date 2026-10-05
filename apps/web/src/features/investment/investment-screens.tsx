@@ -9,7 +9,7 @@ import {
   moneyHorizonSchema,
 } from '@miluca/domain';
 import type { RiskCapacityInput } from '@miluca/engine';
-import { COUNTRY_LOCALES, formatMoney, formatPercent, messages } from '@miluca/i18n';
+import { formatMoney, formatPercent, type Messages } from '@miluca/i18n';
 
 import { BackLink, LoadError, ModuleLink } from '@/components/back-link';
 import { FigureList } from '@/components/figure-list';
@@ -19,6 +19,7 @@ import { loadComputedCase, type ComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
 import { amountToText, percentToText } from '@/lib/amount';
 import type { CaseEditor } from '@/server/case-access';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import {
   deleteInvestment,
@@ -32,9 +33,6 @@ import { RiskProfileForm, type RiskProfileFormText } from './risk-profile-form';
 import { InvestmentSettingsForm } from './settings-form';
 import type { CapacityChoice } from './validation';
 
-const t = messages.es;
-const text = t.investment;
-
 /**
  * Condiciones de capacidad que se muestran. La brecha pensional de la plantilla no aplica: la
  * pensión no se analiza en la plataforma (ADR 0016) y el motor la deja siempre en "No".
@@ -47,22 +45,23 @@ const CONDITIONS: readonly Exclude<keyof RiskCapacityInput, 'pensionGap'>[] = [
 ];
 
 /** Textos según quién mira: el asesor habla del cliente; el cliente, en su trato. */
-function localText(viewer: CaseEditor) {
+function localText(t: Messages, viewer: CaseEditor) {
+  const text = t.investment;
   if (viewer.role === 'advisor') {
     return { title: text.title, intro: text.intro, back: text.back, empty: text.current.empty };
   }
   return withAddress(text.client, viewer.formOfAddress);
 }
 
-function loadError(retryHref: string) {
+function loadError(t: Messages, retryHref: string) {
   return (
     <LoadError message={t.common.loadError} retryLabel={t.common.retry} retryHref={retryHref} />
   );
 }
 
-function formatters(computed: ComputedCase) {
+async function formatters(computed: ComputedCase) {
   const { client } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   return {
     locale,
     money: (amount: number, currency = client.base_currency) =>
@@ -93,8 +92,10 @@ export async function InvestmentScreen({
   viewer: CaseEditor;
   clientId: string;
 }) {
+  const t = await getMessages();
+  const text = t.investment;
   const paths = investmentPaths(viewer.role, clientId);
-  const local = localText(viewer);
+  const local = localText(t, viewer);
   const computed = await loadComputedCase(clientId);
   const header = (
     <>
@@ -109,11 +110,11 @@ export async function InvestmentScreen({
     return (
       <Screen>
         {header}
-        {loadError(paths.main)}
+        {loadError(t, paths.main)}
       </Screen>
     );
   }
-  const { money, percent } = formatters(computed);
+  const { money, percent } = await formatters(computed);
   const { investment, summary } = computed.result;
   const { profile, allocation, plan, current } = investment;
   const level = (value: keyof typeof text.levels | null) =>
@@ -305,15 +306,17 @@ export async function InvestmentFormScreen({
   clientId: string;
   investmentId: string | null;
 }) {
+  const t = await getMessages();
+  const text = t.investment;
   const paths = investmentPaths(viewer.role, clientId);
-  const local = localText(viewer);
+  const local = localText(t, viewer);
   const title = investmentId ? text.form.editTitle : text.form.newTitle;
   const computed = await loadComputedCase(clientId);
   if (!computed) {
     return (
       <Screen>
         <h1 className="text-2xl font-semibold text-balance">{title}</h1>
-        {loadError(investmentId ? paths.item(investmentId) : paths.add)}
+        {loadError(t, investmentId ? paths.item(investmentId) : paths.add)}
       </Screen>
     );
   }
@@ -322,7 +325,7 @@ export async function InvestmentFormScreen({
     : null;
   if (investmentId && !row) notFound();
   const { client, fxRates } = computed.rows;
-  const { locale } = formatters(computed);
+  const { locale } = await formatters(computed);
   const bucket = investmentBucketSchema.safeParse(row?.bucket);
 
   return (
@@ -365,6 +368,8 @@ export async function RiskProfileScreen({
   viewer: CaseEditor;
   clientId: string;
 }) {
+  const t = await getMessages();
+  const text = t.investment;
   const paths = investmentPaths(viewer.role, clientId);
   const form = text.riskForm;
   const computed = await loadComputedCase(clientId);
@@ -372,11 +377,11 @@ export async function RiskProfileScreen({
     return (
       <Screen>
         <h1 className="text-2xl font-semibold text-balance">{form.title}</h1>
-        {loadError(paths.profile)}
+        {loadError(t, paths.profile)}
       </Screen>
     );
   }
-  const { locale } = formatters(computed);
+  const { locale } = await formatters(computed);
   const risk = computed.rows.riskProfile;
   const client = viewer.role === 'client' ? withAddress(form.client, viewer.formOfAddress) : null;
   const formText: RiskProfileFormText = {
@@ -394,7 +399,7 @@ export async function RiskProfileScreen({
 
   return (
     <Screen>
-      <BackLink href={paths.main} label={localText(viewer).title} />
+      <BackLink href={paths.main} label={localText(t, viewer).title} />
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold text-balance">{form.title}</h1>
         <p className="text-text-muted">{client?.intro ?? form.intro}</p>
@@ -424,6 +429,8 @@ export async function RiskProfileScreen({
 
 /** Supuestos de inversión del caso: solo el asesor (la página lo exige). */
 export async function InvestmentSettingsScreen({ clientId }: { clientId: string }) {
+  const t = await getMessages();
+  const text = t.investment;
   const paths = investmentPaths('advisor', clientId);
   const form = text.settingsForm;
   const computed = await loadComputedCase(clientId);
@@ -440,11 +447,11 @@ export async function InvestmentSettingsScreen({ clientId }: { clientId: string 
     return (
       <Screen>
         {header}
-        {loadError(paths.settings)}
+        {loadError(t, paths.settings)}
       </Screen>
     );
   }
-  const { locale } = formatters(computed);
+  const { locale } = await formatters(computed);
   const pct = (value: number) => formatPercent(value, locale, 1);
   const { methodology, settings, client } = computed.rows;
   const methodologyAge =

@@ -1,6 +1,9 @@
 import 'server-only';
 
+import { countryLabel } from '@miluca/i18n';
+
 import { createClient } from '@/lib/supabase/server';
+import { getLanguage } from '@/server/i18n';
 
 import { escapeLike, parseClientStatus, type ClientStatus } from './validation';
 
@@ -30,10 +33,10 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
  * que contienen ese texto en el nombre visible, sin distinguir mayúsculas. Null si falla.
  */
 export async function listClients(search = ''): Promise<readonly ClientSummary[] | null> {
-  const supabase = await createClient();
+  const [supabase, language] = await Promise.all([createClient(), getLanguage()]);
   let query = supabase
     .from('clients')
-    .select('id, display_name, status, country:countries(name)')
+    .select('id, display_name, status, country_code, country:countries(name)')
     .order('display_name');
   if (search) query = query.ilike('display_name', `%${escapeLike(search)}%`);
   const { data, error } = await query;
@@ -41,7 +44,7 @@ export async function listClients(search = ''): Promise<readonly ClientSummary[]
   return data.map((row) => ({
     id: row.id,
     displayName: row.display_name,
-    countryName: row.country.name,
+    countryName: countryLabel(row.country_code, language, row.country.name),
     status: parseClientStatus(row.status),
   }));
 }
@@ -49,7 +52,7 @@ export async function listClients(search = ''): Promise<readonly ClientSummary[]
 /** P-A03: un perfil, o 'not-found' si no existe o el asesor no tiene acceso (RLS). */
 export async function getClientDetail(id: string): Promise<ClientDetail | 'not-found' | null> {
   if (!UUID.test(id)) return 'not-found';
-  const supabase = await createClient();
+  const [supabase, language] = await Promise.all([createClient(), getLanguage()]);
   const { data, error } = await supabase
     .from('clients')
     .select(
@@ -62,7 +65,7 @@ export async function getClientDetail(id: string): Promise<ClientDetail | 'not-f
   return {
     id: data.id,
     displayName: data.display_name,
-    countryName: data.country.name,
+    countryName: countryLabel(data.country_code, language, data.country.name),
     status: parseClientStatus(data.status),
     countryCode: data.country_code,
     baseCurrency: data.base_currency,
@@ -72,12 +75,16 @@ export async function getClientDetail(id: string): Promise<ClientDetail | 'not-f
 
 /** Países habilitados para P-A02. Null si falla. */
 export async function listCountries(): Promise<readonly CountryOption[] | null> {
-  const supabase = await createClient();
+  const [supabase, language] = await Promise.all([createClient(), getLanguage()]);
   const { data, error } = await supabase
     .from('countries')
     .select('code, name, default_currency')
     .eq('enabled', true)
     .order('name');
   if (error) return null;
-  return data.map((row) => ({ code: row.code, name: row.name, currency: row.default_currency }));
+  return data.map((row) => ({
+    code: row.code,
+    name: countryLabel(row.code, language, row.name),
+    currency: row.default_currency,
+  }));
 }

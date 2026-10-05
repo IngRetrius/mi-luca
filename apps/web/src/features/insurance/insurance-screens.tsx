@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { insuranceStatusSchema } from '@miluca/domain';
-import { COUNTRY_LOCALES, formatMoney, messages } from '@miluca/i18n';
+import { formatMoney, type Messages } from '@miluca/i18n';
 
 import { BackLink, LoadError, ModuleLink } from '@/components/back-link';
 import { FigureList } from '@/components/figure-list';
@@ -12,6 +12,7 @@ import { loadComputedCase, type ComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
 import { amountToText } from '@/lib/amount';
 import type { CaseEditor } from '@/server/case-access';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { deleteInsurance, saveInsurance, saveLifeSettings } from './actions';
 import { InsuranceForm } from './insurance-form';
@@ -19,25 +20,24 @@ import { LifeSettingsForm } from './life-settings-form';
 import { insurancePaths } from './paths';
 import { INSURANCE_TYPES, isInsuranceType, type InsuranceType } from './validation';
 
-const t = messages.es;
-const text = t.insurance;
 /** Los del catálogo de la plantilla (`Seguros!B6:B13`); "otro" son los que se agregan. */
 const CATALOG = INSURANCE_TYPES.filter((type) => type !== 'otro');
 
-function localText(viewer: CaseEditor) {
+function localText(t: Messages, viewer: CaseEditor) {
+  const text = t.insurance;
   if (viewer.role === 'advisor') return { title: text.title, intro: text.intro, back: text.back };
   return withAddress(text.client, viewer.formOfAddress);
 }
 
-function loadError(retryHref: string) {
+function loadError(t: Messages, retryHref: string) {
   return (
     <LoadError message={t.common.loadError} retryLabel={t.common.retry} retryHref={retryHref} />
   );
 }
 
-function money(computed: ComputedCase) {
+async function money(computed: ComputedCase) {
   const { client } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   return (amount: number, currency = client.base_currency) => formatMoney(amount, currency, locale);
 }
 
@@ -53,8 +53,10 @@ export async function InsuranceScreen({
   viewer: CaseEditor;
   clientId: string;
 }) {
+  const t = await getMessages();
+  const text = t.insurance;
   const paths = insurancePaths(viewer.role, clientId);
-  const local = localText(viewer);
+  const local = localText(t, viewer);
   const computed = await loadComputedCase(clientId);
   const header = (
     <>
@@ -69,11 +71,11 @@ export async function InsuranceScreen({
     return (
       <Screen>
         {header}
-        {loadError(paths.list)}
+        {loadError(t, paths.list)}
       </Screen>
     );
   }
-  const format = money(computed);
+  const format = await money(computed);
   const { insurances, settings } = computed.rows;
   const { insurance, lifeInsurance } = computed.result;
   const byType = new Map(insurances.map((row) => [row.insurance_type, row]));
@@ -102,7 +104,7 @@ export async function InsuranceScreen({
       </Link>
     </li>
   );
-  const locale = COUNTRY_LOCALES[computed.rows.client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(computed.rows.client.country_code);
 
   return (
     <Screen>
@@ -191,15 +193,17 @@ export async function InsuranceFormScreen({
   insuranceId: string | null;
   type?: string | null;
 }) {
+  const t = await getMessages();
+  const text = t.insurance;
   const paths = insurancePaths(viewer.role, clientId);
-  const local = localText(viewer);
+  const local = localText(t, viewer);
   const title = insuranceId ? text.form.editTitle : text.form.newTitle;
   const computed = await loadComputedCase(clientId);
   if (!computed) {
     return (
       <Screen>
         <h1 className="text-2xl font-semibold text-balance">{title}</h1>
-        {loadError(insuranceId ? paths.item(insuranceId) : paths.add())}
+        {loadError(t, insuranceId ? paths.item(insuranceId) : paths.add())}
       </Screen>
     );
   }
@@ -208,7 +212,7 @@ export async function InsuranceFormScreen({
     : null;
   if (insuranceId && !row) notFound();
   const { client, fxRates } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const chosen: InsuranceType = isInsuranceType(row?.insurance_type)
     ? row.insurance_type
     : isInsuranceType(type)
@@ -252,6 +256,8 @@ export async function InsuranceFormScreen({
 
 /** Supuestos de seguros: solo el asesor (la página lo exige). */
 export async function LifeSettingsScreen({ clientId }: { clientId: string }) {
+  const t = await getMessages();
+  const text = t.insurance;
   const paths = insurancePaths('advisor', clientId);
   const form = text.settingsForm;
   const computed = await loadComputedCase(clientId);
@@ -268,12 +274,12 @@ export async function LifeSettingsScreen({ clientId }: { clientId: string }) {
     return (
       <Screen>
         {header}
-        {loadError(paths.settings)}
+        {loadError(t, paths.settings)}
       </Screen>
     );
   }
   const { client, settings, pockets } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
 
   return (
     <Screen>

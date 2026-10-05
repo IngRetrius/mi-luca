@@ -1,5 +1,5 @@
 import { suggestedActions, type ActionPlanContext, type ActionTemplateKey } from '@miluca/engine';
-import { messages } from '@miluca/i18n';
+import type { Messages } from '@miluca/i18n';
 
 import type { ComputedCase } from '@/features/summary';
 
@@ -20,15 +20,15 @@ export function suggestionContext(
 
 /**
  * Filas de `action_items` para las tareas sugeridas que aplican, con su fecha límite contada desde
- * la fecha de corte. Con `only`, solo esas llaves (las revisiones de P-A16), con el mismo orden que
- * tendrían en la lista completa.
+ * la fecha de corte y el título en el idioma de quien las agrega. Con `only`, solo esas llaves (las
+ * revisiones de P-A16), con el mismo orden que tendrían en la lista completa.
  */
 export function suggestedActionRows(
   clientId: string,
   computed: Pick<ComputedCase, 'mode' | 'rows' | 'result' | 'input'>,
+  templates: Messages['actionPlan']['templates'],
   only?: readonly ActionTemplateKey[],
 ) {
-  const templates = messages.es.actionPlan.templates;
   return suggestedActions(computed.input.cutoffDate, suggestionContext(computed))
     .map((action, index) => ({
       client_id: clientId,

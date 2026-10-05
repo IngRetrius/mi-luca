@@ -1,18 +1,17 @@
 import 'server-only';
 
-import { COUNTRY_LOCALES, formatDate, messages } from '@miluca/i18n';
+import { formatDate, type Messages } from '@miluca/i18n';
 import { lightTheme } from '@miluca/ui';
 
 import { getClientDetail } from '@/features/clients';
 import { withAddress } from '@/lib/address';
+import { getCaseMessages, getLanguage, getLocale } from '@/server/i18n';
 
 import { formatFigure, PLAN_FIGURES } from './plan-figures';
 import { listDeliveries, loadDelivery } from './queries';
 
-const t = messages.es;
-
 /** Nombre del archivo: el que se ve al descargar y uno solo con ASCII para navegadores viejos. */
-function contentDisposition(label: string): string {
+function contentDisposition(t: Messages, label: string): string {
   const name = `${t.plan.pdf.fileName.replace('{label}', label)}.pdf`;
   const ascii = name
     .normalize('NFD')
@@ -41,7 +40,12 @@ export async function deliveryPdfResponse(
     return new Response(null, { status: 404 });
   }
 
-  const locale = COUNTRY_LOCALES[client.countryCode]?.locale ?? 'es';
+  // El PDF es del cliente: su vocabulario y su trato, aunque lo descargue el asesor.
+  const [t, language, locale] = await Promise.all([
+    getCaseMessages({ address: client.formOfAddress, country: client.countryCode }),
+    getLanguage(),
+    getLocale(client.countryCode),
+  ]);
   const view = withAddress(t.documents.view, client.formOfAddress);
   const date = (value: string) => formatDate(value, locale, 'UTC');
   const figures = delivery.keyFigures;
@@ -62,11 +66,18 @@ export async function deliveryPdfResponse(
       (figure) => figures[figure] !== null && figures[figure] !== undefined,
     ).map((figure) => ({
       label: t.keyFigures[figure],
-      value: formatFigure(figure, figures[figure], locale, delivery.baseCurrency),
+      value: formatFigure(
+        figure,
+        figures[figure],
+        locale,
+        delivery.baseCurrency,
+        t.keyFigureMonths,
+      ),
     })),
     footer: t.plan.currencyNote.replace('{currency}', delivery.baseCurrency),
     pageLabel: t.plan.pdf.pageLabel,
     scope: t.plan.scope,
+    language,
     colors: {
       text: lightTheme.text,
       textMuted: lightTheme.textMuted,
@@ -77,7 +88,7 @@ export async function deliveryPdfResponse(
   return new Response(pdf as BodyInit, {
     headers: {
       'Content-Type': 'application/pdf',
-      'Content-Disposition': contentDisposition(delivery.label),
+      'Content-Disposition': contentDisposition(t, delivery.label),
       // Datos personales: ni cachés compartidas ni copia en el navegador.
       'Cache-Control': 'private, no-store',
     },

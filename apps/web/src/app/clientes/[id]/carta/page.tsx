@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { DocumentEditorScreen } from '@/features/documents';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Carta de cierre | MiLuca' };
+export const generateMetadata = pageMetadata('closingLetter');
 
 /** P-A13 Carta de cierre. */
 export default async function AdvisorLetterPage({ params }: PageProps<'/clientes/[id]/carta'>) {

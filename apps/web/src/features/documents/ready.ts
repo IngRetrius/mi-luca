@@ -6,40 +6,49 @@ import {
   type DocumentContent,
   type DocumentKind,
 } from '@miluca/exporters/documents';
-import { messages } from '@miluca/i18n';
+import type { Messages } from '@miluca/i18n';
 
 import type { FormOfAddress } from '@/lib/address';
 
 import type { ReadySection } from './document-sections';
 
-const sectionText = messages.es.documents.sections;
-
 /** El título de una sección como lo lee el cliente; la apertura no lleva. */
-export function sectionTitle(key: string, address: FormOfAddress): string | null {
+type SectionText = Messages['documents']['sections'];
+
+export function sectionTitle(
+  key: string,
+  address: FormOfAddress,
+  sectionText: SectionText,
+): string | null {
   if (key === 'opening') return null;
-  const variants = sectionText[key as keyof typeof sectionText];
+  const variants = sectionText[key as keyof SectionText];
   return variants ? variants[address] : null;
 }
 
 /** El nombre de la sección en el editor (también la apertura). */
-export function sectionLabel(key: string, address: FormOfAddress): string {
-  const variants = sectionText[key as keyof typeof sectionText];
+export function sectionLabel(
+  key: string,
+  address: FormOfAddress,
+  sectionText: SectionText,
+): string {
+  const variants = sectionText[key as keyof SectionText];
   return variants ? variants[address] : key;
 }
 
 /**
- * Las secciones escritas, con su título en el trato del cliente y las cifras puestas: así se
- * muestran y así quedan fijas en el plan entregado.
+ * Las secciones escritas, con su título en el trato del cliente (y en el idioma de quien entrega) y
+ * las cifras puestas: así se muestran y así quedan fijas en el plan entregado.
  */
 export function readySections(
   kind: DocumentKind,
   content: DocumentContent,
   address: FormOfAddress,
   values: Readonly<Partial<Record<KeyFigureId, string>>>,
+  sectionText: SectionText,
 ): ReadySection[] {
   return writtenSections(kind, content).map(({ key, text }) => ({
     key,
-    title: kind === 'notas' ? null : sectionTitle(key, address),
+    title: kind === 'notas' ? null : sectionTitle(key, address, sectionText),
     text: fillFigures(text, values),
   }));
 }

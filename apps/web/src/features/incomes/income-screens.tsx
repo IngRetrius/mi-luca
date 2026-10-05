@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { incomeKindSchema, incomeScenarioSchema } from '@miluca/domain';
 import { baseIncome } from '@miluca/engine';
-import { COUNTRY_LOCALES, formatMoney, messages } from '@miluca/i18n';
+import { formatMoney, type Messages } from '@miluca/i18n';
 
 import { BackLink, LoadError, ModuleLink } from '@/components/back-link';
 import { Screen, ScreenActions } from '@/components/screen';
@@ -14,6 +14,7 @@ import { withAddress } from '@/lib/address';
 import { amountToText } from '@/lib/amount';
 import { monthNames, todayIn } from '@/lib/dates';
 import type { CaseEditor } from '@/server/case-access';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { deleteIncome, saveIncome, saveSocialSecurity, saveVariableIncome } from './actions';
 import { BaseIncomeForm } from './base-income-form';
@@ -23,15 +24,14 @@ import { loadVariableIncome } from './queries';
 import { SocialSecurityForm } from './social-security-form';
 import type { IncomeValues } from './validation';
 
-const t = messages.es;
-const text = t.incomes;
 const ALL_MONTHS = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] as const;
 
-function localeOf(computed: ComputedCase): string {
-  return COUNTRY_LOCALES[computed.rows.client.country_code]?.locale ?? 'es';
+function localeOf(computed: ComputedCase): Promise<string> {
+  return getLocale(computed.rows.client.country_code);
 }
 
-function screenText(viewer: CaseEditor, clientId: string) {
+function screenText(t: Messages, viewer: CaseEditor, clientId: string) {
+  const text = t.incomes;
   if (viewer.role === 'advisor') {
     return {
       title: text.title,
@@ -55,7 +55,7 @@ function screenText(viewer: CaseEditor, clientId: string) {
   };
 }
 
-function loadError(retryHref: string) {
+function loadError(t: Messages, retryHref: string) {
   return (
     <LoadError message={t.common.loadError} retryLabel={t.common.retry} retryHref={retryHref} />
   );
@@ -69,8 +69,10 @@ export async function IncomesScreen({
   viewer: CaseEditor;
   clientId: string;
 }) {
+  const t = await getMessages();
+  const text = t.incomes;
   const paths = incomePaths(viewer.role, clientId);
-  const local = screenText(viewer, clientId);
+  const local = screenText(t, viewer, clientId);
   const [computed, variable] = await Promise.all([
     loadComputedCase(clientId),
     loadVariableIncome(clientId),
@@ -80,12 +82,12 @@ export async function IncomesScreen({
       <Screen>
         <BackLink {...local.back} />
         <h1 className="text-2xl font-semibold text-balance">{local.title}</h1>
-        {loadError(paths.list)}
+        {loadError(t, paths.list)}
       </Screen>
     );
   }
 
-  const locale = localeOf(computed);
+  const locale = await localeOf(computed);
   const base = computed.rows.client.base_currency;
   const { incomes } = computed.result;
   const money = (amount: number, currency = base) => formatMoney(amount, currency, locale);
@@ -218,22 +220,24 @@ export async function IncomeScreen({
   clientId: string;
   incomeId: string | null;
 }) {
+  const t = await getMessages();
+  const text = t.incomes;
   const paths = incomePaths(viewer.role, clientId);
-  const local = screenText(viewer, clientId);
+  const local = screenText(t, viewer, clientId);
   const title = incomeId ? text.form.editTitle : text.form.newTitle;
   const computed = await loadComputedCase(clientId);
   if (!computed) {
     return (
       <Screen>
         <h1 className="text-2xl font-semibold text-balance">{title}</h1>
-        {loadError(incomeId ? paths.item(incomeId) : paths.add)}
+        {loadError(t, incomeId ? paths.item(incomeId) : paths.add)}
       </Screen>
     );
   }
   const row = incomeId ? computed.rows.incomes.find((income) => income.id === incomeId) : null;
   if (incomeId && !row) notFound();
 
-  const locale = localeOf(computed);
+  const locale = await localeOf(computed);
   const { client, fxRates } = computed.rows;
   const currencies = [client.base_currency, ...fxRates.map((rate) => rate.currency)];
   const { input: baseInput } = toCaseInput(
@@ -295,12 +299,14 @@ export async function SocialSecurityScreen({
   viewer: CaseEditor;
   clientId: string;
 }) {
+  const t = await getMessages();
+  const text = t.incomes;
   const paths = incomePaths(viewer.role, clientId);
   const computed = await loadComputedCase(clientId);
   const ss = text.socialSecurity;
   return (
     <Screen>
-      <BackLink href={paths.list} label={screenText(viewer, clientId).title} />
+      <BackLink href={paths.list} label={screenText(t, viewer, clientId).title} />
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold text-balance">{ss.title}</h1>
         <p className="text-text-muted">{ss.intro}</p>
@@ -308,13 +314,13 @@ export async function SocialSecurityScreen({
       {computed ? (
         <SocialSecurityForm
           text={ss}
-          months={monthNames(localeOf(computed))}
+          months={monthNames(await localeOf(computed))}
           initial={computed.rows.socialSecurity?.payments_by_month ?? ALL_MONTHS}
           action={saveSocialSecurity.bind(null, clientId)}
           cancelHref={paths.list}
         />
       ) : (
-        loadError(paths.socialSecurity)
+        loadError(t, paths.socialSecurity)
       )}
     </Screen>
   );
@@ -328,6 +334,8 @@ export async function BaseIncomeScreen({
   viewer: CaseEditor;
   clientId: string;
 }) {
+  const t = await getMessages();
+  const text = t.incomes;
   const paths = incomePaths(viewer.role, clientId);
   const [computed, variable, currencies] = await Promise.all([
     loadComputedCase(clientId),
@@ -337,7 +345,7 @@ export async function BaseIncomeScreen({
   const v = text.variable;
   const header = (
     <>
-      <BackLink href={paths.list} label={screenText(viewer, clientId).title} />
+      <BackLink href={paths.list} label={screenText(t, viewer, clientId).title} />
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold text-balance">{v.title}</h1>
         <p className="text-text-muted">{v.intro}</p>
@@ -348,11 +356,11 @@ export async function BaseIncomeScreen({
     return (
       <Screen>
         {header}
-        {loadError(paths.baseIncome)}
+        {loadError(t, paths.baseIncome)}
       </Screen>
     );
   }
-  const locale = localeOf(computed);
+  const locale = await localeOf(computed);
   const amounts = Array.from({ length: 12 }, (_, month) => {
     const row = variable.find((item) => item.month_index === month + 1);
     return row ? amountToText(row.amount, locale) : '';

@@ -172,9 +172,9 @@ export function caseSnapshot(rows: SnapshotRows, today: string): string {
         line(
           `id ${receivable.id}`,
           receivable.debtor_label,
-          `saldo ${value(receivable.balance, receivable.currency)}`,
+          `saldo al empezar a pagar ${value(receivable.balance, receivable.currency)}`,
           `cuota ${value(receivable.monthly_payment, receivable.currency)}`,
-          receivable.first_payment_date ? `desde ${receivable.first_payment_date}` : null,
+          receivable.first_payment_date ? `primer pago ${receivable.first_payment_date}` : null,
         ),
       ),
     ),

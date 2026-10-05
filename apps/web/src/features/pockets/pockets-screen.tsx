@@ -1,22 +1,20 @@
 import Link from 'next/link';
 
 import type { PocketRow } from '@miluca/engine';
-import { COUNTRY_LOCALES, formatMoney, messages } from '@miluca/i18n';
+import { formatMoney } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
-import { FigureList } from '@/components/figure-list';
 import { ModuleLink } from '@/components/back-link';
+import { FigureList } from '@/components/figure-list';
 import { Screen, ScreenActions } from '@/components/screen';
 import { StatusLabel } from '@/components/status';
 import { focusRing, linkButton, primaryButton } from '@/components/ui-classes';
 import { loadComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
 import type { CaseEditor } from '@/server/case-access';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { pocketPaths, type SpecialPocketKind } from './paths';
-
-const t = messages.es;
-const text = t.pockets;
 
 /**
  * P-A10 Análisis, pestaña Bolsillos: meta del año, aporte al mes y saldo de cada bolsillo, y el
@@ -30,6 +28,8 @@ export async function PocketsScreen({
   viewer: CaseEditor;
   clientId: string;
 }) {
+  const t = await getMessages();
+  const text = t.pockets;
   const paths = pocketPaths(viewer.role, clientId);
   const local =
     viewer.role === 'advisor'
@@ -59,7 +59,7 @@ export async function PocketsScreen({
   }
 
   const { client } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const money = (amount: number) => formatMoney(amount, client.base_currency, locale);
   const { pockets } = computed.result;
   const general = computed.rows.pockets.filter((pocket) => pocket.kind === 'general');

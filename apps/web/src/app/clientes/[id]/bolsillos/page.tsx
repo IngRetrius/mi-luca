@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { PocketsScreen } from '@/features/pockets';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Bolsillos | MiLuca' };
+export const generateMetadata = pageMetadata('pockets');
 
 /** P-A10 Análisis, pestaña Bolsillos. */
 export default async function AdvisorPocketsPage({

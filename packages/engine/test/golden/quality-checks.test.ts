@@ -52,6 +52,11 @@ describe('qualityChecks con los casos de oro', () => {
     const report = qualityChecks(input, compute(input, { mode: 'compatible' }));
     expect(report.blocking.map((entry) => entry.code)).toEqual(['allocation_within_available']);
     expect(report.needNote.map((entry) => entry.code)).toEqual(['reality_check_confirms']);
+    // La diferencia también va en dinero al mes, para mostrarla así si el esperado es 0 o menos (G10).
+    const reality = report.needNote[0]!;
+    const { actualMonthly, expectedMonthly } = compute(input, { mode: 'compatible' }).realityCheck;
+    expect(reality.detail.expectedMonthly).toBe(expectedMonthly);
+    expect(reality.detail.gapMonthly).toBeCloseTo((actualMonthly ?? 0) - expectedMonthly, 6);
   });
 
   it('cada control lleva sus cifras y el informe es determinista', () => {

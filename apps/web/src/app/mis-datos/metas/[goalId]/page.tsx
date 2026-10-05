@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { GoalFormScreen } from '@/features/goals';
 import { isUuid } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Meta | MiLuca' };
+export const generateMetadata = pageMetadata('goal');
 
 /** Editar una meta. */
 export default async function MyGoalItemPage({ params }: PageProps<'/mis-datos/metas/[goalId]'>) {

@@ -180,6 +180,8 @@ export function qualityChecks(input: CaseInput, result: CaseResult): QcReport {
     item('reality_check_done', 'warning', realityCheck.status !== 'pendiente'),
     item('reality_check_confirms', 'note', realityCheck.status !== 'revisar_gastos', {
       difference: realityCheck.difference ?? 0,
+      expectedMonthly: realityCheck.expectedMonthly,
+      gapMonthly: (realityCheck.actualMonthly ?? 0) - realityCheck.expectedMonthly,
     }),
     item('third_party_counted_once', 'warning', !(paidByOthers && otherIncome)),
   ];

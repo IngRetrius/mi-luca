@@ -1,21 +1,22 @@
-import { COUNTRY_LOCALES, formatPercent, messages } from '@miluca/i18n';
+import { formatPercent } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { Screen } from '@/components/screen';
 import { loadCaseRows } from '@/features/summary';
 import { amountToText, percentToText } from '@/lib/amount';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { savePlanSettings } from './actions';
 import { PlanSettingsForm } from './plan-settings-form';
 import { PLAN_PERCENTS, type PlanField } from './plan-settings-validation';
 
-const t = messages.es;
-const text = t.planSettings;
 /** Sin tipo de cliente, la plantilla usa 3 meses (`Supuestos!C19`). */
 const MONTHS_WITHOUT_TYPE = 3;
 
 /** Supuestos del plan del caso (`Supuestos!C20:C32`), con la metodología como referencia. */
 export async function PlanSettingsScreen({ clientId }: { clientId: string }) {
+  const t = await getMessages();
+  const text = t.planSettings;
   const back = `/clientes/${clientId}`;
   const rows = await loadCaseRows(clientId);
   const header = (
@@ -40,7 +41,7 @@ export async function PlanSettingsScreen({ clientId }: { clientId: string }) {
     );
   }
   const { client, methodology, settings } = rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const pct = (value: number) => formatPercent(value, locale, 0);
   const months =
     (client.client_type

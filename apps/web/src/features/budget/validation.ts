@@ -6,6 +6,7 @@ import {
   type Frequency,
   type Payer,
 } from '@miluca/domain';
+import { canonicalCategory } from '@miluca/i18n';
 
 import { parseAmount } from '@/lib/amount';
 
@@ -158,7 +159,8 @@ export function parseBudgetItem(
     ok: true,
     values,
     record: {
-      category: values.category,
+      // Una categoría conocida se guarda con su valor canónico, en cualquier idioma (ADR 0022).
+      category: canonicalCategory(values.category),
       concept: values.concept,
       currency: values.currency,
       amount,

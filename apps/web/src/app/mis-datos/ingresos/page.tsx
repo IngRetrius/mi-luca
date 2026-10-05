@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { IncomesScreen } from '@/features/incomes';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Mis ingresos | MiLuca' };
+export const generateMetadata = pageMetadata('myIncomes');
 
 /** Los ingresos del cliente. */
 export default async function MyIncomesPage() {

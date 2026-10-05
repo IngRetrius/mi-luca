@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { BankFormScreen } from '@/features/pockets';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Nuevo banco | MiLuca' };
+export const generateMetadata = pageMetadata('newBank');
 
 /** Registrar un banco por su nombre. */
 export default async function AdvisorNewBankPage({

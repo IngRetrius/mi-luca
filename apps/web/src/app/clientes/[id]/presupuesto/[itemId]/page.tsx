@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { BudgetItemScreen } from '@/features/budget';
 import { isUuid, requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Editar gasto | MiLuca' };
+export const generateMetadata = pageMetadata('editExpense');
 
 /** P-A06: editar o borrar una partida del presupuesto. */
 export default async function AdvisorBudgetItemPage({

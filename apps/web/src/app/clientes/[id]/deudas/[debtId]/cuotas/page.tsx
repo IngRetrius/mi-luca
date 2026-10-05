@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { InstallmentsScreen } from '@/features/debts';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Cuotas | MiLuca' };
+export const generateMetadata = pageMetadata('installments');
 
 /** Cuotas de un crédito en seguimiento, vistas por el asesor. */
 export default async function AdvisorInstallmentsPage({

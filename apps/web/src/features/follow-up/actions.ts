@@ -7,6 +7,7 @@ import { actionPlanPaths, suggestedActionRows } from '@/features/action-plan';
 import { loadComputedCase } from '@/features/summary';
 import { createClient } from '@/lib/supabase/server';
 import { isUuid } from '@/server/case-access';
+import { getCaseMessages } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
 import { parseNotes, type NotesErrors, type NotesValues } from './notes';
@@ -56,10 +57,13 @@ export async function scheduleReviews(clientId: string): Promise<void> {
   await requireAdvisor(paths.page);
   const computed = await loadComputedCase(clientId);
   if (computed) {
-    const supabase = await createClient();
+    const [supabase, t] = await Promise.all([
+      createClient(),
+      getCaseMessages({ country: computed.rows.client.country_code }),
+    ]);
     await supabase
       .from('action_items')
-      .upsert(suggestedActionRows(clientId, computed, REVIEW_KEYS), {
+      .upsert(suggestedActionRows(clientId, computed, t.actionPlan.templates, REVIEW_KEYS), {
         onConflict: 'client_id,suggestion_key',
         ignoreDuplicates: true,
       });

@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { GoalFormScreen } from '@/features/goals';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Nueva meta | MiLuca' };
+export const generateMetadata = pageMetadata('newGoal');
 
 /** Registrar una meta. */
 export default async function MyNewGoalPage() {

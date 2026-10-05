@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { AssetsScreen } from '@/features/net-worth';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Patrimonio | MiLuca' };
+export const generateMetadata = pageMetadata('netWorth');
 
 /** Patrimonio del cliente: activos y saldo líquido. */
 export default async function AdvisorAssetsPage({

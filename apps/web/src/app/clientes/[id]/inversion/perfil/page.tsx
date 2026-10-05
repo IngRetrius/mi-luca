@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { RiskProfileScreen } from '@/features/investment';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Perfil de riesgo | MiLuca' };
+export const generateMetadata = pageMetadata('riskProfile');
 
 /** Perfil de riesgo del cliente, con el criterio del asesor. */
 export default async function AdvisorRiskProfilePage({

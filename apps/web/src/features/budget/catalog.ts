@@ -1,4 +1,9 @@
-import type { BudgetCatalog, CatalogConcept } from '@miluca/i18n';
+import {
+  catalogConceptNames,
+  catalogPocketNames,
+  type BudgetCatalog,
+  type CatalogConcept,
+} from '@miluca/i18n';
 
 import { parseAmount } from '@/lib/amount';
 
@@ -53,6 +58,25 @@ export function comparableName(text: string): string {
     .replace(/\s+/g, ' ');
 }
 
+/**
+ * Si un concepto del catálogo ya está en el presupuesto, con su nombre en cualquier idioma: lo que
+ * marcó alguien con la app en español no se repite desde la app en inglés (ADR 0022).
+ */
+export function conceptPresent(
+  present: ReadonlySet<string>,
+  item: CatalogConcept,
+  countryCode: string,
+): boolean {
+  return [item.name, ...catalogConceptNames(countryCode, item.key)].some((name) =>
+    present.has(comparableName(name)),
+  );
+}
+
+/** Un bolsillo sugerido con sus nombres en todos los idiomas, listos para comparar. */
+export function pocketAliases(name: string): string[] {
+  return catalogPocketNames(name).map(comparableName);
+}
+
 const EMPTY_ROW: CatalogRowValues = { picked: false, amount: '', days: '' };
 const FIELD_NAME = /^(pick|amount|days)\.([a-z]+(?:-[a-z]+)*)$/;
 
@@ -84,6 +108,7 @@ export function parseCatalogSelection(
   formData: FormData,
   catalog: BudgetCatalog,
   present: ReadonlySet<string>,
+  countryCode = '',
 ): CatalogParse {
   const values = catalogValues(formData);
   const errors: Record<string, CatalogFieldError> = {};
@@ -94,7 +119,7 @@ export function parseCatalogSelection(
     for (const item of category.concepts) {
       order += 1;
       const row = values[item.key] ?? EMPTY_ROW;
-      if (!row.picked || present.has(comparableName(item.name))) continue;
+      if (!row.picked || conceptPresent(present, item, countryCode)) continue;
 
       const amount = parseAmount(row.amount);
       if (Number.isNaN(amount)) {
@@ -133,8 +158,10 @@ export function missingPockets(
   const known = new Set(existing.map(comparableName));
   const missing: string[] = [];
   for (const { item } of picks) {
-    if (item.pocket === null || known.has(comparableName(item.pocket))) continue;
-    known.add(comparableName(item.pocket));
+    if (item.pocket === null) continue;
+    const aliases = pocketAliases(item.pocket);
+    if (aliases.some((alias) => known.has(alias))) continue;
+    for (const alias of aliases) known.add(alias);
     missing.push(item.pocket);
   }
   return missing;

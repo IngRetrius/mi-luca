@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { messages } from '@miluca/i18n';
+
 import { suggestedActionRows } from './suggestions';
 
 // Modo compatible: sin contexto, las 14 tareas de la plantilla (ADR 0018).
@@ -10,7 +12,7 @@ const computed = {
 
 describe('suggestedActionRows', () => {
   it('arma las filas con la fecha contada desde la fecha de corte', () => {
-    const rows = suggestedActionRows('cliente', computed);
+    const rows = suggestedActionRows('cliente', computed, messages.es.actionPlan.templates);
     expect(rows).toHaveLength(14);
     expect(rows[0]).toEqual({
       client_id: 'cliente',
@@ -24,7 +26,10 @@ describe('suggestedActionRows', () => {
   });
 
   it('con `only`, solo esas llaves y con el orden de la lista completa', () => {
-    const rows = suggestedActionRows('cliente', computed, ['review_30_days', 'annual_review']);
+    const rows = suggestedActionRows('cliente', computed, messages.es.actionPlan.templates, [
+      'review_30_days',
+      'annual_review',
+    ]);
     expect(rows.map((row) => [row.suggestion_key, row.due_date, row.sort_order])).toEqual([
       ['review_30_days', '2026-11-03', 11],
       ['annual_review', '2027-10-04', 13],

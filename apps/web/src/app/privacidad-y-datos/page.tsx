@@ -1,7 +1,6 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { formatDate, messages } from '@miluca/i18n';
+import { formatDate } from '@miluca/i18n';
 
 import { Screen } from '@/components/screen';
 import { focusRing } from '@/components/ui-classes';
@@ -15,10 +14,12 @@ import {
   withdrawSensitiveConsent,
 } from '@/features/consent';
 import { countryDateFormat } from '@/features/invitations';
+import { LanguageSwitcher } from '@/features/language';
 import { withAddress } from '@/lib/address';
+import { getLanguage, getMessages, pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Privacidad y datos | MiLuca' };
+export const generateMetadata = pageMetadata('privacy');
 
 const backIcon = (
   <svg
@@ -38,14 +39,15 @@ const backIcon = (
  * el borrado llegan en F7.
  */
 export default async function PrivacyPage() {
+  const messages = await getMessages();
   const viewer = await requireClient('/privacidad-y-datos');
   // Independientes: el acceso y los consentimientos se piden a la vez.
   const [access, consents] = await Promise.all([
     listAdvisorAccess(viewer.clientId),
     listConsents(viewer.clientId),
   ]);
-  const t = withAddress(messages.es.privacy, viewer.formOfAddress);
-  const { locale, timeZone } = countryDateFormat(viewer.countryCode);
+  const t = withAddress(messages.privacy, viewer.formOfAddress);
+  const { locale, timeZone } = countryDateFormat(viewer.countryCode, await getLanguage());
 
   return (
     <Screen>
@@ -66,7 +68,7 @@ export default async function PrivacyPage() {
           {t.advisorTitle}
         </h2>
         {access === null ? (
-          <p role="alert">{messages.es.common.loadError}</p>
+          <p role="alert">{messages.common.loadError}</p>
         ) : access.length === 0 ? (
           <p className="text-text-muted">{t.noAdvisor}</p>
         ) : (
@@ -87,7 +89,7 @@ export default async function PrivacyPage() {
           {t.consentsTitle}
         </h2>
         {consents === null ? (
-          <p role="alert">{messages.es.common.loadError}</p>
+          <p role="alert">{messages.common.loadError}</p>
         ) : consents.length === 0 ? (
           <p className="text-text-muted">{t.consentsEmpty}</p>
         ) : (
@@ -124,7 +126,8 @@ export default async function PrivacyPage() {
         )}
       </section>
 
-      <div className="pb-8">
+      <div className="flex flex-col items-start gap-4 pb-8">
+        <LanguageSwitcher />
         <SignOutButton />
       </div>
     </Screen>

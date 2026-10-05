@@ -1,22 +1,21 @@
 import Link from 'next/link';
 
-import { messages } from '@miluca/i18n';
-
 import { linkButton, textButton } from '@/components/ui-classes';
+import { getMessages } from '@/server/i18n';
 
 import { continuityText, type ContinuitySheet } from './continuity';
 import { CopyButton } from './copy-button';
 
-const text = messages.es.followUp.sheet;
-
 /** La ficha de continuidad del Anexo C, para leerla y copiarla como bloque de texto. */
-export function ContinuitySection({
+export async function ContinuitySection({
   sheet,
   notesHref,
 }: {
   sheet: ContinuitySheet;
   notesHref: string;
 }) {
+  const t = await getMessages();
+  const text = t.followUp.sheet;
   return (
     <section aria-labelledby="sheet-title" className="flex flex-col gap-3 pb-8">
       <div className="flex flex-col gap-1">

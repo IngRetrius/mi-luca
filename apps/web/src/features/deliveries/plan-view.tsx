@@ -1,15 +1,14 @@
 import type { CaseResult, KeyFigures } from '@miluca/engine';
-import { formatDate, formatMoney, messages } from '@miluca/i18n';
+import { formatDate, formatMoney } from '@miluca/i18n';
 
 import { FigureList } from '@/components/figure-list';
 import { DocumentSections } from '@/features/documents';
+import { getMessages } from '@/server/i18n';
 
 import { PlanAssumptions } from './plan-assumptions';
 import { PlanComparison } from './plan-comparison';
 import { formatFigure, PLAN_FIGURES } from './plan-figures';
 import type { Delivery } from './queries';
-
-const t = messages.es;
 
 function formatMonth(date: string, locale: string): string {
   return new Intl.DateTimeFormat(locale, {
@@ -26,7 +25,7 @@ function formatMonth(date: string, locale: string): string {
  * entregado no cambia aunque cambien los datos. Textos neutros salvo los títulos de la carta y las
  * notas, que da quien llama: lo usan el asesor y el cliente.
  */
-export function PlanView({
+export async function PlanView({
   delivery,
   today,
   locale,
@@ -40,6 +39,7 @@ export function PlanView({
   currency: string;
   documentTitles: { readonly letter: string; readonly notes: string };
 }) {
+  const t = await getMessages();
   const text = t.plan;
   const money = (amount: number) => formatMoney(amount, currency, locale);
   const results: CaseResult = delivery.results;
@@ -109,7 +109,7 @@ export function PlanView({
         <FigureList
           figures={shown.map((id) => ({
             label: t.keyFigures[id],
-            value: formatFigure(id, figures[id], locale, currency),
+            value: formatFigure(id, figures[id], locale, currency, t.keyFigureMonths),
           }))}
         />
       </section>

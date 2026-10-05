@@ -1,5 +1,5 @@
 import { actionOwnerSchema, type IsoDate, type Money } from '@miluca/domain';
-import { messages } from '@miluca/i18n';
+import type { Messages } from '@miluca/i18n';
 
 import type { ActionItemRow } from '@/features/action-plan';
 import type { ComputedCase } from '@/features/summary';
@@ -7,8 +7,6 @@ import { todayIn } from '@/lib/dates';
 
 import type { ContinuityInput } from './continuity';
 import type { ContinuityNotes } from './notes';
-
-const t = messages.es;
 
 /**
  * Saca del caso calculado lo que lleva la ficha de continuidad. Las cifras son las del motor con
@@ -24,6 +22,7 @@ export function continuityInput({
   minimumWage,
   today,
   locale,
+  t,
 }: {
   computed: Pick<ComputedCase, 'input' | 'result' | 'figures' | 'rows'>;
   client: { readonly displayName: string; readonly countryName: string };
@@ -35,6 +34,7 @@ export function continuityInput({
   /** Hoy en el país del cliente: el día de la ficha. */
   today: IsoDate;
   locale: string;
+  t: Messages;
 }): ContinuityInput {
   const { input, result, figures, rows } = computed;
   const country = rows.client.country_code;

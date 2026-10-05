@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { qualityChecks, type QcItem } from '@miluca/engine';
-import { COUNTRY_LOCALES, formatDate, formatMoney, formatPercent, messages } from '@miluca/i18n';
+import { formatDate, formatMoney, formatPercent } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { Screen } from '@/components/screen';
@@ -11,6 +11,7 @@ import { focusRing, linkButton, textButton } from '@/components/ui-classes';
 import { documentPaths, loadDocuments, writtenCount } from '@/features/documents';
 import { loadComputedCase } from '@/features/summary';
 import { todayIn } from '@/lib/dates';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { deliverPlan } from './actions';
 import { DeliveryForm, type NoteRequest } from './delivery-form';
@@ -18,9 +19,6 @@ import { PdfLink } from './pdf-link';
 import { PlanView } from './plan-view';
 import { qcMessage } from './qc-text';
 import { listDeliveries, loadDelivery } from './queries';
-
-const t = messages.es;
-const text = t.delivery;
 
 const STATUS: Readonly<Record<QcItem['severity'], Status>> = {
   blocking: 'alert',
@@ -30,6 +28,8 @@ const STATUS: Readonly<Record<QcItem['severity'], Status>> = {
 
 /** P-A12 Control de calidad y P-A14 Entregar el plan, con los planes ya entregados. */
 export async function DeliveryScreen({ clientId }: { clientId: string }) {
+  const t = await getMessages();
+  const text = t.delivery;
   const back = `/clientes/${clientId}`;
   const [computed, deliveries, documents] = await Promise.all([
     loadComputedCase(clientId),
@@ -59,7 +59,7 @@ export async function DeliveryScreen({ clientId }: { clientId: string }) {
   }
 
   const { client } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const format = {
     money: (amount: number) => formatMoney(amount, client.base_currency, locale),
     percent: (ratio: number) => formatPercent(ratio, locale),
@@ -168,7 +168,7 @@ export async function DeliveryScreen({ clientId }: { clientId: string }) {
 }
 
 /** P-A14 "Se enviará al cliente": la carta y las notas publicadas, con el enlace para escribirlas. */
-function WithThePlan({
+async function WithThePlan({
   clientId,
   documents,
   locale,
@@ -179,6 +179,7 @@ function WithThePlan({
   locale: string;
   countryCode: string;
 }) {
+  const t = await getMessages();
   const local = t.documents.delivery;
   const summary = t.documents.summary;
   const paths = documentPaths(clientId);
@@ -228,6 +229,8 @@ export async function AdvisorDeliveredPlanScreen({
   clientId: string;
   deliveryId: string;
 }) {
+  const t = await getMessages();
+  const text = t.delivery;
   const back = `/clientes/${clientId}/entrega`;
   const [delivery, computed] = await Promise.all([
     loadDelivery(clientId, deliveryId),
@@ -235,7 +238,7 @@ export async function AdvisorDeliveredPlanScreen({
   ]);
   if (!delivery) notFound();
   const country = computed?.rows.client.country_code;
-  const locale = (country && COUNTRY_LOCALES[country]?.locale) ?? 'es';
+  const locale = await getLocale(country);
 
   return (
     <Screen>

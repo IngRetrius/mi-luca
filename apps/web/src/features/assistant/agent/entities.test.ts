@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
+import { messages } from '@miluca/i18n';
+
 vi.mock('server-only', () => ({}));
 
 const { ENTITIES, entityByTool, saveEntity, undoEntity } = await import('./entities');
@@ -47,6 +49,7 @@ function fakeContext(existing: Record<string, Record<string, unknown>> = {}) {
     currencies: ['COP'],
     pocketIds: ['22222222-2222-4222-8222-222222222222'],
     bankIds: [],
+    t: messages.es,
   } satisfies Ctx;
   return { ctx, writes };
 }

@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { InstallmentFormScreen } from '@/features/debts';
 import { isUuid } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Cuota | MiLuca' };
+export const generateMetadata = pageMetadata('installment');
 
 /** P-C10: marcar una cuota pagada con su fecha, cuota distinta o abono extra. */
 export default async function MyInstallmentPage({

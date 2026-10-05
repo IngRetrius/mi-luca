@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { CashflowScreen } from '@/features/cashflow';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Flujo anual | MiLuca' };
+export const generateMetadata = pageMetadata('cashflow');
 
 /** P-A10 Análisis, pestaña Flujo. */
 export default async function AdvisorCashflowPage({ params }: PageProps<'/clientes/[id]/flujo'>) {

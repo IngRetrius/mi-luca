@@ -18,7 +18,10 @@ export interface MonthRowDeviation {
 }
 
 export interface MonthRow {
+  /** Valor guardado (canónico). */
   readonly category: string;
+  /** La categoría en el idioma de la pantalla. */
+  readonly label: string;
   /** "Presupuesto 1.100.000 COP". */
   readonly budget: string;
   readonly initial: MonthEntryValues;
@@ -90,7 +93,7 @@ export function MonthForm({
               <input type="hidden" name={`category-${index}`} value={row.category} />
               <Field
                 id={id}
-                label={row.category}
+                label={row.label}
                 hint={row.budget}
                 error={error ? text.errors[error] : null}
               >
@@ -114,7 +117,7 @@ export function MonthForm({
                     <select
                       name={`currency-${index}`}
                       defaultValue={values.currency}
-                      aria-label={text.currency.replace('{category}', row.category)}
+                      aria-label={text.currency.replace('{category}', row.label)}
                       className={textField}
                     >
                       {currencies.map((currency) => (

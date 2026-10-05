@@ -38,6 +38,8 @@ export interface LetterPdfInput {
   readonly pageLabel: string;
   /** Alcance de la plataforma (regla 11), al final. */
   readonly scope: string;
+  /** Idioma de los textos (BCP 47), para los lectores de pantalla del PDF. Por defecto, español. */
+  readonly language?: string;
   readonly colors: PdfColors;
 }
 
@@ -153,7 +155,7 @@ export function LetterDocument({ input }: { input: LetterPdfInput }) {
       author="MiLuca"
       creator="MiLuca"
       producer="MiLuca"
-      language="es"
+      language={input.language ?? 'es'}
     >
       <Page size="A4" style={s.page}>
         <Text style={s.eyebrow}>{pdfSafe(input.planLabel)}</Text>

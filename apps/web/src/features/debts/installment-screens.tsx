@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { frechClientRate, type CreditSchedule, type Installment } from '@miluca/engine';
-import { COUNTRY_LOCALES, formatDate, formatMoney, formatPercent, messages } from '@miluca/i18n';
+import { formatDate, formatMoney, formatPercent, type Messages } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { FigureList } from '@/components/figure-list';
@@ -13,13 +13,11 @@ import { focusRing } from '@/components/ui-classes';
 import { loadComputedCase } from '@/features/summary';
 import { amountToText } from '@/lib/amount';
 import type { CaseEditor } from '@/server/case-access';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { markInstallmentPaid, saveInstallment } from './actions';
 import { InstallmentForm } from './installment-form';
 import { debtPaths } from './paths';
-
-const t = messages.es;
-const text = t.credits;
 
 // Cuántas cuotas se ven sin "Ver todas": las últimas pagadas y las próximas pendientes.
 const RECENT_PAID = 3;
@@ -32,7 +30,7 @@ const STATUS_TONE: Readonly<Record<NonNullable<Installment['status']>, Status | 
   pendiente: null,
 };
 
-function loadError(retryHref: string) {
+function loadError(t: Messages, retryHref: string) {
   return (
     <LoadError message={t.common.loadError} retryLabel={t.common.retry} retryHref={retryHref} />
   );
@@ -76,20 +74,22 @@ export async function InstallmentsScreen({
   debtId: string;
   showAll: boolean;
 }) {
+  const t = await getMessages();
+  const text = t.credits;
   const paths = debtPaths(viewer.role, clientId);
   const loaded = await loadCredit(clientId, debtId);
   if (!loaded) {
     return (
       <Screen>
         <BackLink href={paths.list} label={text.back} />
-        {loadError(paths.installments(debtId))}
+        {loadError(t, paths.installments(debtId))}
       </Screen>
     );
   }
   const { computed, debt, schedule, credit } = loaded;
   const { client } = computed.rows;
   const frechRate = credit ? frechClientRate(credit) : null;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const money = (amount: number) => formatMoney(amount, debt.currency, locale);
   const date = (value: string) => formatDate(value, locale, 'UTC');
   const header = (
@@ -263,20 +263,22 @@ export async function InstallmentFormScreen({
   debtId: string;
   number: number;
 }) {
+  const t = await getMessages();
+  const text = t.credits;
   const paths = debtPaths(viewer.role, clientId);
   const loaded = await loadCredit(clientId, debtId);
   if (!loaded) {
     return (
       <Screen>
         <BackLink href={paths.installments(debtId)} label={text.listTitle} />
-        {loadError(paths.installment(debtId, number))}
+        {loadError(t, paths.installment(debtId, number))}
       </Screen>
     );
   }
   const { computed, debt, schedule } = loaded;
   const row = schedule?.installments.find((item) => item.number === number);
   if (!schedule || !row || row.status === null) notFound();
-  const locale = COUNTRY_LOCALES[computed.rows.client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(computed.rows.client.country_code);
   const mark = computed.rows.installments.find(
     (item) => item.debt_id === debtId && item.installment_number === number,
   );

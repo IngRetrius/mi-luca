@@ -1,5 +1,6 @@
 import type { Database } from '@miluca/db';
 import { expenseTypeSchema, frequencySchema, payerSchema } from '@miluca/domain';
+import { categoryLabel, localeLanguage } from '@miluca/i18n';
 
 import { amountToText } from '@/lib/amount';
 
@@ -35,7 +36,7 @@ export function budgetValuesFromRow(row: BudgetRow, locale: string): BudgetItemV
   const frequency = frequencySchema.safeParse(row.frequency);
   const expenseType = expenseTypeSchema.safeParse(row.expense_type);
   return {
-    category: row.category,
+    category: categoryLabel(row.category, localeLanguage(locale)),
     concept: row.concept,
     currency: row.currency,
     amount: amountToText(row.amount, locale),

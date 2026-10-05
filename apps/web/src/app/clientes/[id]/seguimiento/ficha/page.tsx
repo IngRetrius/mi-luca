@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { ContinuityNotesScreen } from '@/features/follow-up';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Sucesión y decisiones | MiLuca' };
+export const generateMetadata = pageMetadata('continuitySheet');
 
 /** P-A16: datos de la ficha de continuidad que no salen del plan. */
 export default async function AdvisorContinuityNotesPage({

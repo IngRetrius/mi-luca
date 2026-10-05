@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { isOverdue, type KeyFigures } from '@miluca/engine';
-import { COUNTRY_LOCALES, formatDate, formatMoney, messages } from '@miluca/i18n';
+import { formatDate, formatMoney } from '@miluca/i18n';
 
 import { BackLink, LoadError, ModuleLink } from '@/components/back-link';
 import { Screen } from '@/components/screen';
@@ -19,6 +19,7 @@ import {
 } from '@/features/monthly-control';
 import { loadComputedCase, type ComputedCase } from '@/features/summary';
 import { todayIn } from '@/lib/dates';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { continuitySheet } from './continuity';
 import { continuityInput } from './continuity-input';
@@ -28,11 +29,8 @@ import { loadContinuityNotes, loadMinimumWage } from './queries';
 import { nextReview, reviews } from './reviews';
 import { ReviewsSection } from './reviews-section';
 
-const t = messages.es;
-const text = t.followUp;
-
 /** "Frente al plan entregado": las cifras del último plan que cambiaron con los datos de hoy. */
-function PlanSection({
+async function PlanSection({
   clientId,
   latest,
   today,
@@ -45,6 +43,8 @@ function PlanSection({
   locale: string;
   countryCode: string;
 }) {
+  const t = await getMessages();
+  const text = t.followUp;
   return (
     <section
       aria-labelledby="plan-title"
@@ -93,7 +93,7 @@ function PlanSection({
 }
 
 /** "Cómo va": gasto real del año frente al presupuesto y avance del plan de acción. */
-function ProgressSection({
+async function ProgressSection({
   clientId,
   computed,
   entries,
@@ -108,6 +108,8 @@ function ProgressSection({
   today: string;
   locale: string;
 }) {
+  const t = await getMessages();
+  const text = t.followUp;
   const caseText = t.clientProfile.caseData;
   const year = Number(today.slice(0, 4));
   const control = yearControl(
@@ -117,7 +119,7 @@ function ProgressSection({
   const { total } = control;
   const months = total.months.filter((value) => value !== null).length;
   const money = (amount: number) => formatMoney(amount, computed.rows.client.base_currency, locale);
-  const status = deviationText(total.averageReal, total.monthlyBudget, locale);
+  const status = deviationText(total.averageReal, total.monthlyBudget, locale, t.monthlyControl);
   const spending =
     months === 0
       ? t.monthlyControl.yearNone.replace('{year}', String(year))
@@ -177,6 +179,8 @@ function ProgressSection({
  * gasto real y las tareas, las revisiones a 30 días, 90 días y anual, y la ficha de continuidad.
  */
 export async function FollowUpScreen({ clientId }: { clientId: string }) {
+  const t = await getMessages();
+  const text = t.followUp;
   const paths = followUpPaths(clientId);
   const [client, computed, latest, tasks, entries, notes] = await Promise.all([
     getClientDetail(clientId),
@@ -210,7 +214,7 @@ export async function FollowUpScreen({ clientId }: { clientId: string }) {
   }
 
   const country = computed.rows.client.country_code;
-  const locale = COUNTRY_LOCALES[country]?.locale ?? 'es';
+  const locale = await getLocale(country);
   const today = todayIn(country);
   // Salario mínimo vigente en la fecha de corte: necesita el país, por eso va después.
   const minimumWage = await loadMinimumWage(country, computed.input.cutoffDate);
@@ -225,6 +229,7 @@ export async function FollowUpScreen({ clientId }: { clientId: string }) {
       minimumWage,
       today,
       locale,
+      t,
     }),
     text.sheet,
     { owners: t.actionPlan.owners, clientTypes: t.profile.types },

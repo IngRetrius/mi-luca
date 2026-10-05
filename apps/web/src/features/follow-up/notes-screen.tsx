@@ -1,10 +1,9 @@
 import { notFound } from 'next/navigation';
 
-import { messages } from '@miluca/i18n';
-
 import { BackLink, LoadError } from '@/components/back-link';
 import { Screen } from '@/components/screen';
 import { getClientDetail } from '@/features/clients';
+import { getMessages } from '@/server/i18n';
 
 import { saveContinuityNotes } from './actions';
 import { toAnswer } from './notes';
@@ -12,11 +11,10 @@ import { ContinuityNotesForm } from './notes-form';
 import { followUpPaths } from './paths';
 import { loadContinuityNotes } from './queries';
 
-const t = messages.es;
-const text = t.followUp.notesForm;
-
 /** P-A16: lo que la ficha de continuidad no saca del plan (sucesión y decisiones tomadas). */
 export async function ContinuityNotesScreen({ clientId }: { clientId: string }) {
+  const t = await getMessages();
+  const text = t.followUp.notesForm;
   const paths = followUpPaths(clientId);
   const [client, notes] = await Promise.all([
     getClientDetail(clientId),

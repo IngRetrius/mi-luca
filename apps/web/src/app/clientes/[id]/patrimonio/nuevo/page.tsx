@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { AssetFormScreen } from '@/features/net-worth';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Nuevo activo | MiLuca' };
+export const generateMetadata = pageMetadata('newAsset');
 
 /** Registrar un activo. */
 export default async function AdvisorNewAssetPage({

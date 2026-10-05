@@ -3,12 +3,12 @@
 import { revalidatePath } from 'next/cache';
 
 import Anthropic from '@anthropic-ai/sdk';
-import { messages } from '@miluca/i18n';
 
 import { loadCaseRows, withImpact } from '@/features/summary';
 import { todayIn } from '@/lib/dates';
 import { createClient } from '@/lib/supabase/server';
 import { requireCaseEditor } from '@/server/case-access';
+import { getLanguage, getMessages } from '@/server/i18n';
 
 import {
   entityByKind,
@@ -60,8 +60,9 @@ async function agentContext(clientId: string) {
   const rows = await loadCaseRows(clientId);
   if (!rows) return null;
   const today = todayIn(rows.client.country_code);
+  const [supabase, t] = await Promise.all([createClient(), getMessages()]);
   const ctx: AgentContext = {
-    supabase: await createClient(),
+    supabase,
     clientId,
     baseCurrency: rows.client.base_currency,
     today,
@@ -70,6 +71,7 @@ async function agentContext(clientId: string) {
       .filter((pocket) => pocket.kind === 'general')
       .map((pocket) => pocket.id),
     bankIds: rows.banks.map((bank) => bank.id),
+    t,
   };
   return { rows, today, ctx };
 }
@@ -96,6 +98,7 @@ export async function sendToAgent(
   const loaded = await agentContext(clientId);
   if (!loaded) return { ok: false, error: 'failed' };
   const { rows, today, ctx } = loaded;
+  const language = await getLanguage();
 
   try {
     const { value: turn } = await withImpact(
@@ -105,10 +108,10 @@ export async function sendToAgent(
           history: previous,
           notes: text,
           snapshot: caseSnapshot(rows, today),
+          language,
           execute: async (name, input) => {
             const entity = entityByTool(name);
-            if (!entity)
-              return { ok: false, message: messages.es.assistant.agent.failures.unknownTool };
+            if (!entity) return { ok: false, message: ctx.t.assistant.agent.failures.unknownTool };
             return saveEntity(entity, ctx, asInput(input));
           },
         }),

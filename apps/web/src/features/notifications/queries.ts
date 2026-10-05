@@ -1,9 +1,10 @@
 import 'server-only';
 
 import { KEY_FIGURES, type KeyFigureDelta } from '@miluca/engine';
-import { COUNTRY_LOCALES } from '@miluca/i18n';
+import { displayLocale } from '@miluca/i18n';
 
 import { createClient } from '@/lib/supabase/server';
+import { getLanguage } from '@/server/i18n';
 
 interface NoticeBase {
   readonly id: string;
@@ -32,7 +33,7 @@ function isDelta(value: unknown): value is KeyFigureDelta {
 
 /** Avisos sin ver de la sesión actual (RLS: solo los propios), del más reciente al más antiguo. */
 export async function listUnreadNotices(): Promise<readonly Notice[] | null> {
-  const supabase = await createClient();
+  const [supabase, language] = await Promise.all([createClient(), getLanguage()]);
   const { data, error } = await supabase
     .from('notifications')
     .select(
@@ -75,7 +76,7 @@ export async function listUnreadNotices(): Promise<readonly Notice[] | null> {
       kind: 'cambio_del_cliente',
       deltas: typeof impactId === 'string' ? (deltasById.get(impactId) ?? []) : [],
       currency: row.client?.base_currency ?? null,
-      locale: COUNTRY_LOCALES[row.client?.country_code ?? '']?.locale ?? 'es-CO',
+      locale: displayLocale(row.client?.country_code ?? 'CO', language),
     };
   });
 }

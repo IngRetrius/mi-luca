@@ -1,10 +1,12 @@
 import Image from 'next/image';
 
-import { formatDate, messages } from '@miluca/i18n';
+import { formatDate } from '@miluca/i18n';
 
 import { ScreenActions } from '@/components/screen';
 import { SubmitButton } from '@/components/submit-button';
+import { LanguageSwitcher } from '@/features/language';
 import { withAddress } from '@/lib/address';
+import { getLanguage, getMessages } from '@/server/i18n';
 
 import { beginInvitation } from './client-actions';
 import { countryDateFormat, type ValidInvitation } from './queries';
@@ -13,15 +15,16 @@ import { countryDateFormat, type ValidInvitation } from './queries';
  * P-C01 Invitación: quién invita, qué es y qué no es MiLuca, qué datos se piden y cuáles nunca.
  * Se ve sin sesión. Los nombres van marcados como no traducibles.
  */
-export function InvitationWelcome({
+export async function InvitationWelcome({
   invitation,
   token,
 }: {
   invitation: ValidInvitation;
   token: string;
 }) {
-  const t = withAddress(messages.es.invitation.welcome, invitation.formOfAddress);
-  const { locale, timeZone } = countryDateFormat(invitation.countryCode);
+  const messages = await getMessages();
+  const t = withAddress(messages.invitation.welcome, invitation.formOfAddress);
+  const { locale, timeZone } = countryDateFormat(invitation.countryCode, await getLanguage());
   const [titleBefore, titleAfter] = t.title.split('{advisor}');
   const [greetingBefore, greetingAfter] = t.greeting.split('{name}');
 
@@ -66,6 +69,8 @@ export function InvitationWelcome({
       <p className="text-sm text-text-muted">
         {t.expires.replace('{date}', formatDate(invitation.expiresAt, locale, timeZone))}
       </p>
+
+      <LanguageSwitcher />
 
       <ScreenActions>
         <form action={beginInvitation.bind(null, token)}>

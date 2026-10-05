@@ -27,7 +27,7 @@ const warningIcon = (
 export function BudgetList({ groups, text, locale, baseCurrency, basePath }: BudgetListProps) {
   const money = (amount: number, currency = baseCurrency) => formatMoney(amount, currency, locale);
   return (
-    <div className="flex flex-col gap-6">
+    <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
       {groups.map((group) => (
         <section key={group.category} aria-label={group.category} className="flex flex-col gap-2">
           <div className="flex items-baseline justify-between gap-3">

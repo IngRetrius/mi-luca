@@ -1,0 +1,288 @@
+{
+  "common": {
+    "loadError": "No pudimos cargar esta información. Revise su conexión e intente de nuevo."
+  },
+  "privacy": {
+    "errors": {
+      "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos."
+    }
+  },
+  "budget": {
+    "form": {
+      "currencyHint": "Para otra moneda, registre antes su tasa en Monedas.",
+      "errors": {
+        "missingCategory": "Escriba la categoría.",
+        "missingConcept": "Escriba el concepto.",
+        "invalidAmount": "Escriba un valor de 0 o más, solo con números.",
+        "missingDays": "Escriba cuántos días dura.",
+        "invalidCurrency": "Elija una moneda de la lista.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrela en Monedas y vuelva a intentarlo.",
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos.",
+        "invalidPocket": "Elija un bolsillo de la lista."
+      }
+    },
+    "catalog": {
+      "errors": {
+        "invalidAmount": "Escriba un valor de 0 o más, solo con números.",
+        "missingDays": "Con valor, escriba cuántos días dura: un número mayor que 0.",
+        "nothingPicked": "Marque al menos un gasto de la lista.",
+        "missingRate": "Falta la tasa de cambio de la moneda base. Revise Monedas y vuelva a intentarlo.",
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos."
+      }
+    }
+  },
+  "currencies": {
+    "form": {
+      "errors": {
+        "invalidCurrency": "Escriba un código de tres letras, por ejemplo USD.",
+        "duplicate": "Esa moneda ya tiene tasa: edítela desde la lista.",
+        "invalidRate": "Escriba una tasa mayor que 0, solo con números.",
+        "invalidDate": "Elija la fecha de la tasa.",
+        "inUse": "Hay importes en esta moneda. Cámbielos antes de borrar su tasa.",
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos."
+      }
+    }
+  },
+  "incomes": {
+    "socialSecurity": {
+      "errors": {
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos."
+      }
+    },
+    "variable": {
+      "missing": "Escriba al menos un mes para calcularlo.",
+      "errors": {
+        "invalidAmount": "Revise los meses marcados: solo números de 0 o más.",
+        "invalidCurrency": "Elija una moneda de la lista.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrela en Monedas.",
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos."
+      }
+    },
+    "form": {
+      "currencyHint": "Para otra moneda, registre antes su tasa en Monedas.",
+      "errors": {
+        "missingName": "Escriba el nombre.",
+        "missingAmount": "Escriba el valor por pago.",
+        "invalidAmount": "Escriba un valor de 0 o más, solo con números.",
+        "invalidCurrency": "Elija una moneda de la lista.",
+        "invalidPayments": "Escriba un número de 0 a 9 en cada mes.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrela en Monedas y vuelva a intentarlo.",
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos."
+      }
+    }
+  },
+  "profile": {
+    "errors": {
+      "invalidDate": "Escriba una fecha válida.",
+      "invalidDependents": "Escriba un número de 0 a 20.",
+      "invalidYear": "Escriba un año entre 2000 y 2100.",
+      "notAllowed": "No tiene permiso para cambiar estos datos.",
+      "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos."
+    }
+  },
+  "cashflow": {
+    "fundPlanNever": "Con este sobrante el fondo de emergencia no se completa: revise gastos o ingresos."
+  },
+  "pockets": {
+    "overAllocated": "Los saldos de los bolsillos superan lo disponible. Ajuste los saldos de los bolsillos generales.",
+    "form": {
+      "currencyHint": "La de la cuenta. Para otra moneda, registre antes su tasa en Monedas.",
+      "errors": {
+        "missingName": "Escriba el nombre.",
+        "looksLikeAccount": "Parece un número de cuenta o tarjeta. No lo necesitamos: escriba solo el nombre.",
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos.",
+        "invalidBank": "Elija un banco de la lista.",
+        "invalidCurrency": "Elija una moneda de la lista.",
+        "invalidAmount": "Escriba un valor de 0 o más, solo con números.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrela en Monedas y vuelva a intentarlo."
+      }
+    },
+    "special": {
+      "nameTaken": "Ya hay un bolsillo general con este nombre. Cámbiele el nombre y vuelva a intentarlo."
+    }
+  },
+  "banks": {
+    "form": {
+      "errors": {
+        "missingName": "Escriba el nombre.",
+        "looksLikeAccount": "Parece un número de cuenta o tarjeta. No lo necesitamos: escriba solo el nombre.",
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos.",
+        "invalidMaxPockets": "Escriba un número de 1 a 99, o déjelo vacío."
+      }
+    }
+  },
+  "receivables": {
+    "form": {
+      "currencyHint": "Saldo y cuota van en la misma moneda. Para otra, registre antes su tasa en Monedas.",
+      "errors": {
+        "missingDebtor": "Escriba quién le debe.",
+        "missingAmount": "Escriba el valor.",
+        "invalidAmount": "Escriba un valor mayor que 0, solo con números.",
+        "invalidCurrency": "Elija una moneda de la lista.",
+        "invalidDate": "Escriba una fecha válida.",
+        "invalidPercent": "Escriba un número de 0 a 100.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrela en Monedas y vuelva a intentarlo.",
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos."
+      }
+    }
+  },
+  "debts": {
+    "methodForm": {
+      "error": "No se pudo guardar el método. Intente de nuevo en unos minutos."
+    },
+    "form": {
+      "currencyHint": "Saldo y cuota van en la misma moneda. Para otra, registre antes su tasa en Monedas.",
+      "minPaymentHint": "Si la cuota incluye seguros, por ahora escríbala completa.",
+      "errors": {
+        "missingName": "Escriba el nombre de la deuda.",
+        "invalidType": "Elija un tipo de la lista.",
+        "missingAmount": "Escriba el valor.",
+        "invalidAmount": "Escriba un valor de 0 o más, solo con números.",
+        "invalidCurrency": "Elija una moneda de la lista.",
+        "invalidRate": "Escriba la tasa como un número de 0 a 1.000, por ejemplo 28 o 12,5.",
+        "invalidDate": "Escriba una fecha válida.",
+        "invalidOrder": "Escriba un número entero de 1 a 99.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrela en Monedas y vuelva a intentarlo.",
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos.",
+        "invalidInstallment": "Escriba un número entero de 1 a 600.",
+        "frechIncomplete": "Escriba los puntos del FRECH y la cuota hasta la que cubre, o deje los dos vacíos.",
+        "invalidPoints": "Escriba los puntos como un número mayor que 0, por ejemplo 4.",
+        "paymentOrTerm": "Con seguimiento, escriba la cuota o el plazo total para calcularla."
+      }
+    },
+    "whatIf": {
+      "intro": "Simule un pago adicional a las deudas. Entra por el mismo orden de pago y respeta las que no aceptan abonos. No cambia el plan ni se guarda.",
+      "empty": "Escriba un valor para ver cuánto se adelanta la salida y cuánto se ahorra en intereses.",
+      "invalidAmount": "Escriba un valor de 0 o más, solo con números."
+    }
+  },
+  "assets": {
+    "form": {
+      "currencyHint": "Para otra moneda, registre antes su tasa en Monedas.",
+      "errors": {
+        "missingName": "Escriba el nombre.",
+        "looksLikeAccount": "Parece un número de cuenta o tarjeta. No lo necesitamos: escriba solo el nombre.",
+        "missingAmount": "Escriba el valor.",
+        "invalidAmount": "Escriba un valor de 0 o más, solo con números.",
+        "invalidCurrency": "Elija una moneda de la lista.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrela en Monedas y vuelva a intentarlo.",
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos."
+      }
+    }
+  },
+  "realityCheck": {
+    "form": {
+      "errors": {
+        "invalidAmount": "Escriba un valor de 0 o más, solo con números.",
+        "invalidMonths": "Escriba un número entero de 1 a 120.",
+        "invalidCurrency": "Elija una moneda de la lista.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrela en Monedas y vuelva a intentarlo.",
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos."
+      }
+    }
+  },
+  "credits": {
+    "markError": "No se pudo marcar la cuota. Intente de nuevo en unos minutos.",
+    "form": {
+      "errors": {
+        "invalidAmount": "Escriba un valor mayor que 0, solo con números.",
+        "invalidDate": "Escriba una fecha válida.",
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos."
+      }
+    }
+  },
+  "investment": {
+    "notAdvice": "Esto no es una recomendación de productos ni de entidades. Antes de invertir, revise costos y riesgos con la entidad que se elija.",
+    "form": {
+      "currencyHint": "Para otra moneda, registre antes su tasa en Monedas.",
+      "errors": {
+        "missingName": "Escriba la plataforma o el tipo.",
+        "looksLikeAccount": "Parece un número de cuenta. No lo necesitamos: escriba solo el nombre.",
+        "missingAmount": "Escriba el saldo.",
+        "invalidAmount": "Escriba un saldo de 0 o más, solo con números.",
+        "invalidCurrency": "Elija una moneda de la lista.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrela en Monedas y vuelva a intentarlo.",
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos."
+      }
+    },
+    "riskForm": {
+      "errors": {
+        "invalidPercent": "Escriba un número de 0 a 100.",
+        "missingRate": "No se pudo guardar. Intente de nuevo en unos minutos.",
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos."
+      }
+    }
+  },
+  "goals": {
+    "noPocket": "Sin bolsillo: elija uno para que el aporte entre al presupuesto.",
+    "form": {
+      "repeatEveryYearsHint": "Para una meta que se repite, como un viaje cada 2 años. Si escribe los dos, manda la repetición.",
+      "tripNote": "Busque precios reales y actuales.",
+      "errors": {
+        "missingName": "Escriba la meta.",
+        "missingAmount": "Escriba el valor o use la calculadora de viaje.",
+        "invalidAmount": "Escriba un valor de 0 o más, solo con números.",
+        "invalidCurrency": "Elija una moneda de la lista.",
+        "invalidYears": "Escriba un número de años mayor que 0 y hasta 50.",
+        "invalidDate": "Escriba una fecha válida.",
+        "missingWhen": "Escriba la fecha objetivo o cada cuántos años se repite.",
+        "invalidPercent": "Escriba un número de 0 a 100.",
+        "invalidQuantity": "Escriba una cantidad de 0 o más.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrela en Monedas y vuelva a intentarlo.",
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos."
+      }
+    }
+  },
+  "insurance": {
+    "noPocket": "Las primas de los seguros nuevos no tienen bolsillo. Elíjalo en Supuestos de seguros.",
+    "form": {
+      "errors": {
+        "missingName": "Escriba el nombre del seguro.",
+        "invalidAmount": "Escriba una prima de 0 o más, solo con números.",
+        "invalidCurrency": "Elija una moneda de la lista.",
+        "duplicate": "Ese seguro ya está registrado. Edítelo desde la lista.",
+        "missingRate": "Falta la tasa de cambio de esa moneda. Regístrela en Monedas y vuelva a intentarlo.",
+        "notAllowed": "No tiene permiso para cambiar este dato.",
+        "unavailable": "No se pudo guardar. Intente de nuevo en unos minutos."
+      }
+    }
+  },
+  "monthlyControl": {
+    "form": {
+      "errors": {
+        "invalidAmount": "Escriba un valor de 0 o más, con hasta dos decimales.",
+        "invalidCurrency": "Elija una moneda con tasa registrada.",
+        "missingRate": "Falta la tasa de una moneda. Regístrela en Monedas.",
+        "notAllowed": "No tiene permiso para registrar este gasto.",
+        "unavailable": "No pudimos guardar. Revise su conexión e intente de nuevo."
+      }
+    }
+  },
+  "actionPlan": {
+    "form": {
+      "errors": {
+        "missingTitle": "Escriba la tarea.",
+        "invalidOption": "Elija una opción de la lista.",
+        "invalidDate": "Escriba una fecha válida.",
+        "notAllowed": "No tiene permiso para cambiar esta tarea.",
+        "unavailable": "No pudimos guardar. Revise su conexión e intente de nuevo."
+      }
+    }
+  }
+}

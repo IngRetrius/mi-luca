@@ -1,0 +1,3112 @@
+{
+  "app": {
+    "name": "MiLuca",
+    "tagline": "Personal financial planning",
+    "underConstruction": "We are building your platform. Soon you will be able to see your plan here."
+  },
+  "pageTitle": {
+    "home": "MiLuca",
+    "signIn": "Sign in",
+    "recovery": "Reset password",
+    "noInvitation": "No invitation",
+    "invitation": "Invitation",
+    "install": "Add to home screen",
+    "privacy": "Privacy and data",
+    "clients": "Clients",
+    "newClient": "New client",
+    "client": "Client",
+    "profile": "Profile and settings",
+    "planSettings": "Plan assumptions",
+    "incomes": "Income",
+    "newIncome": "New income",
+    "editIncome": "Edit income",
+    "socialSecurityMonths": "Social security months",
+    "baseIncome": "Base income",
+    "budget": "Budget",
+    "newExpense": "New expense",
+    "editExpense": "Edit expense",
+    "catalog": "Typical expenses",
+    "costOfLiving": "Cost of living",
+    "currencies": "Currencies",
+    "newCurrency": "New currency",
+    "fxRate": "Exchange rate",
+    "cashflow": "Annual cash flow",
+    "emergencyFund": "Emergency fund",
+    "pockets": "Pockets",
+    "pocket": "Pocket",
+    "newPocket": "New pocket",
+    "emergencyFundPocket": "Pocket: Emergency fund",
+    "noIncomePocket": "Pocket: Months without income",
+    "banks": "Banks",
+    "bank": "Bank",
+    "newBank": "New bank",
+    "banksAndPockets": "Banks and pockets",
+    "debts": "Debts",
+    "debt": "Debt",
+    "newDebt": "New debt",
+    "installments": "Installments",
+    "installment": "Installment",
+    "creditsPanel": "Loans dashboard",
+    "receivables": "Receivables",
+    "receivable": "Receivable",
+    "newReceivable": "New receivable",
+    "netWorth": "Net worth",
+    "asset": "Asset",
+    "newAsset": "New asset",
+    "realityCheck": "Reality check",
+    "investment": "Investment",
+    "newInvestment": "New investment",
+    "riskProfile": "Risk profile",
+    "investmentSettings": "Investment assumptions",
+    "goals": "Goals",
+    "goal": "Goal",
+    "newGoal": "New goal",
+    "insurances": "Insurance",
+    "insurance": "Insurance policy",
+    "newInsurance": "New insurance",
+    "insuranceSettings": "Insurance assumptions",
+    "delivery": "Deliver the plan",
+    "deliveredPlan": "Delivered plan",
+    "closingLetter": "Closing letter",
+    "clientNotes": "Notes for the client",
+    "followUp": "Follow-up",
+    "continuitySheet": "Succession and decisions",
+    "actionPlan": "Action plan",
+    "task": "Task",
+    "newTask": "New task",
+    "tasks": "Tasks",
+    "monthlyControl": "Monthly tracking",
+    "myPlan": "My plan",
+    "myData": "My data",
+    "myIncomes": "My income",
+    "myExpenses": "My expenses",
+    "myAssets": "What I own",
+    "myReceivables": "What I am owed",
+    "myInvestment": "My investment",
+    "myDebts": "My debts",
+    "myGoals": "My goals",
+    "myInsurances": "My insurance"
+  },
+  "language": {
+    "label": "Language",
+    "names": {
+      "es": "Español",
+      "en": "English"
+    }
+  },
+  "auth": {
+    "signInIntro": "Sign in to your financial plan.",
+    "continueWithGoogle": "Continue with Google",
+    "orWithEmail": "or with your email",
+    "email": "Email",
+    "password": "Password",
+    "showPassword": "Show",
+    "hidePassword": "Hide",
+    "showPasswordLabel": "Show password",
+    "hidePasswordLabel": "Hide password",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "invitationOnly": "Access is by invitation from your advisor.",
+    "signedInAs": "Signed in as {email}.",
+    "signOut": "Sign out",
+    "popupDone": "Done. You can go back to MiLuca.",
+    "popupFailed": "Signing in with Google did not work. Go back to MiLuca and try again.",
+    "backToApp": "Back to MiLuca",
+    "errors": {
+      "missingFields": "Enter your email and password.",
+      "invalidCredentials": "The email or password is not correct. Check them and try again.",
+      "tooManyRequests": "Too many attempts. Wait a few minutes and try again.",
+      "unavailable": "The sign-in service is not responding. Try again in a few minutes.",
+      "google": "Signing in with Google did not work. Try again."
+    },
+    "forgotPassword": "I forgot my password"
+  },
+  "money": {
+    "todayCurrency": "Figures in today's {currency}"
+  },
+  "scope": {
+    "notInvestmentAdvice": "MiLuca is a personal financial planning and education tool. It does not recommend financial products or institutions."
+  },
+  "common": {
+    "loadError": "We could not load this information. Check your connection and try again.",
+    "retry": "Try again",
+    "loading": "Loading…",
+    "notFoundTitle": "We could not find this page",
+    "notFoundBody": "The link may be mistyped, or you may no longer have access to what you are looking for.",
+    "backHome": "Go to home",
+    "error": {
+      "title": "Something went wrong",
+      "body": "We could not show this screen. Try again; if it keeps failing, go back to home.",
+      "retry": "Try again",
+      "backHome": "Go to home"
+    },
+    "helpFor": "What it means: {label}"
+  },
+  "noProfile": {
+    "title": "Your account does not have a profile yet",
+    "signedInAs": "You signed in as {email}, but this account is not linked to any MiLuca profile.",
+    "signedIn": "You signed in, but this account is not linked to any MiLuca profile.",
+    "howTo": "Access is by invitation from your advisor. Open the invitation link they sent you and follow the steps.",
+    "otherAccount": "If you already accepted an invitation with another account, sign out and sign in with that one.",
+    "deletion": "If it is not linked to a profile, this account is deleted 7 days after it was created."
+  },
+  "clientHome": {
+    "greeting": "Hi, {name}",
+    "preparing": {
+      "tu": "Your advisor is preparing your plan. When they deliver it, you will see it here.",
+      "usted": "Your advisor is preparing your plan. When they deliver it, you will see it here."
+    },
+    "privacyLink": "Privacy and data",
+    "spendingLink": "Record this month's spending",
+    "tasksTitle": {
+      "tu": "Your next tasks",
+      "usted": "Your next tasks"
+    },
+    "tasksLink": "See all tasks",
+    "overdue": "Overdue",
+    "dueOn": "By {date}"
+  },
+  "clients": {
+    "title": "Clients",
+    "new": "New client",
+    "listLabel": "Your clients",
+    "emptyTitle": "You have no clients yet",
+    "emptyBody": "Create the first profile. Then you can invite the person to see their plan in the app.",
+    "status": {
+      "borrador": "Draft",
+      "invitado": "Invited",
+      "activo": "Active",
+      "borrado_solicitado": "Deletion requested"
+    },
+    "searchLabel": "Search by name",
+    "search": "Search",
+    "noMatches": "No profile matches “{query}”.",
+    "showAll": "Show all"
+  },
+  "newClient": {
+    "title": "New client",
+    "intro": "These details create the profile. You complete the rest during the advisory session.",
+    "displayName": "Display name",
+    "displayNameHint": "This is how they appear in your list and how the app greets them. The full name is not needed.",
+    "country": "Country",
+    "countryHint": "Sets the base currency and the plan modules.",
+    "countryOption": "{name} ({currency})",
+    "formOfAddress": "Form of address",
+    "formOfAddressHint": "How the app speaks to them in Spanish (tú or usted).",
+    "tu": "Informal (tú)",
+    "usted": "Formal (usted)",
+    "submit": "Create profile",
+    "submitting": "Creating…",
+    "cancel": "Cancel",
+    "errors": {
+      "missingName": "Enter the display name.",
+      "nameTooLong": "The display name can have up to 80 characters.",
+      "missingCountry": "Choose the country.",
+      "notAllowed": "Your account cannot create client profiles. Sign out and sign in with your advisor account.",
+      "unavailable": "The profile could not be created. Try again in a few minutes."
+    }
+  },
+  "clientProfile": {
+    "backToClients": "Clients",
+    "summary": "{country} · {currency} · Form of address: {address}",
+    "invitationTitle": "Invitation",
+    "invitation": {
+      "borrador": "You have not invited this person yet. Once they accept, they can see their plan in the app.",
+      "invitado": "You invited this person. Once they accept, they can see their plan in the app.",
+      "activo": "They accepted the invitation and can now sign in to the app.",
+      "borrado_solicitado": "They asked to delete their data."
+    },
+    "invite": {
+      "open": "Open invitation for {email}. Expires on {date}.",
+      "openNoEmail": "There is an open invitation. Expires on {date}.",
+      "email": "Person's email",
+      "emailHint": "With this email they can create their password. They can also sign in with Google.",
+      "create": "Create invitation link",
+      "createAnother": "Create a new link",
+      "replaceHint": "The new link cancels the previous one.",
+      "creating": "Creating…",
+      "link": "Invitation link",
+      "linkHint": "Copy it and send it through whatever channel you use. For security it is shown only now: if you lose it, create a new one. It expires in 7 days.",
+      "copy": "Copy link",
+      "copied": "Link copied.",
+      "copyFailed": "It could not be copied. Press and hold the link and copy it by hand.",
+      "revoke": "Cancel invitation",
+      "revoking": "Cancelling…",
+      "revoked": "Invitation cancelled. The link no longer works.",
+      "errors": {
+        "missingEmail": "Enter the email.",
+        "invalidEmail": "Check the email: it should look like name@domain.",
+        "notAllowed": "This profile can no longer be invited: it already accepted an invitation or your account has no access.",
+        "unavailable": "It could not be completed. Try again in a few minutes."
+      },
+      "revokeFailed": "It could not be cancelled. Try again in a few minutes.",
+      "revokeConfirm": "The link will stop working and the person will not be able to accept it. Cancel the invitation?",
+      "revokeConfirmYes": "Yes, cancel it",
+      "revokeCancel": "No, keep it"
+    },
+    "caseData": {
+      "title": "Case data",
+      "budget": "Budget",
+      "budgetSummary": "{amount} of spending per month",
+      "figuresTitle": "Plan figures",
+      "figuresNote": "With the data recorded today.",
+      "profile": "Profile and settings",
+      "profileSummary": "{type} · cutoff: {cutoff}",
+      "today": "today",
+      "incomes": "Income",
+      "incomesSummary": "{amount} per year",
+      "costOfLiving": "Cost of living",
+      "costOfLivingSummary": "Essential {amount} per month",
+      "currencies": "Currencies",
+      "currenciesSummary": "{count} besides {base}",
+      "currenciesNone": "Only {base}",
+      "analysisTitle": "Analysis",
+      "cashflow": "Annual cash flow",
+      "cashflowSummary": "Surplus of {amount} in {year}",
+      "emergencyFund": "Emergency fund",
+      "emergencyFundSummary": "Goal of {amount}",
+      "pockets": "Pockets",
+      "pocketsSummary": "{count} with a monthly contribution",
+      "receivables": "Receivables",
+      "receivablesSummary": "{amount} pending",
+      "receivablesNone": "None",
+      "debts": "Debts",
+      "debtsSummary": "{amount} in total",
+      "debtsNone": "None",
+      "assets": "Net worth",
+      "assetsSummary": "Net worth of {amount}",
+      "realityCheck": "Reality check",
+      "planSettings": "Plan assumptions",
+      "planSettingsSummary": "Percentages, expensive debt threshold and cushion",
+      "delivery": "Deliver the plan",
+      "deliverySummary": "{count} plans delivered",
+      "deliveryNone": "Quality check and delivery",
+      "goals": "Goals",
+      "goalsSummary": {
+        "one": "1 goal · {amount} per month",
+        "other": "{count} goals · {amount} per month"
+      },
+      "goalsNone": "None",
+      "insurance": "Insurance",
+      "insuranceSummary": "New premiums of {amount} per year",
+      "investment": "Investment",
+      "investmentSummary": "Profile: {profile} · {growth} in growth",
+      "investmentUnanswered": "The profile is not answered yet",
+      "followUpTitle": "Follow-up",
+      "monthlyControl": "Monthly tracking",
+      "monthlyControlSummary": "{count} months recorded in {year}",
+      "monthlyControlNone": "No actual spending recorded in {year}",
+      "actionPlan": "Action plan",
+      "actionPlanSummary": "{pending} pending of {total}",
+      "actionPlanOverdue": "{pending} pending of {total} · {overdue} overdue",
+      "actionPlanNone": "No tasks",
+      "letter": "Closing letter",
+      "notes": "Notes for the client",
+      "followUp": "Reviews and continuity sheet",
+      "followUpNext": "Next review on {date}",
+      "followUpOverdue": "Review overdue since {date}",
+      "followUpNone": "No reviews scheduled"
+    }
+  },
+  "invitation": {
+    "welcome": {
+      "title": {
+        "tu": "{advisor} invites you to MiLuca",
+        "usted": "{advisor} invites you to MiLuca"
+      },
+      "greeting": "Hi, {name}.",
+      "whatIs": {
+        "tu": "MiLuca is a personal financial planning and education tool. There you will see the plan your advisor prepares and you can keep your data up to date.",
+        "usted": "MiLuca is a personal financial planning and education tool. There you will see the plan your advisor prepares and you can keep your data up to date."
+      },
+      "whatIsNot": {
+        "tu": "It does not recommend financial products or institutions, and it does not replace a licensed professional in investments, taxes, pensions or legal matters.",
+        "usted": "It does not recommend financial products or institutions, and it does not replace a licensed professional in investments, taxes, pensions or legal matters."
+      },
+      "askedTitle": {
+        "tu": "What data we ask for",
+        "usted": "What data we ask for"
+      },
+      "asked": {
+        "tu": "Your income, expenses, savings, debts and goals, plus basic details such as your date of birth and your dependents. If your budget includes health expenses, we ask for a separate authorization.",
+        "usted": "Your income, expenses, savings, debts and goals, plus basic details such as your date of birth and your dependents. If your budget includes health expenses, we ask for a separate authorization."
+      },
+      "neverTitle": {
+        "tu": "What we never ask for",
+        "usted": "What we never ask for"
+      },
+      "never": {
+        "tu": "Account, card or ID numbers, or your bank passwords. Banks are identified only by their name.",
+        "usted": "Account, card or ID numbers, or your bank passwords. Banks are identified only by their name."
+      },
+      "expires": "The invitation expires on {date}.",
+      "continue": "Continue",
+      "continuing": "One moment…"
+    },
+    "consent": {
+      "title": {
+        "tu": "Authorize the processing of your data",
+        "usted": "Authorize the processing of your data"
+      },
+      "intro": {
+        "tu": "Read the text. You need to accept it to use MiLuca.",
+        "usted": "Read the text. You need to accept it to use MiLuca."
+      },
+      "version": "Version {version}, published on {date}",
+      "spanishOnly": "This notice is only available in Spanish.",
+      "accept": "I accept the processing of my personal data as described in this text.",
+      "sensitiveIntro": {
+        "tu": "It is optional. It is only needed if your budget includes health expenses. You can continue without accepting it.",
+        "usted": "It is optional. It is only needed if your budget includes health expenses. You can continue without accepting it."
+      },
+      "acceptSensitive": "I accept the processing of my health data as described in this text.",
+      "submit": "Accept and continue",
+      "submitting": "Saving…",
+      "errors": {
+        "required": {
+          "tu": "To continue, check the acceptance box.",
+          "usted": "To continue, check the acceptance box."
+        },
+        "outdated": {
+          "tu": "The text changed while you were reading it. Review the new version.",
+          "usted": "The text changed while you were reading it. Review the new version."
+        }
+      }
+    },
+    "access": {
+      "title": {
+        "tu": "Create your access",
+        "usted": "Create your access"
+      },
+      "intro": {
+        "tu": "Choose how you will sign in to MiLuca.",
+        "usted": "Choose how you will sign in to MiLuca."
+      },
+      "orPassword": {
+        "tu": "or create a password",
+        "usted": "or create a password"
+      },
+      "email": "Email",
+      "emailHint": {
+        "tu": "Your account uses the invitation email. If it is not your email, ask your advisor for a new invitation.",
+        "usted": "Your account uses the invitation email. If it is not your email, ask your advisor for a new invitation."
+      },
+      "password": "Password",
+      "passwordHint": {
+        "tu": "At least 8 characters. You can use phrases and your password manager.",
+        "usted": "At least 8 characters. You can use phrases and your password manager."
+      },
+      "missingChars": "{count} more characters needed.",
+      "missingChar": "1 more character needed.",
+      "lengthOk": "Long enough.",
+      "submit": "Create my access",
+      "submitting": {
+        "tu": "Creating your access…",
+        "usted": "Creating your access…"
+      },
+      "noEmail": {
+        "tu": "This invitation has no email, so you sign in with Google. If you prefer a password, ask your advisor for an invitation with your email.",
+        "usted": "This invitation has no email, so you sign in with Google. If you prefer a password, ask your advisor for an invitation with your email."
+      },
+      "signInInstead": "Sign in with that account",
+      "errors": {
+        "tooShort": "The password must have at least 8 characters.",
+        "tooLong": "The password can have up to 72 characters.",
+        "weakPassword": "That password appears in known leaks or is too easy to guess. Choose another one.",
+        "emailExists": "There is already an account with this email. Sign in with it to accept the invitation.",
+        "tooManyRequests": "Too many attempts. Wait a few minutes and try again.",
+        "unavailable": "The access could not be created. Try again in a few minutes."
+      }
+    },
+    "problem": {
+      "invalid": {
+        "title": "This invitation link does not work",
+        "body": "Check that the link is complete or ask your advisor for a new one."
+      },
+      "expired": {
+        "title": "This invitation has expired",
+        "body": "Invitations last 7 days. Ask your advisor for a new one."
+      },
+      "revoked": {
+        "title": "This invitation is no longer active",
+        "body": "Your advisor cancelled it or replaced it with another one. Use the most recent link or ask for a new one."
+      },
+      "used": {
+        "title": "This invitation was already accepted",
+        "body": "If it was you, sign in with the account you used."
+      },
+      "missing": {
+        "title": "Open the invitation link again",
+        "body": "It has been a long time since you opened it. Open the link your advisor sent you again."
+      },
+      "advisor": {
+        "title": "You signed in with an advisor account",
+        "body": "An advisor account cannot accept a client invitation. Sign out and open the link again."
+      },
+      "linked": {
+        "title": "Your account already has a profile",
+        "body": "This account is already linked to a MiLuca profile. To accept this invitation, sign out and open the link again with another account."
+      },
+      "noLegalText": {
+        "title": "You cannot accept the invitation yet",
+        "body": "We are finishing the privacy notices for your country. Your advisor will let you know when they are ready."
+      },
+      "unavailable": {
+        "title": "We could not continue",
+        "body": "The service is not responding. Try again in a few minutes."
+      }
+    },
+    "signIn": "Sign in",
+    "goHome": "Go to home"
+  },
+  "install": {
+    "title": {
+      "tu": "Keep your plan one tap away",
+      "usted": "Keep your plan one tap away"
+    },
+    "intro": {
+      "tu": "Add MiLuca to your home screen and open it like an app.",
+      "usted": "Add MiLuca to your home screen and open it like an app."
+    },
+    "ios": {
+      "step1": {
+        "tu": "Tap the Share button in the Safari toolbar.",
+        "usted": "Tap the Share button in the Safari toolbar."
+      },
+      "step2": {
+        "tu": "Choose “Add to Home Screen”. If you do not see it, swipe the list up.",
+        "usted": "Choose “Add to Home Screen”. If you do not see it, swipe the list up."
+      },
+      "step3": {
+        "tu": "Tap “Add”.",
+        "usted": "Tap “Add”."
+      },
+      "shareIcon": "Share",
+      "afterwards": {
+        "tu": "Then open MiLuca from your home screen and sign in again with your account. It is a one-time step: the iPhone does not share the Safari session with the app.",
+        "usted": "Then open MiLuca from your home screen and sign in again with your account. It is a one-time step: the iPhone does not share the Safari session with the app."
+      }
+    },
+    "android": {
+      "button": "Install MiLuca",
+      "installed": {
+        "tu": "Done. You can now open MiLuca from your home screen.",
+        "usted": "Done. You can now open MiLuca from your home screen."
+      },
+      "manual": {
+        "tu": "Open the Chrome menu (the three dots at the top right) and choose “Install app” or “Add to Home screen”.",
+        "usted": "Open the Chrome menu (the three dots at the top right) and choose “Install app” or “Add to Home screen”."
+      }
+    },
+    "other": {
+      "tu": "On your phone, open MiLuca in Safari (iPhone) or Chrome (Android) and add it to your home screen from the browser menu.",
+      "usted": "On your phone, open MiLuca in Safari (iPhone) or Chrome (Android) and add it to your home screen from the browser menu."
+    },
+    "done": "I added it",
+    "notNow": "Not now"
+  },
+  "privacy": {
+    "title": "Privacy and data",
+    "back": "Home",
+    "advisorTitle": {
+      "tu": "Your advisor",
+      "usted": "Your advisor"
+    },
+    "access": {
+      "active": "Has access",
+      "revoked": "No access"
+    },
+    "activeHint": {
+      "tu": "They see and edit your data to prepare your plan. If you withdraw access, they stop seeing it immediately; your data stays with you.",
+      "usted": "They see and edit your data to prepare your plan. If you withdraw access, they stop seeing it immediately; your data stays with you."
+    },
+    "revokedHint": {
+      "tu": "They do not see your data. You can give access back whenever you want.",
+      "usted": "They do not see your data. You can give access back whenever you want."
+    },
+    "revoke": "Withdraw access",
+    "revokeConfirm": {
+      "tu": "Your advisor will stop seeing your data and cannot continue with your plan until you give access back. Withdraw it?",
+      "usted": "Your advisor will stop seeing your data and cannot continue with your plan until you give access back. Withdraw it?"
+    },
+    "revokeYes": "Yes, withdraw access",
+    "revokeCancel": "No, keep it",
+    "restore": "Give access back",
+    "saving": "Saving…",
+    "revokedDone": "Access withdrawn.",
+    "restoredDone": "Access given back.",
+    "noAdvisor": {
+      "tu": "You do not have a linked advisor.",
+      "usted": "You do not have a linked advisor."
+    },
+    "consentsTitle": "Consents",
+    "consentsEmpty": "There are no recorded consents.",
+    "consentLine": "Version {version} · {date}",
+    "granted": "Accepted",
+    "declined": "Not accepted",
+    "errors": {
+      "unavailable": "It could not be saved. Try again in a few minutes."
+    },
+    "withdrawn": "Withdrawn on {date}",
+    "withdraw": "Withdraw consent",
+    "withdrawConfirm": {
+      "tu": "Your advisor will stop using the health data in your budget. You can keep using MiLuca with those expenses under a generic name, such as “Health”. Withdraw it?",
+      "usted": "Your advisor will stop using the health data in your budget. You can keep using MiLuca with those expenses under a generic name, such as “Health”. Withdraw it?"
+    },
+    "withdrawYes": "Yes, withdraw it",
+    "withdrawCancel": "No, keep it",
+    "withdrawDone": "Consent withdrawn."
+  },
+  "recovery": {
+    "title": "Reset password",
+    "step": "Step {n} of 3",
+    "emailIntro": "Enter your account email. We will send you a 6-digit code.",
+    "email": "Email",
+    "sendCode": "Send code",
+    "sending": "Sending…",
+    "codeIntro": "If there is an account with {email}, you received an email with a 6-digit code. Enter it here. If you do not see it, check your spam folder.",
+    "code": "Code",
+    "verify": "Continue",
+    "verifying": "Verifying…",
+    "resend": "Send another code",
+    "resent": "We sent you another code.",
+    "otherEmail": "Use another email",
+    "passwordIntro": "Choose your new password.",
+    "newPassword": "New password",
+    "passwordHint": "At least 8 characters. You can use phrases and your password manager.",
+    "save": "Save password",
+    "saving": "Saving…",
+    "backToSignIn": "Back to Sign in",
+    "errors": {
+      "missingEmail": "Enter your email.",
+      "invalidEmail": "Check the email: it should look like name@domain.",
+      "invalidCode": "The code is not correct or has expired. Check it or ask for another one.",
+      "tooManyRequests": "Too many attempts. Wait a few minutes and try again.",
+      "unavailable": "The service is not responding. Try again in a few minutes.",
+      "tooShort": "The password must have at least 8 characters.",
+      "tooLong": "The password can have up to 72 characters.",
+      "weakPassword": "That password appears in known leaks or is too easy to guess. Choose another one.",
+      "samePassword": "That is your current password. Choose a different one.",
+      "expired": "Too much time has passed since you verified the code. Start again."
+    }
+  },
+  "notifications": {
+    "title": "Notices",
+    "accepted": "{name} accepted the invitation.",
+    "acceptedUnknown": "A client accepted the invitation.",
+    "markRead": "Mark as seen",
+    "changed": "{name} changed their data.",
+    "changedUnknown": "A client changed their data."
+  },
+  "keyFigures": {
+    "annualIncome": "Income per year",
+    "annualExpenses": "Spending per year",
+    "monthlyExpenses": "Spending per month",
+    "programmedSavings": "Scheduled savings per year",
+    "annualSurplus": "Surplus per year",
+    "savingsRate": "Savings rate",
+    "essentialMonthly": "Essential cost of living per month",
+    "basicMonthly": "Basic cost of living per month",
+    "ownSavingsRate": "Savings rate on own income",
+    "debtLoad": "Debt load",
+    "totalDebt": "Total debt",
+    "expensiveDebtMonths": "Months to get out of expensive debt",
+    "emergencyGoal": "Emergency fund goal",
+    "emergencyProgress": "Emergency fund progress",
+    "noIncomeShortfall": "Shortfall in months without income",
+    "annualInvestment": "Investment per year",
+    "growthShare": "% in growth",
+    "netWorth": "Net worth"
+  },
+  "budget": {
+    "title": "Budget",
+    "intro": "The client's budget items by category. Debt installments, new insurance and goal contributions are added automatically once those modules have data.",
+    "back": "Client file",
+    "add": "Add expense",
+    "addFromCatalog": "Add from the list",
+    "empty": "No expenses recorded yet.",
+    "emptyCatalog": "To start, check the typical expenses the client has in the list.",
+    "categoryTotal": "{amount} per month",
+    "itemSummary": "{amount} · {frequency}",
+    "incomplete": "No frequency or no type: it does not count until completed",
+    "incompleteCount": "Items without frequency or type: {count}",
+    "familyReference": "Family reference: does not count",
+    "temporary": "Temporary",
+    "essentialTag": "Essential",
+    "paidBy": {
+      "familia": "Paid by the family",
+      "tercero": "Paid by someone else"
+    },
+    "totals": {
+      "title": "Totals",
+      "expenses": "Spending per month",
+      "essential": "Essential spending per month",
+      "savings": "Scheduled savings per month"
+    },
+    "filters": {
+      "title": "Filter",
+      "type": "How it is paid",
+      "payer": "Who pays it",
+      "essential": "Essential",
+      "all": "All",
+      "onlyEssential": "Essential only",
+      "apply": "Filter",
+      "clear": "Clear filters",
+      "noMatches": "No item matches the filter."
+    },
+    "frequencies": {
+      "semanal": "Weekly",
+      "quincenal": "Biweekly",
+      "mensual": "Monthly",
+      "bimestral": "Every 2 months",
+      "trimestral": "Quarterly",
+      "cada_4_meses": "Every 4 months",
+      "semestral": "Every 6 months",
+      "anual": "Yearly",
+      "cada_2_anos": "Every 2 years",
+      "por_duracion": "By duration (days)",
+      "meses_seguridad_social": "Social security months"
+    },
+    "noFrequency": "no frequency",
+    "expenseTypes": {
+      "directo": "Direct payment",
+      "bolsillo": "Pocket",
+      "seg_social": "Social security",
+      "deuda": "Debt installment",
+      "ahorro": "Savings"
+    },
+    "expenseTypeHints": {
+      "directo": "Paid with the month's money.",
+      "bolsillo": "Not monthly: set aside every month and paid when due.",
+      "seg_social": "Health, pension and occupational risk contributions.",
+      "deuda": "A loan installment.",
+      "ahorro": "It is savings, not spending."
+    },
+    "payers": {
+      "cliente": "The client",
+      "familia": "The family",
+      "tercero": "Someone else"
+    },
+    "categories": [
+      "Housing",
+      "Food",
+      "Transport",
+      "Health and wellness",
+      "Personal care",
+      "Children and family",
+      "Pets",
+      "Services",
+      "Travel and leisure",
+      "Seasonal",
+      "Taxes and paperwork",
+      "One-off purchases",
+      "Social security",
+      "Savings"
+    ],
+    "form": {
+      "newTitle": "New expense",
+      "editTitle": "Edit expense",
+      "category": "Category",
+      "categoryHint": "For example, Housing or Food.",
+      "concept": "Item",
+      "conceptHint": "For example, Groceries or Rent.",
+      "amount": "Amount per payment",
+      "amountHint": "What is paid each time.",
+      "currency": "Currency",
+      "currencyHint": "For another currency, first record its rate in Currencies.",
+      "frequency": "Frequency",
+      "durationDays": "Days it lasts",
+      "durationDaysHint": "For example, how many days a bottle lasts.",
+      "expenseType": "How it is paid",
+      "essential": "It is essential",
+      "essentialHint": "It cannot stop being paid even if income drops.",
+      "payer": "Who pays it",
+      "payerLabel": "Who, if it is someone else or the family (optional)",
+      "payerLabelHint": "For example, their parents.",
+      "temporary": "It is temporary",
+      "temporaryHint": "For example, tuition: the cost of living is also calculated without it.",
+      "familyReference": "It is only a family reference",
+      "familyReferenceHint": "It is recorded but does not count in any calculation, for example the family home.",
+      "note": "Note (optional)",
+      "advisorTitle": "Advisor's judgment",
+      "basicAmount": "Amount per payment at the basic level (optional)",
+      "basicAmountHint": "Your proposal for the basic cost of living. Empty equals the current amount; 0 leaves it out.",
+      "proposed": "The amount is a proposal from the advisor",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "deleteToggle": "Delete this expense",
+      "deleteConfirm": "Yes, delete it",
+      "deleting": "Deleting…",
+      "deleteHint": "It is removed from the budget. The change history keeps it.",
+      "errors": {
+        "missingCategory": "Enter the category.",
+        "missingConcept": "Enter the item.",
+        "tooLong": "It is too long.",
+        "invalidAmount": "Enter an amount of 0 or more, using numbers only.",
+        "missingDays": "Enter how many days it lasts.",
+        "invalidCurrency": "Choose a currency from the list.",
+        "missingRate": "That currency has no exchange rate. Record it in Currencies and try again.",
+        "notAllowed": "You do not have permission to change this data.",
+        "notFound": "This expense no longer exists.",
+        "unavailable": "It could not be saved. Try again in a few minutes.",
+        "invalidPocket": "Choose a pocket from the list."
+      },
+      "pocket": "Pocket",
+      "pocketHint": "For pocket-type expenses: where the money for this expense is kept.",
+      "pocketNone": "There are no pockets yet. They are created in Pockets.",
+      "noPocket": "No pocket",
+      "health": "It is a health expense",
+      "healthHint": "Therapy, medication, glasses. If the health data consent is withdrawn, it stays only as “Health”, without detail."
+    },
+    "preview": {
+      "title": {
+        "tu": "How your plan changes",
+        "usted": "How your plan changes"
+      },
+      "advisorTitle": "How the plan changes",
+      "unchanged": "No changes in the figures.",
+      "change": "{before} → {after}",
+      "note": "Calculated with today's data, before saving."
+    },
+    "client": {
+      "title": {
+        "tu": "My expenses",
+        "usted": "My expenses"
+      },
+      "intro": {
+        "tu": "What you pay and how often. If you change something, your advisor sees the before and after.",
+        "usted": "What you pay and how often. If you change something, your advisor sees the before and after."
+      },
+      "back": "My data",
+      "add": "Add expense",
+      "empty": {
+        "tu": "You have no expenses recorded yet.",
+        "usted": "You have no expenses recorded yet."
+      },
+      "emptyCatalog": {
+        "tu": "To start, check the expenses you have in the list.",
+        "usted": "To start, check the expenses you have in the list."
+      },
+      "payers": {
+        "cliente": "Me",
+        "familia": "My family",
+        "tercero": "Someone else"
+      },
+      "amountHint": {
+        "tu": "What you pay each time.",
+        "usted": "What you pay each time."
+      },
+      "payerLabelHint": "For example, my parents.",
+      "essentialHint": {
+        "tu": "You cannot stop paying it even if your income drops.",
+        "usted": "You cannot stop paying it even if your income drops."
+      }
+    },
+    "withoutPocket": "Pocket type, but the pocket is not chosen yet",
+    "catalog": {
+      "title": "Typical expenses",
+      "intro": "Check what the client spends on, category by category. The amount is optional: it is completed later in each expense. Whatever is not checked is not saved.",
+      "client": {
+        "intro": {
+          "tu": "Check what you pay for, category by category. The amount is optional: you can complete it later in each expense. Whatever you do not check is not saved.",
+          "usted": "Check what you pay for, category by category. The amount is optional: you can complete it later in each expense. Whatever you do not check is not saved."
+        }
+      },
+      "pocketNote": "Expenses that are not monthly go to a pocket. If the suggested pocket does not exist, it is created when saving.",
+      "pocket": "Pocket {pocket}",
+      "essential": "Essential",
+      "amount": "Amount per payment (optional)",
+      "days": "Days each purchase lasts",
+      "present": "Already in the budget",
+      "moreTitle": "Anything else?",
+      "more": "What is most often forgotten: eating out, gifts, apps, cash, family support and online shopping. Anything not on the list is added later, one by one, with Add expense.",
+      "noCatalog": "There is no list of typical expenses for this country yet. Expenses are added one by one.",
+      "allPresent": "All the expenses on the list are already in the budget.",
+      "submit": "Add the checked ones",
+      "submitting": "Adding…",
+      "cancel": "Cancel",
+      "errors": {
+        "invalidAmount": "Enter an amount of 0 or more, using numbers only.",
+        "missingDays": "With an amount, enter how many days it lasts: a number greater than 0.",
+        "nothingPicked": "Check at least one expense on the list.",
+        "missingRate": "The base currency has no exchange rate. Check Currencies and try again.",
+        "notAllowed": "You do not have permission to change this data.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      }
+    }
+  },
+  "myData": {
+    "title": "My data",
+    "intro": {
+      "tu": "What you recorded for your plan. If you change something, your advisor sees the before and after.",
+      "usted": "What you recorded for your plan. If you change something, your advisor sees the before and after."
+    },
+    "back": "Home",
+    "expenses": "Expenses",
+    "expensesSummary": "{count} items · {amount} per month",
+    "noExpenses": "No expenses recorded",
+    "incomes": "Income",
+    "incomesSummary": "{count} incomes · {amount} per year",
+    "noIncomes": "No income recorded",
+    "link": "My data",
+    "currencies": "Currencies",
+    "currenciesSummary": "{count} besides {base}",
+    "currenciesNone": "Only {base}",
+    "pockets": "Banks and pockets",
+    "pocketsSummary": "{count} pockets with a monthly contribution",
+    "receivables": {
+      "tu": "What you are owed",
+      "usted": "What you are owed"
+    },
+    "receivablesSummary": "{amount} pending",
+    "receivablesNone": "Nobody",
+    "assets": {
+      "tu": "What you own",
+      "usted": "What you own"
+    },
+    "assetsSummary": "Net worth of {amount}",
+    "realityCheck": "Reality check",
+    "debts": {
+      "tu": "Your debts",
+      "usted": "Your debts"
+    },
+    "debtsSummary": "{amount} in total",
+    "debtsNone": "None",
+    "goals": {
+      "tu": "Your goals",
+      "usted": "Your goals"
+    },
+    "goalsSummary": {
+      "one": "1 goal · {amount} per month",
+      "other": "{count} goals · {amount} per month"
+    },
+    "goalsNone": "None",
+    "insurance": {
+      "tu": "Your insurance",
+      "usted": "Your insurance"
+    },
+    "insuranceSummary": "New premiums of {amount} per year",
+    "investment": {
+      "tu": "Your investment",
+      "usted": "Your investment"
+    },
+    "investmentSummary": "Profile: {profile} · {growth} in growth",
+    "investmentUnanswered": "The profile is not answered yet"
+  },
+  "currencies": {
+    "title": "Currencies",
+    "intro": "The rate the client gets for each currency other than the base one. Without a rate, an amount in that currency cannot be saved.",
+    "back": "Client file",
+    "baseCurrency": "Base currency: {currency}",
+    "empty": "No other currencies recorded.",
+    "rateSummary": "1 {currency} = {rate}",
+    "asOf": "Rate as of {date}",
+    "add": "Add currency",
+    "common": ["USD", "EUR", "COP", "GBP", "MXN", "CAD", "CHF", "BRL", "CLP", "PEN", "ARS"],
+    "client": {
+      "intro": {
+        "tu": "The rate you get for each currency other than your base currency. Without a rate, an amount in that currency cannot be saved.",
+        "usted": "The rate you get for each currency other than your base currency. Without a rate, an amount in that currency cannot be saved."
+      },
+      "back": "My data",
+      "rateHint": {
+        "tu": "The one you actually get at your bank or platform, not the official one.",
+        "usted": "The one you actually get at your bank or platform, not the official one."
+      },
+      "noteHint": "For example, the one my bank pays."
+    },
+    "form": {
+      "newTitle": "New currency",
+      "editTitle": "{currency} rate",
+      "currency": "Currency",
+      "currencyHint": "Three-letter code, for example USD.",
+      "rate": "Rate: {base} per 1 unit",
+      "rateHint": "The one the client actually gets, not the official one.",
+      "asOf": "Rate date",
+      "note": "Note (optional)",
+      "noteHint": "For example, the one their bank pays.",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "deleteToggle": "Delete this currency",
+      "deleteConfirm": "Yes, delete it",
+      "deleteHint": "Only possible if no amount uses this currency.",
+      "errors": {
+        "invalidCurrency": "Enter a three-letter code, for example USD.",
+        "isBase": "The base currency does not have a rate.",
+        "duplicate": "That currency already has a rate: edit it from the list.",
+        "invalidRate": "Enter a rate greater than 0, using numbers only.",
+        "invalidDate": "Choose the rate date.",
+        "tooLong": "It is too long.",
+        "inUse": "There are amounts in this currency. Change them before deleting its rate.",
+        "notAllowed": "You do not have permission to change this data.",
+        "notFound": "This currency no longer has a recorded rate.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      }
+    }
+  },
+  "incomes": {
+    "title": "Income",
+    "intro": "Each income with its amount per payment and the months it arrives.",
+    "back": "Client file",
+    "add": "Add income",
+    "empty": "No income recorded yet.",
+    "kinds": {
+      "laboral": "Employment",
+      "renta": "Rental or investment",
+      "pension": "Pension",
+      "otro": "Other"
+    },
+    "itemSummary": "{amount} · {payments} payments per year",
+    "annual": "{amount} per year",
+    "savingsOnly": "All goes to savings",
+    "gross": "Gross",
+    "totals": {
+      "title": "Totals",
+      "annual": "Income per year",
+      "monthly": "Monthly average"
+    },
+    "socialSecurity": {
+      "title": "Social security months",
+      "summary": "{count} of 12 months",
+      "intro": "Check the months in which social security is paid. Expenses with the “Social security months” frequency are paid in those months.",
+      "legend": "Payment months",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "errors": {
+        "notAllowed": "You do not have permission to change this data.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      }
+    },
+    "variable": {
+      "title": "Base income",
+      "summary": "Suggested: {amount}",
+      "noData": "No data",
+      "intro": "For variable income: what was received in each of the last 12 months. The base income is the lower of the 12-month average and the average of the 3 lowest months.",
+      "currency": "Currency",
+      "legend": "What was received each month",
+      "average": "12-month average",
+      "lowestThree": "Average of the 3 lowest months",
+      "suggested": "Suggested base income",
+      "missing": "Enter at least one month to calculate it.",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "errors": {
+        "invalidAmount": "Check the highlighted months: numbers of 0 or more only.",
+        "invalidCurrency": "Choose a currency from the list.",
+        "missingRate": "That currency has no exchange rate. Record it in Currencies.",
+        "notAllowed": "You do not have permission to change this data.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      },
+      "resultTitle": "Result"
+    },
+    "form": {
+      "newTitle": "New income",
+      "editTitle": "Edit income",
+      "name": "Name",
+      "nameHint": "For example, Salary or Apartment rent.",
+      "kind": "Type",
+      "amount": "Amount per payment",
+      "amountHint": "What arrives each time.",
+      "currency": "Currency",
+      "currencyHint": "For another currency, first record its rate in Currencies.",
+      "payments": "Payments in each month",
+      "paymentsHint": "0 if it does not arrive that month; 2 if it arrives twice, for example with a bonus.",
+      "isNet": "Arrives net",
+      "isNetHint": "It is what arrives, after deductions.",
+      "savingsOnly": "All goes to savings",
+      "savingsOnlyHint": "It does not pay expenses: it feeds savings, for example a salary that is saved in full.",
+      "note": "Note (optional)",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "deleteToggle": "Delete this income",
+      "deleteConfirm": "Yes, delete it",
+      "deleteHint": "It is removed from income. The change history keeps it.",
+      "errors": {
+        "missingName": "Enter the name.",
+        "tooLong": "It is too long.",
+        "missingAmount": "Enter the amount per payment.",
+        "invalidAmount": "Enter an amount of 0 or more, using numbers only.",
+        "invalidCurrency": "Choose a currency from the list.",
+        "invalidPayments": "Enter a number from 0 to 9 in each month.",
+        "missingRate": "That currency has no exchange rate. Record it in Currencies and try again.",
+        "notAllowed": "You do not have permission to change this data.",
+        "notFound": "This income no longer exists.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      },
+      "lostIn": "In an emergency, this income…",
+      "lostInHint": "For the emergency fund. For example, a fixed contribution from the family or a secure rental is always kept.",
+      "lostInOptions": {
+        "": "Depends on the type of income",
+        "a": "Is lost if the job is lost",
+        "b": "Is lost if rental income is lost",
+        "c": "Is lost only in the worst case",
+        "ninguno": "Is always kept"
+      }
+    },
+    "client": {
+      "title": "My income",
+      "intro": {
+        "tu": "What you receive and in which months. If you change something, your advisor sees the before and after.",
+        "usted": "What you receive and in which months. If you change something, your advisor sees the before and after."
+      },
+      "back": "My data",
+      "add": "Add income",
+      "empty": {
+        "tu": "You have no income recorded yet.",
+        "usted": "You have no income recorded yet."
+      },
+      "amountHint": {
+        "tu": "What you get each time.",
+        "usted": "What you get each time."
+      }
+    }
+  },
+  "profile": {
+    "title": "Profile and settings",
+    "intro": "Client details and the advisor's judgment for the case. Every case is different: none of this comes from the country.",
+    "back": "Client file",
+    "profileTitle": "Profile",
+    "birthDate": "Date of birth",
+    "birthDateHint": "Sets the age at the cutoff date.",
+    "sex": "Sex",
+    "sexHint": "Used by the default retirement age.",
+    "sexes": {
+      "mujer": "Female",
+      "hombre": "Male",
+      "none": "Not given"
+    },
+    "dependents": "Dependents",
+    "dependentsHint": "Children or other people who depend on them financially.",
+    "typeTitle": "Client type",
+    "typeHint": "Sets the rules that apply in the plan.",
+    "types": {
+      "empleado": "Employee",
+      "contratista": "Contractor",
+      "independiente_variable": "Self-employed with variable income",
+      "pensionado": "Pensioner",
+      "rentista": "Lives on rental or investment income",
+      "mixto": "Mixed",
+      "none": "Not defined"
+    },
+    "rules": {
+      "empleado": "Bonus (prima): split it among annual pockets, debts and savings by priority. Severance (cesantías): it is savings for housing or education, not emergency fund liquidity.",
+      "contratista": "Review months without a contract and each month's social security; a pocket for months without income. With no employee benefits, their own savings replace them. Confirm the contribution base, because it sets the pension.",
+      "independiente_variable": "The budget is built on the base income: the lower of the 12-month average and the average of the 3 lowest months. Anything above that is split with a fixed rule.",
+      "pensionado": "The net pension is the main income and health is already deducted. Check whether they still work; focus on liquidity and succession.",
+      "rentista": "Rental income is the main income: review months without a tenant and who pays building fees and property tax.",
+      "mixto": "The rules of each type of income they have apply."
+    },
+    "emergencyMonths": "Suggested emergency fund: {months} months of essentials.",
+    "settingsTitle": "Case settings",
+    "cutoffDate": "Cutoff date",
+    "cutoffDateHint": "Empty means today. Set it so the figures do not change as days go by.",
+    "flowYear": "Cash flow year",
+    "flowYearHint": "Empty means the year after the cutoff date.",
+    "mode": "Calculation mode",
+    "modes": {
+      "native": "Native",
+      "compatible": "Template-compatible"
+    },
+    "modeHints": {
+      "native": "With the approved corrections, for example who pays each expense.",
+      "compatible": "Reproduces template 2.2 exactly."
+    },
+    "thresholds": "Tax thresholds that apply",
+    "thresholdsHint": "Check only the ones that apply to this case. They are a reference: confirm them with the accountant or tax advisor.",
+    "thresholdOption": "{label}: {amount}",
+    "noThresholds": "There are no published thresholds for {country}.",
+    "thresholdLabels": {
+      "tax.dependent_income_limit": "Dependent's income limit (allowance for descendants)"
+    },
+    "submit": "Save",
+    "submitting": "Saving…",
+    "cancel": "Cancel",
+    "saved": "Changes saved.",
+    "errors": {
+      "invalidDate": "Enter a valid date.",
+      "futureBirthDate": "The date of birth cannot be in the future.",
+      "invalidDependents": "Enter a number from 0 to 20.",
+      "invalidYear": "Enter a year between 2000 and 2100.",
+      "notAllowed": "You do not have permission to change this data.",
+      "unavailable": "It could not be saved. Try again in a few minutes."
+    }
+  },
+  "costOfLiving": {
+    "title": "Cost of living",
+    "intro": "How much the client's life costs at three levels. You propose the basic level in each budget expense.",
+    "back": "Client file",
+    "levels": {
+      "essential": "Essential",
+      "basic": "Basic",
+      "current": "Current"
+    },
+    "levelHints": {
+      "essential": "Essential expenses only.",
+      "basic": "The current budget with your basic-level proposal.",
+      "current": "The whole budget, without savings."
+    },
+    "perMonth": "{amount} per month",
+    "perYear": "{amount} per year",
+    "byPayer": "What each one pays, per year",
+    "payers": {
+      "cliente": "The client",
+      "familia": "The family",
+      "tercero": "Someone else"
+    },
+    "withoutTemporary": "Without temporary expenses, per month",
+    "itemsTitle": "By item, per year",
+    "editBasic": "Edit in the budget",
+    "thresholdsTitle": "Tax thresholds",
+    "thresholdsNote": "A reference, not tax advice: confirm it with the accountant or tax advisor.",
+    "ownIncome": "Own income per year",
+    "limit": "Limit: {amount} per year",
+    "exceeds": "Exceeds",
+    "notExceeds": "Does not exceed",
+    "noThresholds": "No threshold is checked for this case. They are checked in Profile and settings.",
+    "empty": "There are no expenses in the budget yet.",
+    "annualLabel": "Per year"
+  },
+  "status": {
+    "ok": "Good",
+    "warning": "Attention",
+    "alert": "Alert"
+  },
+  "cashflow": {
+    "title": "Cash flow {year}",
+    "intro": "What comes in and goes out each month of the cash flow year, and where the surplus goes.",
+    "back": "Client file",
+    "currencyNote": "Amounts in today's {currency}.",
+    "monthsTitle": "Month by month",
+    "income": "In",
+    "expenses": "Out",
+    "balance": "Balance",
+    "usesPocket": "Uses {amount} from the months-without-income pocket",
+    "contributes": "Saves {amount} for months without income",
+    "monthSurplus": "Surplus for the month",
+    "noIncomeTitle": "Months without income",
+    "noIncomeNone": "No month ends in the red: this pocket is not needed.",
+    "shortfall": "Shortfall in the months in the red",
+    "method": "How it is saved",
+    "methods": {
+      "no_aplica": "Not applicable",
+      "aporte_igual": "The same amount each month with a surplus",
+      "aporte_proporcional": "In proportion to each month's surplus"
+    },
+    "equalContribution": "Equal contribution per month",
+    "coverage": "Share of the shortfall that is covered",
+    "deficitAlert": "The year ends in deficit: the months with a surplus are not enough to cover the months in the red.",
+    "destinationTitle": "Where the surplus goes",
+    "annualSurplus": "Surplus for the year",
+    "toFund": "To the emergency fund, first",
+    "toDebt": "Extra payment to debts",
+    "toInvestment": "To investment ({pct} of the surplus)",
+    "freeMargin": "Free margin",
+    "expensiveDebtNote": "There is expensive debt: the surplus goes to debts and is not invested.",
+    "realityNote": {
+      "pendiente": "The reality check is pending: a smaller percentage is invested.",
+      "confirmada": "The reality check is confirmed.",
+      "revisar_gastos": "The reality check shows unrecorded expenses: review the budget before investing more."
+    },
+    "fundPlan": "The surplus fills the emergency fund first: it is complete in {month}.",
+    "fundPlanNever": "With this surplus the emergency fund is never completed: review expenses or income.",
+    "receivablesTitle": "Receivables this year",
+    "receivablesReceived": "Payments received",
+    "receivablesToDebt": "To debts",
+    "receivablesToInvestment": "To investment",
+    "receivablesFree": "Free",
+    "totalInvestment": "Total to investment in the year",
+    "illustrative": "Illustrative, not guaranteed. This platform does not recommend products or institutions.",
+    "empty": "There is no income or spending yet to build the cash flow."
+  },
+  "emergencyFund": {
+    "title": "Emergency fund",
+    "intro": "How much the client should have for an emergency, based on what would happen if they lost their income.",
+    "back": "Client file",
+    "currencyNote": "Amounts in today's {currency}.",
+    "goalTitle": "Goal",
+    "currentGoal": "Current goal",
+    "fullGoal": "Full goal",
+    "expensiveDebtNote": "With expensive debt, the current goal is one month of essentials; it is completed after the debt is paid.",
+    "progress": "{balance} of {goal}",
+    "progressLabel": "Progress toward the full goal",
+    "progressCurrent": "Progress toward the current goal",
+    "months": "Months of coverage",
+    "essential": "Essential spending per month",
+    "scenariosTitle": "Scenarios",
+    "scenarios": {
+      "a": "Loses employment income",
+      "b": "Loses rental or investment income",
+      "c": "Loses both (worst case)"
+    },
+    "keptIncome": "Income that is kept",
+    "monthlyShortfall": "Monthly shortfall",
+    "covered": "The income that is kept covers the essentials.",
+    "monthsCovered": "The current goal covers {months} months",
+    "worstCase": "Goal for the worst case",
+    "minimum": "Minimum: one month of essentials",
+    "ruleTitle": "Compared with the 6-months-of-spending rule",
+    "sixMonthRule": "6 months of total spending",
+    "released": "Capital released",
+    "balanceNote": "The balance comes from allocating the liquid balance in Pockets.",
+    "empty": "There are no essential expenses in the budget yet."
+  },
+  "pockets": {
+    "title": "Pockets",
+    "intro": "What each unit of money is saved for: the year's goal, the monthly contribution and today's balance.",
+    "back": "Client file",
+    "currencyNote": "Amounts in today's {currency}.",
+    "emergency": "Emergency fund",
+    "noIncome": "Months without income",
+    "unnamed": "Unnamed pocket",
+    "annualGoal": "Goal for the year",
+    "monthly": "Monthly contribution",
+    "balance": "Today's balance",
+    "suggested": "suggested",
+    "allocationTitle": "Allocation of today's balance",
+    "liquid": "Liquid balance",
+    "cushion": "Cushion in the operating account",
+    "available": "Available to allocate",
+    "assigned": "Assigned to pockets",
+    "excess": "Excess",
+    "lumpDebt": "One-off payment to expensive debt",
+    "lumpInvestment": "One-off contribution to investment",
+    "unallocated": "Left unassigned",
+    "overAllocated": "The pocket balances exceed what is available. Adjust the balances of the general pockets.",
+    "order": "Allocation order: emergency fund, months without income and then each pocket's balance.",
+    "withContribution": "Pockets with a monthly contribution: {count}",
+    "empty": "There are no general pockets yet. Pocket-type budget items are assigned to one.",
+    "totalGoal": "Total goals for the year",
+    "totalMonthly": "Total monthly contributions",
+    "add": "Add pocket",
+    "manageBanks": "Banks",
+    "edit": "Edit",
+    "bankOf": "At {bank}",
+    "noBank": "No bank",
+    "form": {
+      "newTitle": "New pocket",
+      "editTitle": "Edit pocket",
+      "name": "Name",
+      "nameHint": "For example, Travel, Clothing or Taxes.",
+      "purpose": "What it holds (optional)",
+      "whenUsed": "When it is used (optional)",
+      "bank": "Bank",
+      "bankHint": "Where the pocket is. Banks are added in Banks.",
+      "noBank": "No bank yet",
+      "currency": "Currency",
+      "currencyHint": "The account's currency. For another currency, first record its rate in Currencies.",
+      "balance": "Today's balance (optional)",
+      "balanceHint": "What the client already has in this pocket. It comes out of the liquid balance.",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "deleteToggle": "Delete this pocket",
+      "deleteConfirm": "Yes, delete it",
+      "deleteHint": "Its items are left without a pocket. The change history keeps it.",
+      "errors": {
+        "missingName": "Enter the name.",
+        "tooLong": "It is too long.",
+        "looksLikeAccount": "It looks like an account or card number. We do not need it: enter only the name.",
+        "notAllowed": "You do not have permission to change this data.",
+        "unavailable": "It could not be saved. Try again in a few minutes.",
+        "invalidBank": "Choose a bank from the list.",
+        "invalidCurrency": "Choose a currency from the list.",
+        "invalidAmount": "Enter an amount of 0 or more, using numbers only.",
+        "duplicateName": "There is already a pocket with that name.",
+        "missingRate": "That currency has no exchange rate. Record it in Currencies and try again.",
+        "notFound": "This pocket no longer exists."
+      }
+    },
+    "banksSummary": "{count} recorded",
+    "client": {
+      "back": "My data",
+      "intro": {
+        "tu": "What you save each unit of money for: the year's goal, the monthly contribution and today's balance. If you change something, your plan is recalculated and your advisor sees it.",
+        "usted": "What you save each unit of money for: the year's goal, the monthly contribution and today's balance. If you change something, your plan is recalculated and your advisor sees it."
+      },
+      "balanceHint": {
+        "tu": "What you already have in this pocket. It comes out of your liquid balance.",
+        "usted": "What you already have in this pocket. It comes out of your liquid balance."
+      }
+    },
+    "special": {
+      "title": "Pocket: {name}",
+      "intro": "The plan calculates the goal and the balance; here you choose which bank it is in.",
+      "nameTaken": "There is already a general pocket with this name. Rename it and try again."
+    },
+    "bankLabel": "Bank: {bank}"
+  },
+  "banks": {
+    "title": "Banks",
+    "intro": "Where the pockets are. Only the institution's name: never account numbers.",
+    "back": "Pockets",
+    "add": "Add bank",
+    "empty": "There are no banks yet.",
+    "count": "{count} pockets",
+    "countWithLimit": "{count} of {max} pockets",
+    "overLimit": "It has more pockets than the bank allows.",
+    "remunerated": "Interest-bearing",
+    "form": {
+      "newTitle": "New bank",
+      "editTitle": "Edit bank",
+      "name": "Bank name",
+      "nameHint": "Only the name, for example Bank A.",
+      "maxPockets": "Pockets it allows (optional)",
+      "maxPocketsHint": "To warn if the plan needs more pockets than the bank offers.",
+      "isRemunerated": "Pays interest",
+      "isRemuneratedHint": "The account or the pockets earn something.",
+      "note": "Note (optional)",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "deleteToggle": "Delete this bank",
+      "deleteConfirm": "Yes, delete it",
+      "deleteHint": "Its pockets are left without a bank, with their balance.",
+      "errors": {
+        "missingName": "Enter the name.",
+        "tooLong": "It is too long.",
+        "looksLikeAccount": "It looks like an account or card number. We do not need it: enter only the name.",
+        "notAllowed": "You do not have permission to change this data.",
+        "unavailable": "It could not be saved. Try again in a few minutes.",
+        "invalidMaxPockets": "Enter a number from 1 to 99, or leave it empty.",
+        "duplicateName": "There is already a bank with that name.",
+        "notFound": "This bank no longer exists."
+      }
+    }
+  },
+  "receivables": {
+    "title": "Receivables",
+    "intro": "Money owed to the client and repaid in installments. The payments are not budget income: they go to investment or, if there is expensive debt, to debts.",
+    "back": "Client file",
+    "add": "Add receivable",
+    "empty": "Nobody owes the client money.",
+    "pendingTotal": "Pending today",
+    "itemSummary": "{payment} per month · {installments} installments",
+    "lastPayment": "Last payment: {date}",
+    "noDate": "No first payment date",
+    "pending": "Pending: {amount}",
+    "toInvestment": "{pct} to investment",
+    "form": {
+      "newTitle": "New receivable",
+      "editTitle": "Edit receivable",
+      "debtor": "Who owes them",
+      "debtorHint": "The relationship is enough, for example Sister or Friend.",
+      "balance": "Balance owed",
+      "balanceHint": "What they owed before the first payment. From the first payment date, installments are deducted automatically.",
+      "payment": "Monthly installment",
+      "currency": "Currency",
+      "currencyHint": "Balance and installment use the same currency. For another one, first record its rate in Currencies.",
+      "firstPayment": "First payment date (optional)",
+      "pctToInvestment": "Share of each payment that goes to investment (%)",
+      "pctToInvestmentHint": "Empty means 100 %. The rest stays free. With expensive debt, everything goes to debts.",
+      "note": "Note (optional)",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "deleteToggle": "Delete this receivable",
+      "deleteConfirm": "Yes, delete it",
+      "deleteHint": "It is removed from receivables. The change history keeps it.",
+      "errors": {
+        "missingDebtor": "Enter who owes them.",
+        "tooLong": "It is too long.",
+        "missingAmount": "Enter the amount.",
+        "invalidAmount": "Enter an amount greater than 0, using numbers only.",
+        "invalidCurrency": "Choose a currency from the list.",
+        "invalidDate": "Enter a valid date.",
+        "invalidPercent": "Enter a number from 0 to 100.",
+        "missingRate": "That currency has no exchange rate. Record it in Currencies and try again.",
+        "notAllowed": "You do not have permission to change this data.",
+        "notFound": "This receivable no longer exists.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      }
+    },
+    "client": {
+      "back": "My data",
+      "title": {
+        "tu": "What you are owed",
+        "usted": "What you are owed"
+      },
+      "intro": {
+        "tu": "Money owed to you and repaid in installments. The payments are not budget income: they go to investment or, if you have expensive debt, to debts.",
+        "usted": "Money owed to you and repaid in installments. The payments are not budget income: they go to investment or, if you have expensive debt, to debts."
+      },
+      "empty": {
+        "tu": "Nobody owes you money.",
+        "usted": "Nobody owes you money."
+      },
+      "debtor": {
+        "tu": "Who owes you",
+        "usted": "Who owes you"
+      },
+      "pctNote": "The advisor decides the share of each payment that goes to investment.",
+      "balance": {
+        "tu": "Balance owed to you",
+        "usted": "Balance owed to you"
+      },
+      "balanceHint": {
+        "tu": "What you were owed before the first payment. From the first payment date, installments are deducted automatically.",
+        "usted": "What you were owed before the first payment. From the first payment date, installments are deducted automatically."
+      }
+    }
+  },
+  "debts": {
+    "title": "Debts",
+    "intro": "What the client owes: balance, rate and installment of each debt. This sets the payment order and when each one is paid off.",
+    "back": "Client file",
+    "add": "Add debt",
+    "empty": "The client has no debts recorded.",
+    "types": {
+      "tarjeta_credito": "Credit card",
+      "libre_inversion": "Personal loan",
+      "vehiculo": "Vehicle",
+      "hipotecario": "Mortgage",
+      "libranza": "Payroll loan (libranza)",
+      "informal": "Informal (family or private)",
+      "otro": "Other"
+    },
+    "itemSummary": "{rate} EAR · installment of {payment}",
+    "noExtra": "Does not accept extra payments",
+    "extraFrom": "Extra payments from {date}",
+    "expensive": "Expensive debt",
+    "balanceTotal": "Total debt",
+    "minPaymentTotal": "Minimum installments per month",
+    "debtLoad": "Debt load (installments / income)",
+    "plan": {
+      "title": "Payment plan",
+      "intro": "Every month the installment of every debt is paid; whatever is left of the total payment goes as an extra payment to the first debt in the order that accepts extra payments. When a debt ends, its installment moves to the next one.",
+      "method": "Method",
+      "methods": {
+        "avalancha": "Avalanche",
+        "bola_de_nieve": "Snowball",
+        "manual": "Manual order"
+      },
+      "start": "First month",
+      "totalPayment": "Total monthly payment for debts",
+      "extraMonthly": "Extra from the surplus per month",
+      "lumpSum": "Initial one-off payment (from the excess in today's balance)",
+      "orderLabel": "{order}.",
+      "payoff": "Paid off in {month} · {months} months",
+      "payoffOne": "Paid off in {month} · 1 month",
+      "payoffLumpSum": "The one-off payment pays it off",
+      "exceeds": "More than {months} months: the total payment does not pay it off in that time",
+      "interest": "Interest with the plan: {amount}",
+      "neverPaid": "With only the installment it is never paid off: the installment does not cover the month's interest.",
+      "interestSavings": "Interest saved compared with paying only the installment",
+      "interestSavingsDetail": "See each debt: some are not paid off with only the installment or go past the term",
+      "expensivePayoff": "Out of expensive debt",
+      "expensivePayoffExceeds": "More than {months} months",
+      "noExpensive": "No expensive debt",
+      "notInPlan": "No balance: not part of the plan",
+      "illustrative": "Illustrative projection, not guaranteed: it assumes the total payment stays the same, rates do not change and there are no new debts. This platform does not recommend products or institutions.",
+      "methodHints": {
+        "avalancha": "Highest rate first: saves the most interest.",
+        "bola_de_nieve": "Smallest balance first: small debts end sooner and it is more motivating.",
+        "manual": "In the order the advisor set in each debt."
+      }
+    },
+    "methodForm": {
+      "label": "Payment method",
+      "hint": "Avalanche: highest rate first, saves the most interest. Snowball: smallest balance first, more motivating. Manual order: each debt's place is set in its form.",
+      "submit": "Save method",
+      "submitting": "Saving…",
+      "saved": "Method saved.",
+      "error": "The method could not be saved. Try again in a few minutes."
+    },
+    "form": {
+      "newTitle": "New debt",
+      "editTitle": "Edit debt",
+      "name": "Debt name",
+      "nameHint": "For example Main card or Car loan. No card or loan numbers.",
+      "type": "Type",
+      "lender": "Lender (optional)",
+      "lenderHint": "Only the name, for example Bank A.",
+      "balance": "Today's balance",
+      "currency": "Currency",
+      "currencyHint": "Balance and installment use the same currency. For another one, first record its rate in Currencies.",
+      "rate": "Effective annual rate (%)",
+      "rateHint": "The one shown on the statement as the effective annual rate. An interest-free loan is 0.",
+      "minPayment": "Minimum monthly installment",
+      "minPaymentHint": "If the installment includes insurance, enter it in full for now.",
+      "acceptsExtra": "Does it accept extra payments?",
+      "acceptsExtraYes": "Yes",
+      "acceptsExtraNo": "No",
+      "acceptsExtraHint": "No, for example, on a loan with FRECH coverage or a family loan that is not worth paying early.",
+      "extraFrom": "Accepts extra payments from (optional)",
+      "extraFromHint": "Empty means from now.",
+      "manualOrder": "Place in the manual order (optional)",
+      "manualOrderHint": "Only counts with the manual order method. 1 is the first to receive extra payments.",
+      "note": "Note (optional)",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "deleteToggle": "Delete this debt",
+      "deleteConfirm": "Yes, delete it",
+      "deleteHint": "It is removed from the debt inventory. The change history keeps it.",
+      "errors": {
+        "missingName": "Enter the debt name.",
+        "tooLong": "It is too long.",
+        "invalidType": "Choose a type from the list.",
+        "missingAmount": "Enter the amount.",
+        "invalidAmount": "Enter an amount of 0 or more, using numbers only.",
+        "invalidCurrency": "Choose a currency from the list.",
+        "invalidRate": "Enter the rate as a number from 0 to 1,000, for example 28 or 12,5.",
+        "invalidDate": "Enter a valid date.",
+        "extraFromWithoutExtra": "A debt that does not accept extra payments has no date from which it accepts them.",
+        "invalidOrder": "Enter a whole number from 1 to 99.",
+        "missingRate": "That currency has no exchange rate. Record it in Currencies and try again.",
+        "notAllowed": "You do not have permission to change this data.",
+        "notFound": "This debt no longer exists.",
+        "unavailable": "It could not be saved. Try again in a few minutes.",
+        "invalidInstallment": "Enter a whole number from 1 to 600.",
+        "beforeFirst": "The total term cannot be less than the number of the first installment.",
+        "frechIncomplete": "Enter the FRECH points and the installment it covers until, or leave both empty.",
+        "invalidPoints": "Enter the points as a number greater than 0, for example 4.",
+        "paymentOrTerm": "With tracking, enter the installment or the total term to calculate it.",
+        "extraInstallmentWithoutExtra": "A debt that does not accept extra payments has no installment from which it accepts them."
+      },
+      "trackingTitle": "Installment-by-installment tracking (optional)",
+      "trackingIntro": "With the first installment date, the app builds the loan schedule and the client checks off each installment paid. The plan's balance and installment come from that schedule.",
+      "firstInstallmentDate": "Date of the first installment in the schedule",
+      "firstInstallmentDateHint": "The one on the bank's statement or schedule. Empty means the debt is not tracked.",
+      "firstInstallmentNumber": "Number of that installment",
+      "firstInstallmentNumberHint": "1 if the loan is new; if the schedule starts at installment 37, enter 37 and the balance at that point.",
+      "totalInstallments": "Total term in installments (optional)",
+      "totalInstallmentsHint": "With the term, the installment is calculated automatically if it is left at 0.",
+      "insurance": "Insurance and fees included in the installment",
+      "originalAmount": "Original amount (optional)",
+      "extraFromInstallment": "Accepts extra payments from installment No. (optional)",
+      "frechPoints": "FRECH: rate points covered by the government (optional)",
+      "frechPointsHint": "For example 4 if it covers 4 points of the effective annual rate.",
+      "frechUntil": "FRECH: coverage until installment No."
+    },
+    "client": {
+      "back": "My data",
+      "title": {
+        "tu": "Your debts",
+        "usted": "Your debts"
+      },
+      "intro": {
+        "tu": "What you owe: balance, rate and installment of each debt. This sets the payment order and when you pay off each one.",
+        "usted": "What you owe: balance, rate and installment of each debt. This sets the payment order and when you pay off each one."
+      },
+      "empty": {
+        "tu": "You have no debts recorded.",
+        "usted": "You have no debts recorded."
+      },
+      "orderNote": "The advisor decides the payment method and the order."
+    },
+    "whatIf": {
+      "title": "What if you pay more?",
+      "intro": "Simulate an additional payment toward the debts. It follows the same payment order and respects debts that do not accept extra payments. It does not change the plan and is not saved.",
+      "monthly": "Additional payment per month",
+      "lumpSum": "Additional one-off payment (optional)",
+      "free": "Free per month according to the cash flow: {amount}",
+      "overFree": "It is more than what is left free in the cash flow: it would have to come from another expense or new income.",
+      "empty": "Enter an amount to see how much sooner the debts are paid off and how much interest is saved.",
+      "invalidAmount": "Enter an amount of 0 or more, using numbers only.",
+      "resultTitle": "With the additional payment",
+      "freedom": "Out of all debts",
+      "monthsEarlier": "{month} · {months} months sooner",
+      "oneMonthEarlier": "{month} · 1 month sooner",
+      "sameMonth": "{month} · same as in the plan",
+      "baseExceeds": "{month} · in the plan, more than {horizon} months",
+      "exceeds": "More than {horizon} months",
+      "interestSaved": "Interest saved compared with the plan",
+      "atLeast": "At least {amount}",
+      "expensivePayoff": "Out of expensive debt",
+      "perDebt": "Each debt",
+      "rowChange": "{months} months sooner · {amount} less in interest",
+      "rowChangeOne": "1 month sooner · {amount} less in interest",
+      "rowInterestOnly": "{amount} less in interest",
+      "rowSame": "No change",
+      "rowPaidByLumpSum": "The one-off payment pays it off",
+      "termNote": "When paying extra on a long loan, ask the lender to shorten the term rather than the installment, and ask whether they charge for extra payments."
+    },
+    "minPaymentHintTracking": "With tracking, it is the bank's installment including insurance; 0 calculates it from the term.",
+    "tracking": {
+      "link": "Installments",
+      "next": "Next installment: {amount} on {date}",
+      "overdue": "{count} overdue installments not checked off",
+      "overdueOne": "1 overdue installment not checked off",
+      "paidOff": "Paid off"
+    },
+    "panelLink": "Loans dashboard",
+    "panelLinkSummary": "{count} tracked installment by installment",
+    "frechSummary": "With FRECH: {rate} EAR until installment {until}"
+  },
+  "assets": {
+    "title": "Net worth",
+    "intro": "What the client owns. The liquid part (accounts, pockets and cash) is what is allocated to the pockets. Investments are recorded in Investment and what they are owed, in Receivables.",
+    "back": "Client file",
+    "add": "Add asset",
+    "empty": "There are no assets yet.",
+    "liquidTotal": "Liquid balance",
+    "types": {
+      "liquido": "Liquid",
+      "inmueble": "Real estate",
+      "vehiculo": "Vehicle",
+      "otro": "Other"
+    },
+    "typeHints": {
+      "liquido": "Available accounts, pockets and cash.",
+      "inmueble": "House, apartment, commercial unit or land.",
+      "vehiculo": "Car or motorcycle.",
+      "otro": "Cooperative contributions, severance savings and everything else."
+    },
+    "generatesIncome": "Generates income",
+    "form": {
+      "newTitle": "New asset",
+      "editTitle": "Edit asset",
+      "name": "Name",
+      "nameHint": "For example, Savings account at Bank A or Apartment. No account numbers.",
+      "assetType": "Type",
+      "value": "Value",
+      "valueHint": "Today's balance or the approximate value.",
+      "currency": "Currency",
+      "currencyHint": "For another currency, first record its rate in Currencies.",
+      "generatesIncome": "Generates income",
+      "generatesIncomeHint": "For example, a rented commercial unit.",
+      "note": "Note (optional)",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "deleteToggle": "Delete this asset",
+      "deleteConfirm": "Yes, delete it",
+      "deleteHint": "It is removed from net worth. The change history keeps it.",
+      "errors": {
+        "missingName": "Enter the name.",
+        "tooLong": "It is too long.",
+        "looksLikeAccount": "It looks like an account or card number. We do not need it: enter only the name.",
+        "missingAmount": "Enter the value.",
+        "invalidAmount": "Enter an amount of 0 or more, using numbers only.",
+        "invalidCurrency": "Choose a currency from the list.",
+        "missingRate": "That currency has no exchange rate. Record it in Currencies and try again.",
+        "notAllowed": "You do not have permission to change this data.",
+        "notFound": "This asset no longer exists.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      }
+    },
+    "client": {
+      "back": "My data",
+      "title": {
+        "tu": "What you own",
+        "usted": "What you own"
+      },
+      "intro": {
+        "tu": "Your accounts, pockets, cash, real estate and vehicles. The liquid part is what is allocated to your pockets. Your investments go in Investment.",
+        "usted": "Your accounts, pockets, cash, real estate and vehicles. The liquid part is what is allocated to your pockets. Your investments go in Investment."
+      },
+      "empty": {
+        "tu": "You have not recorded what you own yet.",
+        "usted": "You have not recorded what you own yet."
+      }
+    },
+    "netWorth": {
+      "title": "Net worth",
+      "totalAssets": "Total assets",
+      "debts": "Debts",
+      "netWorth": "Net worth",
+      "composition": "Composition",
+      "share": "{value} · {share}",
+      "groups": {
+        "liquido": "Liquid",
+        "inversion": "Investments",
+        "inmueble": "Real estate",
+        "vehiculo": "Vehicles",
+        "por_cobrar": "Receivable",
+        "otro": "Other"
+      },
+      "concentration": "Concentration in real estate and vehicles",
+      "concentrationHigh": "More than 80 % in real estate and vehicles: net worth is not very liquid.",
+      "concentrationOk": "Reference: more than 80 % is not very liquid.",
+      "assetsTitle": "Assets"
+    }
+  },
+  "realityCheck": {
+    "title": "Reality check",
+    "intro": "Compares what the client actually saved with what the plan says they save. Until it is confirmed, a smaller share of the surplus is invested.",
+    "back": "Client file",
+    "status": {
+      "pendiente": "Pending",
+      "confirmada": "Confirmed",
+      "revisar_gastos": "Review expenses"
+    },
+    "resultTitle": "Result",
+    "actual": "Actual savings per month",
+    "expected": "Expected savings per month",
+    "expectedHint": "The plan's surplus and scheduled savings, per month.",
+    "difference": "Difference",
+    "differenceInMoney": "Because the plan leaves no savings, the difference is shown in money per month.",
+    "noExpected": "The plan leaves no expected savings, so there is nothing to compare against.",
+    "pctToInvestment": "Of the surplus to investment",
+    "rule": "It is confirmed if actual savings reach 85 % of the expected amount.",
+    "statusHints": {
+      "pendiente": "Some data is missing.",
+      "confirmada": "The budget reflects what really happens.",
+      "revisar_gastos": "There are expenses that are not in the budget: review it with the client."
+    },
+    "form": {
+      "savingsAgo": "Total savings N months ago",
+      "savingsAgoHint": "Sum of accounts, pockets and investments on that date.",
+      "months": "N (months)",
+      "savingsToday": "Total savings today",
+      "savingsTodayHint": "Not counting extraordinary income, such as inheritances or sales.",
+      "currency": "Currency",
+      "currencyHint": "Both balances in the same currency.",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "errors": {
+        "invalidAmount": "Enter an amount of 0 or more, using numbers only.",
+        "invalidMonths": "Enter a whole number from 1 to 120.",
+        "invalidCurrency": "Choose a currency from the list.",
+        "missingRate": "That currency has no exchange rate. Record it in Currencies and try again.",
+        "notAllowed": "You do not have permission to change this data.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      }
+    },
+    "client": {
+      "back": "My data",
+      "intro": {
+        "tu": "Compares what you actually saved with what your plan says you save. Until it is confirmed, a smaller percentage is invested.",
+        "usted": "Compares what you actually saved with what your plan says you save. Until it is confirmed, a smaller percentage is invested."
+      },
+      "revisar_gastos": {
+        "tu": "There are expenses that are not in your budget: review it with your advisor.",
+        "usted": "There are expenses that are not in your budget: review it with your advisor."
+      }
+    }
+  },
+  "planSettings": {
+    "title": "Plan assumptions",
+    "intro": "The advisor's professional judgment for the case. Empty uses the methodology value, shown in each field. The question mark explains what each one does.",
+    "back": "Client file",
+    "methodology": "Methodology: {value}",
+    "form": {
+      "emergencyMonths": "Emergency fund months",
+      "emergencyMonthsHint": "Methodology for this type of client: {value}.",
+      "expensiveDebtThreshold": "Expensive debt threshold (% effective annual)",
+      "expensiveDebtThresholdHint": "Methodology: {value}.",
+      "pctInvestConfirmed": "Surplus to investment with the reality check confirmed (%)",
+      "pctInvestPending": "Surplus to investment while the check is not confirmed (%)",
+      "pctSurplusToDebt": "Surplus to debts when there is expensive debt (%)",
+      "pctExcessToInvest": "Excess of today's balance to investment (%)",
+      "percentHint": "Methodology: {value}.",
+      "cushion": "Cushion in the operating account ({currency})",
+      "cushionHint": "Empty means 0.",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "errors": {
+        "invalidMonths": "Enter a number greater than 0 and up to 24, with at most one decimal.",
+        "invalidPercent": "Enter a number from 0 to 100.",
+        "invalidAmount": "Enter an amount of 0 or more, using numbers only.",
+        "notAllowed": "Only the advisor changes the plan assumptions.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      }
+    }
+  },
+  "assumptions": {
+    "title": "Plan assumptions",
+    "intro": "The criteria this plan was calculated with. The question mark explains what each one does.",
+    "months": {
+      "one": "{value} month",
+      "other": "{value} months"
+    },
+    "labels": {
+      "emergencyMonths": "Emergency fund months",
+      "expensiveDebtThreshold": "Expensive debt threshold (effective annual rate)",
+      "pctInvestConfirmed": "Surplus to investment with the reality check confirmed",
+      "pctInvestPending": "Surplus to investment while the check is not confirmed",
+      "pctSurplusToDebt": "Surplus to debts when there is expensive debt",
+      "pctExcessToInvest": "Excess of today's balance to investment",
+      "cushion": "Cushion in the operating account",
+      "retirementAge": "Expected retirement age",
+      "realReturnGrowth": "Assumed real return on growth",
+      "realReturnStability": "Assumed real return on stability",
+      "glideStep": "Yearly reduction of the % in growth near retirement",
+      "growthFloor": "Floor for the % in growth"
+    },
+    "help": {
+      "emergencyMonths": "How many months of essential spending the emergency fund covers in the worst scenario, if income is lost. More months are suggested the less stable the income is. The goal never goes below one month of essentials and, while there is expensive debt, it stays at that month.",
+      "expensiveDebtThreshold": "From this rate up, a debt is considered expensive. While there is expensive debt nothing is invested, because no investment reliably earns more than that debt costs: the surplus goes to pay it off first.",
+      "pctInvestConfirmed": "Share of each month's surplus that goes to investment when the reality check confirms that actual savings reach at least 85 % of the expected amount. The rest stays as margin.",
+      "pctInvestPending": "Share of the surplus that goes to investment while the reality check is pending or shows unrecorded expenses. It is smaller because that surplus has not shown up in the account yet.",
+      "pctSurplusToDebt": "With expensive debt nothing is invested: this share of each month's surplus goes to pay it off. It also applies to today's money left over after filling the fund, the months without income and the pockets.",
+      "pctExcessToInvest": "Without expensive debt, the share of today's money that goes to investment as a one-off contribution: what is left of the liquid balance after keeping the cushion and filling the fund, the months without income and the pockets. With expensive debt, the debt percentage is used.",
+      "cushion": "Money left in the everyday account and not allocated. The rest of the liquid balance goes to the fund, the months without income, the pockets and, if anything is left, the excess.",
+      "retirementAge": "Age at which the client expects to stop working. In the 10 years before, the % in growth goes down gradually; with less than 5 years to retirement, the risk capacity goes down.",
+      "realReturnGrowth": "Annual return above inflation assumed for money in growth in the projection. It is illustrative and not guaranteed.",
+      "realReturnStability": "Annual return above inflation assumed for money in stability in the projection. It is illustrative and not guaranteed.",
+      "glideStep": "Points the % in growth goes down each year in the 10 years before retirement, to reach that age with less risk.",
+      "growthFloor": "The % in growth does not go below this floor, unless today's is already lower."
+    },
+    "years": "{value} years"
+  },
+  "assistant": {
+    "open": "Assistant (AI)",
+    "close": "Close the assistant",
+    "title": "Assistant",
+    "intro": "Type or dictate what the client tells you. Claude proposes what to check on the list and you review it before saving. The notes are sent to Claude only for this proposal: MiLuca does not keep them. Do not write names or account numbers.",
+    "notes": "Conversation notes",
+    "notesHint": "For example: rent 1.200.000 a month, SOAT 900 thousand a year, groceries 250 thousand a week. To dictate, use your keyboard's or macOS dictation.",
+    "propose": "Propose expenses",
+    "proposing": "Thinking…",
+    "resultTitle": "Proposal",
+    "reviewNote": "Automatic proposal: review each amount before saving.",
+    "nothingFound": "The model did not find any expenses from the list in the notes.",
+    "apply": "Check on the list",
+    "applied": "Checked on the list: {count}. Review the amounts and save with Add the checked ones.",
+    "status": {
+      "ready": "{amount} per payment, {frequency}",
+      "frequencyDiffers": "They said {amount} {said}; the list uses {listed}: enter the amount per payment",
+      "noFrequency": "They said {amount} without saying how often: enter the amount per payment",
+      "needsDays": "They said {amount}: enter the amount per purchase and the days it lasts",
+      "noAmount": "No amount in the notes",
+      "present": "Already in the budget"
+    },
+    "quote": "In the notes: “{quote}”",
+    "unmatchedTitle": "Not on the list",
+    "unmatchedHint": "They are added later, one by one, with Add expense.",
+    "errors": {
+      "emptyNotes": "Write the notes first.",
+      "notAllowed": "Only the advisor uses the assistant.",
+      "notConfigured": "The assistant is not configured: the Anthropic key is missing on the server.",
+      "failed": "No valid proposal arrived. Try again in a moment."
+    },
+    "agent": {
+      "open": "Assistant",
+      "openLabel": "Open the assistant",
+      "title": "Assistant",
+      "close": "Close the assistant",
+      "newChat": "New conversation",
+      "intro": "Write what the client is telling you and I will record it in their plan: income, expenses, debts, goals, insurance, net worth, investments, receivables and profile. I will ask about anything missing. I do not do calculations: the results are on each screen. What you write is sent to Claude, by Anthropic, only to record it; MiLuca does not keep the conversation. Do not write full names or account numbers.",
+      "message": "What the client says",
+      "placeholder": "For example: she earns 4.500.000 a month as an employee, pays rent of 1.200.000 and has a card with a balance of 3 million at 28 %…",
+      "send": "Send",
+      "sending": "Recording…",
+      "you": "You",
+      "assistant": "Assistant",
+      "saved": "Saved",
+      "updatedLabel": "Updated",
+      "view": "View",
+      "undo": "Undo",
+      "undoing": "Undoing…",
+      "undone": "Undone",
+      "undoFailed": "It could not be undone. Check it on its screen.",
+      "sendHint": "Enter sends; Shift + Enter adds a line break.",
+      "errors": {
+        "emptyMessage": "Write what the client says first.",
+        "notAllowed": "Only the advisor uses the assistant.",
+        "notConfigured": "The assistant is not configured: the Anthropic key is missing on the server.",
+        "refused": "The model would not answer that message. Write it another way.",
+        "tooLong": "The conversation is too long. Start a new conversation.",
+        "failed": "No response arrived. Try again in a moment.",
+        "truncated": "I ran out of time on this message. What I managed to save is above; send me what is missing."
+      },
+      "entities": {
+        "profile": "Profile",
+        "income": "Income",
+        "expense": "Expense",
+        "debt": "Debt",
+        "goal": "Goal",
+        "insurance": "Insurance",
+        "asset": "Asset",
+        "investment": "Investment",
+        "receivable": "Receivable",
+        "pocket": "Pocket",
+        "fxRate": "Exchange rate",
+        "riskAnswers": "Risk profile",
+        "realityCheck": "Reality check"
+      },
+      "perPayment": "per payment",
+      "balance": "balance",
+      "minPayment": "installment",
+      "dependents": "dependents:",
+      "savingsToday": "savings today",
+      "created": "Saved:",
+      "updated": "Updated:",
+      "failures": {
+        "invalid": "Not saved. The screen rejected it like this:",
+        "check": "Not saved: that currency has no exchange rate or a value is out of range.",
+        "duplicate": "Not saved: an identical one already exists. Edit the existing one, with its id.",
+        "notAllowed": "Not saved: there is no permission for that change.",
+        "notFound": "Not saved: that id does not exist for this client.",
+        "unavailable": "Not saved: the database did not respond. Try again.",
+        "unknownTool": "That tool does not exist.",
+        "badReference": "Not saved: an id you sent (of a pocket, bank or record) does not exist for this client. Check the case state."
+      },
+      "newChatConfirm": "Yes, start another one",
+      "cancel": "Cancel"
+    }
+  },
+  "quality": {
+    "severity": {
+      "ok": "Good",
+      "blocking": "Blocks delivery",
+      "note": "Needs a note",
+      "warning": "Notice"
+    },
+    "checks": {
+      "surplus_balances": {
+        "ok": "Income minus spending and scheduled savings gives the surplus.",
+        "failed": "Income minus spending and scheduled savings does not give the surplus: there is a difference of {difference}. Review income and expenses without a type."
+      },
+      "pocket_contributions_match": {
+        "ok": "What the budget sends to pockets reaches its pockets.",
+        "failed": "The budget sends {budget} per month to pockets, but {pockets} reaches the pockets. Check each expense's pocket."
+      },
+      "allocation_within_available": {
+        "ok": "Today's balance allocation does not exceed what is available.",
+        "failed": "The pocket balances exceed what is available by {excess}. Adjust the balances in Pockets."
+      },
+      "no_income_covered": {
+        "ok": "The months without income are covered.",
+        "failed": "The year ends in deficit: {shortfall} is missing and the months with a surplus add up to {positive}. Explain how it is covered."
+      },
+      "complete_items": {
+        "ok": "Every expense has a frequency and a type.",
+        "failed": "Expenses with an amount but no frequency or type: {count}. Complete them in the budget."
+      },
+      "items_have_pocket": {
+        "ok": "Every pocket-type expense has its pocket.",
+        "failed": "Pocket-type expenses without a pocket: {count}. Choose it in each budget expense; for a goal contribution, in Goals; and for new insurance premiums, in Insurance assumptions."
+      },
+      "incomes_classified": {
+        "ok": "Every income has a type.",
+        "failed": "Income without a type: {count}. It does not go into the cash flow."
+      },
+      "missing_rates": {
+        "ok": "Every currency has its rate.",
+        "failed": "The exchange rate for {currencies} is missing. Record it in Currencies."
+      },
+      "no_investment_with_expensive_debt": {
+        "ok": "With expensive debt, nothing is invested.",
+        "failed": "There is expensive debt and the plan invests. Review where the surplus goes."
+      },
+      "risk_profile_answered": {
+        "ok": "The risk profile is answered.",
+        "failed": "The risk profile is not answered: meanwhile, everything invested goes to stability."
+      },
+      "short_horizon_in_stability": {
+        "ok": "Money needed in less than 3 years goes entirely to stability.",
+        "failed": "The money is needed in less than 3 years and the plan puts {growth} in growth."
+      },
+      "growth_within_range": {
+        "ok": "The % in growth is within the range for their age and profile.",
+        "failed": "The % in growth ({growth}) is not within the range for their age and profile ({min} to {max}). If the date of birth is missing, record it in the profile."
+      },
+      "reality_check_done": {
+        "ok": "The reality check is done.",
+        "failed": "The reality check is pending: a smaller percentage is invested."
+      },
+      "reality_check_confirms": {
+        "ok": "The reality check shows no unrecorded expenses.",
+        "failed": "The reality check shows unrecorded expenses ({difference} compared with the expected amount). Explain what was reviewed with the client."
+      },
+      "third_party_counted_once": {
+        "ok": "What others pay is not counted twice.",
+        "failed": "There are expenses paid by others and also an income of type other. Check that the contribution is not counted twice."
+      }
+    }
+  },
+  "delivery": {
+    "title": "Deliver the plan",
+    "intro": "Quality check before delivering. The delivered plan is frozen with its date: afterwards it is compared with today's data.",
+    "back": "Client file",
+    "checksTitle": "Quality check",
+    "allPassed": "Everything is in order.",
+    "blockedTitle": "Fix this before delivering",
+    "blockedBody": "The plan cannot be delivered while there are items that block delivery.",
+    "deliveredTitle": "Delivered plans",
+    "noneDelivered": "No plans delivered yet.",
+    "deliveredItem": "{date} · cutoff {cutoff}",
+    "form": {
+      "label": "Version name",
+      "labelHint": "For example, Initial plan or 90-day review.",
+      "defaultFirst": "Initial plan",
+      "defaultNext": "Review of {date}",
+      "notesTitle": "Delivery notes",
+      "notesHint": "They stay with the delivered plan; the client does not see them.",
+      "noteFor": "Note: {check}",
+      "submit": "Deliver the plan",
+      "submitting": "Delivering…",
+      "cancel": "Cancel",
+      "errors": {
+        "missingLabel": "Enter the version name.",
+        "tooLong": "It is too long.",
+        "missingNote": "Write the note that explains this item.",
+        "blocked": "The plan changed and now there are items that block delivery. Review the quality check.",
+        "notAllowed": "Only the advisor delivers the plan.",
+        "unavailable": "It could not be delivered. Try again in a few minutes."
+      }
+    }
+  },
+  "plan": {
+    "deliveredOn": "Delivered on {date} · figures as of {cutoff}",
+    "currencyNote": "Figures in today's {currency}. Illustrative, not guaranteed.",
+    "figuresTitle": "Plan figures",
+    "fundTitle": "Emergency fund",
+    "fundGoal": "Goal",
+    "fundBalance": "Assigned balance",
+    "fundMonthly": "Monthly contribution to complete it",
+    "fundComplete": "It is complete in {month}.",
+    "pocketsTitle": "Pockets",
+    "pocketMonthly": "{amount} per month",
+    "pocketBalance": "Balance: {amount}",
+    "emergency": "Emergency fund",
+    "noIncome": "Months without income",
+    "flowTitle": "The year {year}",
+    "annualSurplus": "Surplus for the year",
+    "redMonths": "Months in the red",
+    "noIncomeMonthly": "Contribution to months without income, in the months with a surplus",
+    "annualInvestment": "To investment in the year",
+    "compareTitle": "Compare with today",
+    "compareIntro": "What was delivered compared with what today's data calculates.",
+    "delivered": "Delivered",
+    "today": "Today",
+    "noChanges": "Today's figures are the same as the delivered plan's.",
+    "versions": "Versions",
+    "scope": "This platform does not recommend products or institutions. Tax, pension and succession matters are confirmed with the corresponding professional.",
+    "pdf": {
+      "download": "Download as PDF",
+      "downloadHint": "The letter, the notes and the figures of this plan, as they were delivered.",
+      "pageLabel": "Page {page} of {total}",
+      "fileName": "MiLuca - {label}"
+    }
+  },
+  "myPlan": {
+    "title": {
+      "tu": "Your plan",
+      "usted": "Your plan"
+    },
+    "link": {
+      "tu": "See your plan",
+      "usted": "See your plan"
+    },
+    "ready": {
+      "tu": "Your plan is ready.",
+      "usted": "Your plan is ready."
+    },
+    "none": {
+      "tu": "Your advisor has not delivered your plan yet.",
+      "usted": "Your advisor has not delivered your plan yet."
+    },
+    "back": "Home"
+  },
+  "credits": {
+    "title": "{name} installments",
+    "intro": "The loan schedule installment by installment. Each installment is checked off as paid with its actual date; if a different installment or an extra payment was made, it is recorded in that installment.",
+    "back": "Debts",
+    "currentBalance": "Today's balance",
+    "next": "Next installment",
+    "nextValue": "No. {number} · {amount} on {date}",
+    "none": "None",
+    "remaining": "Remaining installments",
+    "endDate": "Ends",
+    "exceeds": "More than 360 installments",
+    "pendingInterest": "Interest still to pay",
+    "pendingTotal": "Total still to pay",
+    "principalPaid": "Principal already paid",
+    "overdueAlert": "There are overdue installments not checked off. If they were already paid, check them off; if not, it is best to catch up with the lender.",
+    "paidOff": "This loan is already paid off.",
+    "listTitle": "Installments",
+    "showAll": "See all installments",
+    "showSome": "See only the upcoming ones",
+    "status": {
+      "pagada": "Paid",
+      "vencida": "Overdue",
+      "proxima": "Next",
+      "pendiente": "Pending"
+    },
+    "row": "No. {number} · {date}",
+    "paidOn": "Paid on {date}",
+    "withExtra": "with an extra payment of {amount}",
+    "markPaid": "Mark as paid",
+    "marking": "Marking…",
+    "edit": "Details",
+    "illustrative": "The figures are a guide calculated with the recorded rate and installment: balances and installments are confirmed with the lender's statements.",
+    "markError": "The installment could not be marked. Try again in a few minutes.",
+    "notTracked": "This debt is not tracked installment by installment. Turn it on in the debt with the first installment date.",
+    "form": {
+      "title": "Installment No. {number}",
+      "summary": "Date {date} · installment of {amount}",
+      "paid": "Is it paid?",
+      "paidYes": "Yes",
+      "paidNo": "No",
+      "paidOn": "Actual payment date (optional)",
+      "customPayment": "Different installment this month (optional)",
+      "customPaymentHint": "If a different amount was paid instead of the installment.",
+      "extraPayment": "Extra payment (optional)",
+      "extraPaymentHint": "What was paid on top of the installment. Ask the lender to shorten the term rather than the installment.",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "errors": {
+        "invalidAmount": "Enter an amount greater than 0, using numbers only.",
+        "invalidDate": "Enter a valid date.",
+        "paidOnWithoutPaid": "The payment date goes with an installment marked as paid.",
+        "notAllowed": "You do not have permission to change this data.",
+        "notFound": "This installment no longer exists.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      }
+    },
+    "frechRate": "Client rate with FRECH",
+    "frechRateValue": "{rate} EAR until installment {until} (bank rate: {bank})"
+  },
+  "creditsPanel": {
+    "title": "Loans dashboard",
+    "intro": "The loans tracked installment by installment: what is owed today, what is paid this month and when each one ends with the payment plan.",
+    "back": "Debts",
+    "empty": "No loan is tracked installment by installment. It is turned on in each debt with the first installment date.",
+    "today": "Today",
+    "totalDebt": "Total debt",
+    "nextPayments": "Next month's payment",
+    "pendingInterest": "Interest still to pay",
+    "principalPaid": "Principal already paid",
+    "debtFree": "Debt-free (with the plan)",
+    "debtFreeExceeds": "More than 30 years",
+    "overdue": "Overdue installments not checked off",
+    "load": "Financial load (month's payments / income)",
+    "loadLevels": {
+      "sana": "Healthy (up to 30 %)",
+      "alta": "High (30 % to 40 %)",
+      "muy_alta": "Very high (40 % to 50 %)",
+      "critica": "Critical (more than 50 %)"
+    },
+    "noIncome": "No income recorded",
+    "calendarTitle": "Calendar: each loan's next installment",
+    "calendarStatus": {
+      "vencida": "Overdue",
+      "esta_semana": "Due this week",
+      "al_dia": "Up to date"
+    },
+    "calendarRow": "{date} · {amount}",
+    "segmentsTitle": "Payments by day of the month",
+    "segmentsIntro": "It is best to have that money in the account before each period.",
+    "segments": ["Days 1 to 10", "Days 11 to 20", "Days 21 to 31"],
+    "segmentsTotal": "Total for the month",
+    "planTitle": "Payment plan",
+    "planIntro": "With the plan's payment method and the extra from the surplus, how much is saved compared with paying only the installments.",
+    "planPayment": "Total monthly plan payment",
+    "costMinimumOnly": "Interest and insurance with installments only",
+    "costWithPlan": "Interest and insurance with the plan",
+    "savings": "Savings with the plan",
+    "suggestedExtra": "Suggested extra payment next month: {amount} to {name}",
+    "noSuggestedExtra": "Next month only the regular installments are paid.",
+    "milestonesTitle": "Milestones: when each loan ends",
+    "milestone": "{date} · in {years} years",
+    "milestoneFreed": "Frees {amount} per month; {after} remains in installments",
+    "milestoneLoad": "Load afterwards: {load}",
+    "milestonesNone": "No loan ends within 30 years with its installments.",
+    "yearsTitle": "Debt year by year",
+    "yearsCaption": "Debt at the end of each year with the plan and paying only the installments, and what is paid in the year with the plan.",
+    "year": "Year",
+    "withPlan": "With the plan",
+    "minimumOnly": "Installments only",
+    "payments": "Payments in the year",
+    "illustrative": "Illustrative projection, not guaranteed: it assumes rates and installments do not change. Balances and installments are confirmed with each lender's statements. This platform does not recommend products or institutions."
+  },
+  "keyFigureMonths": {
+    "one": "1 month",
+    "other": "{count} months",
+    "more": "More than {count} months"
+  },
+  "investment": {
+    "title": "Investment",
+    "intro": "Current investments, risk profile, how much goes to growth and to stability, and an illustrative projection. No products or institutions are named.",
+    "back": "Client file",
+    "illustrative": "Illustrative, not guaranteed.",
+    "notAdvice": "This is not a recommendation of products or institutions. Before investing, review costs and risks with the chosen institution.",
+    "settingsLink": "Investment assumptions",
+    "settingsSummary": "Retirement age {age}; assumed real return {growth} in growth and {stability} in stability.",
+    "current": {
+      "title": "Current investments",
+      "empty": "No investments recorded yet.",
+      "add": "Add investment",
+      "total": "Total invested",
+      "growth": "In growth",
+      "stability": "In stability",
+      "noBucket": "No bucket"
+    },
+    "buckets": {
+      "crecimiento": "Growth",
+      "estabilidad": "Stability"
+    },
+    "bucketHints": {
+      "crecimiento": "Money for more than 3 years that can go up and down.",
+      "estabilidad": "Money meant to stay stable and available."
+    },
+    "profile": {
+      "title": "Risk profile",
+      "answer": "Answer the profile",
+      "edit": "Change the profile",
+      "willingness": "Willingness (what they want to take on)",
+      "capacity": "Capacity (what they can take on)",
+      "final": "Final profile (the lower of the two)",
+      "unanswered": "Not answered yet",
+      "conditionsTitle": "Conditions that lower capacity",
+      "conditionsMet": "{count} of 4 apply.",
+      "expensiveDebt": "There is expensive debt: pay it off first, then invest.",
+      "conditions": {
+        "variableIncome": "Variable income or an unstable contract",
+        "dependentsWithoutLifeInsurance": "Dependents without life insurance",
+        "emergencyFundIncomplete": "Emergency fund not complete",
+        "nearRetirementWithoutPension": "Less than 5 years to retirement"
+      },
+      "yes": "Yes",
+      "no": "No"
+    },
+    "levels": {
+      "no_invertir": "Do not invest yet",
+      "conservador": "Conservative",
+      "moderado": "Moderate",
+      "tolerante": "Tolerant"
+    },
+    "allocation": {
+      "title": "How much goes to growth",
+      "range": "Guideline range by age and profile",
+      "rangeValue": "{min} to {max}",
+      "growth": "% in growth",
+      "stability": "% in stability",
+      "notes": {
+        "short_horizon": "The money would be needed in less than 3 years: everything goes to stability.",
+        "stability_first": "Stability first: pay off the expensive debt or strengthen capacity before investing in growth.",
+        "answer_profile": "The profile is not answered: meanwhile, everything goes to stability."
+      },
+      "ageMissing": "The date of birth is missing to know the range for their age."
+    },
+    "plan": {
+      "title": "Allocation",
+      "intro": "The year's investment comes from the surplus and from the payments on what they are owed; the one-off contribution, from the excess in today's balance.",
+      "monthly": "Investment per month",
+      "annual": "Investment per year",
+      "lumpSum": "One-off contribution",
+      "current": "Invested today",
+      "target": "Target (invested today plus the one-off contribution)",
+      "movement": "Suggested move toward the target",
+      "movementHint": "Positive: move money into that bucket. Negative: the bucket is above the target. New contributions can make the adjustment without selling.",
+      "split": "Growth {growth} · Stability {stability}"
+    },
+    "projection": {
+      "title": "10-year projection",
+      "intro": "In today's money, with assumed real returns. The % in growth goes down in the 10 years before retirement.",
+      "yearAge": "{year} · age {age}",
+      "year": "{year}",
+      "end": "Closing balance",
+      "detail": "{growth} in growth · contributions {contributions} · return {returns}"
+    },
+    "form": {
+      "newTitle": "New investment",
+      "editTitle": "Edit investment",
+      "name": "Platform or type",
+      "nameHint": "For example, Investment platform or Voluntary pension fund. No account numbers.",
+      "bucket": "Bucket",
+      "bucketNone": "Not defined",
+      "bucketNoneHint": "It counts in the total, not in the buckets.",
+      "balance": "Balance",
+      "balanceHint": "Today's balance.",
+      "currency": "Currency",
+      "currencyHint": "For another currency, first record its rate in Currencies.",
+      "note": "Note (optional)",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "deleteToggle": "Delete this investment",
+      "deleteConfirm": "Yes, delete it",
+      "deleteHint": "It is removed from investment and net worth. The change history keeps it.",
+      "errors": {
+        "missingName": "Enter the platform or type.",
+        "tooLong": "It is too long.",
+        "looksLikeAccount": "It looks like an account number. We do not need it: enter only the name.",
+        "missingAmount": "Enter the balance.",
+        "invalidAmount": "Enter a balance of 0 or more, using numbers only.",
+        "invalidCurrency": "Choose a currency from the list.",
+        "missingRate": "That currency has no exchange rate. Record it in Currencies and try again.",
+        "notAllowed": "You do not have permission to change this data.",
+        "notFound": "This investment no longer exists.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      }
+    },
+    "riskForm": {
+      "title": "Risk profile",
+      "intro": "Three questions about what the client wants to take on. They can be left unanswered.",
+      "dropReaction": "If their investment fell 15 % in a year, what would they do?",
+      "dropReactions": {
+        "venderia": "Sell",
+        "esperaria": "Wait",
+        "invertiria_mas": "Invest more"
+      },
+      "experience": "How much investing experience do they have?",
+      "experiences": {
+        "ninguna": "None",
+        "algo": "Some",
+        "bastante": "A lot"
+      },
+      "horizon": "How soon might they need the money?",
+      "horizonHint": "It does not add points: if it is less than 3 years, everything goes to stability.",
+      "horizons": {
+        "menos_3": "Less than 3 years",
+        "de_3_a_7": "3 to 7 years",
+        "mas_7": "More than 7 years"
+      },
+      "unanswered": "Not answered",
+      "advisorTitle": "Advisor's judgment",
+      "variableIncome": "Variable income or an unstable contract",
+      "dependents": "Dependents without life insurance",
+      "suggested": "The suggested one ({value})",
+      "yes": "Yes",
+      "no": "No",
+      "rangePosition": "Position within the range (%)",
+      "rangePositionHint": "0 is the bottom of the range and 100 the top. Empty: 50. Toward the top if the pension they receive and rental income cover the basics or the money is for inheritance; toward the bottom if there are dependents or near-term goals.",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "errors": {
+        "invalidPercent": "Enter a number from 0 to 100.",
+        "missingRate": "It could not be saved. Try again in a few minutes.",
+        "notAllowed": "You do not have permission to change this data.",
+        "notFound": "This profile no longer exists.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      },
+      "client": {
+        "intro": {
+          "tu": "Three questions about how much risk you want to take on. You can leave some unanswered.",
+          "usted": "Three questions about how much risk you want to take on. You can leave some unanswered."
+        },
+        "dropReaction": {
+          "tu": "If your investment fell 15 % in a year, what would you do?",
+          "usted": "If your investment fell 15 % in a year, what would you do?"
+        },
+        "experience": {
+          "tu": "How much investing experience do you have?",
+          "usted": "How much investing experience do you have?"
+        },
+        "horizon": {
+          "tu": "How soon might you need the money?",
+          "usted": "How soon might you need the money?"
+        }
+      }
+    },
+    "settingsForm": {
+      "title": "Investment assumptions",
+      "intro": "Retirement age and projection assumptions for this client. Empty uses the methodology value.",
+      "retirementAge": "Expected retirement age",
+      "retirementAgeHint": "Empty: {value} (the template's default by sex). Enter the client's.",
+      "realReturnGrowth": "Assumed real return on growth (%)",
+      "realReturnStability": "Assumed real return on stability (%)",
+      "glideStep": "Yearly reduction of the % in growth near retirement (points)",
+      "growthFloor": "Floor for the % in growth (%)",
+      "percentHint": "Empty: {value}.",
+      "returnsNote": "Illustrative returns, above inflation. Not guaranteed.",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "errors": {
+        "invalidPercent": "Enter a number from 0 to 100.",
+        "returnTooHigh": "Enter a return from 0 to 50.",
+        "invalidAge": "Enter a whole age from 30 to 100.",
+        "missingRate": "It could not be saved. Try again in a few minutes.",
+        "notAllowed": "Only the advisor changes these assumptions.",
+        "notFound": "This client no longer exists.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      }
+    },
+    "client": {
+      "back": "My data",
+      "title": {
+        "tu": "Your investment",
+        "usted": "Your investment"
+      },
+      "intro": {
+        "tu": "What you have invested, your risk profile and how what you invest is split. We do not recommend products or institutions.",
+        "usted": "What you have invested, your risk profile and how what you invest is split. We do not recommend products or institutions."
+      },
+      "empty": {
+        "tu": "You have not recorded investments yet.",
+        "usted": "You have not recorded investments yet."
+      }
+    }
+  },
+  "goals": {
+    "title": "Goals",
+    "intro": "Goals with a date or that repeat. Each goal's monthly contribution goes into the budget as a pocket.",
+    "back": "Client file",
+    "add": "Add goal",
+    "empty": "There are no goals yet.",
+    "monthlyTotal": "Monthly contribution to goals",
+    "monthly": "Contribution of {amount} per month",
+    "byDate": "By {date}",
+    "repeats": {
+      "one": "Repeats every year",
+      "other": "Repeats every {years} years"
+    },
+    "value": "Value {amount}",
+    "trip": "With the trip calculator",
+    "noPocket": "No pocket: choose one so the contribution goes into the budget.",
+    "repeatNote": "A repeating goal does not deduct what is already saved (like the template).",
+    "concepts": {
+      "tiquete": "Round-trip ticket with luggage",
+      "alojamiento": "Lodging per night",
+      "comida": "Food per day",
+      "transporte": "Local transport",
+      "atracciones": "Attractions",
+      "seguro_viaje": "Travel insurance",
+      "compras": "Shopping and other expenses"
+    },
+    "form": {
+      "newTitle": "New goal",
+      "editTitle": "Edit goal",
+      "name": "Goal",
+      "nameHint": "For example, Trip, Computer or Down payment.",
+      "pocket": "Pocket",
+      "pocketHint": "Where the contribution is kept. Pockets are created in Pockets.",
+      "pocketNone": "No pocket",
+      "amount": "Value",
+      "amountHint": "What the goal costs. With the trip calculator it can be left empty.",
+      "currency": "Currency",
+      "alreadySaved": "Already saved (optional)",
+      "targetDate": "Target date",
+      "targetDateHint": "For a goal with a date.",
+      "repeatEveryYears": "Repeats every (years)",
+      "repeatEveryYearsHint": "For a repeating goal, like a trip every 2 years. If you enter both, the repetition wins.",
+      "usesTrip": "Use the trip calculator",
+      "usesTripHint": "Calculates the value from the trip's costs in another currency.",
+      "tripTitle": "Trip calculator",
+      "tripCurrency": "Trip currency",
+      "unitValue": "Unit price",
+      "quantity": "Quantity",
+      "tripLodgingTax": "Lodging taxes (%)",
+      "tripCushion": "Cushion for exchange rate and fees (%)",
+      "tripCushionHint": "Empty: 5 %.",
+      "tripBaseCosts": "Trip to the airport and visa ({currency})",
+      "tripBaseCostsHint": "In the base currency, if they apply.",
+      "tripNote": "Look up real, current prices.",
+      "note": "Note (optional)",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "deleteToggle": "Delete this goal",
+      "deleteConfirm": "Yes, delete it",
+      "deleteHint": "The goal and its budget contribution are deleted. The change history keeps it.",
+      "errors": {
+        "missingName": "Enter the goal.",
+        "tooLong": "It is too long.",
+        "looksLikeAccount": "It looks like an account number. We do not need it.",
+        "missingAmount": "Enter the value or use the trip calculator.",
+        "invalidAmount": "Enter an amount of 0 or more, using numbers only.",
+        "invalidCurrency": "Choose a currency from the list.",
+        "invalidYears": "Enter a number of years greater than 0 and up to 50.",
+        "invalidDate": "Enter a valid date.",
+        "missingWhen": "Enter the target date or how many years it repeats every.",
+        "invalidPercent": "Enter a number from 0 to 100.",
+        "invalidQuantity": "Enter a quantity of 0 or more.",
+        "missingRate": "That currency has no exchange rate. Record it in Currencies and try again.",
+        "notAllowed": "You do not have permission to change this data.",
+        "notFound": "This goal no longer exists.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      }
+    },
+    "client": {
+      "back": "My data",
+      "title": {
+        "tu": "Your goals",
+        "usted": "Your goals"
+      },
+      "intro": {
+        "tu": "What you want to achieve, by a date or every few years. What you set aside each month goes into your budget.",
+        "usted": "What you want to achieve, by a date or every few years. What you set aside each month goes into your budget."
+      },
+      "empty": {
+        "tu": "You have not recorded goals yet.",
+        "usted": "You have not recorded goals yet."
+      }
+    }
+  },
+  "insurance": {
+    "title": "Insurance",
+    "intro": "Which insurance the client has and the quoted premiums for the ones they do not have. New insurance premiums go into the budget. No insurers are recommended.",
+    "back": "Client file",
+    "add": "Add another insurance",
+    "unanswered": "Not answered",
+    "answer": "Answer",
+    "statuses": {
+      "si": "Has it",
+      "no": "Does not have it",
+      "cotizando": "Getting quotes"
+    },
+    "premium": "Annual premium {amount}",
+    "newPremiums": "New insurance premiums per year",
+    "newPremiumsMonthly": "Per month, in the budget",
+    "quoting": "Of those, being quoted",
+    "quotingNote": "Premiums being quoted go into the budget as if already paid: the plan assumes they are taken.",
+    "pendingNote": "It is not marked yet which insurance the client has.",
+    "noPocket": "New insurance premiums have no pocket. Choose it in Insurance assumptions.",
+    "types": {
+      "hogar": "Home insurance for property",
+      "arrendamiento": "Rental guarantee",
+      "enfermedades_graves": "Critical illness",
+      "renta_hospitalizacion": "Hospitalization or disability income",
+      "vida": "Life and permanent disability",
+      "complementario": "Supplementary or prepaid health plan",
+      "desempleo": "Unemployment or income protection",
+      "vehiculo": "Vehicle (comprehensive)",
+      "otro": "Other"
+    },
+    "covers": {
+      "hogar": "Earthquake, fire, flood, damage and civil liability. Check what the building's policy covers.",
+      "arrendamiento": "Rent and building fees if the tenant does not pay. It does not cover a vacant property.",
+      "enfermedades_graves": "Lump sum on diagnosis. Check the list of illnesses, pre-existing conditions, waiting periods and maximum age.",
+      "renta_hospitalizacion": "Daily amount while hospitalized or on disability. It complements what the health system pays.",
+      "vida": "Payment to beneficiaries or to the insured. The guideline sum insured is below.",
+      "complementario": "Access to specialists and lower copays. It goes up with age and may exclude pre-existing conditions.",
+      "desempleo": "Monthly payment if income is lost. Limited for contractors and the self-employed.",
+      "vehiculo": "Vehicle damage and theft. Confirm who pays it today.",
+      "otro": ""
+    },
+    "life": {
+      "title": "Guideline life sum insured",
+      "debts": "Outstanding debts",
+      "annualToCover": "Annual spending to cover",
+      "supportYears": "Years of support for dependents",
+      "liquid": "Liquid balance and investments",
+      "sumInsured": "Guideline sum insured",
+      "note": "A guideline. Get quotes from 2 or 3 insurers and compare exclusions.",
+      "years": "{years} years"
+    },
+    "settingsLink": "Insurance assumptions",
+    "settingsSummary": "Years of support, spending to cover and the premiums pocket.",
+    "form": {
+      "newTitle": "New insurance",
+      "editTitle": "Edit insurance",
+      "insuranceType": "Insurance",
+      "customName": "Insurance name",
+      "customNameHint": "For example, Pets. No policy number.",
+      "status": "Do they have it?",
+      "statusUnanswered": "Not answered",
+      "premium": "Quoted annual premium (optional)",
+      "premiumHint": "Only quoted premiums: they are not made up. If they already have it, its cost goes in the budget.",
+      "currency": "Currency",
+      "beneficiaries": "Beneficiaries (optional)",
+      "beneficiariesHint": "For example, children or partner. No ID documents.",
+      "note": "Note (optional)",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "deleteToggle": "Delete this insurance",
+      "deleteConfirm": "Yes, delete it",
+      "deleteHint": "It is removed from the analysis. The change history keeps it.",
+      "errors": {
+        "missingName": "Enter the insurance name.",
+        "tooLong": "It is too long.",
+        "looksLikeAccount": "It looks like a policy or ID number. We do not need it.",
+        "invalidAmount": "Enter a premium of 0 or more, using numbers only.",
+        "invalidCurrency": "Choose a currency from the list.",
+        "duplicate": "That insurance is already recorded. Edit it from the list.",
+        "missingRate": "That currency has no exchange rate. Record it in Currencies and try again.",
+        "notAllowed": "You do not have permission to change this data.",
+        "notFound": "This insurance no longer exists.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      }
+    },
+    "settingsForm": {
+      "title": "Insurance assumptions",
+      "intro": "The advisor's inputs for the life sum insured and the pocket for new premiums.",
+      "supportYears": "Years of support for dependents",
+      "supportYearsHint": "Empty: 10 years if there are dependents, like the template.",
+      "annualToCover": "Annual spending to cover ({currency})",
+      "annualToCoverHint": "Empty: the budget's annual spending, which includes the client's own expenses.",
+      "nativeOnly": "These two inputs only count in native mode; in compatible mode the template's rule is used.",
+      "pocket": "Pocket for new premiums",
+      "pocketHint": "Premiums for the insurance they do not have go into the budget in this pocket.",
+      "pocketNone": "No pocket",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "errors": {
+        "invalidYears": "Enter a number of years from 0 to 60.",
+        "invalidAmount": "Enter an amount of 0 or more, using numbers only.",
+        "duplicate": "It could not be saved. Try again in a few minutes.",
+        "missingRate": "It could not be saved. Try again in a few minutes.",
+        "notAllowed": "Only the advisor changes these assumptions.",
+        "notFound": "This client no longer exists.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      }
+    },
+    "client": {
+      "back": "My data",
+      "title": {
+        "tu": "Your insurance",
+        "usted": "Your insurance"
+      },
+      "intro": {
+        "tu": "Which insurance you have and the quotes you got for the ones you do not have. We do not recommend insurers.",
+        "usted": "Which insurance you have and the quotes you got for the ones you do not have. We do not recommend insurers."
+      }
+    }
+  },
+  "monthlyControl": {
+    "title": "Monthly tracking",
+    "intro": "Actual spending each month by category, compared with the budget. The monthly budget is the average: annual expenses are spread over 12.",
+    "client": {
+      "intro": {
+        "tu": "Each month, enter how much you spent in each category. It is compared with your budget; anything more than 10 % above or below is flagged.",
+        "usted": "Each month, enter how much you spent in each category. It is compared with your budget; anything more than 10 % above or below is flagged."
+      },
+      "back": "Home",
+      "emptyHint": {
+        "tu": "Leave empty what you did not record; 0 is a month with no spending.",
+        "usted": "Leave empty what you did not record; 0 is a month with no spending."
+      }
+    },
+    "back": "Client file",
+    "monthNav": "Choose month",
+    "previousMonth": "Previous month: {month}",
+    "nextMonth": "Next month: {month}",
+    "monthTitle": "{month} {year}",
+    "empty": "There is no budget by category yet. Once the budget expenses are recorded, they will appear here.",
+    "automaticCategories": {
+      "debts": "Debts",
+      "insurance": "Insurance",
+      "goals": "Goals"
+    },
+    "outsideBudget": "Outside the budget",
+    "over": "{pct} above",
+    "under": "{pct} below",
+    "onBudget": "Within budget",
+    "noBudget": "No budget",
+    "form": {
+      "budget": "Budget {amount}",
+      "currency": "Currency for {category}",
+      "emptyHint": "Leave empty what you did not record; 0 is a month with no spending.",
+      "total": "Total for the month: {real} of {budget}",
+      "totalNone": "Budget for the month: {budget}",
+      "submit": "Save month",
+      "submitting": "Saving…",
+      "saved": "Month saved.",
+      "errors": {
+        "invalidAmount": "Enter an amount of 0 or more, with up to two decimals.",
+        "invalidCurrency": "Choose a currency with a recorded rate.",
+        "missingRate": "A currency's rate is missing. Record it in Currencies.",
+        "notAllowed": "You do not have permission to record this spending.",
+        "unavailable": "We could not save. Check your connection and try again.",
+        "invalidMonth": "That month is not valid."
+      }
+    },
+    "yearTitle": "{year} average",
+    "yearIntro": "Compare the actual average over several months, not a single month.",
+    "yearNone": "No months recorded in {year} yet.",
+    "yearRow": "Actual average {real} of {budget} · {months}",
+    "monthsCount": {
+      "one": "1 month",
+      "other": "{count} months"
+    },
+    "yearTotal": "Total"
+  },
+  "actionPlan": {
+    "title": "Action plan",
+    "intro": "The plan's tasks with their owner and due date. The client marks theirs as done from the app.",
+    "back": "Client file",
+    "client": {
+      "title": {
+        "tu": "Your tasks",
+        "usted": "Your tasks"
+      },
+      "intro": {
+        "tu": "What you agreed with your advisor. Tap “Mark done” when you finish a task.",
+        "usted": "What you agreed with your advisor. Tap “Mark done” when you finish a task."
+      },
+      "back": "Home",
+      "empty": {
+        "tu": "Your advisor has not added tasks yet.",
+        "usted": "Your advisor has not added tasks yet."
+      }
+    },
+    "empty": "There are no tasks yet. Add the suggested ones or write one.",
+    "filterLabel": "Show",
+    "filters": {
+      "pendientes": "Pending",
+      "hechas": "Done",
+      "todas": "All"
+    },
+    "emptyFilter": "There are no tasks in this list.",
+    "add": "Add task",
+    "addSuggested": "Add the suggested tasks",
+    "addSuggestedHint": {
+      "one": "1 suggested task is missing for this client, with its due date counted from the cutoff date.",
+      "other": "{count} suggested tasks are missing for this client, with their due date counted from the cutoff date."
+    },
+    "addingSuggested": "Adding…",
+    "markDone": "Mark done",
+    "reopen": "Reopen",
+    "working": "Saving…",
+    "edit": "Edit",
+    "overdue": "Overdue",
+    "due": "By {date}",
+    "noDue": "No due date",
+    "doneOn": "Done on {date}",
+    "priorities": {
+      "alta": "High",
+      "media": "Medium",
+      "baja": "Low"
+    },
+    "owners": {
+      "cliente": "Client",
+      "asesor": "Advisor",
+      "contador": "Accountant",
+      "abogado": "Lawyer",
+      "aseguradora": "Insurer",
+      "administradora_pensiones": "Pension fund"
+    },
+    "statuses": {
+      "pendiente": "Pending",
+      "en_curso": "In progress",
+      "hecho": "Done"
+    },
+    "templates": {
+      "create_pockets": "Create the pockets and allocate the current balance",
+      "automate_transfers": "Schedule automatic transfers on payday",
+      "record_actual_spending": "Record actual spending every month in Monthly tracking",
+      "complete_reality_check": "Complete the budget reality check",
+      "pay_debts_in_order": "Pay the debts in the plan's order",
+      "quote_insurance": "Get quotes for the high-priority insurance",
+      "review_beneficiaries": "Review the beneficiaries of insurance, pension and accounts",
+      "consult_accountant": "Consult the accountant: income tax, withholdings and tax benefits",
+      "pension_projection": "Request the employment history and pension projection from the pension fund",
+      "will_and_family_folder": "Consider a will and prepare the family folder",
+      "investment_profile": "Define the investment profile and allocation",
+      "review_30_days": "30-day follow-up review",
+      "review_90_days": "90-day follow-up review",
+      "annual_review": "Annual plan review"
+    },
+    "form": {
+      "newTitle": "New task",
+      "editTitle": "Edit task",
+      "title": "Task",
+      "priority": "Priority",
+      "owner": "Owner",
+      "dueDate": "Due date (optional)",
+      "status": "Status",
+      "note": "Note (optional)",
+      "noteHint": "For example, what was done or what is left.",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "deleteToggle": "Delete task",
+      "deleteHint": "The task disappears from the client's list.",
+      "deleteConfirm": "Yes, delete the task",
+      "errors": {
+        "missingTitle": "Enter the task.",
+        "tooLong": "It is too long.",
+        "invalidOption": "Choose an option from the list.",
+        "invalidDate": "Enter a valid date.",
+        "notAllowed": "You do not have permission to change this task.",
+        "notFound": "This task no longer exists.",
+        "unavailable": "We could not save. Check your connection and try again."
+      }
+    },
+    "priorityLabel": "{priority} priority"
+  },
+  "documents": {
+    "back": "Client file",
+    "letter": {
+      "title": "Closing letter",
+      "intro": "What the client reads with their plan, following the structure of section 11 of the protocol. Figures are written as markers: they change if the data changes and are frozen when the plan is delivered.",
+      "deliveryNote": "The letter reaches the client with the delivered plan."
+    },
+    "notes": {
+      "title": "Notes for the client",
+      "intro": "A short text the client sees in My plan when you publish it, for example after a meeting. The figures update automatically until the plan is delivered.",
+      "published": "Published on {date}",
+      "draft": "Draft: the client does not see it",
+      "none": "No notes"
+    },
+    "sections": {
+      "executive_summary": {
+        "tu": "Summary",
+        "usted": "Summary"
+      },
+      "opening": {
+        "tu": "Opening",
+        "usted": "Opening"
+      },
+      "today": {
+        "tu": "1. Where you are today",
+        "usted": "1. Where you are today"
+      },
+      "strengths": {
+        "tu": "2. What you are doing well",
+        "usted": "2. What you are doing well"
+      },
+      "attention": {
+        "tu": "3. What to keep in mind",
+        "usted": "3. What to keep in mind"
+      },
+      "action_plan": {
+        "tu": "4. Your action plan",
+        "usted": "4. Your action plan"
+      },
+      "calendar": {
+        "tu": "5. Your calendar",
+        "usted": "5. Your calendar"
+      },
+      "tracking": {
+        "tu": "6. How to know you are on track",
+        "usted": "6. How to know you are on track"
+      },
+      "scope": {
+        "tu": "7. Scope of this advice",
+        "usted": "7. Scope of this advice"
+      },
+      "closing": {
+        "tu": "8. To close",
+        "usted": "8. To close"
+      },
+      "body": {
+        "tu": "Notes",
+        "usted": "Notes"
+      }
+    },
+    "hints": {
+      "executive_summary": "Three to five lines: the situation in one sentence, the three priority actions and the expected result.",
+      "opening": "Greeting by name and the purpose of the letter.",
+      "today": "The main indicators and brief context.",
+      "strengths": "Strengths, explained.",
+      "attention": "Points of attention with the reason why, without alarm.",
+      "action_plan": "Balance allocation and pockets, contributions, debts if applicable, investment (profile, range by age and allocation) and protection (insurance and succession).",
+      "calendar": "Next 30 days, 90 days and 12 months, and key dates (end of debts, goals).",
+      "tracking": "Tracking indicators with their target value.",
+      "scope": "It is based on the information provided; figures are estimates in today's values; no product recommendations; taxes, pension and legal matters with the corresponding professional.",
+      "closing": "A positive summary, pending items and the next review.",
+      "body": "Write one paragraph per idea; a line that starts with “- ” is a bullet."
+    },
+    "defaults": {
+      "scope": {
+        "tu": "This plan is based on the information you shared with me. The figures are estimates in today's values, illustrative and not guaranteed. It does not include recommendations of financial products or institutions. You should confirm tax, pension and legal matters with an accountant, your pension fund and a lawyer.",
+        "usted": "This plan is based on the information you shared with me. The figures are estimates in today's values, illustrative and not guaranteed. It does not include recommendations of financial products or institutions. You should confirm tax, pension and legal matters with an accountant, your pension fund and a lawyer."
+      }
+    },
+    "editor": {
+      "insertFigure": "Insert figure",
+      "insertFigureIn": "Insert figure in {section}",
+      "dialogTitle": "Insert figure",
+      "dialogIntro": "It goes where you left the cursor. The value is today's; it is frozen when the plan is delivered.",
+      "close": "Close",
+      "formatHint": "An empty line separates paragraphs; a line that starts with “- ” is a bullet.",
+      "preview": "View as the client",
+      "edit": "Back to editing",
+      "previewEmpty": "Nothing written yet.",
+      "save": "Save draft",
+      "saving": "Saving…",
+      "saved": "Saved.",
+      "publish": "Save and publish",
+      "unpublish": "Stop showing to the client",
+      "errors": {
+        "tooLong": "It is too long: split it into another section or shorten it.",
+        "unknownMarkers": "These figures do not exist: {markers}. Use “Insert figure”.",
+        "notAllowed": "Only the advisor writes the letter and the notes.",
+        "unavailable": "We could not save. Check your connection and try again."
+      }
+    },
+    "summary": {
+      "letterNone": "Not written",
+      "letterSome": "{count} of {total} parts written",
+      "notesPublished": "Published on {date}",
+      "notesDraft": "Draft",
+      "notesNone": "No notes"
+    },
+    "delivery": {
+      "title": "Goes with the plan",
+      "letter": "Letter: {status}",
+      "notes": "Notes: {status}",
+      "notesNotPublished": "not published, they do not go",
+      "editLetter": "Write the letter",
+      "editNotes": "Write the notes"
+    },
+    "view": {
+      "letterTitle": {
+        "tu": "Letter from your advisor",
+        "usted": "Letter from your advisor"
+      },
+      "notesTitle": {
+        "tu": "Notes from your advisor",
+        "usted": "Notes from your advisor"
+      },
+      "letterTitleAdvisor": "Closing letter",
+      "notesTitleAdvisor": "Delivered notes",
+      "notesPublished": "Published on {date}",
+      "notesDeliveredTitle": "Notes with this plan"
+    }
+  },
+  "followUp": {
+    "title": "Follow-up",
+    "intro": "What was delivered compared with today, the plan reviews and the continuity sheet.",
+    "back": "Client file",
+    "plan": {
+      "title": "Compared with the delivered plan",
+      "delivered": "Latest plan: {label}, delivered on {date}.",
+      "view": "See the delivered plan",
+      "none": "There is no delivered plan yet. Follow-up compares with the latest one you deliver.",
+      "deliver": "Deliver the plan"
+    },
+    "progress": {
+      "title": "How it is going",
+      "spending": "Actual spending in {year}",
+      "spendingLink": "See monthly tracking",
+      "tasks": "Action plan",
+      "tasksLink": "See the action plan"
+    },
+    "reviews": {
+      "title": "Reviews",
+      "intro": "Each review is an advisor task in the action plan, with the date counted from the cutoff date. The date is changed in the task.",
+      "items": {
+        "review_30_days": {
+          "title": "After 30 days",
+          "checks": "Pockets created and automatic transfers, actual spending against the budget in monthly tracking, and action plan tasks."
+        },
+        "review_90_days": {
+          "title": "After 90 days",
+          "checks": "Reality check completed, adjustment of the % to investment, insurance quotes, and answers from the accountant and the pension fund."
+        },
+        "annual_review": {
+          "title": "Annual",
+          "checks": "Before the months without income or in December: update the minimum wage, exchange rates, prices, property values, premiums, balances, debts and receivables; review goals and beneficiaries; rebalance the investment and adjust the % in growth to the new age."
+        }
+      },
+      "states": {
+        "sin_programar": "Not scheduled",
+        "programada": "Scheduled for {date}",
+        "programadaNoDate": "Scheduled, no date",
+        "vencida": "Overdue since {date}",
+        "hecha": "Done on {date}"
+      },
+      "schedule": "Schedule the missing reviews",
+      "scheduling": "Scheduling…",
+      "openTask": "See the task",
+      "lifeEventsTitle": "Life events",
+      "lifeEvents": "After a job change, a birth, a separation, an inheritance, an illness or buying a home, review the whole plan."
+    },
+    "sheet": {
+      "title": "Continuity sheet",
+      "intro": "Where the work stands, with today's data. Copy it for your notes or for the next session.",
+      "copy": "Copy the sheet",
+      "copied": "Sheet copied.",
+      "copyFailed": "It could not be copied. Select the sheet's text and copy it.",
+      "edit": "Change succession and decisions",
+      "heading": "CONTINUITY SHEET - {name} - {date}",
+      "labels": {
+        "profile": "Profile",
+        "incomes": "Income",
+        "spending": "Average monthly spending",
+        "programmedSavings": "Scheduled savings",
+        "surplus": "Annual surplus",
+        "debts": "Debts",
+        "emergencyFund": "Emergency fund",
+        "pockets": "Pockets",
+        "riskProfile": "Risk profile",
+        "investment": "Investment",
+        "pension": "Pension",
+        "insurance": "Insurance",
+        "succession": "Succession",
+        "assumptions": "Key assumptions",
+        "decisions": "Decisions made",
+        "pending": "Pending",
+        "files": "Files",
+        "nextReview": "Next review"
+      },
+      "values": {
+        "age": "age {age}",
+        "ageUnknown": "age unknown",
+        "noDependents": "no dependents",
+        "dependents": {
+          "one": "1 dependent",
+          "other": "{count} dependents"
+        },
+        "income": "{name}: {amount}, {payments}",
+        "payments": {
+          "one": "1 payment per year",
+          "other": "{count} payments per year"
+        },
+        "noIncomes": "No income recorded",
+        "spending": "{total} in total · {essential} essential",
+        "programmedSavings": "{annual} per year ({monthly} per month)",
+        "surplus": "{amount} · reality check {status}",
+        "realityCheck": {
+          "pendiente": "pending",
+          "confirmada": "done",
+          "revisar_gastos": "done, with expenses to review"
+        },
+        "noDebts": "No debts",
+        "debts": "total balance {total} · expensive debt {expensive} · {payoff}",
+        "debtsNoExpensive": "total balance {total} · no expensive debt",
+        "payoff": "estimated payoff in {month}",
+        "payoffBeyond": "payoff in more than 120 months",
+        "emergencyFund": "goal {goal} · current balance {balance}",
+        "fundComplete": "completed with the surplus in {month}",
+        "pocket": "{name}: {amount} per month",
+        "noPockets": "No pockets with a contribution",
+        "riskProfile": "willingness {willingness} · capacity {capacity} · final profile {final}",
+        "levels": {
+          "no_invertir": "do not invest yet",
+          "conservador": "conservative",
+          "moderado": "moderate",
+          "tolerante": "tolerant"
+        },
+        "unanswered": "not answered",
+        "investment": "balance {balance} · contribution {monthly} per month · {growth} in growth and {stability} in stability",
+        "investmentToday": "invested today: {growth} in growth and {stability} in stability",
+        "horizon": "time horizon: {horizon}",
+        "horizonUnanswered": "time horizon not answered",
+        "horizons": {
+          "menos_3": "less than 3 years",
+          "de_3_a_7": "3 to 7 years",
+          "mas_7": "more than 7 years"
+        },
+        "pension": "Not analyzed in the platform; reviewed with the pension fund.",
+        "insurance": "in force: {current} · being quoted: {quoting}",
+        "none": "none",
+        "succession": "will: {will} · beneficiaries reviewed: {beneficiaries}",
+        "yes": "yes",
+        "no": "no",
+        "unknown": "unknown",
+        "fx": "exchange rate {rates}",
+        "rate": "1 {currency} = {rate}",
+        "noFx": "no currencies other than {currency}",
+        "minimumWage": "minimum wage {amount}",
+        "pctToInvestment": "{pct} of the surplus to investment",
+        "noDecisions": "None recorded",
+        "pendingItem": "{title} ({owner}, by {date})",
+        "pendingItemNoDate": "{title} ({owner}, no due date)",
+        "noPending": "None",
+        "files": "latest delivered plan: {label}, from {date}",
+        "noFiles": "No delivered plan",
+        "noReview": "Not scheduled"
+      }
+    },
+    "notesForm": {
+      "title": "Succession and decisions",
+      "intro": "What the continuity sheet does not take from the plan data.",
+      "will": "Does the client have a will?",
+      "beneficiaries": "Has the client reviewed the beneficiaries of insurance, pension and accounts?",
+      "options": {
+        "si": "Yes",
+        "no": "No",
+        "sin_dato": "Unknown"
+      },
+      "decisions": "Decisions made",
+      "decisionsHint": "One per line. For example, what was decided about the fund, the debts or the investment.",
+      "submit": "Save",
+      "submitting": "Saving…",
+      "cancel": "Cancel",
+      "errors": {
+        "tooLong": "Write 4,000 characters at most.",
+        "notAllowed": "You do not have permission to change this data.",
+        "unavailable": "It could not be saved. Try again in a few minutes."
+      }
+    }
+  }
+}

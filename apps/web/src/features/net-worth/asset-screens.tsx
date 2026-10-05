@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { assetTypeSchema } from '@miluca/domain';
 import { CONCENTRATION_THRESHOLD, NET_WORTH_GROUPS } from '@miluca/engine';
-import { COUNTRY_LOCALES, formatMoney, formatPercent, messages } from '@miluca/i18n';
+import { formatMoney, formatPercent, type Messages } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { FigureList } from '@/components/figure-list';
@@ -13,23 +13,22 @@ import { loadComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
 import { amountToText } from '@/lib/amount';
 import type { CaseEditor } from '@/server/case-access';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { deleteAsset, saveAsset } from './actions';
 import { AssetForm } from './asset-form';
 import { assetPaths } from './paths';
 
-const t = messages.es;
-const text = t.assets;
-
 /** Textos según quién mira: el asesor habla del cliente; el cliente, en su trato. */
-function localText(viewer: CaseEditor) {
+function localText(t: Messages, viewer: CaseEditor) {
+  const text = t.assets;
   if (viewer.role === 'advisor') {
     return { title: text.title, intro: text.intro, back: text.back, empty: text.empty };
   }
   return withAddress(text.client, viewer.formOfAddress);
 }
 
-function loadError(retryHref: string) {
+function loadError(t: Messages, retryHref: string) {
   return (
     <LoadError message={t.common.loadError} retryLabel={t.common.retry} retryHref={retryHref} />
   );
@@ -40,8 +39,10 @@ function loadError(retryHref: string) {
  * activos, con el saldo líquido que se reparte en los bolsillos (`Patrimonio!C33`).
  */
 export async function AssetsScreen({ viewer, clientId }: { viewer: CaseEditor; clientId: string }) {
+  const t = await getMessages();
+  const text = t.assets;
   const paths = assetPaths(viewer.role, clientId);
-  const local = localText(viewer);
+  const local = localText(t, viewer);
   const computed = await loadComputedCase(clientId);
   const header = (
     <>
@@ -56,12 +57,12 @@ export async function AssetsScreen({ viewer, clientId }: { viewer: CaseEditor; c
     return (
       <Screen>
         {header}
-        {loadError(paths.list)}
+        {loadError(t, paths.list)}
       </Screen>
     );
   }
   const { client } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const money = (amount: number, currency = client.base_currency) =>
     formatMoney(amount, currency, locale);
 
@@ -158,22 +159,24 @@ export async function AssetFormScreen({
   clientId: string;
   assetId: string | null;
 }) {
+  const t = await getMessages();
+  const text = t.assets;
   const paths = assetPaths(viewer.role, clientId);
-  const local = localText(viewer);
+  const local = localText(t, viewer);
   const title = assetId ? text.form.editTitle : text.form.newTitle;
   const computed = await loadComputedCase(clientId);
   if (!computed) {
     return (
       <Screen>
         <h1 className="text-2xl font-semibold text-balance">{title}</h1>
-        {loadError(assetId ? paths.item(assetId) : paths.add)}
+        {loadError(t, assetId ? paths.item(assetId) : paths.add)}
       </Screen>
     );
   }
   const row = assetId ? computed.rows.assets.find((asset) => asset.id === assetId) : null;
   if (assetId && !row) notFound();
   const { client, fxRates } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
 
   return (
     <Screen>

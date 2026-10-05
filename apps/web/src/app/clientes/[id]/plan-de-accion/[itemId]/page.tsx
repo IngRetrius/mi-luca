@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { ActionItemFormScreen } from '@/features/action-plan';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Tarea | MiLuca' };
+export const generateMetadata = pageMetadata('task');
 
 export default async function ActionItemPage({
   params,

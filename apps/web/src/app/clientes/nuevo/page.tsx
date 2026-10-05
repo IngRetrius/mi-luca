@@ -1,19 +1,16 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
-
-import { messages } from '@miluca/i18n';
 
 import { Screen } from '@/components/screen';
 import { linkButton, secondaryButton } from '@/components/ui-classes';
 import { listCountries, NewClientForm } from '@/features/clients';
+import { getMessages, pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-const t = messages.es;
-
-export const metadata: Metadata = { title: 'Nuevo cliente | MiLuca' };
+export const generateMetadata = pageMetadata('newClient');
 
 /** P-A02 Nuevo cliente. */
 export default async function NewClientPage() {
+  const t = await getMessages();
   await requireAdvisor('/clientes/nuevo');
   const countries = await listCountries();
 

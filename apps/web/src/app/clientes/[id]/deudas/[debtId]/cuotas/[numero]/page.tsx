@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { InstallmentFormScreen } from '@/features/debts';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Cuota | MiLuca' };
+export const generateMetadata = pageMetadata('installment');
 
 /** Detalle de una cuota, visto por el asesor. */
 export default async function AdvisorInstallmentPage({

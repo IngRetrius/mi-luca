@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { FxRateScreen } from '@/features/currencies';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Nueva moneda | MiLuca' };
+export const generateMetadata = pageMetadata('newCurrency');
 
 /** El cliente registra la tasa que recibe por una moneda. */
 export default async function MyNewCurrencyPage() {

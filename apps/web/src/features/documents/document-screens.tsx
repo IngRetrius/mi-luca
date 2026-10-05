@@ -1,13 +1,14 @@
 import { notFound } from 'next/navigation';
 
 import { DOCUMENT_SECTIONS, type DocumentKind } from '@miluca/exporters/documents';
-import { COUNTRY_LOCALES, formatDate, messages } from '@miluca/i18n';
+import { formatDate } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { Screen } from '@/components/screen';
 import { getClientDetail } from '@/features/clients';
 import { loadComputedCase } from '@/features/summary';
 import { todayIn } from '@/lib/dates';
+import { getCaseMessages, getLocale, getMessages } from '@/server/i18n';
 
 import { saveDocument } from './actions';
 import { DocumentEditor, type EditorSection } from './document-editor';
@@ -15,9 +16,6 @@ import { figureValues, insertableFigures } from './figures';
 import { documentPaths } from './paths';
 import { loadDocuments } from './queries';
 import { sectionLabel, sectionTitle } from './ready';
-
-const t = messages.es;
-const text = t.documents;
 
 /** P-A13 Notas y carta: el editor del asesor con las cifras de hoy. */
 export async function DocumentEditorScreen({
@@ -27,6 +25,8 @@ export async function DocumentEditorScreen({
   clientId: string;
   kind: DocumentKind;
 }) {
+  const t = await getMessages();
+  const text = t.documents;
   const paths = documentPaths(clientId);
   const local = kind === 'carta' ? text.letter : text.notes;
   const retry = kind === 'carta' ? paths.letter : paths.notes;
@@ -55,18 +55,24 @@ export async function DocumentEditorScreen({
   }
 
   const address = client.formOfAddress;
-  const locale = COUNTRY_LOCALES[client.countryCode]?.locale ?? 'es';
+  const locale = await getLocale(client.countryCode);
   const document = documents[kind];
-  const values = figureValues(computed.figures, { locale, currency: client.baseCurrency });
+  const values = figureValues(computed.figures, {
+    locale,
+    currency: client.baseCurrency,
+    months: t.keyFigureMonths,
+  });
   const sections: EditorSection[] = DOCUMENT_SECTIONS[kind].map((key) => ({
     key,
-    title: kind === 'notas' ? null : sectionTitle(key, address),
-    label: sectionLabel(key, address),
+    title: kind === 'notas' ? null : sectionTitle(key, address, t.documents.sections),
+    label: sectionLabel(key, address, t.documents.sections),
     hint: text.hints[key as keyof typeof text.hints] ?? '',
   }));
-  // Una carta nueva trae escrito el alcance (sección 7 del protocolo), en el trato del cliente.
+  // Una carta nueva trae escrito el alcance (sección 7 del protocolo), en el trato del cliente y
+  // con el vocabulario de su país.
+  const defaults = (await getCaseMessages({ country: client.countryCode })).documents.defaults;
   const initial =
-    document?.content ?? (kind === 'carta' ? { scope: text.defaults.scope[address] } : {});
+    document?.content ?? (kind === 'carta' ? { scope: defaults.scope[address] } : {});
   const published = document?.status === 'publicado';
   const status =
     kind === 'carta'
@@ -88,7 +94,7 @@ export async function DocumentEditorScreen({
         text={text.editor}
         sections={sections}
         initial={initial}
-        figures={insertableFigures(values)}
+        figures={insertableFigures(values, t.keyFigures)}
         publishable={kind === 'notas'}
         published={published}
         action={saveDocument.bind(null, clientId, kind)}

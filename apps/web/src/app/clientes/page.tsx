@@ -1,9 +1,6 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { messages } from '@miluca/i18n';
-
-import { Screen, ScreenActions } from '@/components/screen';
+import { ScreenActions, WideScreen } from '@/components/screen';
 import {
   linkButton,
   primaryButton,
@@ -13,15 +10,16 @@ import {
 } from '@/components/ui-classes';
 import { SignOutButton } from '@/features/auth';
 import { ClientList, listClients, parseSearch, SEARCH_MAX } from '@/features/clients';
+import { LanguageSwitcher } from '@/features/language';
 import { listUnreadNotices, NoticeList } from '@/features/notifications';
+import { getMessages, pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-const t = messages.es;
-
-export const metadata: Metadata = { title: 'Clientes | MiLuca' };
+export const generateMetadata = pageMetadata('clients');
 
 /** P-A01 Clientes: inicio del asesor. La búsqueda va en la URL (`?q=`) y se puede enlazar. */
 export default async function ClientsPage({ searchParams }: PageProps<'/clientes'>) {
+  const t = await getMessages();
   // Independientes: la sesión y los parámetros se resuelven a la vez.
   const [viewer, params] = await Promise.all([requireAdvisor('/clientes'), searchParams]);
   const search = parseSearch(params.q);
@@ -32,7 +30,7 @@ export default async function ClientsPage({ searchParams }: PageProps<'/clientes
   const showSearch = clients !== null && (clients.length > 0 || search !== '');
 
   return (
-    <Screen>
+    <WideScreen>
       <h1 className="text-2xl font-semibold">{t.clients.title}</h1>
       {/* Si los avisos no cargan, la lista sigue: no son imprescindibles. */}
       {notices ? <NoticeList notices={notices} /> : null}
@@ -82,12 +80,13 @@ export default async function ClientsPage({ searchParams }: PageProps<'/clientes
           <p className="wrap-anywhere">{t.auth.signedInAs.replace('{email}', email)}</p>
         ) : null}
         <SignOutButton />
+        <LanguageSwitcher />
       </div>
       <ScreenActions>
         <Link href="/clientes/nuevo" className={`${primaryButton} ${linkButton}`}>
           {t.clients.new}
         </Link>
       </ScreenActions>
-    </Screen>
+    </WideScreen>
   );
 }

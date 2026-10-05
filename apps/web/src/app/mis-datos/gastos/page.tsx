@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { BudgetScreen } from '@/features/budget';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Mis gastos | MiLuca' };
+export const generateMetadata = pageMetadata('myExpenses');
 
 /** P-C06: los gastos del cliente. */
 export default async function MyExpensesPage() {

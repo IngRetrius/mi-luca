@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { IncomeScreen } from '@/features/incomes';
 import { isUuid, requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Editar ingreso | MiLuca' };
+export const generateMetadata = pageMetadata('editIncome');
 
 /** Editar o borrar un ingreso. */
 export default async function AdvisorIncomePage({

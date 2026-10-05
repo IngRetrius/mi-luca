@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { ReceivablesScreen } from '@/features/receivables';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Lo que te deben | MiLuca' };
+export const generateMetadata = pageMetadata('myReceivables');
 
 /** Lo que le deben al cliente. */
 export default async function MyReceivablesPage() {

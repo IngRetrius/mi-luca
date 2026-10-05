@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { budgetCatalog, COUNTRY_LOCALES, messages } from '@miluca/i18n';
+import { budgetCatalog, categoryLabel } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { Screen, ScreenActions } from '@/components/screen';
@@ -8,15 +8,13 @@ import { linkButton, primaryButton } from '@/components/ui-classes';
 import { CaptureAssistant, proposeCapture } from '@/features/assistant';
 import { withAddress } from '@/lib/address';
 import type { CaseEditor } from '@/server/case-access';
+import { getLanguage, getLocale, getMessages } from '@/server/i18n';
 
 import { addCatalogItems } from './actions';
-import { comparableName } from './catalog';
+import { comparableName, conceptPresent } from './catalog';
 import { CatalogForm, type CatalogCategoryView } from './catalog-form';
 import { budgetPaths } from './paths';
 import { loadCatalogContext } from './queries';
-
-const t = messages.es;
-const text = t.budget.catalog;
 
 /**
  * P-A06b (asesor) y su versión en Mis gastos (cliente): los gastos típicos del país del cliente
@@ -29,6 +27,8 @@ export async function BudgetCatalogScreen({
   viewer: CaseEditor;
   clientId: string;
 }) {
+  const t = await getMessages();
+  const text = t.budget.catalog;
   const paths = budgetPaths(viewer.role, clientId);
   const intro =
     viewer.role === 'advisor' ? text.intro : withAddress(text.client, viewer.formOfAddress).intro;
@@ -60,9 +60,10 @@ export async function BudgetCatalogScreen({
   }
 
   const present = new Set(context.concepts.map(comparableName));
-  const catalog = budgetCatalog(context.countryCode);
+  const language = await getLanguage();
+  const catalog = budgetCatalog(context.countryCode, language);
   const categories: CatalogCategoryView[] = catalog.map((category) => ({
-    name: category.name,
+    name: categoryLabel(category.name, language),
     concepts: category.concepts.map((item) => ({
       key: item.key,
       name: item.name,
@@ -76,7 +77,7 @@ export async function BudgetCatalogScreen({
         .join(' · '),
       hint: item.hint,
       needsDays: item.frequency === 'por_duracion',
-      present: present.has(comparableName(item.name)),
+      present: conceptPresent(present, item, context.countryCode),
     })),
   }));
   const pending = categories.some((category) => category.concepts.some((item) => !item.present));
@@ -125,7 +126,7 @@ export async function BudgetCatalogScreen({
             propose={proposeCapture.bind(null, clientId)}
             text={t.assistant}
             frequencies={t.budget.frequencies}
-            locale={COUNTRY_LOCALES[context.countryCode]?.locale ?? 'es'}
+            locale={await getLocale(context.countryCode)}
             currency={context.baseCurrency}
           />
         ) : null}

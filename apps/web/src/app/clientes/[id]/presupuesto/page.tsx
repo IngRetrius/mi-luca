@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { BudgetScreen } from '@/features/budget';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Presupuesto | MiLuca' };
+export const generateMetadata = pageMetadata('budget');
 
 /** P-A06 Presupuesto del cliente. */
 export default async function AdvisorBudgetPage({

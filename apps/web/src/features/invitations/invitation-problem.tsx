@@ -1,11 +1,8 @@
 import Link from 'next/link';
 
-import { messages } from '@miluca/i18n';
-
 import { linkButton, primaryButton, secondaryButton } from '@/components/ui-classes';
 import { SignOutButton } from '@/features/auth';
-
-const t = messages.es.invitation;
+import { getMessages } from '@/server/i18n';
 
 export const PROBLEM_REASONS = [
   'invalid',
@@ -28,13 +25,15 @@ export function parseProblemReason(value: unknown): ProblemReason {
  * Por qué no se puede seguir con la invitación, y qué hacer. `retryHref` es la ruta que se vuelve
  * a intentar cuando el servicio no respondió.
  */
-export function InvitationProblem({
+export async function InvitationProblem({
   reason,
   retryHref,
 }: {
   reason: ProblemReason;
   retryHref?: string | undefined;
 }) {
+  const messages = await getMessages();
+  const t = messages.invitation;
   const { title, body } = t.problem[reason];
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-4 px-4 py-10">
@@ -54,7 +53,7 @@ export function InvitationProblem({
         {reason === 'advisor' || reason === 'linked' ? <SignOutButton /> : null}
         {reason === 'unavailable' && retryHref ? (
           <Link href={retryHref} className={`${secondaryButton} ${linkButton}`}>
-            {messages.es.common.retry}
+            {messages.common.retry}
           </Link>
         ) : null}
       </div>

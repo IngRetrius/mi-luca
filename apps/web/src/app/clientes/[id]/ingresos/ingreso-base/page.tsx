@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { BaseIncomeScreen } from '@/features/incomes';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Ingreso base | MiLuca' };
+export const generateMetadata = pageMetadata('baseIncome');
 
 /** Calculadora de ingreso base. */
 export default async function AdvisorBaseIncomePage({

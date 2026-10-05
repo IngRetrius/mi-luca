@@ -2,7 +2,7 @@ import 'server-only';
 
 import { cache } from 'react';
 
-import { COUNTRY_LOCALES } from '@miluca/i18n';
+import { COUNTRY_LOCALES, displayLocale, type Language } from '@miluca/i18n';
 
 import { parseFormOfAddress, type FormOfAddress } from '@/lib/address';
 import { supabaseEnv } from '@/lib/supabase/env';
@@ -116,8 +116,17 @@ export async function getOpenInvitation(
   return data ? { email: data.email, expiresAt: data.expires_at } : null;
 }
 
-/** Formato y zona horaria de las fechas de un cliente según su país (Colombia por defecto). */
-export function countryDateFormat(countryCode: string): { locale: string; timeZone: string } {
+/**
+ * Locale y zona horaria de las fechas de un cliente: el idioma de la interfaz con la región de su
+ * país, y la hora de su país (Colombia por defecto).
+ */
+export function countryDateFormat(
+  countryCode: string,
+  language: Language,
+): { locale: string; timeZone: string } {
   const country = COUNTRY_LOCALES[countryCode] ?? COUNTRY_LOCALES.CO;
-  return { locale: country?.locale ?? 'es-CO', timeZone: country?.timeZone ?? 'America/Bogota' };
+  return {
+    locale: displayLocale(COUNTRY_LOCALES[countryCode] ? countryCode : 'CO', language),
+    timeZone: country?.timeZone ?? 'America/Bogota',
+  };
 }

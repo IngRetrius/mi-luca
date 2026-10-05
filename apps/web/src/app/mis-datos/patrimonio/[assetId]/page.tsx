@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { AssetFormScreen } from '@/features/net-worth';
 import { isUuid } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Activo | MiLuca' };
+export const generateMetadata = pageMetadata('asset');
 
 /** Editar un activo. */
 export default async function MyAssetPage({

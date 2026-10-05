@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { isOverdue } from '@miluca/engine';
-import { COUNTRY_LOCALES, formatDate, messages } from '@miluca/i18n';
+import { formatDate } from '@miluca/i18n';
 
 import { StatusLabel } from '@/components/status';
 import {
@@ -17,13 +17,11 @@ import { loadActionItems, type ActionItemRow } from '@/features/action-plan';
 import { SignOutButton } from '@/features/auth';
 import { listDeliveries } from '@/features/deliveries';
 import { loadDocuments } from '@/features/documents';
+import { LanguageSwitcher } from '@/features/language';
 import { withAddress, type FormOfAddress } from '@/lib/address';
 import { todayIn } from '@/lib/dates';
+import { getLocale, getMessages } from '@/server/i18n';
 import { homePath, requireViewer } from '@/server/viewer';
-
-const t = messages.es;
-// El nombre va aparte para marcarlo como no traducible.
-const [greetingBefore, greetingAfter] = t.clientHome.greeting.split('{name}');
 
 // Cuántas tareas pendientes se ven en el inicio (P-C04).
 const NEXT_TASKS = 3;
@@ -34,6 +32,9 @@ const NEXT_TASKS = 3;
  * y, si el asesor agregó tareas, ve las próximas.
  */
 export default async function HomePage() {
+  const t = await getMessages();
+  // El nombre va aparte para marcarlo como no traducible.
+  const [greetingBefore, greetingAfter] = t.clientHome.greeting.split('{name}');
   const viewer = await requireViewer();
   if (viewer.role !== 'client') redirect(homePath(viewer));
   const [deliveries, actionItems, documents] = await Promise.all([
@@ -89,13 +90,14 @@ export default async function HomePage() {
         {t.clientHome.privacyLink}
       </Link>
       <SignOutButton />
+      <LanguageSwitcher className="justify-center" />
       <p className="text-sm text-text-muted">{t.scope.notInvestmentAdvice}</p>
     </main>
   );
 }
 
 /** Las próximas tareas pendientes del plan de acción, con su fecha límite y si está vencida. */
-function NextTasks({
+async function NextTasks({
   tasks,
   formOfAddress,
   countryCode,
@@ -104,8 +106,9 @@ function NextTasks({
   formOfAddress: FormOfAddress;
   countryCode: string;
 }) {
+  const t = await getMessages();
   const text = withAddress(t.clientHome, formOfAddress);
-  const locale = COUNTRY_LOCALES[countryCode]?.locale ?? 'es';
+  const locale = await getLocale(countryCode);
   const today = todayIn(countryCode);
   return (
     <section aria-labelledby="next-tasks-title" className="flex w-full flex-col gap-2 text-left">

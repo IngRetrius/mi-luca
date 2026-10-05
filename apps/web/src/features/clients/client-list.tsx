@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import type { Messages } from '@miluca/i18n';
 
-import { focusRing } from '@/components/ui-classes';
+import { focusRing, gridList, gridListItem } from '@/components/ui-classes';
 
 import type { ClientSummary } from './queries';
 import { ClientStatusBadge } from './status-badge';
@@ -24,12 +24,9 @@ export function ClientList({
     );
   }
   return (
-    <ul
-      aria-label={text.listLabel}
-      className="divide-y divide-border rounded-xl border border-border"
-    >
+    <ul aria-label={text.listLabel} className={`${gridList} md:grid-cols-2`}>
       {clients.map((client) => (
-        <li key={client.id}>
+        <li key={client.id} className={gridListItem}>
           <Link
             href={`/clientes/${client.id}`}
             className={`flex min-h-16 items-center justify-between gap-3 rounded-xl px-4 py-3 transition-colors hover:bg-surface active:bg-surface ${focusRing}`}

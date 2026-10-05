@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { IncomeScreen } from '@/features/incomes';
 import { isUuid } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Editar ingreso | MiLuca' };
+export const generateMetadata = pageMetadata('editIncome');
 
 /** El cliente edita un ingreso y ve el impacto antes de guardar. */
 export default async function MyIncomePage({

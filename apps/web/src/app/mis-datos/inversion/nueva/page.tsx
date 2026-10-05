@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { InvestmentFormScreen } from '@/features/investment';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Nueva inversión | MiLuca' };
+export const generateMetadata = pageMetadata('newInvestment');
 
 /** Registrar una inversión actual. */
 export default async function MyNewInvestmentPage() {

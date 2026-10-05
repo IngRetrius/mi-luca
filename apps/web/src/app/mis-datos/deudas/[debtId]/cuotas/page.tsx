@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { InstallmentsScreen } from '@/features/debts';
 import { isUuid } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Cuotas | MiLuca' };
+export const generateMetadata = pageMetadata('installments');
 
 /** P-C10: las cuotas de un crédito del cliente, para marcarlas pagadas. */
 export default async function MyInstallmentsPage({

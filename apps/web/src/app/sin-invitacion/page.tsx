@@ -1,17 +1,14 @@
-import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
-import { messages } from '@miluca/i18n';
-
 import { SignOutButton } from '@/features/auth';
+import { getMessages, pageMetadata } from '@/server/i18n';
 import { homePath, requireViewer } from '@/server/viewer';
 
-const t = messages.es.noProfile;
-
-export const metadata: Metadata = { title: 'Sin invitación | MiLuca' };
+export const generateMetadata = pageMetadata('noInvitation');
 
 /** P-G02: la cuenta existe, pero ningún perfil está vinculado a ella. */
 export default async function NoProfilePage() {
+  const t = (await getMessages()).noProfile;
   const viewer = await requireViewer('/sin-invitacion');
   if (viewer.role !== 'none') redirect(homePath(viewer));
   const { email } = viewer.user;

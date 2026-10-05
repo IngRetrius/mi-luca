@@ -1,13 +1,12 @@
-import { COUNTRY_LOCALES, formatMoney, formatPercent, messages } from '@miluca/i18n';
+import { formatMoney, formatPercent, numberLocale } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { FigureList } from '@/components/figure-list';
 import { Screen } from '@/components/screen';
 import { StatusLabel, type Status } from '@/components/status';
 import { loadComputedCase } from '@/features/summary';
+import { getLocale, getMessages } from '@/server/i18n';
 
-const t = messages.es;
-const text = t.emergencyFund;
 const SCENARIOS = ['a', 'b', 'c'] as const;
 
 /** Semáforo del avance, como `Resumen!D22`: completo, desde la mitad o menos. */
@@ -22,6 +21,8 @@ function progressStatus(progress: number): Status {
  * (RN-080 a RN-084, H-11).
  */
 export async function EmergencyFundScreen({ clientId }: { clientId: string }) {
+  const t = await getMessages();
+  const text = t.emergencyFund;
   const back = `/clientes/${clientId}`;
   const computed = await loadComputedCase(clientId);
   const header = (
@@ -47,7 +48,7 @@ export async function EmergencyFundScreen({ clientId }: { clientId: string }) {
   }
 
   const { client } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const money = (amount: number) => formatMoney(amount, client.base_currency, locale);
   const {
     emergencyFund: fund,
@@ -109,9 +110,9 @@ export async function EmergencyFundScreen({ clientId }: { clientId: string }) {
                 },
                 {
                   label: text.months,
-                  value: new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(
-                    fund.months,
-                  ),
+                  value: new Intl.NumberFormat(numberLocale(locale), {
+                    maximumFractionDigits: 1,
+                  }).format(fund.months),
                 },
                 { label: text.essential, value: money(budget.essential.monthly) },
               ]}
@@ -143,9 +144,9 @@ export async function EmergencyFundScreen({ clientId }: { clientId: string }) {
                         ? text.covered
                         : text.monthsCovered.replace(
                             '{months}',
-                            new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(
-                              scenario.monthsCovered,
-                            ),
+                            new Intl.NumberFormat(numberLocale(locale), {
+                              maximumFractionDigits: 1,
+                            }).format(scenario.monthsCovered),
                           )}
                     </p>
                   </li>

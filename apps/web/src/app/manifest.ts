@@ -11,7 +11,8 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: '/',
     scope: '/',
     display: 'standalone',
-    orientation: 'portrait',
+    // Cualquier orientación: en tableta y escritorio la app instalada también gira (ADR 0023).
+    orientation: 'any',
     background_color: lightTheme.bg,
     theme_color: lightTheme.primary,
     icons: [

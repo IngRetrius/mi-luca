@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { ActionPlanScreen } from '@/features/action-plan';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Plan de acción | MiLuca' };
+export const generateMetadata = pageMetadata('actionPlan');
 
 /** Plan de acción del cliente (RN-134): tareas sugeridas y escritas por el asesor. */
 export default async function AdvisorActionPlanPage({

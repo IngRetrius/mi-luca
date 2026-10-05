@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { formatDate, messages } from '@miluca/i18n';
+import { formatDate } from '@miluca/i18n';
 
 import { RowSubmitButton } from '@/components/row-submit-button';
 import { StatusLabel } from '@/components/status';
@@ -8,14 +8,12 @@ import { SubmitButton } from '@/components/submit-button';
 import { linkButton, textButton } from '@/components/ui-classes';
 import { actionPlanPaths, type ActionItemRow } from '@/features/action-plan';
 import { todayIn } from '@/lib/dates';
+import { getMessages } from '@/server/i18n';
 
 import { scheduleReviews, setReviewDone } from './actions';
 import type { Review } from './reviews';
 
-const t = messages.es;
-const text = t.followUp.reviews;
-
-function StateText({
+async function StateText({
   review,
   date,
   countryCode,
@@ -24,6 +22,8 @@ function StateText({
   date: (day: string) => string;
   countryCode: string;
 }) {
+  const t = await getMessages();
+  const text = t.followUp.reviews;
   const { task, state } = review;
   if (!task || state === 'sin_programar') {
     return <span className="text-sm text-text-muted">{text.states.sin_programar}</span>;
@@ -59,7 +59,7 @@ function StateText({
  * Revisiones a 30 días, 90 días y anual (fase 12 del protocolo): qué revisar en cada una y su tarea
  * del plan de acción, para marcarla o abrirla. Las que faltan se programan con un botón.
  */
-export function ReviewsSection({
+export async function ReviewsSection({
   clientId,
   list,
   locale,
@@ -70,6 +70,8 @@ export function ReviewsSection({
   locale: string;
   countryCode: string;
 }) {
+  const t = await getMessages();
+  const text = t.followUp.reviews;
   const date = (day: string) => formatDate(day, locale, 'UTC');
   const taskPath = actionPlanPaths('advisor', clientId).item;
   const missing = list.some((review) => review.task === null);

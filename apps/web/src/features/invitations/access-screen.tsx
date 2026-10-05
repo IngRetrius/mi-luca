@@ -1,7 +1,6 @@
-import { messages } from '@miluca/i18n';
-
 import { GoogleButton } from '@/features/auth';
 import { withAddress } from '@/lib/address';
+import { getMessages } from '@/server/i18n';
 
 import { NewPasswordForm } from './new-password-form';
 import type { ValidInvitation } from './queries';
@@ -10,9 +9,10 @@ import type { ValidInvitation } from './queries';
  * P-C12 Crear tu acceso: Google o contraseña con el correo de la invitación (ADR 0009). Las dos
  * vías terminan en /invitacion/aceptar, que vincula la cuenta y registra el consentimiento.
  */
-export function AccessScreen({ invitation }: { invitation: ValidInvitation }) {
-  const t = withAddress(messages.es.invitation.access, invitation.formOfAddress);
-  const auth = messages.es.auth;
+export async function AccessScreen({ invitation }: { invitation: ValidInvitation }) {
+  const messages = await getMessages();
+  const t = withAddress(messages.invitation.access, invitation.formOfAddress);
+  const auth = messages.auth;
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 py-8">

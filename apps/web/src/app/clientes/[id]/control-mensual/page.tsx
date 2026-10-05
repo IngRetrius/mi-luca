@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { MonthlyControlScreen } from '@/features/monthly-control';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Control mensual | MiLuca' };
+export const generateMetadata = pageMetadata('monthlyControl');
 
 /** P-A16 Seguimiento: el control mensual que lleva el cliente, también editable por el asesor. */
 export default async function AdvisorMonthlyControlPage({

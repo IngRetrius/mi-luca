@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { RealityCheckScreen } from '@/features/reality-check';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Prueba de realidad | MiLuca' };
+export const generateMetadata = pageMetadata('realityCheck');
 
 /** Prueba de realidad del cliente. */
 export default async function MyRealityCheckPage() {

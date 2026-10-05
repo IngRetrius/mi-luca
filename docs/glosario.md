@@ -41,7 +41,7 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Marcar como visto | `markNoticeRead`, `read_at` | |
 | Generar la migración de textos legales | `tools/legal-texts/build_migration.py` | Desde `docs/legal/textos/` |
 | Pantalla solo del cliente | `requireClient` | Guarda de `src/server/viewer.ts`; otro rol va a su inicio |
-| Trato | `form_of_address` / `FormOfAddress` (`tu`, `usted`) | Los textos del cliente vienen en las dos variantes y se eligen con `withAddress` |
+| Trato | `form_of_address` / `FormOfAddress` (`tu`, `usted`) | Los textos del cliente vienen en las dos variantes y se eligen con `withAddress`; lo que no tiene variantes, con la capa en usted (`messagesFor`) |
 | Entrar (iniciar sesión) | `signIn` | Pantalla P-G01, ruta `/entrar` |
 | Cerrar sesión | `signOut` | Solo en el dispositivo actual (`scope: 'local'`) |
 | Sesión | `session` | Usuario de la sesión: `SessionUser` |
@@ -306,3 +306,17 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Historial de cambios | `auditLog` | |
 | Control de calidad | `qualityChecks` | |
 | Modo compatible, modo nativo | `compatible`, `native` | Opción del motor |
+| Idioma de la interfaz | `Language` (`es`, `en`), `LANGUAGES`, `getLanguage` | ADR 0022; se elige con `LanguageSwitcher` (`setLanguage`, cookie `miluca-lang`) o sale de `Accept-Language` (`negotiateLanguage`) |
+| Textos en el idioma de la petición | `getMessages`, `pageMetadata`, `pageTitle` | `src/server/i18n.ts`; títulos de página con `generateMetadata` |
+| Textos para quien lee | `messagesFor`, `MessagesAudience` (`address`, `country`) | Capas `USTED_MESSAGES` (`es-usted.json`) y `COUNTRY_MESSAGES` (`es-ES.json`) sobre `es.json` |
+| Textos sin persona | `getBaseMessages` | Solo el idioma: layout raíz, títulos de página y lo que solo ve el asesor |
+| Textos del caso | `getCaseMessages` | Con el país del cliente aunque los pida el asesor: carta, tareas sugeridas, PDF |
+| Diferencia en dinero de la prueba de realidad | `gapMonthly` | Real menos esperado, al mes; se muestra si el esperado es 0 o menos |
+| Locale de presentación | `displayLocale`, `getLocale` | Idioma más región del país (`en-CO`); fechas en el idioma |
+| Formato numérico del país | `numberLocale` | Importes y porcentajes iguales en los dos idiomas |
+| Nombre del país en el idioma | `countryLabel` | `Intl.DisplayNames` fuera del español |
+| Categoría canónica | `canonicalCategory`, `categoryLabel`, `BUDGET_CATEGORIES`, `AUTOMATIC_CATEGORIES` | Se guarda en español; se muestra en el idioma de quien mira |
+| Nombres del catálogo en otro idioma | `CONCEPT_NAMES_EN`, `catalogConceptNames`, `catalogPocketNames` | `packages/i18n/src/budget-catalog/en.ts` |
+| Idioma de respuesta del agente | `<idioma_de_respuesta>` | Etiqueta de cada mensaje al agente de captura |
+| Pantalla de resumen | `WideScreen` | ADR 0023; formularios y lectura con `Screen` |
+| Lista en rejilla | `gridList`, `gridListItem` | Recuadro con divisores en el celular, tarjetas desde la tableta |

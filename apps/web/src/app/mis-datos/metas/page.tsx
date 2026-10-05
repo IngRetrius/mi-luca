@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { GoalsScreen } from '@/features/goals';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Tus metas | MiLuca' };
+export const generateMetadata = pageMetadata('myGoals');
 
 /** Metas del cliente con su aporte mensual. */
 export default async function MyGoalPage() {

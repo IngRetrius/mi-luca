@@ -4,7 +4,7 @@ import {
   type CalendarStatus,
   type TrackedCredit,
 } from '@miluca/engine';
-import { COUNTRY_LOCALES, formatDate, formatMoney, formatPercent, messages } from '@miluca/i18n';
+import { formatDate, formatMoney, formatPercent, numberLocale } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { FigureList } from '@/components/figure-list';
@@ -12,11 +12,9 @@ import { Screen } from '@/components/screen';
 import { StatusLabel, type Status } from '@/components/status';
 import { loadComputedCase } from '@/features/summary';
 import type { CaseEditor } from '@/server/case-access';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { debtPaths } from './paths';
-
-const t = messages.es;
-const text = t.creditsPanel;
 
 const CALENDAR_TONE: Readonly<Record<CalendarStatus, Status>> = {
   vencida: 'alert',
@@ -36,6 +34,8 @@ export async function CreditsPanelScreen({
   viewer: CaseEditor;
   clientId: string;
 }) {
+  const t = await getMessages();
+  const text = t.creditsPanel;
   const paths = debtPaths(viewer.role, clientId);
   const computed = await loadComputedCase(clientId);
   const header = (
@@ -88,7 +88,7 @@ export async function CreditsPanelScreen({
     );
   }
 
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const money = (amount: number) => formatMoney(amount, client.base_currency, locale);
   const date = (value: string) => formatDate(value, locale, 'UTC');
   const monthYear = (value: string) =>
@@ -237,7 +237,7 @@ export async function CreditsPanelScreen({
                 <span>
                   {text.milestone
                     .replace('{date}', date(entry.endDate))
-                    .replace('{years}', entry.yearsFromCutoff.toLocaleString(locale))}
+                    .replace('{years}', entry.yearsFromCutoff.toLocaleString(numberLocale(locale)))}
                 </span>
                 <span className="text-text-muted">
                   {text.milestoneFreed

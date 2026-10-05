@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { MyPlanScreen } from '@/features/deliveries';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Mi plan | MiLuca' };
+export const generateMetadata = pageMetadata('myPlan');
 
 /** P-C05 Mi plan. La versión elegida va en la URL (`?version=`). */
 export default async function MyPlanPage({ searchParams }: PageProps<'/mi-plan'>) {

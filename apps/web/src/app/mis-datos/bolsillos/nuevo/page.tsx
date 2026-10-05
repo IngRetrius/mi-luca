@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { PocketFormScreen } from '@/features/pockets';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Nuevo bolsillo | MiLuca' };
+export const generateMetadata = pageMetadata('newPocket');
 
 /** Crear un bolsillo. */
 export default async function MyNewPocketPage() {

@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { messages } from '@miluca/i18n';
+
 import { deliveredDocuments, readySections, writtenCount } from './ready';
 import { parseDocument } from './validation';
 
@@ -45,6 +47,7 @@ describe('readySections', () => {
       { opening: 'Hola', attention: 'Tu deuda es {{deuda_total}}.' },
       'usted',
       { totalDebt: '$ 10.000.000' },
+      messages.es.documents.sections,
     );
     expect(sections).toEqual([
       { key: 'opening', title: null, text: 'Hola' },

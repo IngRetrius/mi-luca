@@ -1,24 +1,27 @@
 import type { Metadata, Viewport } from 'next';
 import { Livvic } from 'next/font/google';
 
-import { messages } from '@miluca/i18n';
 import { darkTheme, lightTheme, themeToCssVariables } from '@miluca/ui';
 
 import { ErrorTextProvider } from '@/components/error-text';
+import { getBaseMessages, getLanguage } from '@/server/i18n';
 
 import './globals.css';
 
-export const metadata: Metadata = {
-  title: 'MiLuca',
-  description: 'Planificación financiera personal',
-  applicationName: 'MiLuca',
-  appleWebApp: {
-    capable: true,
-    title: 'MiLuca',
-    statusBarStyle: 'default',
-  },
-  formatDetection: { telephone: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getBaseMessages();
+  return {
+    title: t.app.name,
+    description: t.app.tagline,
+    applicationName: t.app.name,
+    appleWebApp: {
+      capable: true,
+      title: t.app.name,
+      statusBarStyle: 'default',
+    },
+    formatDetection: { telephone: false },
+  };
+}
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -43,14 +46,15 @@ const livvic = Livvic({
   variable: '--font-livvic',
 });
 
-export default function RootLayout({ children }: LayoutProps<'/'>) {
+export default async function RootLayout({ children }: LayoutProps<'/'>) {
+  const [language, t] = await Promise.all([getLanguage(), getBaseMessages()]);
   return (
-    <html lang="es" className={`${livvic.variable} h-full antialiased`}>
+    <html lang={language} className={`${livvic.variable} h-full antialiased`}>
       <head>
         <style>{themeCss}</style>
       </head>
       <body className="min-h-full flex flex-col">
-        <ErrorTextProvider text={messages.es.common.error}>{children}</ErrorTextProvider>
+        <ErrorTextProvider text={t.common.error}>{children}</ErrorTextProvider>
       </body>
     </html>
   );

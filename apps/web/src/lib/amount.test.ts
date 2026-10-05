@@ -30,6 +30,11 @@ describe('parseAmount', () => {
 });
 
 describe('amountToText', () => {
+  it('con la interfaz en inglés escribe el importe con el formato del país', () => {
+    expect(amountToText(1_750_905.5, 'en-CO')).toBe(amountToText(1_750_905.5, 'es-CO'));
+    expect(parseAmount(amountToText(12_345.67, 'en-ES'))).toBe(12_345.67);
+  });
+
   it('se vuelve a leer igual', () => {
     for (const value of [1_750_905, 130_000.5, 0]) {
       expect(parseAmount(amountToText(value, 'es-CO'))).toBe(value);

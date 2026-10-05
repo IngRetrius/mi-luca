@@ -1,5 +1,6 @@
-/** Trato con el que la app le habla al cliente (lo elige el asesor en P-A02). */
-export type FormOfAddress = 'tu' | 'usted';
+import type { FormOfAddress } from '@miluca/i18n';
+
+export type { FormOfAddress } from '@miluca/i18n';
 
 interface Variants<T> {
   readonly tu: T;

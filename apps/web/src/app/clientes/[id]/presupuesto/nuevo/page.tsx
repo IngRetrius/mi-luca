@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { BudgetItemScreen } from '@/features/budget';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Nuevo gasto | MiLuca' };
+export const generateMetadata = pageMetadata('newExpense');
 
 /** P-A06: alta de una partida del presupuesto. */
 export default async function AdvisorNewBudgetItemPage({

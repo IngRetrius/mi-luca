@@ -1,3 +1,5 @@
+import { numberLocale } from '@miluca/i18n';
+
 /** Hasta este valor cabe en `numeric(18, 2)`. */
 const MAX_AMOUNT = 9_999_999_999_999_999;
 
@@ -25,10 +27,13 @@ export function parseDecimal(text: string, maxDecimals: number): number | null {
   return value <= MAX_AMOUNT ? value : Number.NaN;
 }
 
-/** Un importe guardado, para volver a mostrarlo en un campo con el mismo formato que se escribe. */
+/**
+ * Un importe guardado, para volver a mostrarlo en un campo con el mismo formato que se escribe: el
+ * del país, en cualquier idioma de la interfaz (`numberLocale`).
+ */
 export function amountToText(value: number | null, locale: string, maxDecimals = 2): string {
   if (value === null) return '';
-  return new Intl.NumberFormat(locale, {
+  return new Intl.NumberFormat(numberLocale(locale), {
     maximumFractionDigits: maxDecimals,
     useGrouping: true,
   }).format(value);

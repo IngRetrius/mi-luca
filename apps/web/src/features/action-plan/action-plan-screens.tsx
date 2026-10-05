@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { actionStatusSchema } from '@miluca/domain';
 import { isOverdue, suggestedActions } from '@miluca/engine';
-import { COUNTRY_LOCALES, formatDate, messages } from '@miluca/i18n';
+import { formatDate, type Messages } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { RowSubmitButton } from '@/components/row-submit-button';
@@ -15,6 +15,7 @@ import { loadComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
 import { todayIn } from '@/lib/dates';
 import type { CaseEditor } from '@/server/case-access';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { ActionItemForm } from './action-item-form';
 import {
@@ -27,9 +28,6 @@ import { actionPlanPaths } from './paths';
 import { loadActionItems, type ActionItemRow } from './queries';
 import { suggestionContext } from './suggestions';
 
-const t = messages.es;
-const text = t.actionPlan;
-
 const FILTERS = ['pendientes', 'hechas', 'todas'] as const;
 type Filter = (typeof FILTERS)[number];
 
@@ -37,7 +35,8 @@ function parseFilter(value: unknown): Filter {
   return FILTERS.find((filter) => filter === value) ?? 'pendientes';
 }
 
-function localText(viewer: CaseEditor) {
+function localText(t: Messages, viewer: CaseEditor) {
+  const text = t.actionPlan;
   if (viewer.role === 'advisor') {
     return { title: text.title, intro: text.intro, back: text.back, empty: text.empty };
   }
@@ -46,10 +45,12 @@ function localText(viewer: CaseEditor) {
 
 /** Línea de la tarea: responsable, prioridad y fecha límite (o cuándo se hizo). */
 function itemMeta(
+  t: Messages,
   item: ActionItemRow,
   date: (value: string) => string,
   countryCode: string,
 ): string {
+  const text = t.actionPlan;
   const parts = [
     text.owners[item.owner_role as keyof typeof text.owners] ?? item.owner_role,
     text.priorityLabel.replace(
@@ -79,8 +80,10 @@ export async function ActionPlanScreen({
   clientId: string;
   searchParams: Record<string, string | string[] | undefined>;
 }) {
+  const t = await getMessages();
+  const text = t.actionPlan;
   const paths = actionPlanPaths(viewer.role, clientId);
-  const local = localText(viewer);
+  const local = localText(t, viewer);
   const advisor = viewer.role === 'advisor';
   const filter = parseFilter(searchParams.ver);
   const [computed, items] = await Promise.all([
@@ -110,7 +113,7 @@ export async function ActionPlanScreen({
   }
 
   const { client } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const today = todayIn(client.country_code);
   const date = (value: string) => formatDate(value, locale, 'UTC');
   const visible = items.filter((item) =>
@@ -169,7 +172,7 @@ export async function ActionPlanScreen({
                         {item.title}
                       </span>
                       <span className="text-sm text-text-muted">
-                        {itemMeta(item, date, client.country_code)}
+                        {itemMeta(t, item, date, client.country_code)}
                       </span>
                       {overdue ? <StatusLabel status="alert" label={text.overdue} /> : null}
                       {item.status === 'en_curso' ? (
@@ -239,8 +242,10 @@ export async function ActionItemFormScreen({
   clientId: string;
   itemId: string | null;
 }) {
+  const t = await getMessages();
+  const text = t.actionPlan;
   const paths = actionPlanPaths(viewer.role, clientId);
-  const local = localText(viewer);
+  const local = localText(t, viewer);
   const advisor = viewer.role === 'advisor';
   const title = itemId ? text.form.editTitle : text.form.newTitle;
   const items = await loadActionItems(clientId);

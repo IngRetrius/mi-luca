@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { ReceivableFormScreen } from '@/features/receivables';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Cobro | MiLuca' };
+export const generateMetadata = pageMetadata('receivable');
 
 /** Editar un cobro. */
 export default async function AdvisorReceivablePage({

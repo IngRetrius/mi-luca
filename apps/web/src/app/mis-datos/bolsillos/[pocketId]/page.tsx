@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { PocketFormScreen } from '@/features/pockets';
 import { isUuid } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Bolsillo | MiLuca' };
+export const generateMetadata = pageMetadata('pocket');
 
 /** Editar un bolsillo. */
 export default async function MyPocketPage({

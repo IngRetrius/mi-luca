@@ -1,20 +1,25 @@
-import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import type { ReactNode } from 'react';
 
 import { isOverdue, type KeyFigureId } from '@miluca/engine';
-import { COUNTRY_LOCALES, formatDate, formatMoney, messages } from '@miluca/i18n';
+import { formatDate, formatMoney, type Language, type Messages } from '@miluca/i18n';
 
-import { Screen } from '@/components/screen';
 import { ModuleLink } from '@/components/back-link';
-import { focusRing, linkButton, secondaryButton } from '@/components/ui-classes';
+import { WideScreen } from '@/components/screen';
+import {
+  focusRing,
+  gridList,
+  gridListItem,
+  linkButton,
+  secondaryButton,
+} from '@/components/ui-classes';
 import { loadActionItems, type ActionItemRow } from '@/features/action-plan';
 import { ClientStatusBadge, getClientDetail } from '@/features/clients';
 import { listDeliveries } from '@/features/deliveries';
 import { loadDocuments, writtenCount, type ClientDocument } from '@/features/documents';
 import { nextReview } from '@/features/follow-up';
 import { investmentSummary } from '@/features/investment';
-import { loadControlEntries } from '@/features/monthly-control';
 import {
   countryDateFormat,
   createInvitationLink,
@@ -22,13 +27,13 @@ import {
   InvitationPanel,
   revokeInvitation,
 } from '@/features/invitations';
+import { loadControlEntries } from '@/features/monthly-control';
 import { formatKeyFigure, loadComputedCase, type ComputedCase } from '@/features/summary';
 import { todayIn } from '@/lib/dates';
+import { getLanguage, getLocale, getMessages, pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-const t = messages.es;
-
-export const metadata: Metadata = { title: 'Cliente | MiLuca' };
+export const generateMetadata = pageMetadata('client');
 
 const backIcon = (
   <svg
@@ -45,6 +50,7 @@ const backIcon = (
 
 /** P-A03 Ficha del cliente (esqueleto): datos del perfil e invitación. */
 export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>) {
+  const t = await getMessages();
   const { id } = await params;
   await requireAdvisor(`/clientes/${id}`);
   // Independientes: el perfil y su invitación abierta se piden a la vez.
@@ -64,7 +70,7 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
     client !== null && (client.status === 'borrador' || client.status === 'invitado');
 
   return (
-    <Screen>
+    <WideScreen>
       <Link
         href="/clientes"
         className={`-ml-2 inline-flex min-h-12 items-center gap-1 self-start rounded-xl px-2 text-link hover:underline ${focusRing}`}
@@ -92,28 +98,34 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
             deliveredCount={deliveries?.length ?? 0}
             followUp={{ actionItems, controlEntries }}
             documents={documents}
-          />
-          <section
-            aria-labelledby="invitation-title"
-            className="flex flex-col gap-2 rounded-xl bg-surface p-4"
           >
-            <h2 id="invitation-title" className="font-semibold">
-              {t.clientProfile.invitationTitle}
-            </h2>
-            <p className="text-text-muted">{t.clientProfile.invitation[client.status]}</p>
-            {canInvite ? (
-              openInvitation === undefined ? (
-                <p role="alert">{t.common.loadError}</p>
-              ) : (
-                <InvitationPanel
-                  text={t.clientProfile.invite}
-                  openInvitation={describeInvitation(openInvitation, client.countryCode)}
-                  createAction={createInvitationLink.bind(null, client.id)}
-                  revokeAction={revokeInvitation.bind(null, client.id)}
-                />
-              )
-            ) : null}
-          </section>
+            <section
+              aria-labelledby="invitation-title"
+              className="flex flex-col gap-2 rounded-xl bg-surface p-4"
+            >
+              <h2 id="invitation-title" className="font-semibold">
+                {t.clientProfile.invitationTitle}
+              </h2>
+              <p className="text-text-muted">{t.clientProfile.invitation[client.status]}</p>
+              {canInvite ? (
+                openInvitation === undefined ? (
+                  <p role="alert">{t.common.loadError}</p>
+                ) : (
+                  <InvitationPanel
+                    text={t.clientProfile.invite}
+                    openInvitation={describeInvitation(
+                      t,
+                      openInvitation,
+                      client.countryCode,
+                      await getLanguage(),
+                    )}
+                    createAction={createInvitationLink.bind(null, client.id)}
+                    revokeAction={revokeInvitation.bind(null, client.id)}
+                  />
+                )
+              ) : null}
+            </section>
+          </CaseData>
         </>
       ) : (
         <div className="flex flex-col items-start gap-3">
@@ -123,7 +135,7 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
           </Link>
         </div>
       )}
-    </Screen>
+    </WideScreen>
   );
 }
 
@@ -146,12 +158,13 @@ const PROFILE_FIGURES: readonly KeyFigureId[] = [
 ];
 
 /** Datos del caso y cifras del plan calculadas por el motor con lo registrado hoy. */
-function CaseData({
+async function CaseData({
   clientId,
   computed,
   deliveredCount,
   followUp,
   documents,
+  children,
 }: {
   clientId: string;
   computed: ComputedCase | null;
@@ -161,20 +174,26 @@ function CaseData({
     readonly controlEntries: readonly { readonly year: number; readonly month: number }[] | null;
   };
   documents: Partial<Record<'carta' | 'notas', ClientDocument>> | null;
+  /** Lo que va en la columna lateral bajo las cifras (la invitación). */
+  children: ReactNode;
 }) {
+  const t = await getMessages();
   const text = t.clientProfile.caseData;
   if (!computed) {
     return (
-      <section aria-labelledby="case-title" className="flex flex-col gap-2">
-        <h2 id="case-title" className="font-semibold">
-          {text.title}
-        </h2>
-        <p role="alert">{t.common.loadError}</p>
-      </section>
+      <>
+        <section aria-labelledby="case-title" className="flex flex-col gap-2">
+          <h2 id="case-title" className="font-semibold">
+            {text.title}
+          </h2>
+          <p role="alert">{t.common.loadError}</p>
+        </section>
+        {children}
+      </>
     );
   }
   const { client } = computed.rows;
-  const locale = COUNTRY_LOCALES[client.country_code]?.locale ?? 'es';
+  const locale = await getLocale(client.country_code);
   const format = (id: KeyFigureId) =>
     formatKeyFigure(id, computed.figures[id], {
       locale,
@@ -350,17 +369,17 @@ function CaseData({
     {
       href: `${base}/inversion`,
       title: text.investment,
-      summary: investmentSummary(text, computed),
+      summary: investmentSummary(text, computed, t.investment.levels),
     },
     {
       href: `${base}/carta`,
       title: text.letter,
-      summary: letterSummary(documents),
+      summary: letterSummary(t, documents),
     },
     {
       href: `${base}/notas`,
       title: text.notes,
-      summary: notesSummary(documents, locale, client.country_code),
+      summary: notesSummary(t, documents, locale, client.country_code),
     },
     {
       href: `${base}/entrega`,
@@ -372,65 +391,73 @@ function CaseData({
     },
   ];
   return (
-    <>
-      <section aria-labelledby="case-title" className="flex flex-col gap-2">
-        <h2 id="case-title" className="font-semibold">
-          {text.title}
-        </h2>
-        <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
-          {modules.map((module) => (
-            <li key={module.href}>
-              <ModuleLink {...module} />
-            </li>
-          ))}
-        </ul>
-      </section>
-      <section aria-labelledby="analysis-title" className="flex flex-col gap-2">
-        <h2 id="analysis-title" className="font-semibold">
-          {text.analysisTitle}
-        </h2>
-        <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
-          {analysis.map((module) => (
-            <li key={module.href}>
-              <ModuleLink {...module} />
-            </li>
-          ))}
-        </ul>
-      </section>
-      <section aria-labelledby="follow-up-title" className="flex flex-col gap-2">
-        <h2 id="follow-up-title" className="font-semibold">
-          {text.followUpTitle}
-        </h2>
-        <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
-          {followUpModules.map((module) => (
-            <li key={module.href}>
-              <ModuleLink {...module} />
-            </li>
-          ))}
-        </ul>
-      </section>
-      <section
-        aria-labelledby="figures-title"
-        className="flex flex-col gap-2 rounded-xl bg-surface p-4"
-      >
-        <h2 id="figures-title" className="font-semibold">
-          {text.figuresTitle}
-        </h2>
-        <dl className="flex flex-col gap-1">
-          {PROFILE_FIGURES.map((id) => (
-            <div key={id} className="flex flex-wrap items-baseline justify-between gap-x-3">
-              <dt>{t.keyFigures[id]}</dt>
-              <dd className="font-medium tabular-nums">{format(id)}</dd>
-            </div>
-          ))}
-        </dl>
-        <p className="text-sm text-text-muted">{text.figuresNote}</p>
-      </section>
-    </>
+    <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
+      <div className="flex min-w-0 flex-1 flex-col gap-6">
+        <section aria-labelledby="case-title" className="flex flex-col gap-2">
+          <h2 id="case-title" className="font-semibold">
+            {text.title}
+          </h2>
+          <ul className={`${gridList} md:grid-cols-2`}>
+            {modules.map((module) => (
+              <li key={module.href} className={gridListItem}>
+                <ModuleLink {...module} />
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section aria-labelledby="analysis-title" className="flex flex-col gap-2">
+          <h2 id="analysis-title" className="font-semibold">
+            {text.analysisTitle}
+          </h2>
+          <ul className={`${gridList} md:grid-cols-2`}>
+            {analysis.map((module) => (
+              <li key={module.href} className={gridListItem}>
+                <ModuleLink {...module} />
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section aria-labelledby="follow-up-title" className="flex flex-col gap-2">
+          <h2 id="follow-up-title" className="font-semibold">
+            {text.followUpTitle}
+          </h2>
+          <ul className={`${gridList} md:grid-cols-2`}>
+            {followUpModules.map((module) => (
+              <li key={module.href} className={gridListItem}>
+                <ModuleLink {...module} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+      <div className="flex flex-col gap-6 lg:w-96 lg:shrink-0">
+        <section
+          aria-labelledby="figures-title"
+          className="flex flex-col gap-2 rounded-xl bg-surface p-4"
+        >
+          <h2 id="figures-title" className="font-semibold">
+            {text.figuresTitle}
+          </h2>
+          <dl className="flex flex-col gap-1">
+            {PROFILE_FIGURES.map((id) => (
+              <div key={id} className="flex flex-wrap items-baseline justify-between gap-x-3">
+                <dt>{t.keyFigures[id]}</dt>
+                <dd className="font-medium tabular-nums">{format(id)}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="text-sm text-text-muted">{text.figuresNote}</p>
+        </section>
+        {children}
+      </div>
+    </div>
   );
 }
 
-function letterSummary(documents: Partial<Record<'carta' | 'notas', ClientDocument>> | null) {
+function letterSummary(
+  t: Messages,
+  documents: Partial<Record<'carta' | 'notas', ClientDocument>> | null,
+) {
   const summary = t.documents.summary;
   if (!documents) return t.common.loadError;
   const letter = documents.carta;
@@ -441,6 +468,7 @@ function letterSummary(documents: Partial<Record<'carta' | 'notas', ClientDocume
 }
 
 function notesSummary(
+  t: Messages,
   documents: Partial<Record<'carta' | 'notas', ClientDocument>> | null,
   locale: string,
   countryCode: string,
@@ -457,11 +485,13 @@ function notesSummary(
 }
 
 function describeInvitation(
+  t: Messages,
   invitation: { readonly email: string | null; readonly expiresAt: string } | null,
   countryCode: string,
+  language: Language,
 ): { expiresAt: string; description: string; email: string | null } | null {
   if (!invitation) return null;
-  const { locale, timeZone } = countryDateFormat(countryCode);
+  const { locale, timeZone } = countryDateFormat(countryCode, language);
   const date = formatDate(invitation.expiresAt, locale, timeZone);
   const description = invitation.email
     ? t.clientProfile.invite.open.replace('{email}', invitation.email).replace('{date}', date)

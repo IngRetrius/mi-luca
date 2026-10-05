@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { COUNTRY_LOCALES, formatDate, messages } from '@miluca/i18n';
+import { formatDate } from '@miluca/i18n';
 
 import { BackLink, LoadError } from '@/components/back-link';
 import { Screen } from '@/components/screen';
@@ -15,12 +15,11 @@ import {
 import { loadComputedCase } from '@/features/summary';
 import { withAddress, type FormOfAddress } from '@/lib/address';
 import { todayIn } from '@/lib/dates';
+import { getLocale, getMessages } from '@/server/i18n';
 
 import { PdfLink } from './pdf-link';
 import { PlanView } from './plan-view';
 import { listDeliveries, loadDelivery } from './queries';
-
-const t = messages.es;
 
 /**
  * P-C05 Mi plan: las notas que el asesor publicó (con las cifras de hoy) y el plan entregado vigente
@@ -37,6 +36,7 @@ export async function MyPlanScreen({
   /** Id de una entrega anterior, desde `?version=`; si no, la más reciente. */
   version: string | null;
 }) {
+  const t = await getMessages();
   const text = withAddress(t.myPlan, formOfAddress);
   const view = withAddress(t.documents.view, formOfAddress);
   const [deliveries, computed, documents] = await Promise.all([
@@ -59,7 +59,7 @@ export async function MyPlanScreen({
     );
   }
   const country = computed?.rows.client.country_code;
-  const locale = (country && COUNTRY_LOCALES[country]?.locale) ?? 'es';
+  const locale = await getLocale(country);
   // RLS: el cliente solo recibe las notas publicadas.
   const notes = documents?.notas;
   const notesSection =
@@ -74,6 +74,7 @@ export async function MyPlanScreen({
         values={figureValues(computed.figures, {
           locale,
           currency: computed.rows.client.base_currency,
+          months: t.keyFigureMonths,
         })}
       />
     ) : null;
@@ -138,7 +139,7 @@ export async function MyPlanScreen({
 }
 
 /** Las notas publicadas por el asesor, con las cifras de hoy. */
-function PublishedNotes({
+async function PublishedNotes({
   notes,
   title,
   published,
@@ -155,7 +156,8 @@ function PublishedNotes({
   countryCode: string;
   values: ReturnType<typeof figureValues>;
 }) {
-  const sections = readySections('notas', notes.content, address, values);
+  const t = await getMessages();
+  const sections = readySections('notas', notes.content, address, values, t.documents.sections);
   if (sections.length === 0) return null;
   return (
     <section

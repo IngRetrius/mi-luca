@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
-
 import { InsuranceScreen } from '@/features/insurance';
+import { pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Tus seguros | MiLuca' };
+export const generateMetadata = pageMetadata('myInsurances');
 
 /** Los seguros del cliente. */
 export default async function MyInsurancePage() {

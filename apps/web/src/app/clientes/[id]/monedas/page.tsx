@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { CurrenciesScreen } from '@/features/currencies';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Monedas | MiLuca' };
+export const generateMetadata = pageMetadata('currencies');
 
 /** P-A19 Monedas del cliente. */
 export default async function AdvisorCurrenciesPage({

@@ -1,10 +1,9 @@
-import type { Metadata } from 'next';
-
 import { AdvisorDeliveredPlanScreen } from '@/features/deliveries';
 import { requireCaseEditor } from '@/server/case-access';
+import { pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
 
-export const metadata: Metadata = { title: 'Plan entregado | MiLuca' };
+export const generateMetadata = pageMetadata('deliveredPlan');
 
 /** Un plan entregado y su comparación con hoy. */
 export default async function AdvisorDeliveredPlanPage({

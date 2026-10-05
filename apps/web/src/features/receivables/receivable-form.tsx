@@ -68,7 +68,7 @@ export function ReceivableForm({
       required
       defaultValue={values[field]}
       aria-invalid={errors[field] ? true : false}
-      aria-describedby={describedBy(fieldId(field), false)}
+      aria-describedby={describedBy(fieldId(field), field === 'balance')}
       className={`${textField} text-right tabular-nums`}
     />
   );
@@ -127,6 +127,9 @@ export function ReceivableForm({
           </select>
         </Field>
       </div>
+      <p id={`${fieldId('balance')}-hint`} className="-mt-4 text-sm text-text-muted">
+        {text.balanceHint}
+      </p>
       <p id={`${formId}-currency-note`} className="-mt-4 text-sm text-text-muted">
         {text.currencyHint}
       </p>
