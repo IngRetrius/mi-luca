@@ -26,7 +26,8 @@ export async function LoginScreen({
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 px-4 py-10">
       <header className="flex flex-col items-center gap-3 text-center">
-        <Image src="/icons/icon-192.png" alt="" width={72} height={72} priority />
+        {/* El icono ya es pequeño (192 px, 13 KB): se sirve tal cual, sin el optimizador. */}
+        <Image src="/icons/icon-192.png" alt="" width={72} height={72} priority unoptimized />
         <h1 translate="no" className="text-3xl font-semibold">
           {t.app.name}
         </h1>

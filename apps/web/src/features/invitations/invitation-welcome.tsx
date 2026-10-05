@@ -31,7 +31,7 @@ export async function InvitationWelcome({
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 pt-8">
       <header className="flex flex-col gap-3">
-        <Image src="/icons/icon-192.png" alt="" width={56} height={56} priority />
+        <Image src="/icons/icon-192.png" alt="" width={56} height={56} priority unoptimized />
         <h1 className="text-2xl font-semibold text-balance wrap-anywhere">
           {titleBefore}
           <span translate="no">{invitation.advisorName}</span>
