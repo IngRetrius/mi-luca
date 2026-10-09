@@ -5,11 +5,14 @@ import { requireAdvisor } from '@/server/viewer';
 
 export const generateMetadata = pageMetadata('delivery');
 
-/** P-A12 Control de calidad y P-A14 Entregar el plan. */
-export default async function AdvisorDeliveryPage({ params }: PageProps<'/clientes/[id]/entrega'>) {
-  const { id } = await params;
+/** P-A12 Control de calidad y P-A14 Entregar un reporte. La etapa va en la URL (`?etapa=`). */
+export default async function AdvisorDeliveryPage({
+  params,
+  searchParams,
+}: PageProps<'/clientes/[id]/entrega'>) {
+  const [{ id }, { etapa }] = await Promise.all([params, searchParams]);
   const path = `/clientes/${id}/entrega`;
   await requireAdvisor(path);
   await requireCaseEditor(id, path);
-  return <DeliveryScreen clientId={id} />;
+  return <DeliveryScreen clientId={id} stage={typeof etapa === 'string' ? etapa : null} />;
 }

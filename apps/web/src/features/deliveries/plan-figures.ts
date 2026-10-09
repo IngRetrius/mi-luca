@@ -1,21 +1,14 @@
+import type { DeliveryStage } from '@miluca/domain';
 import type { KeyFigureId } from '@miluca/engine';
 import type { Messages } from '@miluca/i18n';
 
+import { deliveryStages, figuresFor } from '@/features/stages';
 import { formatKeyFigure } from '@/features/summary';
 
-/** Las cifras que muestra un plan entregado, en el orden del Resumen. */
-export const PLAN_FIGURES: readonly KeyFigureId[] = [
-  'annualIncome',
-  'annualExpenses',
-  'programmedSavings',
-  'annualSurplus',
-  'savingsRate',
-  'ownSavingsRate',
-  'emergencyGoal',
-  'emergencyProgress',
-  'noIncomeShortfall',
-  'annualInvestment',
-];
+/** Las cifras que muestra un plan entregado de esa etapa, en el orden del Resumen (ADR 0025). */
+export function planFigures(stage: DeliveryStage): readonly KeyFigureId[] {
+  return figuresFor(deliveryStages(stage));
+}
 
 export function formatFigure(
   id: KeyFigureId,

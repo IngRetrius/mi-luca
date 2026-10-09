@@ -48,8 +48,9 @@ select lives_ok(
 select is((select delivered_by from public.plan_deliveries), '11111111-1111-4111-8111-111111111111'::uuid,
   'La base anota quién entregó');
 select is((select sha256 from public.plan_deliveries),
-  encode(sha256(convert_to('{"incomes": []}' || '{}' || '{"summary": {}}' || '{}', 'UTF8')), 'hex'),
-  'La base sella entradas, nombres, resultados y documentos con su sha256');
+  encode(sha256(convert_to('{"incomes": []}' || '{}' || '{"summary": {}}' || '{}' || 'completo', 'UTF8')),
+    'hex'),
+  'La base sella entradas, nombres, resultados, documentos y etapa con su sha256');
 select throws_ok(
   $$update public.plan_deliveries set label = 'Otro nombre'$$,
   '42501', null, 'Nadie cambia un plan entregado desde la API');

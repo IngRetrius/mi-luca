@@ -4,10 +4,12 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import type { Json } from '@miluca/db';
+import { deliveryStageSchema } from '@miluca/domain';
 import { ENGINE_VERSION, qualityChecks } from '@miluca/engine';
 
 import { getClientDetail } from '@/features/clients';
 import { figureValues, loadDocuments, readySections } from '@/features/documents';
+import { loadActiveStages, reportForStage } from '@/features/stages';
 import { loadComputedCase } from '@/features/summary';
 import { createClient } from '@/lib/supabase/server';
 import { requireCaseEditor } from '@/server/case-access';
@@ -22,25 +24,40 @@ export interface DeliveryState {
 }
 
 /**
- * P-A14 Entregar el plan: vuelve a calcular el caso y su control de calidad en el servidor (no se
- * fía de lo que mostró la pantalla), exige una nota en cada punto que la pide y guarda la foto
- * inmutable del plan: entradas, nombres de los bolsillos, resultados, cifras clave, control de
- * calidad con sus notas, versión del motor y parámetros usados (RN-137). La carta y las notas
- * publicadas van con las cifras ya puestas: quedan fijas aunque cambien los datos (P-A13).
+ * P-A14 Entregar el plan o el reporte de una etapa (ADR 0025): vuelve a calcular el caso y su
+ * control de calidad en el servidor (no se fía de lo que mostró la pantalla), con los controles de
+ * la etapa; exige una nota en cada punto que la pide y guarda la foto inmutable: entradas, nombres
+ * de bolsillos, deudas y metas, resultados, cifras clave, control de calidad con sus notas, etapa,
+ * versión del motor y parámetros usados (RN-137). La carta y las notas publicadas van con las
+ * cifras ya puestas: quedan fijas aunque cambien los datos (P-A13). La etapa llega como argumento
+ * ligado, que viaja sin cifrar: se valida otra vez contra las etapas activas.
  */
 export async function deliverPlan(
   clientId: string,
+  stage: string,
   _previous: DeliveryState | null,
   formData: FormData,
 ): Promise<DeliveryState> {
   const path = `/clientes/${clientId}/entrega`;
   const viewer = await requireCaseEditor(clientId, path);
-  const [computed, client, documents] = await Promise.all([
+  const [computed, client, documents, activeStages] = await Promise.all([
     loadComputedCase(clientId),
     getClientDetail(clientId),
     loadDocuments(clientId),
+    loadActiveStages(clientId),
   ]);
-  const report = computed ? qualityChecks(computed.input, computed.result) : null;
+  const parsedStage = deliveryStageSchema.safeParse(stage);
+  // Solo una etapa activa o el plan completo.
+  const deliveryStage =
+    parsedStage.success &&
+    activeStages !== null &&
+    (parsedStage.data === 'completo' || activeStages.includes(parsedStage.data))
+      ? parsedStage.data
+      : null;
+  const report =
+    computed && deliveryStage
+      ? reportForStage(qualityChecks(computed.input, computed.result), deliveryStage)
+      : null;
   const parsed = parseDelivery(formData, {
     required: report?.needNote.map((item) => item.code) ?? [],
     optional: report?.warnings.map((item) => item.code) ?? [],
@@ -48,7 +65,7 @@ export async function deliverPlan(
   if (viewer.role !== 'advisor') {
     return { values: parsed.values, errors: {}, formError: 'notAllowed' };
   }
-  if (!computed || !report || !documents || !client || client === 'not-found') {
+  if (!computed || !report || !documents || !client || client === 'not-found' || !deliveryStage) {
     return { values: parsed.values, errors: {}, formError: 'unavailable' };
   }
   if (!parsed.ok) return { values: parsed.values, errors: parsed.errors, formError: null };
@@ -93,11 +110,15 @@ export async function deliverPlan(
       inputs: json(computed.input),
       labels: json({
         pockets: computed.input.pockets.map((pocket) => pocketName.get(pocket.key) ?? ''),
+        // En el orden de la entrada del motor, que sigue el de las filas.
+        debts: computed.rows.debts.map((debt) => debt.name),
+        goals: computed.rows.goals.map((goal) => goal.name),
       }),
       results: json(computed.result),
       key_figures: json(computed.figures),
       documents: json({ version: 1, letter: ready('carta'), notes: ready('notas') }),
       qc_report: json({ items: report.items, notes: parsed.values.notes }),
+      stage: deliveryStage,
     })
     .select('id')
     .single();

@@ -20,11 +20,13 @@ import { getLocale, getMessages } from '@/server/i18n';
 import { PdfLink } from './pdf-link';
 import { PlanView } from './plan-view';
 import { listDeliveries, loadDelivery } from './queries';
+import { labelNamesStage } from './stage-label';
 
 /**
- * P-C05 Mi plan: las notas que el asesor publicó (con las cifras de hoy) y el plan entregado vigente
- * (el más reciente) o la versión elegida, con su carta por secciones plegables y la comparación con
- * hoy. Sin PDF todavía (F7).
+ * P-C05 Mi plan: las notas que el asesor publicó (con las cifras de hoy) y el reporte elegido (el más
+ * reciente si no se elige), con su carta por secciones plegables, la comparación con hoy y su PDF.
+ * Con reportes de varias etapas (ADR 0025), arriba va el último de cada una; abajo, todas las
+ * versiones.
  */
 export async function MyPlanScreen({
   clientId,
@@ -79,6 +81,10 @@ export async function MyPlanScreen({
       />
     ) : null;
   const chosen = deliveries.find((delivery) => delivery.id === version) ?? deliveries[0];
+  // El último de cada etapa: la lista viene de la más reciente a la más antigua.
+  const latestByStage = deliveries.filter(
+    (entry, index) => deliveries.findIndex((other) => other.stage === entry.stage) === index,
+  );
   if (!chosen) {
     return (
       <Screen>
@@ -94,6 +100,29 @@ export async function MyPlanScreen({
     <Screen>
       {header}
       {notesSection}
+      {latestByStage.length > 1 ? (
+        <nav aria-labelledby="reports-title" className="flex flex-col gap-2">
+          <h2 id="reports-title" className="font-semibold">
+            {t.plan.reportsTitle}
+          </h2>
+          <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
+            {latestByStage.map((entry) => (
+              <li key={entry.id}>
+                <Link
+                  href={`/mi-plan?version=${entry.id}`}
+                  aria-current={entry.id === chosen.id ? 'page' : undefined}
+                  className={`flex min-h-12 flex-col gap-1 rounded-xl p-4 hover:bg-surface aria-[current=page]:bg-surface ${focusRing}`}
+                >
+                  <span className="font-medium">{t.stages.names[entry.stage]}</span>
+                  <span className="text-sm text-text-muted">
+                    {formatDate(entry.deliveredOn, locale, 'UTC')}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ) : null}
       {delivery ? (
         <>
           <p className={`font-medium wrap-anywhere ${notesSection ? '' : '-mt-4'}`}>
@@ -126,7 +155,11 @@ export async function MyPlanScreen({
                 >
                   <span className="font-medium wrap-anywhere">{entry.label}</span>
                   <span className="text-sm text-text-muted">
-                    {formatDate(entry.deliveredAt, locale, 'UTC')}
+                    {labelNamesStage(entry.label, t.stages.names[entry.stage])
+                      ? formatDate(entry.deliveredOn, locale, 'UTC')
+                      : t.plan.reportItem
+                          .replace('{stage}', t.stages.names[entry.stage])
+                          .replace('{date}', formatDate(entry.deliveredOn, locale, 'UTC'))}
                   </span>
                 </Link>
               </li>

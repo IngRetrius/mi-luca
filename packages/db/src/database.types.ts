@@ -366,6 +366,7 @@ export type Database = {
       };
       case_settings: {
         Row: {
+          active_stages: string[];
           client_id: string;
           compatibility_mode: boolean;
           cutoff_date: string | null;
@@ -391,6 +392,7 @@ export type Database = {
           updated_by: string | null;
         };
         Insert: {
+          active_stages?: string[];
           client_id: string;
           compatibility_mode?: boolean;
           cutoff_date?: string | null;
@@ -416,6 +418,7 @@ export type Database = {
           updated_by?: string | null;
         };
         Update: {
+          active_stages?: string[];
           client_id?: string;
           compatibility_mode?: boolean;
           cutoff_date?: string | null;
@@ -1476,6 +1479,7 @@ export type Database = {
           qc_report: NonNullable<Json>;
           results: NonNullable<Json>;
           sha256: string;
+          stage: string;
         };
         Insert: {
           client_id: string;
@@ -1495,6 +1499,7 @@ export type Database = {
           qc_report: NonNullable<Json>;
           results: NonNullable<Json>;
           sha256?: string;
+          stage?: string;
         };
         Update: {
           client_id?: string;
@@ -1514,6 +1519,7 @@ export type Database = {
           qc_report?: NonNullable<Json>;
           results?: NonNullable<Json>;
           sha256?: string;
+          stage?: string;
         };
         Relationships: [
           {

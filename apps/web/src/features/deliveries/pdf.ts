@@ -7,7 +7,8 @@ import { getClientDetail } from '@/features/clients';
 import { withAddress } from '@/lib/address';
 import { getCaseMessages, getLanguage, getLocale } from '@/server/i18n';
 
-import { formatFigure, PLAN_FIGURES } from './plan-figures';
+import { planDetailFigures } from './plan-details';
+import { formatFigure, planFigures } from './plan-figures';
 import { listDeliveries, loadDelivery } from './queries';
 
 /** Nombre del archivo: el que se ve al descargar y uno solo con ASCII para navegadores viejos. */
@@ -56,24 +57,25 @@ export async function deliveryPdfResponse(
     clientName: client.displayName,
     planLabel: delivery.label,
     meta: t.plan.deliveredOn
-      .replace('{date}', date(delivery.deliveredAt))
+      .replace('{date}', date(delivery.deliveredOn))
       .replace('{cutoff}', date(delivery.cutoffDate)),
     letter: delivery.documents.letter,
     notesTitle: view.notesDeliveredTitle,
     notes: delivery.documents.notes,
     figuresTitle: t.plan.figuresTitle,
-    figures: PLAN_FIGURES.filter(
-      (figure) => figures[figure] !== null && figures[figure] !== undefined,
-    ).map((figure) => ({
-      label: t.keyFigures[figure],
-      value: formatFigure(
-        figure,
-        figures[figure],
-        locale,
-        delivery.baseCurrency,
-        t.keyFigureMonths,
-      ),
-    })),
+    figures: planFigures(delivery.stage)
+      .filter((figure) => figures[figure] !== null && figures[figure] !== undefined)
+      .map((figure) => ({
+        label: t.keyFigures[figure],
+        value: formatFigure(
+          figure,
+          figures[figure],
+          locale,
+          delivery.baseCurrency,
+          t.keyFigureMonths,
+        ),
+      }))
+      .concat(planDetailFigures(delivery, t, locale)),
     footer: t.plan.currencyNote.replace('{currency}', delivery.baseCurrency),
     pageLabel: t.plan.pdf.pageLabel,
     scope: t.plan.scope,

@@ -2,28 +2,24 @@ import type { CaseResult, KeyFigures } from '@miluca/engine';
 import { formatDate, formatMoney } from '@miluca/i18n';
 
 import { FigureList } from '@/components/figure-list';
+import { formatMonth } from '@/features/debts';
 import { DocumentSections } from '@/features/documents';
 import { getMessages } from '@/server/i18n';
 
 import { PlanAssumptions } from './plan-assumptions';
 import { PlanComparison } from './plan-comparison';
-import { formatFigure, PLAN_FIGURES } from './plan-figures';
+import { formatFigure, planFigures } from './plan-figures';
+import { DeliveredDebtPlan, DeliveredWealth } from './plan-sections';
 import type { Delivery } from './queries';
 
-function formatMonth(date: string, locale: string): string {
-  return new Intl.DateTimeFormat(locale, {
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'UTC',
-  }).format(new Date(`${date}T00:00:00Z`));
-}
-
 /**
- * Un plan entregado por secciones (P-C05): cifras, fondo, bolsillos, el año del flujo, los
- * supuestos con su explicación y la comparación con hoy, después de la carta y las notas que se
- * entregaron con él. Lee solo lo que se guardó el día de la entrega (`results`, `documents`), así lo
- * entregado no cambia aunque cambien los datos. Textos neutros salvo los títulos de la carta y las
- * notas, que da quien llama: lo usan el asesor y el cliente.
+ * Un plan entregado por secciones (P-C05), solo las de su etapa (ADR 0025): cifras; en presupuesto,
+ * fondo, bolsillos y el año del flujo; en deudas, el plan de pago; en patrimonio, patrimonio,
+ * protección, metas e inversión; el plan completo trae todo. Después, los supuestos con su
+ * explicación y la comparación con hoy, tras la carta y las notas que se entregaron con él. Lee solo
+ * lo que se guardó el día de la entrega (`results`, `documents`), así lo entregado no cambia aunque
+ * cambien los datos. Textos neutros salvo los títulos de la carta y las notas, que da quien llama:
+ * lo usan el asesor y el cliente.
  */
 export async function PlanView({
   delivery,
@@ -41,41 +37,18 @@ export async function PlanView({
 }) {
   const t = await getMessages();
   const text = t.plan;
-  const money = (amount: number) => formatMoney(amount, currency, locale);
-  const results: CaseResult = delivery.results;
   const figures = delivery.keyFigures;
-  const shown = PLAN_FIGURES.filter((id) => figures[id] !== null && figures[id] !== undefined);
-  const fund = results.emergencyFund;
-  const pockets = results.pockets;
-  const plan = results.savingsPlan;
-  const redMonths = results.cashflow.flow.balance.months.filter((value) => value < 0).length;
-  // Con el plan secuencial (modo nativo) el fondo no recibe un aporte fijo: se llena con el
-  // sobrante hasta completarse. Se dice cuándo, en vez del aporte de 12 meses de la plantilla.
-  const fundNote = plan?.completionMonth
-    ? text.fundComplete.replace('{month}', formatMonth(plan.completionMonth, locale))
-    : null;
-  const pocketRows = [
-    {
-      key: 'emergencia',
-      name: text.emergency,
-      row: pockets.emergency,
-      note: plan ? fundNote : null,
-    },
-    { key: 'meses_sin_ingreso', name: text.noIncome, row: pockets.noIncome, note: null },
-    ...pockets.general.map((row, index) => ({
-      key: `general-${index}`,
-      name: delivery.pocketNames[index] || t.pockets.unnamed,
-      row,
-      note: null,
-    })),
-  ].filter(({ row, note }) => note !== null || row.monthlyContribution > 0 || row.balance > 0);
+  const { stage } = delivery;
+  const shown = planFigures(stage).filter(
+    (id) => figures[id] !== null && figures[id] !== undefined,
+  );
 
   return (
     <>
       <div className="flex flex-col gap-1 text-sm text-text-muted">
         <p>
           {text.deliveredOn
-            .replace('{date}', formatDate(delivery.deliveredAt, locale, 'UTC'))
+            .replace('{date}', formatDate(delivery.deliveredOn, locale, 'UTC'))
             .replace('{cutoff}', formatDate(delivery.cutoffDate, locale, 'UTC'))}
         </p>
         <p>{text.currencyNote.replace('{currency}', currency)}</p>
@@ -114,6 +87,98 @@ export async function PlanView({
         />
       </section>
 
+      {stage === 'presupuesto' || stage === 'completo' ? (
+        <BudgetSections
+          delivery={delivery}
+          locale={locale}
+          currency={currency}
+          withInvestment={stage === 'completo'}
+        />
+      ) : null}
+
+      {stage === 'deudas' || stage === 'completo' ? (
+        <DeliveredDebtPlan delivery={delivery} locale={locale} />
+      ) : null}
+
+      {stage === 'patrimonio' || stage === 'completo' ? (
+        <DeliveredWealth delivery={delivery} locale={locale} />
+      ) : null}
+
+      {delivery.parameters ? (
+        <PlanAssumptions stage={stage} parameters={delivery.parameters} locale={locale} />
+      ) : null}
+
+      {today ? (
+        <section
+          aria-labelledby="plan-compare"
+          className="flex flex-col gap-2 rounded-xl border border-border p-4"
+        >
+          <h2 id="plan-compare" className="font-semibold">
+            {text.compareTitle}
+          </h2>
+          <p className="text-sm text-text-muted">{text.compareIntro}</p>
+          <PlanComparison
+            stage={stage}
+            delivered={figures}
+            today={today}
+            locale={locale}
+            currency={currency}
+          />
+        </section>
+      ) : null}
+
+      <p className="text-sm text-text-muted">{text.scope}</p>
+    </>
+  );
+}
+
+/**
+ * Fondo de emergencia, bolsillos y el año del flujo de un plan entregado: la etapa de presupuesto.
+ * La inversión del año solo va en el plan completo; en el reporte de presupuesto es de la etapa de
+ * patrimonio.
+ */
+async function BudgetSections({
+  delivery,
+  locale,
+  currency,
+  withInvestment,
+}: {
+  delivery: Delivery;
+  locale: string;
+  currency: string;
+  withInvestment: boolean;
+}) {
+  const t = await getMessages();
+  const text = t.plan;
+  const money = (amount: number) => formatMoney(amount, currency, locale);
+  const results: CaseResult = delivery.results;
+  const fund = results.emergencyFund;
+  const pockets = results.pockets;
+  const plan = results.savingsPlan;
+  const redMonths = results.cashflow.flow.balance.months.filter((value) => value < 0).length;
+  // Con el plan secuencial (modo nativo) el fondo no recibe un aporte fijo: se llena con el
+  // sobrante hasta completarse. Se dice cuándo, en vez del aporte de 12 meses de la plantilla.
+  const fundNote = plan?.completionMonth
+    ? text.fundComplete.replace('{month}', formatMonth(plan.completionMonth, locale))
+    : null;
+  const pocketRows = [
+    {
+      key: 'emergencia',
+      name: text.emergency,
+      row: pockets.emergency,
+      note: plan ? fundNote : null,
+    },
+    { key: 'meses_sin_ingreso', name: text.noIncome, row: pockets.noIncome, note: null },
+    ...pockets.general.map((row, index) => ({
+      key: `general-${index}`,
+      name: delivery.pocketNames[index] || t.pockets.unnamed,
+      row,
+      note: null,
+    })),
+  ].filter(({ row, note }) => note !== null || row.monthlyContribution > 0 || row.balance > 0);
+
+  return (
+    <>
       <section aria-labelledby="plan-fund" className="flex flex-col gap-2">
         <h2 id="plan-fund" className="font-semibold">
           {text.fundTitle}
@@ -165,29 +230,12 @@ export async function PlanView({
                   },
                 ]
               : []),
-            { label: text.annualInvestment, value: money(results.summary.annualInvestment) },
+            ...(withInvestment
+              ? [{ label: text.annualInvestment, value: money(results.summary.annualInvestment) }]
+              : []),
           ]}
         />
       </section>
-
-      {delivery.parameters ? (
-        <PlanAssumptions parameters={delivery.parameters} locale={locale} />
-      ) : null}
-
-      {today ? (
-        <section
-          aria-labelledby="plan-compare"
-          className="flex flex-col gap-2 rounded-xl border border-border p-4"
-        >
-          <h2 id="plan-compare" className="font-semibold">
-            {text.compareTitle}
-          </h2>
-          <p className="text-sm text-text-muted">{text.compareIntro}</p>
-          <PlanComparison delivered={figures} today={today} locale={locale} currency={currency} />
-        </section>
-      ) : null}
-
-      <p className="text-sm text-text-muted">{text.scope}</p>
     </>
   );
 }

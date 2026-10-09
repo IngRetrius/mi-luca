@@ -6,6 +6,7 @@ Estado al 08/10/2026: **preparando el piloto con personas cercanas**. Terminadas
 
 ## Qué hace
 
+- La asesoría va en tres etapas, cada una con su reporte: presupuesto y bolsillos, deudas, y patrimonio con protección y metas (ADR 0025). En la ficha, cada etapa muestra sus pasos y el siguiente.
 - El asesor sigue el protocolo de asesoría por fases: cuestionario, procesamiento, prueba de realidad, diagnóstico, análisis, entrega y seguimiento.
 - La plataforma calcula todo lo que hoy calcula la plantilla (presupuesto, flujo anual, bolsillos, fondo de emergencia, deudas, inversión y resumen con semáforo), salvo la pensión, que se remite al profesional (ADR 0016).
 - El cliente tiene su propia cuenta: ve su plan, ajusta sus datos, registra su control mensual y marca sus tareas.

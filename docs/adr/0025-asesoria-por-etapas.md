@@ -38,6 +38,16 @@ La restricción: sin funciones nuevas y sin cambiar el motor. Todo lo que necesi
 - `ENGINE_VERSION` y las pruebas de oro no cambian.
 - Hay que actualizar `05-pantallas-y-flujos.md` (P-A03, P-A12, P-A14, P-C05, P-C06), `03-modelo-de-datos.md` y el glosario al implementarlo.
 
+## Implementación (08/10/2026)
+
+- `features/stages` en la app: catálogo de controles, cifras y supuestos por etapa; pasos de cada etapa (`stageSteps`), que se marcan solos con los datos; la sección de cada etapa en la ficha y el botón de activar u ocultar.
+- Pasos: núcleo (tipo de cliente; ingresos clasificados); presupuesto (gastos, bancos y bolsillos, prueba de realidad); deudas (deudas; tasa y cuota de cada una); patrimonio (patrimonio, seguros revisados, metas, perfil de riesgo). Todas terminan en "Resolver el control de calidad", que solo se marca con el núcleo y los datos de la etapa listos, y "Entregar el reporte".
+- **Supuesto:** la inversión del año va en las cifras de patrimonio, no en las de presupuesto: depende del perfil de riesgo y de no tener deuda cara, aunque salga del sobrante.
+- **Supuesto:** cada reporte muestra solo los supuestos que mueven sus cifras: presupuesto (meses de fondo y colchón), deudas (umbral de deuda cara, sobrante a deudas, excedente del saldo de hoy) y patrimonio (porcentajes a inversión, excedente, edad de retiro y rendimientos).
+- La pantalla de entrega propone la primera etapa activa sin entregar; el nombre por defecto es la etapa y la fecha ("Deudas, 8 de octubre de 2026"), que también nombra el PDF.
+- El PDF de deudas y de patrimonio suma, en su lista de cifras, el orden de pago con la salida de cada deuda y el aporte de cada meta.
+- De paso se corrigió la fecha de entrega: se mostraba en UTC y una entrega de noche en Colombia salía con el día siguiente. Ahora `deliveredOn` es el día en el país del cliente.
+
 ## Alternativas consideradas
 
 - **Un asistente paso a paso con todo el cuestionario:** reduce la sensación de desorden, pero el cliente sigue sin recibir nada hasta el final.

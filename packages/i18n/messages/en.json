@@ -249,7 +249,6 @@
       "revokeCancel": "No, keep it"
     },
     "caseData": {
-      "title": "Case data",
       "budget": "Budget",
       "budgetSummary": "{amount} of spending per month",
       "figuresTitle": "Plan figures",
@@ -264,7 +263,6 @@
       "currencies": "Currencies",
       "currenciesSummary": "{count} besides {base}",
       "currenciesNone": "Only {base}",
-      "analysisTitle": "Analysis",
       "cashflow": "Annual cash flow",
       "cashflowSummary": "Surplus of {amount} in {year}",
       "emergencyFund": "Emergency fund",
@@ -282,8 +280,11 @@
       "realityCheck": "Reality check",
       "planSettings": "Plan assumptions",
       "planSettingsSummary": "Percentages, expensive debt threshold and cushion",
-      "delivery": "Deliver the plan",
-      "deliverySummary": "{count} plans delivered",
+      "delivery": "Deliver a report",
+      "deliverySummary": {
+        "one": "1 report delivered",
+        "other": "{count} reports delivered"
+      },
       "deliveryNone": "Quality check and delivery",
       "goals": "Goals",
       "goalsSummary": {
@@ -768,7 +769,9 @@
       "pocketNone": "There are no pockets yet. They are created in Pockets.",
       "noPocket": "No pocket",
       "health": "It is a health expense",
-      "healthHint": "Therapy, medication, glasses. If the health data consent is withdrawn, it stays only as “Health”, without detail."
+      "healthHint": "Therapy, medication, glasses. If the health data consent is withdrawn, it stays only as “Health”, without detail.",
+      "moreDetails": "More details",
+      "moreDetailsHint": "Who pays it, whether it is temporary or health-related, and a note."
     },
     "preview": {
       "title": {
@@ -903,7 +906,11 @@
       "usted": "Your investment"
     },
     "investmentSummary": "Profile: {profile} · {growth} in growth",
-    "investmentUnanswered": "The profile is not answered yet"
+    "investmentUnanswered": "The profile is not answered yet",
+    "stagesNote": {
+      "tu": "They are grouped by the topics you are working on with your advisor.",
+      "usted": "They are grouped by the topics you are working on with your advisor."
+    }
   },
   "currencies": {
     "title": "Currencies",
@@ -2026,25 +2033,23 @@
     }
   },
   "delivery": {
-    "title": "Deliver the plan",
-    "intro": "Quality check before delivering. The delivered plan is frozen with its date: afterwards it is compared with today's data.",
+    "title": "Deliver a report",
+    "intro": "Quality check before delivering. What is delivered is frozen with its date: afterwards it is compared with today's data.",
     "back": "Client file",
     "checksTitle": "Quality check",
     "allPassed": "Everything is in order.",
     "blockedTitle": "Fix this before delivering",
     "blockedBody": "The plan cannot be delivered while there are items that block delivery.",
-    "deliveredTitle": "Delivered plans",
-    "noneDelivered": "No plans delivered yet.",
+    "deliveredTitle": "Delivered reports",
+    "noneDelivered": "No reports delivered yet.",
     "deliveredItem": "{date} · cutoff {cutoff}",
     "form": {
       "label": "Version name",
-      "labelHint": "For example, Initial plan or 90-day review.",
-      "defaultFirst": "Initial plan",
-      "defaultNext": "Review of {date}",
+      "labelHint": "For example, Initial budget or 90-day review.",
       "notesTitle": "Delivery notes",
       "notesHint": "They stay with the delivered plan; the client does not see them.",
       "noteFor": "Note: {check}",
-      "submit": "Deliver the plan",
+      "submit": "Deliver the report",
       "submitting": "Delivering…",
       "cancel": "Cancel",
       "errors": {
@@ -2054,8 +2059,12 @@
         "blocked": "The plan changed and now there are items that block delivery. Review the quality check.",
         "notAllowed": "Only the advisor delivers the plan.",
         "unavailable": "It could not be delivered. Try again in a few minutes."
-      }
-    }
+      },
+      "defaultLabel": "{stage}, {date}"
+    },
+    "stageTitle": "What you are delivering",
+    "stageHint": "Each stage has its own report and checks. The full plan brings all three together.",
+    "deliveredItemStage": "{stage} · {date} · cutoff {cutoff}"
   },
   "plan": {
     "deliveredOn": "Delivered on {date} · figures as of {cutoff}",
@@ -2088,7 +2097,25 @@
       "downloadHint": "The letter, the notes and the figures of this plan, as they were delivered.",
       "pageLabel": "Page {page} of {total}",
       "fileName": "MiLuca - {label}"
-    }
+    },
+    "reportsTitle": "Delivered reports",
+    "reportItem": "{stage} · {date}",
+    "debtTitle": "Debt payoff plan",
+    "debtUnnamed": "Debt {number}",
+    "debtNone": "There were no debts with a balance on the delivery date.",
+    "wealthTitle": "Net worth and protection",
+    "lifeInsurance": "Indicative life insurance coverage",
+    "newPremiums": "Premiums for new insurance per year",
+    "goalsTitle": "Goals",
+    "goalMonthly": "{amount} per month",
+    "goalsTotal": "Total monthly contribution to goals",
+    "goalUnnamed": "Goal {number}",
+    "investmentTitle": "Investment",
+    "riskProfile": "Risk profile",
+    "riskProfileNone": "Not answered",
+    "growthRange": "Indicative range in growth",
+    "growthRangeValue": "{min} to {max}",
+    "illustrative": "Illustrative projection, not guaranteed. This platform does not recommend products or institutions."
   },
   "myPlan": {
     "title": {
@@ -3230,5 +3257,53 @@
         "unavailable": "It could not be saved. Try again in a few minutes."
       }
     }
+  },
+  "stages": {
+    "coreTitle": "Basic details",
+    "coreIntro": "Profile, income and currencies: all three stages start here.",
+    "names": {
+      "presupuesto": "Budget and pockets",
+      "deudas": "Debts",
+      "patrimonio": "Net worth, protection and goals",
+      "completo": "Full plan"
+    },
+    "numbered": "Stage {number}. {name}",
+    "questions": {
+      "presupuesto": "Where the money goes and how it is organized into pockets, with the emergency fund first.",
+      "deudas": "What the debts cost, in which order they are paid and when they are paid off.",
+      "patrimonio": "What the client owns, how it is protected and how much goes to each goal and to investing."
+    },
+    "steps": {
+      "profile": "Complete the profile and client type",
+      "incomes": "Record and classify income",
+      "expenses": "Record expenses",
+      "pockets": "Set up banks and pockets",
+      "realityCheck": "Do the reality check",
+      "debts": "Record debts",
+      "debtTerms": "Complete the rate and payment of each debt",
+      "assets": "Record what the client owns",
+      "insurance": "Review insurance",
+      "goals": "Define goals",
+      "riskProfile": "Answer the risk profile",
+      "checks": "Resolve the quality check",
+      "delivered": "Deliver the report"
+    },
+    "stepDone": "Done",
+    "stepPending": "Pending",
+    "progress": "{done} of {total} steps",
+    "deliveredOn": "Report delivered on {date}.",
+    "viewReport": "View the report",
+    "modulesTitle": "Stage screens",
+    "inactive": "Not active. Turn it on when the client wants to work on this topic.",
+    "inactiveWithData": "Not active. What is already recorded still counts in the calculation.",
+    "activate": "Turn on the stage",
+    "activating": "Turning on…",
+    "deactivate": "Hide the stage",
+    "deactivating": "Hiding…",
+    "deactivateHint": "Hiding it does not delete its data or remove it from the calculation.",
+    "toggleError": "The stage could not be changed. Try again.",
+    "expensiveDebtFirst": "There is expensive debt: the debts stage should come first. The quality check does not allow delivering investment while it exists.",
+    "documentsTitle": "Letter and delivery",
+    "documentsIntro": "They work for any stage: the letter and the notes go with each delivery."
   }
 }

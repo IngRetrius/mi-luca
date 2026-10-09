@@ -41,3 +41,5 @@ export type {
 } from './investment';
 export { currencyCodeSchema, fxRatesSchema, moneySchema } from './money';
 export type { CurrencyCode, FxRates, Money } from './money';
+export { CASE_STAGES, caseStageSchema, deliveryStageSchema, normalizeStages } from './stage';
+export type { CaseStage, DeliveryStage } from './stage';

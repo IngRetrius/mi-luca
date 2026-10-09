@@ -34,6 +34,21 @@
 
 ## 3. Flujo del asesor: una asesoría completa
 
+### 3.1 Asesoría en tres etapas (ADR 0025)
+
+El asesor no pide todo de una vez. Primero llena el núcleo (perfil, ingresos, monedas y supuestos) y después trabaja una etapa a la vez, cada una con su propio reporte:
+
+| Etapa | Qué se registra | Qué recibe el cliente |
+|---|---|---|
+| Datos básicos (núcleo, siempre activo) | Perfil y tipo de cliente; ingresos con su tipo | Nada aparte: lo usan las tres etapas |
+| 1. Presupuesto y bolsillos | Gastos (desde el catálogo), bancos y bolsillos, prueba de realidad; si aplican, meses sin ingreso y cobros | Reporte con ingreso, gasto, sobrante, tasa de ahorro, fondo de emergencia, aporte de cada bolsillo y el año del flujo |
+| 2. Deudas | Saldo, tasa y cuota de cada deuda | Reporte con deuda total, carga de deuda, orden de pago, salida de cada deuda e intereses |
+| 3. Patrimonio, protección y metas | Patrimonio, seguros, metas y perfil de riesgo | Reporte con patrimonio neto, suma asegurada, aporte a cada meta e inversión ilustrativa |
+
+En la ficha (P-A03), cada etapa activa muestra sus pasos, que se marcan solos con los datos, y el primero pendiente como acción principal. El orden sugerido es 1, 2, 3; un cliente que llega por sus deudas puede empezar por la 2. Con deuda cara, la etapa 3 avisa que la inversión espera. Ocultar una etapa no borra sus datos ni los saca del cálculo. Para cada etapa se sigue el mismo ciclo del protocolo: registrar, analizar, proponer, controlar, entregar y hacer seguimiento.
+
+### 3.2 Fases del protocolo
+
 ```mermaid
 flowchart TD
   A1[P-A02 Nuevo cliente] --> A2{¿Invitar ahora?}
@@ -112,8 +127,8 @@ flowchart TD
 | P-C02 | Consentimiento | Texto de tratamiento de datos del país (versión y fecha), casilla obligatoria; casilla aparte para datos de salud si el presupuesto los incluye; enlace a la política completa |
 | P-C03 | Agregar a inicio | Instrucciones según el sistema: en iPhone, Compartir y luego "Agregar a inicio"; en Android, botón "Instalar" (evento `beforeinstallprompt`). Opción "Ahora no" |
 | P-C04 | Inicio | Saludo con el tratamiento elegido; si el plan está listo o en preparación, con el enlace a Mi plan (o a las notas publicadas antes de la entrega); botón "Registrar el gasto de este mes"; próximas 3 tareas; enlaces a Mis datos y a Privacidad y datos; idioma; cerrar sesión. Las 4 cifras clave con semáforo del boceto de abajo no están construidas (08/10/2026) y no entran antes del piloto |
-| P-C05 | Mi plan | Plan entregado vigente por secciones plegables (estructura de la carta, sección 11 del protocolo); selector de versión; botón "Comparar con hoy"; descargar PDF. Incluye los supuestos con que se calculó, en solo lectura, cada uno con su ayuda (la misma vista la ve el asesor) |
-| P-C06 | Mis datos | Lista de módulos editables con su total (Ingresos, Gastos, Bancos y bolsillos, Deudas, Metas, Patrimonio, Inversiones, Perfil de riesgo, Seguros) |
+| P-C05 | Mi plan | Con reportes de varias etapas, arriba el último de cada una (ADR 0025); el reporte elegido muestra solo las secciones de su etapa. Plan entregado vigente por secciones plegables (estructura de la carta, sección 11 del protocolo); selector de versión; botón "Comparar con hoy"; descargar PDF. Incluye los supuestos con que se calculó, en solo lectura, cada uno con su ayuda (la misma vista la ve el asesor) |
+| P-C06 | Mis datos | Módulos editables con su total, agrupados en datos básicos (Ingresos, Monedas) y las etapas que el asesor activó: presupuesto (Gastos, Bancos y bolsillos, Lo que le deben, Prueba de realidad), deudas y patrimonio (Lo que tiene, Seguros, Metas, Inversión) (ADR 0025) |
 | P-C07 | Editar un dato | Hoja inferior con el formulario; debajo, "Así cambia tu plan" con las cifras clave antes y después, calculadas en el teléfono |
 | P-C08 | Control mensual | Selector de mes; por categoría: presupuesto, campo del gasto real, barra de desviación; total del mes |
 | P-C09 | Tareas | Lista del plan de acción; tocar para marcar hecha; filtro pendientes y hechas |
@@ -128,7 +143,7 @@ flowchart TD
 |---|---|---|
 | P-A01 | Clientes | Buscador; tarjetas con nombre, país, estado (borrador, invitado, activo), fase actual, próxima revisión, marca de cambios nuevos |
 | P-A02 | Nuevo cliente | Nombre visible, país (define moneda y módulos), tú o usted, correo para la invitación (opcional) |
-| P-A03 | Ficha del cliente | Progreso por fases, pendientes, estado de la invitación, accesos a módulos, planes entregados |
+| P-A03 | Ficha del cliente | Datos básicos y las tres etapas con sus pasos, el siguiente paso como acción principal, sus pantallas y activar u ocultar; carta y entrega; seguimiento; cifras de las etapas activas; invitación (ADR 0025) |
 | P-A04 | Cuestionario por bloques | Pasos A a G; en cada campo, marca "estimado" y "por confirmar" |
 | P-A05 | Tipo de cliente | Selector y reglas que se activan |
 | P-A06 | Presupuesto | Partidas agrupadas por categoría con total mensual; icono en filas incompletas; alta rápida; filtros por tipo, pagador y esencial |
@@ -140,9 +155,9 @@ flowchart TD
 | P-A10 | Análisis | Pestañas: Flujo, Bolsillos, Fondo, Deudas, Metas, Seguros, Inversión, Cobros, Profesionales. Sin pensión: la plataforma no la analiza (ADR 0016) |
 | P-A25 | Propuesta del asesor | Solo el asesor (ADR 0024). Ajustes a los gastos (cambiar el valor o quitar) con su porqué; "Partir del nivel básico"; cifras clave de hoy frente a la propuesta y, en cada ajuste, lo que cambia ese gasto al mes; decisión del cliente por ajuste; "Aplicar lo aceptado" con su confirmación; propuestas aplicadas |
 | P-A11 | Costo de vida | Tres niveles por partida; el asesor edita el básico; totales por pagador y sin temporales; umbrales fiscales |
-| P-A12 | Control de calidad | Resultado de `qualityChecks`: bloqueantes, advertencias, nota por advertencia |
+| P-A12 | Control de calidad | Resultado de `qualityChecks` filtrado por la etapa que se entrega (los comunes y los de la etapa; todos en el plan completo): bloqueantes, advertencias, nota por advertencia |
 | P-A13 | Notas y carta | Editor por secciones; botón "Insertar cifra"; vista como el cliente; publicar notas |
-| P-A14 | Entregar plan | Nombre de la versión, resumen del control de calidad, generar PDF, avisar al cliente |
+| P-A14 | Entregar un reporte | Qué se entrega (una etapa activa o el plan completo, en la URL `?etapa=`), control de calidad de esa etapa, nombre de la versión ("Deudas, 8 de octubre de 2026" por defecto), reportes ya entregados |
 | P-A15 | Cambios | Registros de antes y después, agrupados; filtro por actor |
 | P-A16 | Seguimiento | Comparación con el plan entregado; revisiones a 30, 90 días y anual; ficha de continuidad |
 | P-A17 | Parámetros | Por país: clave, valor vigente, desde, fuente, fecha de consulta; "Nueva versión" |
@@ -295,22 +310,33 @@ El texto "entra de nuevo con tu cuenta" responde a que iOS no comparte la sesió
 
 ```
 ┌──────────────────────────────────────┐
-│ ◂ Cliente CO                    ⋯    │
-│ Contratista · 52 años · COP          │
+│ ◂ Clientes                           │
+│ Cliente CO · Colombia · COP          │
 ├──────────────────────────────────────┤
-│ Fases  ●●●●●●●○○○○○   7 de 12        │
-│ [ Seguir: Análisis ]                 │
+│ Datos básicos                        │
+│ ✓ Completar el perfil         Hecho  │
+│ ✓ Registrar los ingresos      Hecho  │
 ├──────────────────────────────────────┤
-│ Pendientes (3)                       │
-│ · Falta la tasa de cambio            │
-│ · Prueba de realidad pendiente       │
-│ · Seguros sin marcar                 │
+│ Etapa 1. Presupuesto y bolsillos     │
+│ 3 de 5 pasos                         │
+│ ✓ Registrar los gastos        Hecho  │
+│ ✓ Organizar bancos y bolsillos Hecho │
+│ ○ Hacer la prueba de realidad  Pend. │
+│ ○ Resolver el control de calidad     │
+│ ○ Entregar el reporte                │
+│ [ Hacer la prueba de realidad ]      │
+│ Presupuesto · Bolsillos · Flujo …    │
+│ Ocultar la etapa                     │
 ├──────────────────────────────────────┤
-│ ▸ Datos del cliente                  │
-│ ▸ Planes entregados (1)              │
-│ ▸ Historial de cambios               │
+│ Etapa 2. Deudas                      │
+│ Sin activar. Lo que ya tiene         │
+│ registrado sigue contando.           │
+│ [ Activar la etapa ]                 │
 ├──────────────────────────────────────┤
-│ Resumen  Datos  Análisis  Entrega  Más│
+│ Etapa 3. Patrimonio … (sin activar)  │
+├──────────────────────────────────────┤
+│ Carta y entrega · Seguimiento        │
+│ Cifras de las etapas activas         │
 └──────────────────────────────────────┘
 ```
 
@@ -399,24 +425,29 @@ En el celular, una columna; desde el escritorio, la comparación a la derecha y 
 
 Las cifras son marcadores enlazados al motor: si un dato cambia, la cifra cambia. Al entregar el plan, se congelan.
 
-### P-A14 Entregar plan
+### P-A14 Entregar un reporte
 
 ```
 ┌──────────────────────────────────────┐
-│ ◂ Entregar plan                      │
+│ ◂ Ficha del cliente                  │
+│ Entregar un reporte                  │
 ├──────────────────────────────────────┤
-│ Nombre   (Plan inicial             ) │
-│ Fecha de corte  28/09/2026           │
+│ Qué vas a entregar                   │
+│ ( ) Presupuesto y bolsillos          │
+│ (●) Deudas                           │
+│ ( ) Plan completo                    │
 ├──────────────────────────────────────┤
 │ Control de calidad                   │
-│ ✓ 11 controles sin problemas         │
-│ ! 1 advertencia con nota             │
+│ ✓ Todos los ingresos tienen tipo     │
+│ ✓ Todas las monedas tienen su tasa   │
 ├──────────────────────────────────────┤
-│ Se enviará al cliente:               │
-│ · Plan en la app · Carta en PDF      │
-│ · Notas · Ficha de continuidad       │
+│ Reportes entregados                  │
+│ Presupuesto y bolsillos, 8 oct 2026  │
 ├──────────────────────────────────────┤
-│ [          Entregar y avisar       ] │
+│ Va con el plan: carta · notas        │
+├──────────────────────────────────────┤
+│ Nombre (Deudas, 8 de octubre de 2026)│
+│ [        Entregar el reporte       ] │
 └──────────────────────────────────────┘
 ```
 

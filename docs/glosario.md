@@ -36,6 +36,12 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Retirar el consentimiento de datos de salud | `withdrawSensitiveConsent`, `consents.withdrawn_at` | P-C11 |
 | Borrar cuentas sin perfil | `private.delete_unclaimed_accounts` | Tarea diaria de `pg_cron`, `delete-unclaimed-accounts` |
 | Borrar los datos de un cliente | `private.delete_client_data` | A pedido del cliente; la ejecuta el responsable en el editor SQL (`supabase/README.md`) |
+| Etapa de la asesoría | `CaseStage` (`presupuesto`, `deudas`, `patrimonio`) | ADR 0025; catálogo `CASE_STAGES` en `packages/domain` |
+| Datos básicos (núcleo) | `core` | Perfil, ingresos, monedas y supuestos: siempre activos, no son una etapa |
+| Etapas activas | `case_settings.active_stages` / `loadActiveStages` | Las activa el asesor; sin fila de supuestos, solo presupuesto |
+| Etapa de la entrega | `plan_deliveries.stage` / `DeliveryStage` | Una etapa o `completo` (las entregas anteriores al ADR 0025) |
+| Pasos de la etapa | `coreSteps`, `stageSteps`, `nextStep` | Se marcan solos con los datos del caso (`features/stages/progress.ts`) |
+| Controles de la etapa | `reportForStage`, `STAGE_CHECKS`, `COMMON_CHECKS` | Filtran la salida de `qualityChecks` sin tocar el motor |
 | Buscar clientes | `?q=`, `parseSearch` | P-A01 |
 | Recuperar contraseña | `/recuperar`, `recoverPassword` | P-G05; pasos `email`, `code`, `password` |
 | Aviso | `notification` / `Notice` | Fila de `notifications`; tipo `invitacion_aceptada` |

@@ -1,7 +1,9 @@
+import type { DeliveryStage } from '@miluca/domain';
 import type { PlanParameters } from '@miluca/engine';
 import { formatMoney, formatPercent, type Messages } from '@miluca/i18n';
 
 import { Help, HelpButton, HelpPanel } from '@/components/help';
+import { assumptionsFor } from '@/features/stages';
 import { amountToText } from '@/lib/amount';
 import { getMessages } from '@/server/i18n';
 
@@ -9,12 +11,15 @@ type AssumptionKey = keyof Messages['assumptions']['labels'];
 
 /**
  * Los supuestos con que se calculó un plan entregado, cada uno con su explicación (decisión del
- * 02/10/2026: el asesor y el cliente los ven). Solo lectura: se cambian en Supuestos del plan.
+ * 02/10/2026: el asesor y el cliente los ven): solo los de su etapa (ADR 0025). Solo lectura: se
+ * cambian en Supuestos del plan.
  */
 export async function PlanAssumptions({
+  stage,
   parameters,
   locale,
 }: {
+  stage: DeliveryStage;
   parameters: PlanParameters;
   locale: string;
 }) {
@@ -35,7 +40,7 @@ export async function PlanAssumptions({
           ['growthFloor', percent(projection.growthFloor)],
         ]
       : [];
-  const rows: readonly (readonly [AssumptionKey, string])[] = [
+  const allRows: readonly (readonly [AssumptionKey, string])[] = [
     [
       'emergencyMonths',
       (months === 1 ? text.months.one : text.months.other).replace(
@@ -54,6 +59,9 @@ export async function PlanAssumptions({
     ],
     ...investmentRows,
   ];
+  const keep = assumptionsFor(stage);
+  const rows = keep ? allRows.filter(([key]) => keep.has(key)) : allRows;
+  if (rows.length === 0) return null;
 
   return (
     <section aria-labelledby="plan-assumptions" className="flex flex-col gap-2">

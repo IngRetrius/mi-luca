@@ -6,7 +6,6 @@ import {
   frechClientRate,
   type CreditInput,
   type CreditSchedule,
-  type DebtSimulation,
 } from '@miluca/engine';
 import { formatDate, formatMoney, formatPercent, type Messages } from '@miluca/i18n';
 
@@ -26,6 +25,7 @@ import { DebtForm } from './debt-form';
 import { DebtMethodForm } from './debt-method-form';
 import { DebtWhatIf } from './debt-what-if';
 import { debtPaths } from './paths';
+import { expensivePayoffText, formatMonth, payoffText } from './payoff-text';
 import type { DebtType } from './validation';
 
 /** Textos según quién mira: el asesor habla del cliente; el cliente, en su trato. */
@@ -42,29 +42,6 @@ function loadError(t: Messages, retryHref: string) {
   return (
     <LoadError message={t.common.loadError} retryLabel={t.common.retry} retryHref={retryHref} />
   );
-}
-
-/** "marzo de 2027" a partir del primer día del mes. */
-function formatMonth(date: string, locale: string): string {
-  return new Intl.DateTimeFormat(locale, {
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'UTC',
-  }).format(new Date(`${date}T00:00:00Z`));
-}
-
-function payoffText(t: Messages, debt: DebtSimulation['debts'][number], locale: string): string {
-  const text = t.debts;
-  if (debt.exceedsHorizon) {
-    return text.plan.exceeds.replace('{months}', String(DIAGNOSIS_HORIZON_MONTHS));
-  }
-  if (debt.monthsToPayoff === 0) return text.plan.payoffLumpSum;
-  const month = formatMonth(debt.payoffDate ?? '', locale);
-  return debt.monthsToPayoff === 1
-    ? text.plan.payoffOne.replace('{month}', month)
-    : text.plan.payoff
-        .replace('{month}', month)
-        .replace('{months}', String(debt.monthsToPayoff ?? ''));
 }
 
 /**
@@ -155,18 +132,7 @@ async function DebtPlan({
                 ? text.plan.interestSavingsDetail
                 : money(simulation.interestSavings),
           },
-          {
-            label: text.plan.expensivePayoff,
-            value:
-              payoff === null
-                ? text.plan.noExpensive
-                : payoff.exceedsHorizon || payoff.date === null
-                  ? text.plan.expensivePayoffExceeds.replace(
-                      '{months}',
-                      String(DIAGNOSIS_HORIZON_MONTHS),
-                    )
-                  : formatMonth(payoff.date, locale),
-          },
+          { label: text.plan.expensivePayoff, value: expensivePayoffText(t, payoff, locale) },
         ]}
       />
       <p className="text-sm text-text-muted">{text.plan.illustrative}</p>

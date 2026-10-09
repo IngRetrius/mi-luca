@@ -123,6 +123,7 @@ Al 08/10/2026, después de la primera ronda de cambios:
 | H10 | Pendiente: lo mueve el asesor |
 | H11 | Resuelto: `README.md` y P-C04 |
 | H12 | Sin cambios (G6) |
+| L1 | Hecha en el código el 08/10/2026 (ADR 0025): etapas con sus pasos en la ficha, entrega por etapa, reporte de deudas, Mi plan por etapas, Mis datos agrupado y formulario de gasto con "Más detalles". De paso, la fecha de entrega se mostraba en UTC (un día después en las entregas de noche en Colombia) y quedó corregida |
 | H13 | **Nuevo:** el ensayo de `db push` del 08/10/2026 muestra que al remoto le falta la migración `proposals` (ADR 0024, del 05/10/2026), además de la nueva `client_data_deletion`. El código publicado ya usa sus tablas, así que la Propuesta del asesor falla en producción y su tarjeta en la ficha dice que no se pudo cargar. Se resuelve con `pnpm supabase db push` (L0) |
 
 Verificado el 08/10/2026 con Supabase local: `pnpm format:check`, `lint`, `typecheck`, `test` (1.059 pruebas), `test:db` (474), `build`, `test:e2e` (308) y `supabase db lint` pasan.

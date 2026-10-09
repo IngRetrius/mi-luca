@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import type { DeliveryStage } from '@miluca/domain';
 import { qualityChecks, type QcItem } from '@miluca/engine';
 import { formatDate, formatMoney, formatPercent } from '@miluca/i18n';
 
@@ -9,6 +10,7 @@ import { Screen } from '@/components/screen';
 import { StatusLabel, type Status } from '@/components/status';
 import { focusRing, linkButton, textButton } from '@/components/ui-classes';
 import { documentPaths, loadDocuments, writtenCount } from '@/features/documents';
+import { loadActiveStages, reportForStage } from '@/features/stages';
 import { loadComputedCase } from '@/features/summary';
 import { todayIn } from '@/lib/dates';
 import { getLocale, getMessages } from '@/server/i18n';
@@ -18,6 +20,7 @@ import { DeliveryForm, type NoteRequest } from './delivery-form';
 import { PdfLink } from './pdf-link';
 import { PlanView } from './plan-view';
 import { qcMessage } from './qc-text';
+import { labelNamesStage } from './stage-label';
 import { listDeliveries, loadDelivery } from './queries';
 
 const STATUS: Readonly<Record<QcItem['severity'], Status>> = {
@@ -26,15 +29,43 @@ const STATUS: Readonly<Record<QcItem['severity'], Status>> = {
   warning: 'warning',
 };
 
-/** P-A12 Control de calidad y P-A14 Entregar el plan, con los planes ya entregados. */
-export async function DeliveryScreen({ clientId }: { clientId: string }) {
+/**
+ * La etapa que se entrega: la pedida en la URL si está activa (o el plan completo); si no, la primera
+ * etapa activa sin entregar, que es el siguiente paso del cliente; si no, la primera activa.
+ */
+function chooseStage(
+  requested: string | null,
+  options: readonly DeliveryStage[],
+  delivered: ReadonlySet<DeliveryStage>,
+): DeliveryStage {
+  const asked = options.find((option) => option === requested);
+  if (asked) return asked;
+  const pending = options.find(
+    (option) => option !== 'completo' && !delivered.has(option) && !delivered.has('completo'),
+  );
+  return pending ?? options[0] ?? 'completo';
+}
+
+/**
+ * P-A12 Control de calidad y P-A14 Entregar un reporte (ADR 0025): se elige la etapa (o el plan
+ * completo) y el control de calidad muestra sus controles. Abajo, los planes ya entregados.
+ */
+export async function DeliveryScreen({
+  clientId,
+  stage,
+}: {
+  clientId: string;
+  /** La etapa pedida en la URL (`?etapa=`); se valida aquí y otra vez al entregar. */
+  stage: string | null;
+}) {
   const t = await getMessages();
   const text = t.delivery;
   const back = `/clientes/${clientId}`;
-  const [computed, deliveries, documents] = await Promise.all([
+  const [computed, deliveries, documents, activeStages] = await Promise.all([
     loadComputedCase(clientId),
     listDeliveries(clientId),
     loadDocuments(clientId),
+    loadActiveStages(clientId),
   ]);
   const header = (
     <>
@@ -45,7 +76,7 @@ export async function DeliveryScreen({ clientId }: { clientId: string }) {
       </div>
     </>
   );
-  if (!computed || !deliveries) {
+  if (!computed || !deliveries || !activeStages) {
     return (
       <Screen>
         {header}
@@ -64,7 +95,9 @@ export async function DeliveryScreen({ clientId }: { clientId: string }) {
     money: (amount: number) => formatMoney(amount, client.base_currency, locale),
     percent: (ratio: number) => formatPercent(ratio, locale),
   };
-  const report = qualityChecks(computed.input, computed.result);
+  const options: readonly DeliveryStage[] = [...activeStages, 'completo'];
+  const chosen = chooseStage(stage, options, new Set(deliveries.map((entry) => entry.stage)));
+  const report = reportForStage(qualityChecks(computed.input, computed.result), chosen);
   // Primero lo que falla, por gravedad; después lo que está bien.
   const order = { blocking: 0, note: 1, warning: 2 } as const;
   const failed = report.items
@@ -77,14 +110,43 @@ export async function DeliveryScreen({ clientId }: { clientId: string }) {
     required: item.severity === 'note',
   }));
   const today = formatDate(todayIn(client.country_code), locale, 'UTC');
-  const defaultLabel =
-    deliveries.length === 0
-      ? text.form.defaultFirst
-      : text.form.defaultNext.replace('{date}', today);
+  const defaultLabel = text.form.defaultLabel
+    .replace('{stage}', t.stages.names[chosen])
+    .replace('{date}', today);
 
   return (
     <Screen>
       {header}
+
+      <nav aria-labelledby="stage-title" className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
+          <h2 id="stage-title" className="font-semibold">
+            {text.stageTitle}
+          </h2>
+          <p className="text-sm text-text-muted">{text.stageHint}</p>
+        </div>
+        <ul className="flex flex-col gap-2">
+          {options.map((option) => (
+            <li key={option}>
+              <Link
+                href={`/clientes/${clientId}/entrega?etapa=${option}`}
+                aria-current={option === chosen ? 'true' : undefined}
+                replace
+                scroll={false}
+                className={`flex min-h-12 items-center gap-3 rounded-xl border border-border px-4 transition-colors hover:border-text-muted aria-[current=true]:border-primary aria-[current=true]:bg-surface aria-[current=true]:font-medium ${focusRing}`}
+              >
+                <span
+                  aria-hidden="true"
+                  className={`flex size-5 shrink-0 items-center justify-center rounded-full border-2 ${option === chosen ? 'border-primary' : 'border-text-muted'}`}
+                >
+                  {option === chosen ? <span className="size-2.5 rounded-full bg-primary" /> : null}
+                </span>
+                {t.stages.names[option]}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
       <section aria-labelledby="checks-title" className="flex flex-col gap-2">
         <h2 id="checks-title" className="font-semibold">
@@ -126,8 +188,12 @@ export async function DeliveryScreen({ clientId }: { clientId: string }) {
                 >
                   <span className="font-medium wrap-anywhere">{delivery.label}</span>
                   <span className="text-sm text-text-muted">
-                    {text.deliveredItem
-                      .replace('{date}', formatDate(delivery.deliveredAt, locale, 'UTC'))
+                    {(labelNamesStage(delivery.label, t.stages.names[delivery.stage])
+                      ? text.deliveredItem
+                      : text.deliveredItemStage
+                    )
+                      .replace('{stage}', t.stages.names[delivery.stage])
+                      .replace('{date}', formatDate(delivery.deliveredOn, locale, 'UTC'))
                       .replace('{cutoff}', formatDate(delivery.cutoffDate, locale, 'UTC'))}
                   </span>
                 </Link>
@@ -156,10 +222,12 @@ export async function DeliveryScreen({ clientId }: { clientId: string }) {
         </section>
       ) : (
         <DeliveryForm
+          // Otra etapa es otro formulario: el nombre por defecto y las notas cambian.
+          key={chosen}
           text={text.form}
           defaultLabel={defaultLabel}
           notes={notes}
-          action={deliverPlan.bind(null, clientId)}
+          action={deliverPlan.bind(null, clientId, chosen)}
           cancelHref={back}
         />
       )}

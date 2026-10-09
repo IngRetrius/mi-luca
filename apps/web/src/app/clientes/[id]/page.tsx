@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
+import { CASE_STAGES, type CaseStage, type DeliveryStage } from '@miluca/domain';
 import { isOverdue, type KeyFigureId } from '@miluca/engine';
 import { formatDate, formatMoney, type Language, type Messages } from '@miluca/i18n';
 
@@ -12,6 +13,7 @@ import {
   gridList,
   gridListItem,
   linkButton,
+  primaryButton,
   secondaryButton,
 } from '@/components/ui-classes';
 import { loadActionItems, type ActionItemRow } from '@/features/action-plan';
@@ -29,6 +31,19 @@ import {
 } from '@/features/invitations';
 import { loadControlEntries } from '@/features/monthly-control';
 import { loadProposals, proposalPaths, type Proposals } from '@/features/proposals';
+import {
+  coreSteps,
+  figuresFor,
+  loadActiveStages,
+  progressInput,
+  stageHasData,
+  StageSection,
+  stageSteps,
+  StepList,
+  type CoreStepId,
+  type StageModule,
+  type StageStepId,
+} from '@/features/stages';
 import { formatKeyFigure, loadComputedCase, type ComputedCase } from '@/features/summary';
 import { todayIn } from '@/lib/dates';
 import { getLanguage, getLocale, getMessages, pageMetadata } from '@/server/i18n';
@@ -49,12 +64,17 @@ const backIcon = (
   </svg>
 );
 
-/** P-A03 Ficha del cliente (esqueleto): datos del perfil e invitación. */
+type Deliveries = NonNullable<Awaited<ReturnType<typeof listDeliveries>>>;
+
+/**
+ * P-A03 Ficha del cliente: los datos básicos, las tres etapas de la asesoría con sus pasos (ADR
+ * 0025), la carta y la entrega, el seguimiento, las cifras de las etapas activas y la invitación.
+ */
 export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>) {
   const t = await getMessages();
   const { id } = await params;
   await requireAdvisor(`/clientes/${id}`);
-  // Independientes: el perfil y su invitación abierta se piden a la vez.
+  // Independientes: todo lo de la ficha se pide a la vez.
   const [
     client,
     openInvitation,
@@ -64,6 +84,7 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
     controlEntries,
     documents,
     proposals,
+    activeStages,
   ] = await Promise.all([
     getClientDetail(id),
     getOpenInvitation(id),
@@ -73,6 +94,7 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
     loadControlEntries(id),
     loadDocuments(id),
     loadProposals(id),
+    loadActiveStages(id),
   ]);
   if (client === 'not-found') notFound();
   // Solo se invita a un perfil que nadie ha aceptado (RLS vuelve a exigirlo).
@@ -105,7 +127,8 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
           <CaseData
             clientId={client.id}
             computed={computed}
-            deliveredCount={deliveries?.length ?? 0}
+            deliveries={deliveries}
+            activeStages={activeStages}
             followUp={{ actionItems, controlEntries }}
             documents={documents}
             proposals={proposals}
@@ -175,29 +198,47 @@ function proposalSummary(
   );
 }
 
-// Cifras de la ficha: las del Resumen que ya calcula el motor.
-const PROFILE_FIGURES: readonly KeyFigureId[] = [
-  'annualIncome',
-  'annualExpenses',
-  'programmedSavings',
-  'annualSurplus',
-  'savingsRate',
-  'debtLoad',
-  'totalDebt',
-  'expensiveDebtMonths',
-  'emergencyGoal',
-  'emergencyProgress',
-  'noIncomeShortfall',
-  'annualInvestment',
-  'growthShare',
-  'netWorth',
-];
+/** La pantalla de cada paso: donde se registra el dato o, al final, la entrega de la etapa. */
+function stepHref(base: string, stage: CaseStage | null, id: CoreStepId | StageStepId): string {
+  switch (id) {
+    case 'profile':
+      return `${base}/perfil`;
+    case 'incomes':
+      return `${base}/ingresos`;
+    case 'expenses':
+      return `${base}/presupuesto`;
+    case 'pockets':
+      return `${base}/bolsillos`;
+    case 'realityCheck':
+      return `${base}/prueba-de-realidad`;
+    case 'debts':
+    case 'debtTerms':
+      return `${base}/deudas`;
+    case 'assets':
+      return `${base}/patrimonio`;
+    case 'insurance':
+      return `${base}/seguros`;
+    case 'goals':
+      return `${base}/metas`;
+    case 'riskProfile':
+      return `${base}/inversion/perfil`;
+    case 'checks':
+    case 'delivered':
+      return `${base}/entrega${stage ? `?etapa=${stage}` : ''}`;
+  }
+}
 
-/** Datos del caso y cifras del plan calculadas por el motor con lo registrado hoy. */
+/** La última entrega que cubre la etapa: la suya o un plan completo. */
+function latestFor(stage: CaseStage, deliveries: Deliveries) {
+  return deliveries.find((entry) => entry.stage === stage || entry.stage === 'completo') ?? null;
+}
+
+/** Datos básicos, etapas, carta y entrega, y seguimiento, con las cifras de hoy a un lado. */
 async function CaseData({
   clientId,
   computed,
-  deliveredCount,
+  deliveries,
+  activeStages,
   followUp,
   documents,
   proposals,
@@ -205,7 +246,8 @@ async function CaseData({
 }: {
   clientId: string;
   computed: ComputedCase | null;
-  deliveredCount: number;
+  deliveries: Deliveries | null;
+  activeStages: readonly CaseStage[] | null;
   followUp: {
     readonly actionItems: readonly ActionItemRow[] | null;
     readonly controlEntries: readonly { readonly year: number; readonly month: number }[] | null;
@@ -217,15 +259,10 @@ async function CaseData({
 }) {
   const t = await getMessages();
   const text = t.clientProfile.caseData;
-  if (!computed) {
+  if (!computed || !deliveries || !activeStages) {
     return (
       <>
-        <section aria-labelledby="case-title" className="flex flex-col gap-2">
-          <h2 id="case-title" className="font-semibold">
-            {text.title}
-          </h2>
-          <p role="alert">{t.common.loadError}</p>
-        </section>
+        <p role="alert">{t.common.loadError}</p>
         {children}
       </>
     );
@@ -245,7 +282,19 @@ async function CaseData({
     : text.today;
   const otherCurrencies = computed.rows.fxRates.length;
   const base = `/clientes/${clientId}`;
-  const modules = [
+  const { cashflow, emergencyFund, pockets } = computed.result;
+
+  const progress = progressInput(
+    computed,
+    new Set<DeliveryStage>(deliveries.map((entry) => entry.stage)),
+  );
+  const core = coreSteps(progress).map((step) => ({
+    id: step.id,
+    done: step.done,
+    label: t.stages.steps[step.id],
+    href: stepHref(base, null, step.id),
+  }));
+  const coreModules: StageModule[] = [
     {
       href: `${base}/perfil`,
       title: text.profile,
@@ -259,71 +308,6 @@ async function CaseData({
       summary: text.incomesSummary.replace('{amount}', money(computed.result.incomes.annual)),
     },
     {
-      href: `${base}/presupuesto`,
-      title: text.budget,
-      summary: text.budgetSummary.replace('{amount}', format('monthlyExpenses')),
-    },
-    {
-      href: `${base}/costo-de-vida`,
-      title: text.costOfLiving,
-      summary: text.costOfLivingSummary.replace(
-        '{amount}',
-        money(computed.result.costOfLiving.levels.essential.monthly),
-      ),
-    },
-    {
-      href: `${base}/supuestos`,
-      title: text.planSettings,
-      summary: text.planSettingsSummary,
-    },
-    {
-      href: `${base}/patrimonio`,
-      title: text.assets,
-      summary: text.assetsSummary.replace('{amount}', money(computed.result.netWorth.netWorth)),
-    },
-    {
-      href: `${base}/metas`,
-      title: text.goals,
-      summary:
-        computed.rows.goals.length === 0
-          ? text.goalsNone
-          : (computed.rows.goals.length === 1 ? text.goalsSummary.one : text.goalsSummary.other)
-              .replace('{count}', String(computed.rows.goals.length))
-              .replace('{amount}', money(computed.result.goals.monthlyTotal)),
-    },
-    {
-      href: `${base}/seguros`,
-      title: text.insurance,
-      summary: text.insuranceSummary.replace(
-        '{amount}',
-        money(computed.result.insurance.newPremiumsAnnual),
-      ),
-    },
-    {
-      href: `${base}/deudas`,
-      title: text.debts,
-      summary:
-        computed.rows.debts.length === 0
-          ? text.debtsNone
-          : text.debtsSummary.replace('{amount}', money(computed.result.debts.balance)),
-    },
-    {
-      href: `${base}/cobros`,
-      title: text.receivables,
-      summary:
-        computed.rows.receivables.length === 0
-          ? text.receivablesNone
-          : text.receivablesSummary.replace(
-              '{amount}',
-              money(computed.result.receivables.totalPending),
-            ),
-    },
-    {
-      href: `${base}/prueba-de-realidad`,
-      title: text.realityCheck,
-      summary: t.realityCheck.status[computed.result.realityCheck.status],
-    },
-    {
       href: `${base}/monedas`,
       title: text.currencies,
       summary:
@@ -333,8 +317,130 @@ async function CaseData({
               .replace('{count}', String(otherCurrencies))
               .replace('{base}', client.base_currency),
     },
+    {
+      href: `${base}/supuestos`,
+      title: text.planSettings,
+      summary: text.planSettingsSummary,
+    },
   ];
-  const { cashflow, emergencyFund, pockets } = computed.result;
+
+  // Las pantallas de cada etapa: primero donde se registran los datos, después el análisis.
+  const stageModules: Readonly<Record<CaseStage, readonly StageModule[]>> = {
+    presupuesto: [
+      {
+        href: `${base}/presupuesto`,
+        title: text.budget,
+        summary: text.budgetSummary.replace('{amount}', format('monthlyExpenses')),
+      },
+      {
+        href: `${base}/bolsillos`,
+        title: text.pockets,
+        summary: text.pocketsSummary.replace('{count}', String(pockets.withContribution)),
+      },
+      {
+        href: `${base}/prueba-de-realidad`,
+        title: text.realityCheck,
+        summary: t.realityCheck.status[computed.result.realityCheck.status],
+      },
+      {
+        href: `${base}/cobros`,
+        title: text.receivables,
+        summary:
+          computed.rows.receivables.length === 0
+            ? text.receivablesNone
+            : text.receivablesSummary.replace(
+                '{amount}',
+                money(computed.result.receivables.totalPending),
+              ),
+      },
+      {
+        href: `${base}/costo-de-vida`,
+        title: text.costOfLiving,
+        summary: text.costOfLivingSummary.replace(
+          '{amount}',
+          money(computed.result.costOfLiving.levels.essential.monthly),
+        ),
+      },
+      {
+        href: `${base}/fondo`,
+        title: text.emergencyFund,
+        summary: text.emergencyFundSummary.replace('{amount}', money(emergencyFund.currentGoal)),
+      },
+      {
+        href: `${base}/flujo`,
+        title: text.cashflow,
+        summary: text.cashflowSummary
+          .replace('{amount}', money(computed.result.summary.annualSurplus))
+          .replace('{year}', String(cashflow.year)),
+      },
+      {
+        href: proposalPaths(clientId).page,
+        title: text.proposal,
+        summary: proposalSummary(t, proposals, locale, client.country_code),
+      },
+    ],
+    deudas: [
+      {
+        href: `${base}/deudas`,
+        title: text.debts,
+        summary:
+          computed.rows.debts.length === 0
+            ? text.debtsNone
+            : text.debtsSummary.replace('{amount}', money(computed.result.debts.balance)),
+      },
+    ],
+    patrimonio: [
+      {
+        href: `${base}/patrimonio`,
+        title: text.assets,
+        summary: text.assetsSummary.replace('{amount}', money(computed.result.netWorth.netWorth)),
+      },
+      {
+        href: `${base}/seguros`,
+        title: text.insurance,
+        summary: text.insuranceSummary.replace(
+          '{amount}',
+          money(computed.result.insurance.newPremiumsAnnual),
+        ),
+      },
+      {
+        href: `${base}/metas`,
+        title: text.goals,
+        summary:
+          computed.rows.goals.length === 0
+            ? text.goalsNone
+            : (computed.rows.goals.length === 1 ? text.goalsSummary.one : text.goalsSummary.other)
+                .replace('{count}', String(computed.rows.goals.length))
+                .replace('{amount}', money(computed.result.goals.monthlyTotal)),
+      },
+      {
+        href: `${base}/inversion`,
+        title: text.investment,
+        summary: investmentSummary(text, computed, t.investment.levels),
+      },
+    ],
+  };
+
+  const documentModules: StageModule[] = [
+    { href: `${base}/carta`, title: text.letter, summary: letterSummary(t, documents) },
+    {
+      href: `${base}/notas`,
+      title: text.notes,
+      summary: notesSummary(t, documents, locale, client.country_code),
+    },
+    {
+      href: `${base}/entrega`,
+      title: text.delivery,
+      summary:
+        deliveries.length === 0
+          ? text.deliveryNone
+          : (deliveries.length === 1
+              ? text.deliverySummary.one
+              : text.deliverySummary.other
+            ).replace('{count}', String(deliveries.length)),
+    },
+  ];
+
   const today = todayIn(client.country_code);
   const year = Number(today.slice(0, 4));
   const recordedMonths = new Set(
@@ -348,7 +454,7 @@ async function CaseData({
     isOverdue({ dueDate: item.due_date, status: 'pendiente' }, today),
   ).length;
   const review = nextReview(tasks);
-  const followUpModules = [
+  const followUpModules: StageModule[] = [
     {
       href: `${base}/seguimiento`,
       title: text.followUp,
@@ -386,91 +492,78 @@ async function CaseData({
               .replace('{year}', String(year)),
     },
   ];
-  const analysis = [
-    {
-      href: `${base}/flujo`,
-      title: text.cashflow,
-      summary: text.cashflowSummary
-        .replace('{amount}', money(computed.result.summary.annualSurplus))
-        .replace('{year}', String(cashflow.year)),
-    },
-    {
-      href: `${base}/fondo`,
-      title: text.emergencyFund,
-      summary: text.emergencyFundSummary.replace('{amount}', money(emergencyFund.currentGoal)),
-    },
-    {
-      href: `${base}/bolsillos`,
-      title: text.pockets,
-      summary: text.pocketsSummary.replace('{count}', String(pockets.withContribution)),
-    },
-    {
-      href: `${base}/inversion`,
-      title: text.investment,
-      summary: investmentSummary(text, computed, t.investment.levels),
-    },
-    {
-      href: proposalPaths(clientId).page,
-      title: text.proposal,
-      summary: proposalSummary(t, proposals, locale, client.country_code),
-    },
-    {
-      href: `${base}/carta`,
-      title: text.letter,
-      summary: letterSummary(t, documents),
-    },
-    {
-      href: `${base}/notas`,
-      title: text.notes,
-      summary: notesSummary(t, documents, locale, client.country_code),
-    },
-    {
-      href: `${base}/entrega`,
-      title: text.delivery,
-      summary:
-        deliveredCount === 0
-          ? text.deliveryNone
-          : text.deliverySummary.replace('{count}', String(deliveredCount)),
-    },
-  ];
+
+  const coreNext = core.find((step) => !step.done) ?? null;
+  // Con deuda cara, la inversión espera: lo dice el protocolo y lo exige el control de calidad.
+  const expensiveDebtNote = computed.result.expensiveDebt.exists
+    ? t.stages.expensiveDebtFirst
+    : null;
+
   return (
     <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
       <div className="flex min-w-0 flex-1 flex-col gap-6">
-        <section aria-labelledby="case-title" className="flex flex-col gap-2">
-          <h2 id="case-title" className="font-semibold">
-            {text.title}
-          </h2>
-          <ul className={`${gridList} md:grid-cols-2`}>
-            {modules.map((module) => (
-              <li key={module.href} className={gridListItem}>
-                <ModuleLink {...module} />
-              </li>
-            ))}
-          </ul>
+        <section
+          aria-labelledby="core-title"
+          className="flex flex-col gap-3 rounded-xl border border-border p-4"
+        >
+          <div className="flex flex-col gap-1">
+            <h2 id="core-title" className="font-semibold">
+              {t.stages.coreTitle}
+            </h2>
+            <p className="text-sm text-text-muted">{t.stages.coreIntro}</p>
+          </div>
+          <StepList
+            steps={core}
+            doneLabel={t.stages.stepDone}
+            pendingLabel={t.stages.stepPending}
+          />
+          {coreNext ? (
+            <Link href={coreNext.href} className={`${primaryButton} ${linkButton} md:self-start`}>
+              {coreNext.label}
+            </Link>
+          ) : null}
+          <ModuleGrid modules={coreModules} />
         </section>
-        <section aria-labelledby="analysis-title" className="flex flex-col gap-2">
-          <h2 id="analysis-title" className="font-semibold">
-            {text.analysisTitle}
-          </h2>
-          <ul className={`${gridList} md:grid-cols-2`}>
-            {analysis.map((module) => (
-              <li key={module.href} className={gridListItem}>
-                <ModuleLink {...module} />
-              </li>
-            ))}
-          </ul>
+
+        {CASE_STAGES.map((stage, index) => {
+          const latest = latestFor(stage, deliveries);
+          return (
+            <StageSection
+              key={stage}
+              clientId={clientId}
+              stage={stage}
+              number={index + 1}
+              active={activeStages.includes(stage)}
+              steps={stageSteps(stage, progress).map((step) => ({
+                id: step.id,
+                done: step.done,
+                label: t.stages.steps[step.id],
+                href: stepHref(base, stage, step.id),
+              }))}
+              delivered={latest ? { id: latest.id, deliveredOn: latest.deliveredOn } : null}
+              hasData={stageHasData(stage, progress)}
+              note={stage === 'patrimonio' ? expensiveDebtNote : null}
+              modules={stageModules[stage]}
+              locale={locale}
+            />
+          );
+        })}
+
+        <section aria-labelledby="documents-title" className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
+            <h2 id="documents-title" className="font-semibold">
+              {t.stages.documentsTitle}
+            </h2>
+            <p className="text-sm text-text-muted">{t.stages.documentsIntro}</p>
+          </div>
+          <ModuleGrid modules={documentModules} />
         </section>
+
         <section aria-labelledby="follow-up-title" className="flex flex-col gap-2">
           <h2 id="follow-up-title" className="font-semibold">
             {text.followUpTitle}
           </h2>
-          <ul className={`${gridList} md:grid-cols-2`}>
-            {followUpModules.map((module) => (
-              <li key={module.href} className={gridListItem}>
-                <ModuleLink {...module} />
-              </li>
-            ))}
-          </ul>
+          <ModuleGrid modules={followUpModules} />
         </section>
       </div>
       <div className="flex flex-col gap-6 lg:w-96 lg:shrink-0">
@@ -482,7 +575,7 @@ async function CaseData({
             {text.figuresTitle}
           </h2>
           <dl className="flex flex-col gap-1">
-            {PROFILE_FIGURES.map((id) => (
+            {figuresFor(activeStages).map((id) => (
               <div key={id} className="flex flex-wrap items-baseline justify-between gap-x-3">
                 <dt>{t.keyFigures[id]}</dt>
                 <dd className="font-medium tabular-nums">{format(id)}</dd>
@@ -494,6 +587,18 @@ async function CaseData({
         {children}
       </div>
     </div>
+  );
+}
+
+function ModuleGrid({ modules }: { modules: readonly StageModule[] }) {
+  return (
+    <ul className={`${gridList} md:grid-cols-2`}>
+      {modules.map((module) => (
+        <li key={module.href} className={gridListItem}>
+          <ModuleLink {...module} />
+        </li>
+      ))}
+    </ul>
   );
 }
 

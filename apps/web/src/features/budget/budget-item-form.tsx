@@ -15,7 +15,7 @@ import type { Messages } from '@miluca/i18n';
 
 import { DeleteDisclosure, FormSubmitActions } from '@/components/form-actions';
 import { Checkbox, ChoiceGroup, describedBy, Field } from '@/components/form-field';
-import { choiceCard, choiceInput, textField } from '@/components/ui-classes';
+import { choiceCard, choiceInput, focusRing, textField } from '@/components/ui-classes';
 import { useUnsavedWarning } from '@/components/use-unsaved-warning';
 import {
   ImpactPreview,
@@ -120,6 +120,7 @@ export function BudgetItemForm({
   const fieldId = (field: string) => `${formId}-${field}`;
   const [frequency, setFrequency] = useState<Frequency | ''>(values.frequency);
   const [payer, setPayer] = useState<Payer>(values.payer);
+  const [expenseType, setExpenseType] = useState<ExpenseType>(values.expenseType || 'directo');
   const [draft, setDraft] = useState<BudgetDraft | null>(null);
   const [dirty, setDirty] = useState(false);
   useUnsavedWarning(dirty, pending);
@@ -303,6 +304,7 @@ export function BudgetItemForm({
               name="expenseType"
               value={type}
               defaultChecked={(values.expenseType || 'directo') === type}
+              onChange={() => setExpenseType(type)}
               className={choiceInput}
             />
             <span className="flex flex-col">
@@ -313,106 +315,132 @@ export function BudgetItemForm({
         ))}
       </ChoiceGroup>
 
-      <Field
-        id={fieldId('pocket')}
-        label={text.form.pocket}
-        hint={pockets.length === 0 ? text.form.pocketNone : text.form.pocketHint}
-        error={errors.pocket ? text.form.errors[errors.pocket] : null}
-      >
-        <select
-          id={fieldId('pocket')}
-          name="pocket"
-          defaultValue={values.pocket}
-          aria-invalid={errors.pocket ? true : false}
-          aria-describedby={describe('pocket', true)}
-          className={textField}
-        >
-          <option value="">{text.form.noPocket}</option>
-          {pockets.map((pocket) => (
-            <option key={pocket.id} value={pocket.id}>
-              {pocket.name}
-            </option>
-          ))}
-        </select>
-      </Field>
-
-      <ChoiceGroup legend={text.form.payer}>
-        {payerSchema.options.map((option: Payer) => (
-          <label key={option} className={`${choiceCard} border-border`}>
-            <input
-              type="radio"
-              name="payer"
-              value={option}
-              defaultChecked={values.payer === option}
-              onChange={() => setPayer(option)}
-              className={choiceInput}
-            />
-            {text.payers[option]}
-          </label>
-        ))}
-      </ChoiceGroup>
-
-      {payer === 'cliente' ? null : (
+      {/* El bolsillo solo cuenta en los gastos tipo bolsillo; en los demás se conserva lo guardado. */}
+      {expenseType === 'bolsillo' ? (
         <Field
-          id={fieldId('payerLabel')}
-          label={text.form.payerLabel}
-          hint={text.form.payerLabelHint}
-          error={errorText('payerLabel')}
+          id={fieldId('pocket')}
+          label={text.form.pocket}
+          hint={pockets.length === 0 ? text.form.pocketNone : text.form.pocketHint}
+          error={errors.pocket ? text.form.errors[errors.pocket] : null}
         >
-          <input
-            id={fieldId('payerLabel')}
-            name="payerLabel"
-            type="text"
-            autoComplete="off"
-            maxLength={PAYER_LABEL_MAX}
-            defaultValue={values.payerLabel}
-            aria-invalid={errors.payerLabel ? true : false}
-            aria-describedby={describe('payerLabel', true)}
+          <select
+            id={fieldId('pocket')}
+            name="pocket"
+            defaultValue={values.pocket}
+            aria-invalid={errors.pocket ? true : false}
+            aria-describedby={describe('pocket', true)}
             className={textField}
-          />
+          >
+            <option value="">{text.form.noPocket}</option>
+            {pockets.map((pocket) => (
+              <option key={pocket.id} value={pocket.id}>
+                {pocket.name}
+              </option>
+            ))}
+          </select>
         </Field>
+      ) : (
+        <input type="hidden" name="pocket" value={values.pocket} />
       )}
 
-      <div className="flex flex-col gap-2">
-        <Checkbox
-          name="essential"
-          label={text.form.essential}
-          hint={text.form.essentialHint}
-          defaultChecked={values.essential}
-        />
-        <Checkbox
-          name="isTemporary"
-          label={text.form.temporary}
-          hint={text.form.temporaryHint}
-          defaultChecked={values.isTemporary}
-        />
-        <Checkbox
-          name="isHealth"
-          label={text.form.health}
-          hint={text.form.healthHint}
-          defaultChecked={values.isHealth}
-        />
-        <Checkbox
-          name="familyReference"
-          label={text.form.familyReference}
-          hint={text.form.familyReferenceHint}
-          defaultChecked={values.familyReference}
-        />
-      </div>
+      <Checkbox
+        name="essential"
+        label={text.form.essential}
+        hint={text.form.essentialHint}
+        defaultChecked={values.essential}
+      />
 
-      <Field id={fieldId('note')} label={text.form.note} error={errorText('note')}>
-        <textarea
-          id={fieldId('note')}
-          name="note"
-          rows={2}
-          autoComplete="off"
-          maxLength={NOTE_MAX}
-          defaultValue={values.note}
-          aria-invalid={errors.note ? true : false}
-          aria-describedby={describe('note', false)}
-          className={`${textField} py-3`}
-        />
-      </Field>
+      <details
+        open={
+          values.payer !== 'cliente' ||
+          values.isTemporary ||
+          values.isHealth ||
+          values.familyReference ||
+          values.note !== '' ||
+          Boolean(errors.payerLabel || errors.note)
+        }
+        className="group rounded-xl border border-border"
+      >
+        <summary
+          className={`flex min-h-12 cursor-pointer flex-col justify-center rounded-xl px-4 py-2 hover:bg-surface ${focusRing}`}
+        >
+          <span className="font-medium">{text.form.moreDetails}</span>
+          <span className="text-sm text-text-muted">{text.form.moreDetailsHint}</span>
+        </summary>
+        <div className="flex flex-col gap-6 px-4 pt-2 pb-4">
+          <ChoiceGroup legend={text.form.payer}>
+            {payerSchema.options.map((option: Payer) => (
+              <label key={option} className={`${choiceCard} border-border`}>
+                <input
+                  type="radio"
+                  name="payer"
+                  value={option}
+                  defaultChecked={values.payer === option}
+                  onChange={() => setPayer(option)}
+                  className={choiceInput}
+                />
+                {text.payers[option]}
+              </label>
+            ))}
+          </ChoiceGroup>
+
+          {payer === 'cliente' ? null : (
+            <Field
+              id={fieldId('payerLabel')}
+              label={text.form.payerLabel}
+              hint={text.form.payerLabelHint}
+              error={errorText('payerLabel')}
+            >
+              <input
+                id={fieldId('payerLabel')}
+                name="payerLabel"
+                type="text"
+                autoComplete="off"
+                maxLength={PAYER_LABEL_MAX}
+                defaultValue={values.payerLabel}
+                aria-invalid={errors.payerLabel ? true : false}
+                aria-describedby={describe('payerLabel', true)}
+                className={textField}
+              />
+            </Field>
+          )}
+
+          <div className="flex flex-col gap-2">
+            <Checkbox
+              name="isTemporary"
+              label={text.form.temporary}
+              hint={text.form.temporaryHint}
+              defaultChecked={values.isTemporary}
+            />
+            <Checkbox
+              name="isHealth"
+              label={text.form.health}
+              hint={text.form.healthHint}
+              defaultChecked={values.isHealth}
+            />
+            <Checkbox
+              name="familyReference"
+              label={text.form.familyReference}
+              hint={text.form.familyReferenceHint}
+              defaultChecked={values.familyReference}
+            />
+          </div>
+
+          <Field id={fieldId('note')} label={text.form.note} error={errorText('note')}>
+            <textarea
+              id={fieldId('note')}
+              name="note"
+              rows={2}
+              autoComplete="off"
+              maxLength={NOTE_MAX}
+              defaultValue={values.note}
+              aria-invalid={errors.note ? true : false}
+              aria-describedby={describe('note', false)}
+              className={`${textField} py-3`}
+            />
+          </Field>
+        </div>
+      </details>
 
       {role === 'advisor' ? (
         <fieldset className="flex flex-col gap-4 rounded-xl border border-border p-4">

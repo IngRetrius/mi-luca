@@ -35,13 +35,11 @@ async function PlanSection({
   latest,
   today,
   locale,
-  countryCode,
 }: {
   clientId: string;
   latest: Delivery | null;
   today: KeyFigures;
   locale: string;
-  countryCode: string;
 }) {
   const t = await getMessages();
   const text = t.followUp;
@@ -58,13 +56,11 @@ async function PlanSection({
           <p className="text-sm text-text-muted">
             {text.plan.delivered
               .replace('{label}', latest.label)
-              .replace(
-                '{date}',
-                formatDate(todayIn(countryCode, new Date(latest.deliveredAt)), locale, 'UTC'),
-              )}{' '}
+              .replace('{date}', formatDate(latest.deliveredOn, locale, 'UTC'))}{' '}
             {t.plan.currencyNote.replace('{currency}', latest.baseCurrency)}
           </p>
           <PlanComparison
+            stage={latest.stage}
             delivered={latest.keyFigures}
             today={today}
             locale={locale}
@@ -238,13 +234,7 @@ export async function FollowUpScreen({ clientId }: { clientId: string }) {
   return (
     <Screen>
       {header}
-      <PlanSection
-        clientId={clientId}
-        latest={latest}
-        today={computed.figures}
-        locale={locale}
-        countryCode={country}
-      />
+      <PlanSection clientId={clientId} latest={latest} today={computed.figures} locale={locale} />
       <ProgressSection
         clientId={clientId}
         computed={computed}

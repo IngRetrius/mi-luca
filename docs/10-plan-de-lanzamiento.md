@@ -15,7 +15,7 @@ Fecha: 08/10/2026. Desde hoy, este plan fija el orden del trabajo que queda hast
 | Fase | Objetivo | Horas (**Supuesto**) | Estado al 08/10/2026 | Para pasar a la siguiente |
 |---|---|---|---|---|
 | L0. Higiene y seguridad | Cerrar los riesgos de la auditoría que no dependen de las etapas | 8 | Hecha en el código; quedan tareas del asesor | `pnpm audit --prod` sin avisos, borrado probado, primera copia guardada |
-| L1. Asesoría por etapas | Construir ADR 0025 con las pantallas que ya existen | 40 | Sin empezar | Criterios de la sección 4 |
+| L1. Asesoría por etapas | Construir ADR 0025 con las pantallas que ya existen | 40 | Hecha en el código y verificada contra Supabase local; falta `db push` del asesor | Criterios de la sección 4 |
 | L2. Preparar el piloto | Probar todo en producción con datos inventados y dejar listo el guion de cada etapa | 8 | Sin empezar | Caso inventado entregado y borrado en producción |
 | L3. Piloto | Atender a 3 a 5 personas cercanas, empezando por la etapa 1 | 6 a 8 semanas de calendario | Sin empezar | Lista de ajustes del piloto aplicada |
 | L4. Antes de cobrar | Planes pagados, dominio, términos y obligaciones al cobrar | 16 más trámites | Sin empezar | Todo lo de la sección 7 |
@@ -30,7 +30,7 @@ Fecha: 08/10/2026. Desde hoy, este plan fija el orden del trabajo que queda hast
 - [x] Borrado a pedido del cliente: `private.delete_client_data` con su prueba pgTAP y el procedimiento en `supabase/README.md` (H5).
 - [x] Procedimiento de copia semanal en `supabase/README.md`, comprobado contra la base local (H1).
 - [x] Documentación desactualizada: `README.md` y P-C04 en `05-pantallas-y-flujos.md` (H11).
-- [ ] **Asesor:** subir las dos migraciones que faltan en el remoto con `pnpm supabase db push --dry-run` y después `pnpm supabase db push`: `proposals` (falta desde el 05/10/2026, así que la Propuesta del asesor falla hoy en producción; H13) y `client_data_deletion`. El ensayo del 08/10/2026 muestra solo esas dos.
+- [ ] **Asesor:** subir las migraciones que faltan en el remoto con `pnpm supabase db push --dry-run` y después `pnpm supabase db push`: `proposals` (falta desde el 05/10/2026, así que la Propuesta del asesor falla hoy en producción; H13), `client_data_deletion` y `case_stages` (L1). Sin `case_stages`, la ficha y la entrega publicadas fallan: subirla antes o junto con el despliegue de L1.
 - [ ] **Asesor:** sacar la primera copia del remoto y guardarla cifrada.
 - [ ] **Asesor:** mover `client_secret_*.json` fuera de la carpeta del repositorio (H10).
 - [ ] **Asesor:** autorizar el MCP de Supabase (`claude mcp login`) para revisar el asesor de seguridad del remoto después del despliegue.
@@ -39,6 +39,8 @@ Fecha: 08/10/2026. Desde hoy, este plan fija el orden del trabajo que queda hast
 Al desplegar, comprobar en `mi-luca.vercel.app` que la respuesta ya no trae `x-powered-by`.
 
 ## 4. L1. Asesoría por etapas (ADR 0025)
+
+**Estado al 08/10/2026:** hechos los pasos 1 a 12 y verificados contra Supabase local con un caso inventado (activar la etapa de deudas, entregar los reportes de presupuesto y de deudas, Mi plan, Mis datos y el PDF). Falta el paso 13. Cada paso del flujo sigue el ciclo profesional de siete pasos [F64]: registrar, analizar, recomendar, presentar, implementar y hacer seguimiento.
 
 Cada paso es un cambio con sus pruebas, en este orden:
 

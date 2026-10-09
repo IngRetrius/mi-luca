@@ -249,7 +249,6 @@
       "revokeCancel": "No, mantenerla"
     },
     "caseData": {
-      "title": "Datos del caso",
       "budget": "Presupuesto",
       "budgetSummary": "{amount} de gasto al mes",
       "figuresTitle": "Cifras del plan",
@@ -264,7 +263,6 @@
       "currencies": "Monedas",
       "currenciesSummary": "{count} además de {base}",
       "currenciesNone": "Solo {base}",
-      "analysisTitle": "Análisis",
       "cashflow": "Flujo anual",
       "cashflowSummary": "Sobrante de {amount} en {year}",
       "emergencyFund": "Fondo de emergencia",
@@ -282,8 +280,11 @@
       "realityCheck": "Prueba de realidad",
       "planSettings": "Supuestos del plan",
       "planSettingsSummary": "Porcentajes, umbral de deuda cara y colchón",
-      "delivery": "Entregar el plan",
-      "deliverySummary": "{count} planes entregados",
+      "delivery": "Entregar un reporte",
+      "deliverySummary": {
+        "one": "1 reporte entregado",
+        "other": "{count} reportes entregados"
+      },
       "deliveryNone": "Control de calidad y entrega",
       "goals": "Metas",
       "goalsSummary": {
@@ -768,7 +769,9 @@
       "pocketNone": "Todavía no hay bolsillos. Se crean en Bolsillos.",
       "noPocket": "Sin bolsillo",
       "health": "Es un gasto de salud",
-      "healthHint": "Terapias, medicamentos, lentes. Si se retira el consentimiento de datos de salud, queda solo como «Salud», sin detalle."
+      "healthHint": "Terapias, medicamentos, lentes. Si se retira el consentimiento de datos de salud, queda solo como «Salud», sin detalle.",
+      "moreDetails": "Más detalles",
+      "moreDetailsHint": "Quién lo paga, si es temporal o de salud, y una nota."
     },
     "preview": {
       "title": {
@@ -903,7 +906,11 @@
       "usted": "Su inversión"
     },
     "investmentSummary": "Perfil {profile} · {growth} en crecimiento",
-    "investmentUnanswered": "Falta responder el perfil"
+    "investmentUnanswered": "Falta responder el perfil",
+    "stagesNote": {
+      "tu": "Están agrupados por los temas que trabajas con tu asesor.",
+      "usted": "Están agrupados por los temas que trabaja con su asesor."
+    }
   },
   "currencies": {
     "title": "Monedas",
@@ -2026,25 +2033,23 @@
     }
   },
   "delivery": {
-    "title": "Entregar el plan",
-    "intro": "Control de calidad antes de entregar. El plan entregado queda fijo con su fecha: después se compara con los datos de hoy.",
+    "title": "Entregar un reporte",
+    "intro": "Control de calidad antes de entregar. Lo entregado queda fijo con su fecha: después se compara con los datos de hoy.",
     "back": "Ficha del cliente",
     "checksTitle": "Control de calidad",
     "allPassed": "Todo en orden.",
     "blockedTitle": "Corrige esto antes de entregar",
     "blockedBody": "El plan no se puede entregar mientras haya puntos que bloquean la entrega.",
-    "deliveredTitle": "Planes entregados",
-    "noneDelivered": "Todavía no hay planes entregados.",
+    "deliveredTitle": "Reportes entregados",
+    "noneDelivered": "Todavía no hay reportes entregados.",
     "deliveredItem": "{date} · corte {cutoff}",
     "form": {
       "label": "Nombre de la versión",
-      "labelHint": "Por ejemplo, Plan inicial o Revisión a 90 días.",
-      "defaultFirst": "Plan inicial",
-      "defaultNext": "Revisión del {date}",
+      "labelHint": "Por ejemplo, Presupuesto inicial o Revisión a 90 días.",
       "notesTitle": "Notas para la entrega",
       "notesHint": "Quedan con el plan entregado; el cliente no las ve.",
       "noteFor": "Nota: {check}",
-      "submit": "Entregar el plan",
+      "submit": "Entregar el reporte",
       "submitting": "Entregando…",
       "cancel": "Cancelar",
       "errors": {
@@ -2054,8 +2059,12 @@
         "blocked": "El plan cambió y ahora hay puntos que bloquean la entrega. Revisa el control de calidad.",
         "notAllowed": "Solo el asesor entrega el plan.",
         "unavailable": "No se pudo entregar. Intenta de nuevo en unos minutos."
-      }
-    }
+      },
+      "defaultLabel": "{stage}, {date}"
+    },
+    "stageTitle": "Qué vas a entregar",
+    "stageHint": "Cada etapa tiene su reporte y sus controles. El plan completo junta las tres.",
+    "deliveredItemStage": "{stage} · {date} · corte {cutoff}"
   },
   "plan": {
     "deliveredOn": "Entregado el {date} · cifras con corte al {cutoff}",
@@ -2088,7 +2097,25 @@
       "downloadHint": "La carta, las notas y las cifras de este plan, tal como se entregaron.",
       "pageLabel": "Página {page} de {total}",
       "fileName": "MiLuca - {label}"
-    }
+    },
+    "reportsTitle": "Reportes entregados",
+    "reportItem": "{stage} · {date}",
+    "debtTitle": "Plan de pago de las deudas",
+    "debtUnnamed": "Deuda {number}",
+    "debtNone": "No había deudas con saldo el día de la entrega.",
+    "wealthTitle": "Patrimonio y protección",
+    "lifeInsurance": "Suma asegurada de vida orientativa",
+    "newPremiums": "Primas de seguros nuevos al año",
+    "goalsTitle": "Metas",
+    "goalMonthly": "{amount} al mes",
+    "goalsTotal": "Aporte total a metas al mes",
+    "goalUnnamed": "Meta {number}",
+    "investmentTitle": "Inversión",
+    "riskProfile": "Perfil de riesgo",
+    "riskProfileNone": "Sin responder",
+    "growthRange": "Rango orientativo en crecimiento",
+    "growthRangeValue": "{min} a {max}",
+    "illustrative": "Proyección ilustrativa, no garantizada. Esta plataforma no recomienda productos ni entidades."
   },
   "myPlan": {
     "title": {
@@ -3230,5 +3257,53 @@
         "unavailable": "No se pudo guardar. Intenta de nuevo en unos minutos."
       }
     }
+  },
+  "stages": {
+    "coreTitle": "Datos básicos",
+    "coreIntro": "Perfil, ingresos y monedas: las tres etapas parten de aquí.",
+    "names": {
+      "presupuesto": "Presupuesto y bolsillos",
+      "deudas": "Deudas",
+      "patrimonio": "Patrimonio, protección y metas",
+      "completo": "Plan completo"
+    },
+    "numbered": "Etapa {number}. {name}",
+    "questions": {
+      "presupuesto": "A dónde se va la plata y cómo se organiza en bolsillos, con el fondo de emergencia primero.",
+      "deudas": "Cuánto cuestan las deudas, en qué orden se pagan y cuándo queda sin ellas.",
+      "patrimonio": "Qué tiene, cómo lo protege y cuánto aportar a cada meta y a la inversión."
+    },
+    "steps": {
+      "profile": "Completar el perfil y el tipo de cliente",
+      "incomes": "Registrar y clasificar los ingresos",
+      "expenses": "Registrar los gastos",
+      "pockets": "Organizar bancos y bolsillos",
+      "realityCheck": "Hacer la prueba de realidad",
+      "debts": "Registrar las deudas",
+      "debtTerms": "Completar la tasa y la cuota de cada deuda",
+      "assets": "Registrar lo que tiene",
+      "insurance": "Revisar los seguros",
+      "goals": "Definir las metas",
+      "riskProfile": "Responder el perfil de riesgo",
+      "checks": "Resolver el control de calidad",
+      "delivered": "Entregar el reporte"
+    },
+    "stepDone": "Hecho",
+    "stepPending": "Pendiente",
+    "progress": "{done} de {total} pasos",
+    "deliveredOn": "Reporte entregado el {date}.",
+    "viewReport": "Ver el reporte",
+    "modulesTitle": "Pantallas de la etapa",
+    "inactive": "Sin activar. Actívala cuando el cliente quiera trabajar este tema.",
+    "inactiveWithData": "Sin activar. Lo que ya tiene registrado sigue contando en el cálculo.",
+    "activate": "Activar la etapa",
+    "activating": "Activando…",
+    "deactivate": "Ocultar la etapa",
+    "deactivating": "Ocultando…",
+    "deactivateHint": "Ocultarla no borra sus datos ni los saca del cálculo.",
+    "toggleError": "No se pudo cambiar la etapa. Intenta de nuevo.",
+    "expensiveDebtFirst": "Tiene deuda cara: conviene la etapa de deudas primero. El control de calidad no deja entregar inversión mientras exista.",
+    "documentsTitle": "Carta y entrega",
+    "documentsIntro": "Sirven para cualquier etapa: la carta y las notas van con cada entrega."
   }
 }
