@@ -12,6 +12,17 @@ Fecha: 09/10/2026. Página pública de MiLuca para quien llega por recomendació
 - La herramienta de capturas está en `tools/landing-screenshots/` (nombres de carpeta en inglés, como las demás) y genera también la imagen para compartir.
 - El caso inventado de las capturas tiene sus nombres en cada idioma: las capturas en inglés no muestran "Ropa" ni "Tarjeta de crédito".
 
+**Segundo enfoque (09/10/2026, pedido del asesor: "visualmente no leerían todo").** La página se rehízo para quien recorre en lugar de leer, con lo que dice la investigación:
+
+| Hallazgo | Cambio en la página |
+|---|---|
+| En una página se lee, en promedio, cerca del 20 % de las palabras [F69] | Texto a casi la mitad: una o dos líneas por bloque; de ocho secciones a seis; la página es un 29 % más corta en el celular y un 23 % en el escritorio |
+| Se recorre de título en título, como las capas de un pastel; los títulos deben describir la sección y empezar por las palabras importantes [F70] | Cada título dice el mensaje de su sección: "Tres etapas, un reporte claro en cada una.", "Primero tu tranquilidad, y tus datos protegidos." |
+| Mostrar antes que contar | Las capturas van junto a su etapa, en lugar de una sección aparte; la de Mis datos sale de la página |
+| La acción principal va donde llega el pulgar, abajo y al centro; la evidencia de una barra fija es de práctica, no de estudios [F74] | En el celular, el botón de WhatsApp queda fijo abajo desde que se deja atrás la presentación; en el cierre no se repite |
+| Las animaciones deben ser cortas (100 a 400 ms, que arrancan rápido y frenan al final) y respetar "reducir movimiento" [F71]; cambiar el desplazamiento o animar texto que hay que leer causa más problemas que beneficios [F72] | Un solo momento de marca al cargar (la moneda cae sobre la ranura); al bajar, la línea de las etapas se dibuja y sus monedas y capturas aparecen. El texto no se anima y el desplazamiento no se toca |
+| Las animaciones ligadas al desplazamiento aún no funcionan en todos los navegadores [F73] | Solo CSS y como mejora: donde no se soportan, o con "reducir movimiento", todo se ve en su lugar desde el principio. Sin librerías ni JavaScript nuevo |
+
 ## 1. Decisiones
 
 | Tema | Decisión del asesor | Consecuencia en el plan |
@@ -48,15 +59,14 @@ Una sola página, primero el celular. En el escritorio, el primer bloque en dos 
 | # | Sección | Contenido |
 |---|---|---|
 | 1 | Encabezado | Logo y nombre; "Entrar" para quien ya es cliente. El idioma va en el pie |
-| 2 | Presentación | Etiqueta, título, bajada, los dos botones y una línea de confianza; a la derecha en escritorio, una captura |
-| 3 | Cómo funciona | Las tres etapas, cada una con qué resuelve y qué reporte recibe |
-| 4 | Así se ve tu plan | Tres capturas con su pie: reporte de presupuesto, plan de pago de deudas, Mis datos. "Ejemplo con datos inventados" |
-| 5 | Cómo trabajo | Cuatro principios del protocolo, en una línea cada uno |
-| 6 | Sobre mí | Foto, nombre e historia corta |
-| 7 | Tus datos y los límites | Qué datos nunca se piden, quién ve la información, borrado, alcance profesional y enlace al aviso de privacidad |
-| 8 | Preguntas frecuentes | Cinco preguntas plegables |
-| 9 | Cierre | Una frase y el botón de WhatsApp |
-| 10 | Pie | Nombre y alcance, aviso de privacidad, Entrar, correo de contacto del responsable e idioma |
+| 2 | Presentación | Etiqueta, título, una línea, los dos botones y una línea de confianza; bajo el título, la moneda y la ranura de la marca. A la derecha en escritorio, una captura |
+| 3 | Tres etapas, un reporte claro en cada una | Las tres etapas en una línea cada una, unidas por la línea de monedas; junto a las dos primeras, su reporte. "Capturas con datos inventados" |
+| 4 | Primero tu tranquilidad, y tus datos protegidos | Cuatro líneas cortas (cómo trabajo y qué pasa con tus datos) y, en letra pequeña, el alcance profesional y el enlace al aviso de privacidad |
+| 5 | Sobre mí | Foto, nombre, dos líneas de historia y el enlace al sitio del asesor |
+| 6 | Preguntas frecuentes | Cinco preguntas plegables |
+| 7 | Cierre | Una frase y el botón de WhatsApp (en el celular, la barra fija hace de botón) |
+| 8 | Pie | Nombre y alcance, aviso de privacidad, Entrar, correo de contacto del responsable e idioma |
+| | Barra fija (solo celular) | "Escríbeme por WhatsApp", abajo, desde que se deja atrás la presentación |
 
 Boceto en el celular:
 
@@ -64,32 +74,33 @@ Boceto en el celular:
 ┌──────────────────────────────────────┐
 │ [alcancía] MiLuca            Entrar  │
 ├──────────────────────────────────────┤
-│ PLANIFICACIÓN FINANCIERA PERSONAL    │
-│ Ordena tu dinero,                    │
-│ una etapa a la vez.                  │
-│ ───── (acento naranja)               │
-│ Te acompaño a armar tu presupuesto…  │
+│ Planificación financiera personal    │
+│ Entiende tu dinero: organízalo,      │
+│ sal de deudas y planea tus metas.    │
+│   ●   (la moneda cae al cargar)      │
+│ ─────  (ranura naranja)              │
+│ Te acompaño paso a paso, sin juicios…│
 │ [   Escríbeme por WhatsApp    ]      │
 │ [ Pedir una primera conversación ]   │
-│ Nunca te pido claves ni números…     │
 ├──────────────────────────────────────┤
-│ ░ Cómo funciona ░░░░░░░░░░░░░░░░░░░░ │
+│ ░ Tres etapas, un reporte claro… ░░░ │
 │ (1) Presupuesto y bolsillos          │
+│  │  una línea   [captura]            │
 │ (2) Deudas                           │
+│  │  una línea   [captura]            │
 │ (3) Patrimonio, protección y metas   │
 ├──────────────────────────────────────┤
-│ Así se ve tu plan   [captura] …      │
+│ Primero tu tranquilidad, y tus datos…│
+│ ✓ ✓ ✓ ✓  · letra pequeña · aviso     │
 ├──────────────────────────────────────┤
-│ ░ Cómo trabajo ░░░░░░░░░░░░░░░░░░░░░ │
-├──────────────────────────────────────┤
-│ Sobre mí  [foto]  historia           │
-├──────────────────────────────────────┤
-│ ░ Tus datos y los límites ░░░░░░░░░░ │
+│ ░ Sobre mí  [foto]  dos líneas ░░░░░ │
 ├──────────────────────────────────────┤
 │ Preguntas frecuentes  ▸ ▸ ▸          │
 ├──────────────────────────────────────┤
-│ ¿Hablamos?  [ Escríbeme por WhatsApp ]│
+│ ░ ¿Hablamos? ░░░░░░░░░░░░░░░░░░░░░░░ │
 │ Aviso de privacidad · Entrar · correo │
+├──────────────────────────────────────┤
+│ [   Escríbeme por WhatsApp   ] (fija)│
 └──────────────────────────────────────┘
 ```
 
@@ -101,50 +112,37 @@ Español neutro, de tú, sin palabras de un solo país (dinero en lugar de plata
 
 - Etiqueta: Planificación financiera personal
 - Título: **Entiende tu dinero: organízalo, sal de deudas y planea tus metas.** El asesor pidió uno mejor que "Ordena tu dinero, una etapa a la vez." y el agente lo eligió con lo que recomiendan las guías: claridad antes que ingenio, un beneficio concreto para quien lee y no la descripción del producto, unas 10 a 12 palabras [F68], y las palabras con significado al principio, porque al recorrer la página se leen unas 2 [F67]. El anterior describía el método con una palabra interna ("etapa") y no decía qué cubre el servicio; el nuevo abre con la promesa de la historia del asesor (entender tu dinero) y nombra las tres etapas en palabras de quien lee, sin prometer cifras. Si algún día se compara con otro, con una prueba A/B.
-- Bajada: Te acompaño paso a paso, con un método claro y sin juicios, para que los intereses jueguen a tu favor y no en tu contra. Cada etapa termina en un reporte que consultas desde tu teléfono.
+- Bajada (más corta en el segundo enfoque): Te acompaño paso a paso, sin juicios, para que los intereses jueguen a tu favor.
 - Botones: Escríbeme por WhatsApp · Pedir una primera conversación
 - Línea de confianza: Sin compromiso. Nunca te pido claves ni números de tus cuentas.
 
-**Cómo funciona**
+**Tres etapas, un reporte claro en cada una.** Empiezas por la que más te preocupa. Capturas con datos inventados.
 
-Empiezas por lo que más te preocupa. Cada etapa es independiente y termina con un reporte claro.
-
-| Etapa | Qué resuelve | Qué recibes |
+| Etapa | Una línea | Captura |
 |---|---|---|
-| 1. Presupuesto y bolsillos | A dónde va tu dinero, cuánto te sobra y cómo repartirlo, con un fondo de emergencia primero | Tu presupuesto, tu fondo de emergencia y el aporte a cada bolsillo |
-| 2. Deudas | Cuánto te cuestan, en qué orden pagarlas y en qué mes quedas libre | Tu plan de pago, deuda por deuda, y lo que ahorras en intereses |
-| 3. Patrimonio, protección y metas | Lo que tienes, cómo protegerlo y cuánto apartar para cada meta | Tu patrimonio, una referencia de seguro de vida y el aporte mensual a cada meta |
+| 1. Presupuesto y bolsillos | Sabes a dónde va tu dinero y cuánto te sobra, con un fondo de emergencia primero. | Reporte de presupuesto |
+| 2. Deudas | Un orden claro para pagarlas y el mes en que quedas libre. | Plan de pago de deudas |
+| 3. Patrimonio, protección y metas | Lo que tienes, cómo protegerlo y cuánto apartar para cada meta. | Sin captura |
 
-**Así se ve tu plan:** Tu reporte de presupuesto · Tu plan de pago de deudas · Tus datos, siempre al día. Debajo: Ejemplo con datos inventados.
+**Primero tu tranquilidad, y tus datos protegidos.**
 
-**Cómo trabajo**
+- Primero un fondo de emergencia y tus deudas bajo control.
+- Sin juicios: te muestro opciones y tú decides.
+- Revisamos tus avances con datos reales a los 30 y 90 días.
+- Nunca te pido claves ni números de cuenta. Solo tú y yo vemos tus datos.
+- Letra pequeña: No recomiendo productos ni entidades financieras y las proyecciones son ilustrativas. Impuestos, pensión y temas legales los confirmas con el profesional correspondiente. Enlace: Lee el aviso de privacidad.
 
-- Primero la tranquilidad: que te sobre cada mes, deudas caras bajo control y un fondo de emergencia.
-- Respeto tu estilo de vida: te muestro costos y alternativas, no te impongo recortes.
-- Todo tu dinero tiene un destino: gastos, bolsillos, ahorro o inversión.
-- Revisamos con datos reales a los 30 y a los 90 días.
-
-**Sobre mí** (09/10/2026, a partir de lo que contó el asesor: ayudar a otros a entender sus finanzas, compartir lo que aprendió, primero organizarse y después tener a los bancos de aliados y entender los intereses; los estudios y el trabajo salen de su hoja de vida). Va con su foto, el nombre con que firma ("Juan Perea Possos"; en los avisos legales sigue el nombre completo) y un enlace a su sitio, `juan-perea.dev`:
+**Sobre mí** (09/10/2026, a partir de lo que contó el asesor; en el segundo enfoque, en dos líneas: ayudar a otros a entender sus finanzas, compartir lo que aprendió, primero organizarse y después tener a los bancos de aliados y entender los intereses; los estudios y el trabajo salen de su hoja de vida). Va con su foto, el nombre con que firma ("Juan Perea Possos"; en los avisos legales sigue el nombre completo) y un enlace a su sitio, `juan-perea.dev`:
 
 > Soy Juan Perea Possos y estoy detrás de MiLuca.
 >
-> Quiero ayudarte a entender tus propias finanzas y compartir contigo lo que he aprendido. Lo primero es organizarte: saber a dónde va tu dinero y darle un destino a todo.
+> Quiero que entiendas tus finanzas: primero, a organizarte; después, a tener a los bancos de aliados y a que los intereses jueguen a tu favor.
 >
-> Después, que veas que a los bancos se les puede ganar en su propio juego. No son el enemigo, pero hay que saber tenerlos de aliados: entender cómo los intereses pueden jugar en tu contra o a tu favor, y usar el crédito con criterio.
->
-> Estudio el último año de Ingeniería de Sistemas, con énfasis en datos aplicados a las finanzas, y trabajo con bases de datos todos los días. Esa forma de mirar los números es la que traigo a tu plan.
+> Estudio el último año de Ingeniería de Sistemas, con énfasis en datos aplicados a las finanzas.
 >
 > Conoce mi trabajo en juan-perea.dev.
 
 "Apalancarse", como lo dijo el asesor, quedó como "usar el crédito con criterio": la página no recomienda productos ni promete resultados (sección 3).
-
-**Tus datos y los límites**
-
-- Nunca te pido números de cuenta, de tarjeta ni contraseñas de tus bancos.
-- Solo tú y yo vemos tu información, y puedes pedir que la borre cuando quieras.
-- No recomiendo productos ni entidades financieras. Las proyecciones son ilustrativas, no garantizadas.
-- Impuestos, pensión y temas legales los confirmas con el profesional correspondiente.
-- Enlace: Lee el aviso de privacidad
 
 **Preguntas frecuentes**
 
@@ -156,7 +154,7 @@ Empiezas por lo que más te preocupa. Cada etapa es independiente y termina con 
 | ¿Me vas a vender algún producto? | No. No recomiendo productos ni entidades financieras |
 | ¿Puedo hacer solo una etapa? | Sí. Cada etapa es independiente; empiezas por la que más te importe |
 
-**Cierre:** ¿Hablamos? Cuéntame qué te gustaría ordenar primero. [Escríbeme por WhatsApp]
+**Cierre:** ¿Hablamos? Cuéntame qué te gustaría ordenar primero. [Escríbeme por WhatsApp; en el celular, la barra fija]
 
 **Pie:** MiLuca, el alcance de la plataforma (el texto de `scope.notInvestmentAdvice`), Aviso de privacidad, Entrar, Contacto: {correo de contacto de los avisos} e Idioma.
 
@@ -167,21 +165,21 @@ Empiezas por lo que más te preocupa. Cada etapa es independiente y termina con 
 
 ## 6. Diseño visual
 
-Limpio y profesional: mucho aire, una sola columna de lectura, jerarquía clara y nada que distraiga. Se aplica la skill `frontend-design` dentro de los tokens de `packages/ui`.
+Limpio y profesional: mucho aire, poco texto, títulos que dicen el mensaje y nada que distraiga. Se aplica la skill `frontend-design` dentro de los tokens de `packages/ui`.
 
 | Elemento | Decisión |
 |---|---|
 | Títulos y botón principal | Marino del logo `#01255D` (14,75:1 sobre blanco, `tokens.md` sección 5), como token nuevo `brand-navy`. La app sigue con `brand-900` |
 | Fondos | Blanco y `brand-50` (#E3F6F5) alternados por sección |
 | Enlaces y botón secundario | `brand-600` (#3E6D9C, 5,42:1) |
-| Naranja `#F0702C` | Solo acento: una línea bajo el título, el círculo de los números de las etapas (número marino sobre naranja, 4,96:1) y un círculo detrás de la foto. Nunca texto sobre blanco (2,97:1) ni fondo de un botón con texto blanco |
+| Naranja `#F0702C` | Solo acento: la moneda y la ranura bajo el título, el círculo de los números de las etapas (número marino sobre naranja, 4,96:1) y un círculo detrás de la foto. Nunca texto sobre blanco (2,97:1) ni fondo de un botón con texto blanco |
 | Modo oscuro | Los tokens de la app: texto `brand-50`, fondos #11142B y `brand-900`; títulos y botón principal en `brand-400` (7,37:1), el botón con texto oscuro; el naranja se mantiene (6,09:1 sobre #11142B) |
 | Tipografía | Livvic, alojada por la app. Título principal de 34 px en el celular y 48 px en el escritorio (`text-display` y `text-display-lg`), títulos de sección de 28 px (`text-title`); cuerpo de 18 px |
 | Espacio | Múltiplos de 4 px: 48 px entre secciones en el celular y 96 px en el escritorio |
 | Capturas | Dentro de un marco de teléfono sencillo hecho con CSS (borde y radio), en tema claro, WebP de 780 px servido tal cual, con texto alternativo que describe la pantalla |
 | Foto | Recorte cuadrado de cabeza y hombros en WebP (600 px, el ancho de la foto original lo limita; unos 20 KB), servido tal cual, con el círculo naranja detrás; texto alternativo con el nombre. En el escritorio va en la columna izquierda, bajo el título |
 | Iconos | Los mismos trazos simples de la app, en SVG en línea. Sin fotos de banco de imágenes |
-| Movimiento | Ninguno, o una aparición suave que se apaga con `prefers-reduced-motion` |
+| Movimiento | Solo CSS, en `features/landing/motion.module.css` (segundo enfoque, tabla de arriba): la moneda cae sobre la ranura al cargar (450 ms) y la ranura se abre (300 ms); al bajar, la línea de las etapas se dibuja, sus monedas aparecen y las capturas suben, cada una en un tramo corto del desplazamiento; en el celular, la barra fija entra. Nada con "reducir movimiento"; lo ligado al desplazamiento, solo donde el navegador lo soporta [F73] |
 
 ## 7. Implementación
 

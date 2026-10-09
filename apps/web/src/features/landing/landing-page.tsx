@@ -7,21 +7,22 @@ import { ADVISOR } from './advisor';
 import { ClosingSection } from './closing-section';
 import { configuredWhatsappNumber, contactLink } from './contact';
 import type { LandingContact } from './contact-buttons';
-import { DataLimitsSection } from './data-limits-section';
 import { FaqSection } from './faq-section';
 import { Hero } from './hero';
-import { PreviewSection } from './preview-section';
-import { PrinciplesSection } from './principles-section';
 import { PublicFooter } from './public-footer';
 import { PublicHeader, SkipLink } from './public-header';
-import { PREVIEW_SCREENS, screenshotSrc } from './screenshots';
+import { STAGE_SCREENS, screenshotSrc } from './screenshots';
 import { StagesSection } from './stages-section';
+import { StickyContact } from './sticky-contact';
+import { TrustSection } from './trust-section';
 
 /**
  * P-G06 Landing (ADR 0026): la página pública para quien llega por recomendación y no tiene
- * sesión. Qué es MiLuca, cómo funciona, quién está detrás y cómo escribir. Solo componentes de
- * servidor: en el navegador no corre más que el selector de idioma, que también funciona sin
- * JavaScript. No pide datos: el contacto abre WhatsApp (o el correo) con el mensaje escrito.
+ * sesión. Hecha para quien no lee todo: títulos que dicen el mensaje, una o dos líneas por bloque,
+ * las capturas junto a cada etapa y el botón de WhatsApp siempre a mano en el celular. Solo
+ * componentes de servidor y movimiento en CSS (`motion.module.css`): en el navegador no corre más
+ * JavaScript que el del selector de idioma, que también funciona sin él. No pide datos: el
+ * contacto abre WhatsApp (o el correo) con el mensaje escrito.
  */
 export async function LandingPage() {
   const [t, language] = await Promise.all([getMessages(), getLanguage()]);
@@ -31,7 +32,7 @@ export async function LandingPage() {
     moreInfo: contactLink(text.contact.moreInfoMessage, number),
     firstSession: contactLink(text.contact.firstSessionMessage, number),
   };
-  const [budget] = PREVIEW_SCREENS;
+  const [budget] = STAGE_SCREENS;
 
   return (
     <>
@@ -44,18 +45,17 @@ export async function LandingPage() {
           contact={contact}
           screenshot={{
             src: screenshotSrc(budget, language),
-            alt: text.preview.screens[budget.key].alt,
+            alt: text.stages.screenshots[budget.key],
           }}
         />
-        <StagesSection text={text.stages} />
-        <PreviewSection text={text.preview} language={language} />
-        <PrinciplesSection text={text.principles} />
+        <StagesSection text={text.stages} language={language} />
+        <TrustSection text={text.trust} />
         <AboutSection text={text.about} advisor={ADVISOR} />
-        <DataLimitsSection text={text.privacy} />
         <FaqSection text={text.faq} />
         <ClosingSection text={text.closing} contactText={text.contact} link={contact.moreInfo} />
       </main>
       <PublicFooter text={text.footer} disclaimer={t.scope.notInvestmentAdvice} />
+      <StickyContact link={contact.moreInfo} text={text.contact} />
     </>
   );
 }

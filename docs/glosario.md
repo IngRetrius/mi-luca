@@ -338,14 +338,18 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Inicio del cliente | `ClientHome`, `features/client-home` | P-C04; la raíz con sesión de cliente |
 | Privacidad pública | `/privacidad`, `PublicPrivacyPage`, grupo de textos `publicPrivacy` | P-G07; los avisos vigentes sin sesión. La de la app es `/privacidad-y-datos` |
 | Cabecera y pie públicos | `PublicHeader`, `PublicFooter`, `SkipLink` | Compartidos por el landing y la privacidad pública |
-| Sección pública | `LandingSection` (`tone`: `plain`, `tinted`; `layout`: `split`, `stacked`), `SectionTitle`, `SectionIntro` | En el escritorio, título a la izquierda y contenido a la derecha |
+| Sección pública | `LandingSection` (`tone`: `plain`, `tinted`), `SectionTitle`, `SectionIntro` | En el escritorio, título a la izquierda y contenido a la derecha |
 | Columna de las páginas públicas | `pageColumn`, `readingWidth` | Mismo borde izquierdo en cabecera, secciones y pie |
 | Número de WhatsApp del landing | `CONTACT_WHATSAPP`, `whatsappNumber`, `configuredWhatsappNumber` | Variable de entorno, no va en el repositorio |
 | Enlace de contacto | `contactLink`, `ContactLink` (`whatsapp`, `email`), `CONTACT_EMAIL` | WhatsApp con el mensaje escrito o, sin número, el correo del responsable |
 | Botones de contacto | `WriteMeButton`, `FirstSessionButton` | Escríbeme por WhatsApp y Pedir una primera conversación |
 | Perfil del asesor | `ADVISOR`, `AdvisorProfile` | Nombre y foto de "Sobre mí" |
-| Capturas del landing | `PREVIEW_SCREENS`, `screenshotSrc`, `SCREENSHOT_SIZE`, `PhoneFrame` | WebP de `tools/landing-screenshots` en `public/landing/` |
+| Capturas del landing | `STAGE_SCREENS`, `screenshotSrc`, `SCREENSHOT_SIZE`, `PhoneFrame` | WebP de `tools/landing-screenshots` en `public/landing/`, junto a su etapa |
 | URL pública | `siteUrl` | Dominio de producción de Vercel; base de los metadatos, `robots.txt` y `sitemap.xml` |
 | Colores de la marca | `brand`, `on-brand`, `accent`, `on-accent`; `palette.brandNavy`, `palette.brandOrange` | Solo en las páginas públicas (`tokens.md`, sección 5) |
 | Botones de la marca | `brandButton`, `brandSecondaryButton` | `ui-classes.ts`; solo en las páginas públicas |
 | Caso inventado de las capturas | `prepareCase`, `fictitious-case.ts` | Solo en Supabase local; nunca datos de clientes |
+| Etapas del landing, confianza | `StagesSection`, `TrustSection` | "Tres etapas, un reporte claro en cada una" y "Primero tu tranquilidad, y tus datos protegidos" |
+| Barra de contacto fija | `StickyContact`, `data-sticky-contact` | Solo en el celular; entra al dejar atrás la presentación |
+| Moneda y ranura de la marca | `CoinSlot` | Bajo el título del landing; la moneda cae al cargar |
+| Movimiento del landing | `motion.module.css` (`slot`, `coin`, `reveal`, `pop`, `draw`, `stickyIn`) | Solo CSS; nada con "reducir movimiento" |

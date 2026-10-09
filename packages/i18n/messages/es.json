@@ -3318,7 +3318,7 @@
     "hero": {
       "tagline": "Planificación financiera personal",
       "title": "Entiende tu dinero: organízalo, sal de deudas y planea tus metas.",
-      "lead": "Te acompaño paso a paso, con un método claro y sin juicios, para que los intereses jueguen a tu favor y no en tu contra. Cada etapa termina en un reporte que consultas desde tu teléfono.",
+      "lead": "Te acompaño paso a paso, sin juicios, para que los intereses jueguen a tu favor.",
       "trust": "Sin compromiso. Nunca te pido claves ni números de tus cuentas."
     },
     "contact": {
@@ -3329,74 +3329,47 @@
       "firstSessionMessage": "Hola, vi la página de MiLuca y quiero pedir una primera conversación."
     },
     "stages": {
-      "title": "Cómo funciona",
-      "intro": "Empiezas por lo que más te preocupa. Cada etapa es independiente y termina con un reporte claro.",
-      "solves": "Qué resuelve",
-      "receives": "Qué recibes",
+      "title": "Tres etapas, un reporte claro en cada una.",
+      "intro": "Empiezas por la que más te preocupa.",
+      "note": "Capturas con datos inventados.",
       "items": [
         {
           "name": "Presupuesto y bolsillos",
-          "solves": "A dónde va tu dinero, cuánto te sobra y cómo repartirlo, con un fondo de emergencia primero.",
-          "receives": "Tu presupuesto, tu fondo de emergencia y el aporte a cada bolsillo."
+          "summary": "Sabes a dónde va tu dinero y cuánto te sobra, con un fondo de emergencia primero."
         },
         {
           "name": "Deudas",
-          "solves": "Cuánto te cuestan, en qué orden pagarlas y en qué mes quedas libre.",
-          "receives": "Tu plan de pago, deuda por deuda, y lo que ahorras en intereses."
+          "summary": "Un orden claro para pagarlas y el mes en que quedas libre."
         },
         {
           "name": "Patrimonio, protección y metas",
-          "solves": "Lo que tienes, cómo protegerlo y cuánto apartar para cada meta.",
-          "receives": "Tu patrimonio, una referencia de seguro de vida y el aporte mensual a cada meta."
+          "summary": "Lo que tienes, cómo protegerlo y cuánto apartar para cada meta."
         }
-      ]
-    },
-    "preview": {
-      "title": "Así se ve tu plan",
-      "note": "Ejemplo con datos inventados.",
-      "screens": {
-        "budget": {
-          "caption": "Tu reporte de presupuesto",
-          "alt": "Reporte de presupuesto en un teléfono: ingreso y gasto del año, lo que sobra, la meta del fondo de emergencia y el aporte de cada mes a cada bolsillo."
-        },
-        "debts": {
-          "caption": "Tu plan de pago de deudas",
-          "alt": "Plan de pago de deudas en un teléfono: el orden de pago, el mes en que sale cada deuda, los intereses y lo que se ahorra frente a pagar solo la cuota."
-        },
-        "myData": {
-          "caption": "Tus datos, siempre al día",
-          "alt": "Pantalla Mis datos en un teléfono: ingresos, monedas, gastos y bolsillos, agrupados por los temas que se trabajan con el asesor."
-        }
+      ],
+      "screenshots": {
+        "budget": "Reporte de presupuesto en un teléfono: ingreso y gasto del año, lo que sobra, la meta del fondo de emergencia y el aporte de cada mes a cada bolsillo.",
+        "debts": "Plan de pago de deudas en un teléfono: el orden de pago, el mes en que sale cada deuda, los intereses y lo que se ahorra frente a pagar solo la cuota."
       }
     },
-    "principles": {
-      "title": "Cómo trabajo",
+    "trust": {
+      "title": "Primero tu tranquilidad, y tus datos protegidos.",
       "items": [
-        "Primero la tranquilidad: que te sobre cada mes, deudas caras bajo control y un fondo de emergencia.",
-        "Respeto tu estilo de vida: te muestro costos y alternativas, no te impongo recortes.",
-        "Todo tu dinero tiene un destino: gastos, bolsillos, ahorro o inversión.",
-        "Revisamos con datos reales a los 30 y a los 90 días."
-      ]
+        "Primero un fondo de emergencia y tus deudas bajo control.",
+        "Sin juicios: te muestro opciones y tú decides.",
+        "Revisamos tus avances con datos reales a los 30 y 90 días.",
+        "Nunca te pido claves ni números de cuenta. Solo tú y yo vemos tus datos."
+      ],
+      "finePrint": "No recomiendo productos ni entidades financieras y las proyecciones son ilustrativas. Impuestos, pensión y temas legales los confirmas con el profesional correspondiente.",
+      "link": "Lee el aviso de privacidad"
     },
     "about": {
       "title": "Sobre mí",
       "intro": "Soy {name} y estoy detrás de MiLuca.",
       "story": [
-        "Quiero ayudarte a entender tus propias finanzas y compartir contigo lo que he aprendido. Lo primero es organizarte: saber a dónde va tu dinero y darle un destino a todo.",
-        "Después, que veas que a los bancos se les puede ganar en su propio juego. No son el enemigo, pero hay que saber tenerlos de aliados: entender cómo los intereses pueden jugar en tu contra o a tu favor, y usar el crédito con criterio.",
-        "Estudio el último año de Ingeniería de Sistemas, con énfasis en datos aplicados a las finanzas, y trabajo con bases de datos todos los días. Esa forma de mirar los números es la que traigo a tu plan."
+        "Quiero que entiendas tus finanzas: primero, a organizarte; después, a tener a los bancos de aliados y a que los intereses jueguen a tu favor.",
+        "Estudio el último año de Ingeniería de Sistemas, con énfasis en datos aplicados a las finanzas."
       ],
       "website": "Conoce mi trabajo en {site}."
-    },
-    "privacy": {
-      "title": "Tus datos y los límites",
-      "items": [
-        "Nunca te pido números de cuenta, de tarjeta ni contraseñas de tus bancos.",
-        "Solo tú y yo vemos tu información, y puedes pedir que la borre cuando quieras.",
-        "No recomiendo productos ni entidades financieras. Las proyecciones son ilustrativas, no garantizadas.",
-        "Impuestos, pensión y temas legales los confirmas con el profesional correspondiente."
-      ],
-      "link": "Lee el aviso de privacidad"
     },
     "faq": {
       "title": "Preguntas frecuentes",

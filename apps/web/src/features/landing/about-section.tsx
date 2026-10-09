@@ -25,6 +25,7 @@ export function AboutSection({
   return (
     <LandingSection
       titleId="about-title"
+      tone="tinted"
       heading={
         <>
           <SectionTitle id="about-title">{text.title}</SectionTitle>

@@ -12,7 +12,8 @@ const footerLink = `${textButton} -ml-3 inline-flex items-center`;
 
 /**
  * Pie de las páginas públicas: qué es MiLuca y su alcance (regla 11), el aviso de privacidad,
- * Entrar, el correo del responsable y el idioma.
+ * Entrar, el correo del responsable y el idioma. En el celular deja espacio abajo para la barra de
+ * contacto fija (`StickyContact`), que si no taparía lo último.
  */
 export function PublicFooter({
   text,
@@ -26,7 +27,7 @@ export function PublicFooter({
   return (
     <footer className="border-t border-border bg-bg">
       <div
-        className={`${pageColumn} grid gap-8 py-10 text-sm text-text-muted md:grid-cols-[minmax(0,1fr)_auto] md:gap-x-16`}
+        className={`${pageColumn} grid gap-8 pt-10 pb-28 text-sm text-text-muted md:grid-cols-[minmax(0,1fr)_auto] md:gap-x-16 md:pb-10`}
       >
         <div className="flex max-w-md flex-col gap-2">
           <p className="text-base font-semibold text-text" translate="no">

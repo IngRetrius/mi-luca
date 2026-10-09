@@ -16,41 +16,30 @@ const tones = {
   tinted: 'bg-surface',
 } as const;
 
-const layouts = {
-  /** En el escritorio, el título a la izquierda (fijo al bajar) y el contenido a la derecha. */
-  split: {
-    frame: 'lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-x-16',
-    heading: 'lg:sticky lg:top-8 lg:self-start',
-    content: readingWidth,
-  },
-  /** El título encima y el contenido a todo el ancho (las capturas). */
-  stacked: { frame: '', heading: readingWidth, content: '' },
-} as const;
-
 /**
  * Una sección de una página pública: fondo que alterna, 48 px de aire en el celular y 96 px en el
- * escritorio, y un encabezado (`heading`: el título y, si hay, una bajada) separado del contenido.
- * Se nombra con el título que lleva `titleId`.
+ * escritorio, y un encabezado (`heading`: el título que dice el mensaje y, si hay, una bajada)
+ * separado del contenido. En el escritorio, el encabezado va a la izquierda, fijo al bajar, y el
+ * contenido a la derecha. Se nombra con el título que lleva `titleId`.
  */
 export function LandingSection({
   titleId,
   tone = 'plain',
-  layout = 'split',
   heading,
   children,
 }: {
   titleId: string;
   tone?: keyof typeof tones;
-  layout?: keyof typeof layouts;
   heading: ReactNode;
   children: ReactNode;
 }) {
-  const { frame, heading: headingClass, content } = layouts[layout];
   return (
     <section aria-labelledby={titleId} className={tones[tone]}>
-      <div className={`${pageColumn} flex flex-col gap-8 py-12 lg:py-24 ${frame}`}>
-        <div className={`flex flex-col gap-3 ${headingClass}`}>{heading}</div>
-        <div className={`flex min-w-0 flex-col gap-8 ${content}`}>{children}</div>
+      <div
+        className={`${pageColumn} flex flex-col gap-8 py-12 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-x-16 lg:py-24`}
+      >
+        <div className="flex flex-col gap-3 lg:sticky lg:top-8 lg:self-start">{heading}</div>
+        <div className={`flex min-w-0 flex-col gap-8 ${readingWidth}`}>{children}</div>
       </div>
     </section>
   );

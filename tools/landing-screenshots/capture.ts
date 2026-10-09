@@ -20,7 +20,7 @@ import { toWebp } from './webp.ts';
 /**
  * Capturas de "Así se ve tu plan" del landing (ADR 0026), con un caso inventado en Supabase local:
  * en cada idioma arma el caso con sus nombres en ese idioma, entrega los reportes de presupuesto y de
- * deudas como asesor y fotografía tres pantallas del cliente. Al final, la imagen para compartir el
+ * deudas como asesor y fotografía dos pantallas del cliente. Al final, la imagen para compartir el
  * enlace (`app/opengraph-image.png`). Se vuelve a correr cuando cambie la app o el título.
  *
  *   pnpm --filter @miluca/landing-screenshots capture [--url http://localhost:3000]
@@ -53,7 +53,6 @@ const SCREENS = [
     anchor: 'plan-figures',
   },
   { file: 'debts', path: (d: Deliveries) => `/mi-plan?version=${d.deudas}`, anchor: 'plan-debts' },
-  { file: 'my-data', path: () => '/mis-datos', anchor: null },
 ] as const;
 
 /** Arranca `next dev` contra Supabase local, sin claves del remoto ni número de contacto. */

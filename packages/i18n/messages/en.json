@@ -3318,7 +3318,7 @@
     "hero": {
       "tagline": "Personal financial planning",
       "title": "Understand your money: organize it, get out of debt and plan your goals.",
-      "lead": "I guide you step by step, with a clear method and without judgment, so interest works for you and not against you. Each stage ends with a report you can check from your phone.",
+      "lead": "I guide you step by step, without judgment, so interest works in your favor.",
       "trust": "No commitment. I never ask for passwords or account numbers."
     },
     "contact": {
@@ -3329,74 +3329,47 @@
       "firstSessionMessage": "Hi, I saw the MiLuca page and I'd like to ask for a first conversation."
     },
     "stages": {
-      "title": "How it works",
-      "intro": "You start with what worries you most. Each stage stands on its own and ends with a clear report.",
-      "solves": "What it solves",
-      "receives": "What you get",
+      "title": "Three stages, a clear report for each.",
+      "intro": "You start with the one that worries you most.",
+      "note": "Screenshots with made-up data.",
       "items": [
         {
           "name": "Budget and pockets",
-          "solves": "Where your money goes, how much is left over and how to split it, with an emergency fund first.",
-          "receives": "Your budget, your emergency fund and the amount for each pocket."
+          "summary": "You know where your money goes and how much is left over, with an emergency fund first."
         },
         {
           "name": "Debts",
-          "solves": "What they cost you, in what order to pay them and the month you become debt-free.",
-          "receives": "Your payment plan, debt by debt, and how much you save in interest."
+          "summary": "A clear order to pay them off and the month you become debt-free."
         },
         {
           "name": "Net worth, protection and goals",
-          "solves": "What you own, how to protect it and how much to set aside for each goal.",
-          "receives": "Your net worth, a life insurance reference and the monthly amount for each goal."
+          "summary": "What you own, how to protect it and how much to set aside for each goal."
         }
-      ]
-    },
-    "preview": {
-      "title": "This is what your plan looks like",
-      "note": "Example with made-up data.",
-      "screens": {
-        "budget": {
-          "caption": "Your budget report",
-          "alt": "Budget report on a phone: yearly income and spending, the surplus, the emergency fund goal and the monthly amount for each pocket."
-        },
-        "debts": {
-          "caption": "Your debt payment plan",
-          "alt": "Debt payoff plan on a phone: the payment order, the month each debt is paid off, the interest and the savings compared with paying only the installment."
-        },
-        "myData": {
-          "caption": "Your data, always up to date",
-          "alt": "My data screen on a phone: income, currencies, expenses and pockets, grouped by the topics worked on with the advisor."
-        }
+      ],
+      "screenshots": {
+        "budget": "Budget report on a phone: yearly income and spending, the surplus, the emergency fund goal and the monthly amount for each pocket.",
+        "debts": "Debt payoff plan on a phone: the payment order, the month each debt is paid off, the interest and the savings compared with paying only the installment."
       }
     },
-    "principles": {
-      "title": "How I work",
+    "trust": {
+      "title": "Your peace of mind first, and your data protected.",
       "items": [
-        "Peace of mind first: money left over each month, expensive debt under control and an emergency fund.",
-        "I respect your lifestyle: I show you costs and alternatives, I don't impose cuts.",
-        "All your money has a purpose: expenses, pockets, savings or investment.",
-        "We review with real figures at 30 and 90 days."
-      ]
+        "An emergency fund first, and your debts under control.",
+        "No judgment: I show you options and you decide.",
+        "We review your progress with real figures at 30 and 90 days.",
+        "I never ask for passwords or account numbers. Only you and I see your data."
+      ],
+      "finePrint": "I don't recommend financial products or institutions, and projections are illustrative. Taxes, pensions and legal matters are for you to confirm with the right professional.",
+      "link": "Read the privacy notice"
     },
     "about": {
       "title": "About me",
       "intro": "I'm {name}, the person behind MiLuca.",
       "story": [
-        "I want to help you understand your own finances and share what I have learned. The first step is getting organized: knowing where your money goes and giving all of it a purpose.",
-        "Then, seeing that you can beat the banks at their own game. They are not the enemy, but you need to know how to make them your allies: understand how interest can work against you or in your favor, and use credit wisely.",
-        "I am in the final year of Systems Engineering, focused on data applied to finance, and I work with databases every day. That way of looking at numbers is what I bring to your plan."
+        "I want you to understand your finances: first, getting organized; then, making the banks your allies and having interest work in your favor.",
+        "I am in the final year of Systems Engineering, focused on data applied to finance."
       ],
       "website": "See my work at {site}."
-    },
-    "privacy": {
-      "title": "Your data and the limits",
-      "items": [
-        "I never ask for account or card numbers, or your bank passwords.",
-        "Only you and I see your information, and you can ask me to delete it whenever you want.",
-        "I don't recommend financial products or institutions. Projections are illustrative, not guaranteed.",
-        "Taxes, pensions and legal matters are for you to confirm with the right professional."
-      ],
-      "link": "Read the privacy notice"
     },
     "faq": {
       "title": "Frequently asked questions",

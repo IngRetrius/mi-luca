@@ -56,6 +56,14 @@ html:has([data-screen-actions]) {
   scroll-padding-bottom: 10rem;
 }
 
+/* En el celular, con la barra de contacto fija del landing (StickyContact), lo enfocado no queda
+   debajo de ella. */
+@media (width < 48rem) {
+  html:has([data-sticky-contact]) {
+    scroll-padding-bottom: 6rem;
+  }
+}
+
 /* Campos de 16 px o más: Safari no hace zoom al enfocarlos. */
 input,
 select,

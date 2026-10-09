@@ -60,6 +60,7 @@ Colores fuera de la paleta de marca a propósito, para que un estado nunca se co
 | Radio | 8 px en campos, 12 px en tarjetas, 16 px en hojas inferiores |
 | Objetivo táctil | 44 x 44 px mínimo |
 | Áreas seguras | `env(safe-area-inset-*)` en barra superior e inferior |
+| Movimiento | Solo en las páginas públicas (ADR 0026): de 100 a 450 ms, con ease-out, sobre `transform` y `opacity`; nada con `prefers-reduced-motion: reduce`. Las animaciones ligadas al desplazamiento, dentro de `@supports (animation-timeline: view())`. Todo en `features/landing/motion.module.css` |
 
 ## 5. El logo frente a la paleta 3
 

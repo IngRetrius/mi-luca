@@ -12,21 +12,17 @@ const whatsapp = (message: string) =>
 const TITLE = 'Entiende tu dinero: organízalo, sal de deudas y planea tus metas.';
 const MORE_INFO = 'Hola, vi la página de MiLuca y quiero saber más.';
 const FIRST_SESSION = 'Hola, vi la página de MiLuca y quiero pedir una primera conversación.';
+const STAGES = 'Tres etapas, un reporte claro en cada una.';
+const TRUST = 'Primero tu tranquilidad, y tus datos protegidos.';
+const isPhone = (project: string) => project === 'iphone' || project === 'android';
 
 test('sin sesión, la raíz muestra el landing con todas sus secciones', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveURL('/');
   await expect(page).toHaveTitle('MiLuca | Planificación financiera personal');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(TITLE);
-  for (const name of [
-    'Cómo funciona',
-    'Así se ve tu plan',
-    'Cómo trabajo',
-    'Sobre mí',
-    'Tus datos y los límites',
-    'Preguntas frecuentes',
-    '¿Hablamos?',
-  ]) {
+  // Títulos que dicen el mensaje de su sección: quien solo lee títulos se lleva la idea.
+  for (const name of [STAGES, TRUST, 'Sobre mí', 'Preguntas frecuentes', '¿Hablamos?']) {
     await expect(page.getByRole('heading', { level: 2, name })).toBeVisible();
   }
 });
@@ -42,11 +38,56 @@ test('los dos botones abren WhatsApp, cada uno con su mensaje', async ({ page })
     'href',
     whatsapp(FIRST_SESSION),
   );
-  const closing = page.getByRole('region', { name: '¿Hablamos?' });
-  await expect(closing.getByRole('link', { name: 'Escríbeme por WhatsApp' })).toHaveAttribute(
-    'href',
-    whatsapp(MORE_INFO),
-  );
+  // Todos los enlaces a WhatsApp de la página (cierre y barra fija) llevan uno de los dos mensajes.
+  for (const link of await page.locator('a[href^="https://wa.me/"]').all()) {
+    expect([whatsapp(MORE_INFO), whatsapp(FIRST_SESSION)]).toContain(
+      await link.getAttribute('href'),
+    );
+  }
+});
+
+test('en el celular, el botón de WhatsApp queda fijo abajo al bajar', async ({
+  page,
+}, testInfo) => {
+  test.skip(!isPhone(testInfo.project.name), 'Desde la tableta no hay barra fija');
+  await page.goto('/');
+  const bar = page.locator('[data-sticky-contact]');
+  const button = bar.getByRole('link', { name: 'Escríbeme por WhatsApp' });
+  const followsScroll = await page.evaluate(() => CSS.supports('animation-timeline: view()'));
+  // Arriba ya están los botones de la presentación: la barra entra al dejarlos atrás.
+  if (followsScroll) await expect(button).toBeHidden();
+  await page.evaluate(() => window.scrollTo(0, window.innerHeight * 1.5));
+  await expect(button).toBeVisible();
+  await expect(button).toHaveAttribute('href', whatsapp(MORE_INFO));
+  const box = await bar.boundingBox();
+  const viewport = page.viewportSize();
+  expect(box && viewport && Math.round(box.y + box.height)).toBe(viewport?.height);
+  // En el cierre no se repite el botón: la barra ya está a la vista.
+  await expect(
+    page
+      .getByRole('region', { name: '¿Hablamos?' })
+      .getByRole('link', { name: 'Escríbeme por WhatsApp' }),
+  ).toBeHidden();
+});
+
+test.describe('con "reducir movimiento"', () => {
+  test.use({ reducedMotion: 'reduce' });
+
+  test('nada se anima y todo está en su lugar desde el principio', async ({ page }, testInfo) => {
+    await page.goto('/');
+    const animated = await page.evaluate(
+      () =>
+        [...document.querySelectorAll('main *, [data-sticky-contact]')].filter(
+          (element) => getComputedStyle(element).animationName !== 'none',
+        ).length,
+    );
+    expect(animated).toBe(0);
+    if (isPhone(testInfo.project.name)) {
+      await expect(
+        page.locator('[data-sticky-contact]').getByRole('link', { name: 'Escríbeme por WhatsApp' }),
+      ).toBeVisible();
+    }
+  });
 });
 
 test('Entrar, en la cabecera, lleva al inicio de sesión', async ({ page }) => {
@@ -56,23 +97,23 @@ test('Entrar, en la cabecera, lleva al inicio de sesión', async ({ page }) => {
   await expect(page.getByLabel('Correo', { exact: true })).toBeVisible();
 });
 
-test('las tres etapas van en orden, con lo que resuelven y lo que se recibe', async ({ page }) => {
+test('las tres etapas van en orden, una línea cada una', async ({ page }) => {
   await page.goto('/');
-  const stages = page.getByRole('region', { name: 'Cómo funciona' }).getByRole('listitem');
+  const stages = page.getByRole('region', { name: STAGES }).getByRole('listitem');
   await expect(stages).toHaveCount(3);
   await expect(stages.nth(0).getByRole('heading', { level: 3 })).toHaveText(
     'Presupuesto y bolsillos',
   );
   await expect(stages.nth(1).getByRole('heading', { level: 3 })).toHaveText('Deudas');
-  await expect(stages.nth(2).getByText('Qué recibes')).toBeVisible();
+  await expect(stages.nth(1)).toContainText('el mes en que quedas libre');
 });
 
-test('las capturas cargan y avisan que los datos son inventados', async ({ page }) => {
+test('las etapas muestran su reporte y avisan que los datos son inventados', async ({ page }) => {
   await page.goto('/');
-  const preview = page.getByRole('region', { name: 'Así se ve tu plan' });
-  await expect(preview.getByText('Ejemplo con datos inventados.')).toBeVisible();
-  const images = preview.getByRole('img');
-  await expect(images).toHaveCount(3);
+  const stages = page.getByRole('region', { name: STAGES });
+  await expect(stages.getByText('Capturas con datos inventados.')).toBeVisible();
+  const images = stages.getByRole('img');
+  await expect(images).toHaveCount(2);
   for (const image of await images.all()) {
     await image.scrollIntoViewIfNeeded();
     await expect(image).toHaveAttribute('alt', /teléfono/);

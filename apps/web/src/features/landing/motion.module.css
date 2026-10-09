@@ -1,0 +1,101 @@
+/*
+ * Movimiento del landing (ADR 0026): pocas animaciones, cortas (100 a 450 ms, que arrancan rápido
+ * y frenan al final) y con propósito [F71].
+ *
+ * - Al cargar, una sola vez: la ranura de la alcancía se abre y la moneda cae sobre ella.
+ * - Al bajar: la línea de las etapas se dibuja y sus monedas y capturas aparecen. El texto no se
+ *   anima, porque animarlo retrasa la lectura; tampoco se cambia el desplazamiento [F72].
+ * - En el celular, la barra de contacto entra cuando se deja atrás la presentación.
+ *
+ * Con "reducir movimiento" no corre ninguna. Las que siguen al desplazamiento solo corren donde el
+ * navegador las soporta [F73]: sin ellas, todo se ve en su lugar desde el principio.
+ */
+
+.slot {
+  transform-origin: left center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .slot {
+    animation: slot-open 300ms ease-out 100ms both;
+  }
+
+  .coin {
+    animation: coin-drop 450ms cubic-bezier(0.3, 1.4, 0.6, 1) 300ms both;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* La propiedad animation reinicia animation-timeline: la línea del recorrido va después. */
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 25%;
+    }
+
+    .pop {
+      animation: pop linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 30%;
+    }
+
+    .draw {
+      transform-origin: top center;
+      animation: draw linear both;
+      animation-timeline: view();
+      animation-range: entry 40% cover 55%;
+    }
+
+    /* Oculta, y por eso sin foco ni toque, hasta que se baja media pantalla. */
+    .stickyIn {
+      animation: sticky-in linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 50vh 80vh;
+    }
+  }
+}
+
+@keyframes slot-open {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes coin-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-2rem);
+  }
+  60% {
+    opacity: 1;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@keyframes draw {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes sticky-in {
+  from {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
