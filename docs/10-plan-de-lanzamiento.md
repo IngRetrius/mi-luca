@@ -30,7 +30,8 @@ Fecha: 08/10/2026. Desde hoy, este plan fija el orden del trabajo que queda hast
 - [x] Borrado a pedido del cliente: `private.delete_client_data` con su prueba pgTAP y el procedimiento en `supabase/README.md` (H5).
 - [x] Procedimiento de copia semanal en `supabase/README.md`, comprobado contra la base local (H1).
 - [x] Documentación desactualizada: `README.md` y P-C04 en `05-pantallas-y-flujos.md` (H11).
-- [ ] **Asesor:** subir las migraciones que faltan en el remoto con `pnpm supabase db push --dry-run` y después `pnpm supabase db push`: `proposals` (falta desde el 05/10/2026, así que la Propuesta del asesor falla hoy en producción; H13), `client_data_deletion` y `case_stages` (L1). Sin `case_stages`, la ficha y la entrega publicadas fallan: subirla antes o junto con el despliegue de L1.
+- [x] **Asesor:** subir `proposals` (H13) y `client_data_deletion` al remoto. El ensayo de `db push` del 08/10/2026 ya no las lista.
+- [ ] **Asesor:** subir `case_stages` (L1) con `pnpm supabase db push --dry-run` y después `pnpm supabase db push`. Hasta entonces, la ficha, la entrega y Mi plan publicados fallan, porque el código de L1 ya está desplegado.
 - [ ] **Asesor:** sacar la primera copia del remoto y guardarla cifrada.
 - [ ] **Asesor:** mover `client_secret_*.json` fuera de la carpeta del repositorio (H10).
 - [ ] **Asesor:** autorizar el MCP de Supabase (`claude mcp login`) para revisar el asesor de seguridad del remoto después del despliegue.
