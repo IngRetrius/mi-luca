@@ -28,5 +28,6 @@ Cada decisión que cambia la arquitectura, el modelo de datos o un resultado del
 | [0022](0022-interfaz-en-espanol-e-ingles.md) | Interfaz en español e inglés, elegida por cada persona (cookie o idioma del navegador); cifras con el formato del país | Aceptada |
 | [0023](0023-diseno-adaptable-del-celular-al-escritorio.md) | Diseño adaptable: igual en el celular, columna de lectura en la tableta y rejillas en el escritorio | Aceptada |
 | [0024](0024-propuesta-del-asesor.md) | Propuesta del asesor: ajustes al presupuesto que el cliente decide uno por uno, comparados sin tocar los datos y aplicados con sus tareas | Aceptada |
+| [0025](0025-asesoria-por-etapas.md) | Asesoría en tres etapas (presupuesto y bolsillos, deudas, patrimonio con protección y metas), cada una con su reporte; el motor no cambia | Aceptada |
 
 Plantilla: [plantilla.md](plantilla.md).

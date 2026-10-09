@@ -35,6 +35,7 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Retirar o devolver el acceso del asesor | `setAdvisorAccess` | Cambia `advisor_client_access.status` a `revoked` o `active` |
 | Retirar el consentimiento de datos de salud | `withdrawSensitiveConsent`, `consents.withdrawn_at` | P-C11 |
 | Borrar cuentas sin perfil | `private.delete_unclaimed_accounts` | Tarea diaria de `pg_cron`, `delete-unclaimed-accounts` |
+| Borrar los datos de un cliente | `private.delete_client_data` | A pedido del cliente; la ejecuta el responsable en el editor SQL (`supabase/README.md`) |
 | Buscar clientes | `?q=`, `parseSearch` | P-A01 |
 | Recuperar contraseña | `/recuperar`, `recoverPassword` | P-G05; pasos `email`, `code`, `password` |
 | Aviso | `notification` / `Notice` | Fila de `notifications`; tipo `invitacion_aceptada` |

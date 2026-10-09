@@ -21,6 +21,7 @@ Nivel de verificación:
 | F14 | [Supabase, Custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp) | El correo incluido envía 2 mensajes por hora y solo a miembros del equipo; no es para producción. Con SMTP propio, 30 mensajes por hora al inicio, ajustable. | Leída |
 | F25 | [Resend, Pricing](https://resend.com/pricing) | Gratis: 3.000 correos al mes, 100 al día. Pro: 20 USD al mes por 50.000 correos. | Leída |
 | F26 | [Supabase, Compute and Disk](https://supabase.com/docs/guides/platform/compute-and-disk) | Micro unos 10 USD al mes (cubierto por el crédito de Pro), Small unos 15 USD, Medium unos 60 USD. | Leída |
+| F62 | [Next.js, September 2026 Security Release](https://nextjs.org/blog/september-2026-security-release) (consultada el 08/10/2026) | Versiones corregidas: 16.3.8 (LTS activa) y 15.5.27, del 30/09/2026. SSRF alto en el optimizador de imágenes, solo con `images.remotePatterns`. `pnpm audit` del 08/10/2026 confirma seis avisos de `next` en 16.3.6, todos corregidos desde 16.3.8. | Búsqueda |
 
 ## Autenticación y plataforma web
 
@@ -89,6 +90,16 @@ Nivel de verificación:
 | F57 | Referencia de la API de Claude, salidas estructuradas (skill `claude-api`; consultada el 02/10/2026) | `output_config.format` con esquema JSON; todo objeto con `additionalProperties: false`; sin límites numéricos ni de longitud; disponible en Haiku 4.5. ADR 0012 | Leída |
 | F58 | [Claude, API and data retention](https://platform.claude.com/docs/en/manage-claude/api-and-data-retention), [Privacy Center, retención comercial](https://privacy.anthropic.com/en/articles/7996866-how-long-do-you-store-personal-data), [DPA](https://support.anthropic.com/en/articles/7996862-i-am-a-prospective-api-customer-can-i-see-a-copy-of-your-data-processing-addendum-dpa) y [encargado o responsable](https://support.anthropic.com/en/articles/9267385-what-is-the-data-relationship-between-anthropic-the-customer-and-the-user) (consultados el 02/10/2026) | Anthropic es encargado bajo su DPA, incorporado a los términos comerciales con cláusulas contractuales tipo; no entrena con datos de la API sin permiso expreso; borra entradas y salidas en 30 días; lo marcado por sus sistemas de seguridad puede guardarse hasta 2 años; retención cero solo para cuentas calificadas. ADR 0012 y avisos 1.1 | Leída |
 | F55 | [Ollama, biblioteca de modelos](https://ollama.com/library) (consultada el 02/10/2026) | Modelos con tamaños de 12 a 14 mil millones de parámetros, entre otros `gemma4` (12b), `qwen3` (14b) y `qwen2.5` (14b); el asesor tiene `qwen2.5:32b`. Candidatos para la prueba del ADR 0012, sin elegir | Leída |
+
+## Producto y metodología
+
+Consultadas el 08/10/2026 para la auditoría de lanzamiento (`09-auditoria-de-lanzamiento.md`).
+
+| N.º | Fuente | Dato usado | Nivel |
+|---|---|---|---|
+| F59 | [Financial Health Network, FinHealth Score Toolkit](https://finhealthnetwork.org/wp-content/uploads/2021/11/FinHealthScoreToolkit-2021.pdf) | Ocho indicadores de salud financiera agrupados en cuatro pilares (gastar, ahorrar, endeudarse y planear), con un puntaje por pilar. | Búsqueda |
+| F60 | [eMoney, Taking a Modular Approach to Financial Planning](https://emoneyadvisor.com/blog/taking-a-modular-approach-to-financial-planning/) | La planificación modular parte el plan en partes separadas o independientes; los encargos modulares suelen durar de uno a tres meses y se centran en un tema. | Búsqueda |
+| F61 | [Kellogg School of Management, The Snowball Approach to Debt (2012)](https://www.kellogg.northwestern.edu/news_articles/2012/snowball-approach.aspx) | Gal y McShane, con datos de unas 6.000 personas: quienes pagan primero las deudas de menor saldo tienen más probabilidad de saldar toda la deuda, aunque no sea lo más barato. Publicado en el Journal of Marketing Research. | Búsqueda |
 
 ## Accesibilidad
 

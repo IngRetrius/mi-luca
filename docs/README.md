@@ -1,6 +1,6 @@
 # Documentación de MiLuca
 
-Plan, diseño y decisiones del proyecto. La investigación inicial tiene fecha de corte del 28 de septiembre de 2026; los documentos se actualizan con cada fase. El avance real está en [06-plan-de-trabajo.md](06-plan-de-trabajo.md), sección 2.1.
+Plan, diseño y decisiones del proyecto. La investigación inicial tiene fecha de corte del 28 de septiembre de 2026; los documentos se actualizan con cada fase. El avance real está en [06-plan-de-trabajo.md](06-plan-de-trabajo.md), sección 2.1, y el orden del trabajo que queda, en [10-plan-de-lanzamiento.md](10-plan-de-lanzamiento.md).
 
 ## Documentos principales
 
@@ -14,6 +14,8 @@ Plan, diseño y decisiones del proyecto. La investigación inicial tiene fecha d
 | [06-plan-de-trabajo.md](06-plan-de-trabajo.md) | Fases, MVP, hitos, estimación, riesgos, costos y criterios de aceptación |
 | [07-preguntas-abiertas.md](07-preguntas-abiertas.md) | Decisiones pendientes, cada una con recomendación |
 | [08-estructura-del-repositorio.md](08-estructura-del-repositorio.md) | Carpetas, responsabilidades y reglas de dependencia |
+| [09-auditoria-de-lanzamiento.md](09-auditoria-de-lanzamiento.md) | Auditoría del 08/10/2026 antes de los primeros clientes: asesoría en tres etapas con reporte propio, riesgos y lista de salida |
+| [10-plan-de-lanzamiento.md](10-plan-de-lanzamiento.md) | Orden del trabajo desde el 08/10/2026: higiene, etapas, piloto, antes de cobrar y lo que queda de F7 y F8 |
 
 ## Documentos de apoyo
 

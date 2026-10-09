@@ -51,7 +51,7 @@ gantt
 
 ### 2.1 Avance real
 
-| Fase | Estimado | Estado al 04/10/2026 |
+| Fase | Estimado | Estado al 08/10/2026 |
 |---|---|---|
 | F0 | 80 h, hasta mediados de noviembre de 2026 | Terminada salvo tareas del asesor: dominio y verificación de marca en Google (D3, D5) |
 | F1 | 120 h, hasta mediados de enero de 2027 | Terminada salvo el alta con Google en un navegador real, el correo de la invitación (C14) y exportar y borrar en P-C11 (F7) |
@@ -60,10 +60,12 @@ gantt
 | F4 | 160 h, hasta comienzos de septiembre de 2027 | Terminada en el código: deudas del diagnóstico (C4 y C9), créditos cuota a cuota, plan de pago y Panel (C5), correcciones del modo nativo y pantallas |
 | F5 | 120 h, hasta comienzos de noviembre de 2027 | Terminada en el código: inversión, patrimonio completo, metas con la calculadora de viaje, seguros con la suma asegurada de vida y sus pantallas |
 | F6 | 80 h | Eliminada el 04/10/2026: la pensión no entra en la plataforma (ADR 0016) |
-| F7 | 160 h | Empezada: control mensual, plan de acción, carta y notas, PDF del plan, y seguimiento con la ficha de continuidad |
-| F8 | 80 h | Sin empezar |
+| F7 | 160 h | Empezada: control mensual, plan de acción, carta y notas, PDF del plan, seguimiento con la ficha de continuidad y propuesta del asesor. Lo que falta pasa a L5 del plan de lanzamiento |
+| F8 | 80 h | Adelantado en L0 del plan de lanzamiento: dependencias sin avisos, borrado a pedido del cliente y copia semanal. Lo demás pasa a L4 y L5 |
 
 Con el agente de código, F0 a F2 avanzaron mucho más rápido que la estimación a 14 horas por semana, que suponía empezar el 5 de octubre de 2026. **Supuesto:** el calendario de arriba se mantiene como techo y se reestima al cerrar F3, con lo que tome realmente una fase que mezcla motor, base de datos y pantallas. Las horas del resto no cambian hasta entonces.
+
+**Desde el 08/10/2026**, el orden del trabajo restante lo fija [10-plan-de-lanzamiento.md](10-plan-de-lanzamiento.md): higiene y seguridad (L0), asesoría por etapas (L1, ADR 0025), preparación del piloto (L2), piloto con personas cercanas (L3), lo que hace falta antes de cobrar (L4) y lo que queda de F7 y F8 (L5). Sale de la [auditoría de lanzamiento](09-auditoria-de-lanzamiento.md).
 
 ## 3. MVP e hitos
 

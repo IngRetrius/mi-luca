@@ -8,6 +8,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Sin la cabecera x-powered-by: no hace falta anunciar el framework.
+  poweredByHeader: false,
   // Los paquetes internos se consumen como código TypeScript (sin paso de compilación propio).
   transpilePackages: [
     '@miluca/db',

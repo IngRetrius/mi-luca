@@ -120,4 +120,30 @@ select id, 'Nombre visible' from auth.users where email = 'correo-del-asesor@exa
 
 El correo real no se escribe en el repositorio.
 
+### Copia de seguridad semanal
+
+El plan gratuito no hace copias (`docs/09-auditoria-de-lanzamiento.md`, H1). Mientras el proyecto siga en ese plan, el asesor saca una copia de los datos cada semana desde su terminal:
+
+```sh
+pnpm supabase db dump --linked --data-only --use-copy -f ~/ruta-cifrada/miluca-AAAA-MM-DD.sql
+```
+
+Incluye las cuentas de acceso (`auth.users`, con el hash de la contraseña) y todas las tablas de `public`; el esquema no hace falta porque está en las migraciones. Comprobado contra la base local el 08/10/2026. **El archivo tiene los datos de todos los clientes:** se guarda solo en un lugar cifrado (por ejemplo, una imagen de disco cifrada de macOS), nunca en el repositorio, en una carpeta sincronizada sin cifrar ni en un adjunto. Se conservan las últimas cuatro.
+
+Restaurar no está probado (queda para F8, en staging). La idea: crear un proyecto, aplicar las migraciones con `db push` y cargar el archivo con `psql` y `SET session_replication_role = replica`, para que los disparadores no reescriban el historial. Falta resolver un choque: las migraciones siembran `countries`, `country_parameters` y `legal_texts`, que también vienen en la copia, y los consentimientos apuntan a los textos legales por su id, así que no basta con quitarlos del archivo.
+
+Con Supabase Pro hay copias diarias y esto deja de hacer falta.
+
+### Borrar los datos de un cliente
+
+Cuando un cliente pide que se borren sus datos (al correo de contacto de los avisos), el asesor lo ejecuta en el editor SQL del panel con el id del perfil (está en la URL de su ficha, `/clientes/<id>`):
+
+```sql
+select private.delete_client_data('<id-del-cliente>');
+```
+
+En una sola transacción borra el perfil y todo lo que cuelga de él (planes entregados, consentimientos, notas, deudas y lo demás, por las claves foráneas en cascada), su historial en `audit_log` y su cuenta de acceso, si la tenía y no es de un asesor. Devuelve cuántas filas de historial borró y si borró la cuenta. No toca a otros clientes ni a los asesores. La app no la puede llamar (migración `client_data_deletion`, prueba `client_data_deletion.test.sql`).
+
+Las copias semanales anteriores siguen teniendo sus datos hasta que se reemplazan.
+
 El servidor MCP de Supabase para agentes está registrado en el alcance local de Claude Code (fuera del repositorio) y se autentica una vez con `claude mcp login`.

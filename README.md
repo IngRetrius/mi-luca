@@ -2,7 +2,7 @@
 
 Plataforma web de planificación financiera personal, pensada para el celular. La usa un asesor para acompañar a sus clientes (hoy en Colombia y en España, preparada para cualquier país y para clientes con varias monedas), y reemplaza la plantilla de Excel de la asesoría como herramienta principal.
 
-Estado al 02/10/2026: **fase 3 de 8 en curso**. Terminadas las fundaciones (F0), la autenticación con clientes y permisos (F1) y el motor núcleo con ingresos, presupuesto y costo de vida (F2). En F3 ya están el flujo anual, el fondo de emergencia, los bolsillos, los cobros y la prueba de realidad para el asesor; faltan las mismas pantallas para el cliente y la entrega del plan. El avance detallado está en [docs/06-plan-de-trabajo.md](docs/06-plan-de-trabajo.md) y el plan completo en [docs/](docs/README.md).
+Estado al 08/10/2026: **preparando el piloto con personas cercanas**. Terminadas en el código las fases F0 a F5 (fundaciones, acceso y permisos, motor, bolsillos y flujo, deudas, inversión, patrimonio, metas y seguros); F7 avanzada (control mensual, plan de acción, carta, PDF, seguimiento y propuesta del asesor). Lo que sigue, en orden, está en [docs/10-plan-de-lanzamiento.md](docs/10-plan-de-lanzamiento.md): la asesoría en tres etapas con su propio reporte (ADR 0025), el piloto y lo necesario antes de cobrar. El avance por fase está en [docs/06-plan-de-trabajo.md](docs/06-plan-de-trabajo.md) y el plan completo en [docs/](docs/README.md).
 
 ## Qué hace
 
