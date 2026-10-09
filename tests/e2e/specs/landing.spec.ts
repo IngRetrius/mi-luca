@@ -195,9 +195,12 @@ test('la privacidad pública abre sin sesión', async ({ page }) => {
     await expect(page.getByRole('heading', { level: 2, name: 'Colombia' })).toBeVisible();
     await expect(page.getByRole('heading', { level: 2, name: 'España' })).toBeVisible();
   } else {
-    await expect(page.getByRole('alert')).toHaveText(
-      'No se pudieron cargar los avisos. Intenta de nuevo en unos minutos.',
-    );
+    // Por el texto: al llegar con un enlace, Next agrega su anunciador de rutas, también un alert.
+    await expect(
+      page
+        .getByRole('alert')
+        .filter({ hasText: 'No se pudieron cargar los avisos. Intenta de nuevo en unos minutos.' }),
+    ).toBeVisible();
   }
   await expect(page.getByRole('link', { name: 'retrius2001@gmail.com' }).first()).toHaveAttribute(
     'href',
