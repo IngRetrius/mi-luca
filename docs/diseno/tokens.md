@@ -54,7 +54,7 @@ Colores fuera de la paleta de marca a propósito, para que un estado nunca se co
 | Fuente | **Livvic** (Jacques Le Bailly para la aseguradora LV=, licencia OFL) [F39], en texto y títulos. Sans humanista de formas redondas, con la `l` y la `y` de cola curva; la más parecida a Laca [F38], que el asesor prefería pero exige un plan pago de Creative Cloud. Cifras tabulares por defecto (medido en el navegador). Pesos en uso: 400, 500 y 600. Token `--font-sans` |
 | Carga | La aloja la app con `next/font/google`: se descarga al construir y se sirve desde el mismo dominio, sin pedir nada a Google [F40]; `font-display: swap` y respaldo ajustado para que el texto no salte. Si no carga, siguen las fuentes del sistema (`-apple-system`, `system-ui`, Roboto). Decisión D4 del 28/09/2026 |
 | Tamaño base | 16 px (también el mínimo en campos, para que Safari no haga zoom) |
-| Escala | 12, 14, 16, 18, 22, 28, 34 px, en `rem` para respetar el tamaño de texto del sistema |
+| Escala | 12, 14, 16, 18, 22, 28, 34 px, en `rem` para respetar el tamaño de texto del sistema. Las páginas públicas (ADR 0026) suman `text-title` (28 px, títulos de sección), `text-display` (34 px) y `text-display-lg` (48 px, el título principal en el escritorio), en `globals.css` |
 | Cifras | `font-variant-numeric: tabular-nums` en tablas y montos |
 | Espaciado | Múltiplos de 4 px |
 | Radio | 8 px en campos, 12 px en tarjetas, 16 px en hojas inferiores |
@@ -71,6 +71,15 @@ El logo (`docs/diseno/marca/logo.png`, 1254 x 1254 px, fondo transparente) usa d
 | #F0702C | 2,97 | 2,66 | 6,09 | Solo en el logo o como acento grande; no para texto sobre fondos claros |
 
 **Decisión (D1, 28/09/2026):** se mantiene la paleta opción 3 para la interfaz y el logo actual se usa de forma provisional, hasta que el asesor lo actualice. El archivo fuente está en `docs/diseno/marca/logo.png`. Mientras tanto, el naranja del logo no se usa en la interfaz, porque se confundiría con el estado "Atención" del semáforo (#B45309).
+
+**Páginas públicas (ADR 0026, 09/10/2026):** el landing y la privacidad pública usan los colores del logo con la paleta 3, como decidió el asesor. La app sigue con la paleta 3 sola, y en esas páginas no hay semáforo, así que el naranja no se confunde con "Atención". Tokens en `packages/ui` (`palette.brandNavy` y `palette.brandOrange`), con sus pruebas de contraste:
+
+| Token | Modo claro | Modo oscuro | Uso | Contraste |
+|---|---|---|---|---|
+| `brand` | #01255D | `brand-400` | Títulos y botón principal | 14,75 sobre blanco y 13,18 sobre `brand-50`; 7,37 sobre #11142B y 5,07 sobre `brand-900` |
+| `on-brand` | Blanco | #11142B | Texto del botón principal | 14,75 y 7,37 |
+| `accent` | #F0702C | #F0702C | Solo decorativo: la ranura bajo el título, las monedas de las etapas y el círculo detrás de la foto. Nunca texto ni fondo de un botón con texto blanco | 2,97 sobre blanco (no llega a 3:1); 6,09 sobre #11142B |
+| `on-accent` | #01255D | #01255D | El número dentro de cada moneda | 4,96 |
 
 ## 6. Relación con la plantilla de Excel
 

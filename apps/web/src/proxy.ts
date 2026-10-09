@@ -7,8 +7,8 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Todo menos archivos estáticos, imágenes, el manifiesto y los iconos.
+  // Todo menos archivos estáticos, imágenes, el manifiesto, los iconos, robots.txt y sitemap.xml.
   matcher: [
-    '/((?!_next/static|_next/image|manifest.webmanifest|icons/|icon|apple-icon|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|manifest.webmanifest|icons/|icon|apple-icon|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };

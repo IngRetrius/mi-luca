@@ -29,5 +29,6 @@ Cada decisión que cambia la arquitectura, el modelo de datos o un resultado del
 | [0023](0023-diseno-adaptable-del-celular-al-escritorio.md) | Diseño adaptable: igual en el celular, columna de lectura en la tableta y rejillas en el escritorio | Aceptada |
 | [0024](0024-propuesta-del-asesor.md) | Propuesta del asesor: ajustes al presupuesto que el cliente decide uno por uno, comparados sin tocar los datos y aplicados con sus tareas | Aceptada |
 | [0025](0025-asesoria-por-etapas.md) | Asesoría en tres etapas (presupuesto y bolsillos, deudas, patrimonio con protección y metas), cada una con su reporte; el motor no cambia | Aceptada |
+| [0026](0026-landing-publico-en-la-raiz.md) | Landing público en la raíz para quien no tiene sesión, privacidad pública en `/privacidad` y contacto por WhatsApp sin datos guardados | Aceptada |
 
 Plantilla: [plantilla.md](plantilla.md).

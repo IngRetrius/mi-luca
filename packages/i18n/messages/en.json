@@ -12,6 +12,7 @@
     "invitation": "Invitation",
     "install": "Add to home screen",
     "privacy": "Privacy and data",
+    "publicPrivacy": "Privacy notice",
     "clients": "Clients",
     "newClient": "New client",
     "client": "Client",
@@ -3305,5 +3306,139 @@
     "expensiveDebtFirst": "There is expensive debt: the debts stage should come first. The quality check does not allow delivering investment while it exists.",
     "documentsTitle": "Letter and delivery",
     "documentsIntro": "They work for any stage: the letter and the notes go with each delivery."
+  },
+  "landing": {
+    "metaTitle": "MiLuca | Personal financial planning",
+    "metaDescription": "Understand your money: organize it, get out of debt and plan your goals, with step-by-step guidance and a clear report for each stage.",
+    "skipToContent": "Skip to content",
+    "header": {
+      "homeLabel": "MiLuca, home",
+      "signIn": "Sign in"
+    },
+    "hero": {
+      "tagline": "Personal financial planning",
+      "title": "Understand your money: organize it, get out of debt and plan your goals.",
+      "lead": "I guide you step by step, with a clear method and without judgment, so interest works for you and not against you. Each stage ends with a report you can check from your phone.",
+      "trust": "No commitment. I never ask for passwords or account numbers."
+    },
+    "contact": {
+      "whatsapp": "Message me on WhatsApp",
+      "email": "Email me",
+      "firstSession": "Ask for a first conversation",
+      "moreInfoMessage": "Hi, I saw the MiLuca page and I'd like to know more.",
+      "firstSessionMessage": "Hi, I saw the MiLuca page and I'd like to ask for a first conversation."
+    },
+    "stages": {
+      "title": "How it works",
+      "intro": "You start with what worries you most. Each stage stands on its own and ends with a clear report.",
+      "solves": "What it solves",
+      "receives": "What you get",
+      "items": [
+        {
+          "name": "Budget and pockets",
+          "solves": "Where your money goes, how much is left over and how to split it, with an emergency fund first.",
+          "receives": "Your budget, your emergency fund and the amount for each pocket."
+        },
+        {
+          "name": "Debts",
+          "solves": "What they cost you, in what order to pay them and the month you become debt-free.",
+          "receives": "Your payment plan, debt by debt, and how much you save in interest."
+        },
+        {
+          "name": "Net worth, protection and goals",
+          "solves": "What you own, how to protect it and how much to set aside for each goal.",
+          "receives": "Your net worth, a life insurance reference and the monthly amount for each goal."
+        }
+      ]
+    },
+    "preview": {
+      "title": "This is what your plan looks like",
+      "note": "Example with made-up data.",
+      "screens": {
+        "budget": {
+          "caption": "Your budget report",
+          "alt": "Budget report on a phone: yearly income and spending, the surplus, the emergency fund goal and the monthly amount for each pocket."
+        },
+        "debts": {
+          "caption": "Your debt payment plan",
+          "alt": "Debt payoff plan on a phone: the payment order, the month each debt is paid off, the interest and the savings compared with paying only the installment."
+        },
+        "myData": {
+          "caption": "Your data, always up to date",
+          "alt": "My data screen on a phone: income, currencies, expenses and pockets, grouped by the topics worked on with the advisor."
+        }
+      }
+    },
+    "principles": {
+      "title": "How I work",
+      "items": [
+        "Peace of mind first: money left over each month, expensive debt under control and an emergency fund.",
+        "I respect your lifestyle: I show you costs and alternatives, I don't impose cuts.",
+        "All your money has a purpose: expenses, pockets, savings or investment.",
+        "We review with real figures at 30 and 90 days."
+      ]
+    },
+    "about": {
+      "title": "About me",
+      "intro": "I'm {name}, the person behind MiLuca.",
+      "story": [
+        "I want to help you understand your own finances and share what I have learned. The first step is getting organized: knowing where your money goes and giving all of it a purpose.",
+        "Then, seeing that you can beat the banks at their own game. They are not the enemy, but you need to know how to make them your allies: understand how interest can work against you or in your favor, and use credit wisely.",
+        "I am in the final year of Systems Engineering, focused on data applied to finance, and I work with databases every day. That way of looking at numbers is what I bring to your plan."
+      ],
+      "website": "See my work at {site}."
+    },
+    "privacy": {
+      "title": "Your data and the limits",
+      "items": [
+        "I never ask for account or card numbers, or your bank passwords.",
+        "Only you and I see your information, and you can ask me to delete it whenever you want.",
+        "I don't recommend financial products or institutions. Projections are illustrative, not guaranteed.",
+        "Taxes, pensions and legal matters are for you to confirm with the right professional."
+      ],
+      "link": "Read the privacy notice"
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "items": [
+        {
+          "question": "What do I need to get started?",
+          "answer": "A conversation and a rough idea of your income and expenses. Your statements from the last few months help, but you don't need them."
+        },
+        {
+          "question": "Is it in person or online?",
+          "answer": "Online, by video call. Your data and reports stay in the app so you can check them whenever you want."
+        },
+        {
+          "question": "Do I have to connect my bank accounts?",
+          "answer": "No. We enter the data together, with approximate amounts; no bank is ever connected."
+        },
+        {
+          "question": "Are you going to sell me a product?",
+          "answer": "No. I don't recommend financial products or institutions."
+        },
+        {
+          "question": "Can I do just one stage?",
+          "answer": "Yes. Each stage stands on its own; you start with the one that matters most to you."
+        }
+      ]
+    },
+    "closing": {
+      "title": "Shall we talk?",
+      "body": "Tell me what you'd like to sort out first."
+    },
+    "footer": {
+      "linksLabel": "Links",
+      "privacy": "Privacy notice",
+      "signIn": "Sign in",
+      "contact": "Contact: {email}"
+    }
+  },
+  "publicPrivacy": {
+    "title": "Privacy notice",
+    "intro": "When starting out, each person accepts the notice for their country inside the app. These are the notices in force.",
+    "notPublished": "There is no published notice for this country yet.",
+    "unavailable": "The notices could not be loaded. Try again in a few minutes.",
+    "contact": "To review, correct or delete your data, write to {email}."
   }
 }

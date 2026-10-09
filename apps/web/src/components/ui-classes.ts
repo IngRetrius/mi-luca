@@ -16,6 +16,12 @@ export const primaryButton = `${control} bg-primary text-on-primary hover:bg-pri
 /** Acción secundaria con borde; al pasar el puntero o tocar, el borde gana contraste. */
 export const secondaryButton = `${control} border border-border hover:border-text-muted active:border-text`;
 
+/** Acción principal de las páginas públicas de la marca (ADR 0026): el marino del logo. */
+export const brandButton = `${control} bg-brand text-on-brand hover:bg-brand/90 active:bg-brand/80`;
+
+/** Acción secundaria de las páginas públicas: borde y texto del color de los enlaces. */
+export const brandSecondaryButton = `${control} border border-link text-link hover:bg-link/10 active:bg-link/15`;
+
 /** Acción de texto, como un enlace. */
 export const textButton = `min-h-12 rounded-xl px-3 text-link hover:underline active:opacity-80 ${focusRing}`;
 

@@ -50,6 +50,7 @@ Lo que se configura en el panel de Vercel (una sola vez):
 | Environment Variables, Production y Preview | `ENABLE_EXPERIMENTAL_COREPACK=1`: sin ella Vercel usa pnpm 9 o 10 y no pnpm 12 |
 | Environment Variables, solo Production | `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, los mismos de `.env.local` |
 | Environment Variables, solo Production, marcada como sensible | `SUPABASE_SECRET_KEY` (clave `sb_secret_...` del proyecto): crea la cuenta con contraseña desde la invitación. Sin ella, P-C12 solo funciona con Google |
+| Environment Variables, Production y Preview | `CONTACT_WHATSAPP`: número de WhatsApp de los botones del landing, en formato internacional (`+57...`). No va en el repositorio. Sin ella, los botones abren el correo de contacto (ADR 0026) |
 
 Las vistas previas no llevan las claves de Supabase: así nunca tocan los datos de producción. La app arranca igual y avisa que el acceso no está disponible. Cuando exista el proyecto de staging, sus claves van en Preview (`docs/02-arquitectura.md`, sección 8).
 
@@ -65,7 +66,10 @@ El plan Hobby es solo para uso personal no comercial: antes de que un cliente re
 | `/auth/start` | Inicia Google con PKCE; guarda la ruta de retorno en una cookie de 10 minutos |
 | `/auth/callback` | Cambia el código por la sesión y sigue a la ruta de retorno |
 | `/auth/listo` | Fin de la ventana de Google abierta por la app instalada: avisa a la principal y se cierra |
-| `/` | Reparte según el rol (`getViewer`, `src/server/viewer.ts`): el asesor va a `/clientes`, la cuenta sin perfil a `/sin-invitacion`; el cliente ve aquí su inicio (P-C04): hasta la entrega, que el asesor prepara su plan; después, el enlace a Mi plan |
+| `/` | Sin sesión, el landing público (P-G06, `features/landing`, ADR 0026). Con sesión, reparte según el rol (`getViewer`, `src/server/viewer.ts`): el asesor va a `/clientes`, la cuenta sin perfil a `/sin-invitacion`; el cliente ve aquí su inicio (P-C04, `features/client-home`): hasta la entrega, que el asesor prepara su plan; después, el enlace a Mi plan |
+| `/privacidad` | P-G07: los avisos de privacidad vigentes de cada país, con o sin sesión (`current_legal_texts`) |
+| `/robots.txt`, `/sitemap.xml` | Solo `/` y `/privacidad` se indexan; las direcciones salen de `siteUrl` (`VERCEL_PROJECT_PRODUCTION_URL` en Vercel) |
+| `/opengraph-image.png` | Vista previa del enlace al compartirlo; la genera `tools/landing-screenshots` con las capturas de `public/landing/` |
 | `/sin-invitacion` | P-G02: la cuenta existe pero no tiene perfil; cerrar sesión. Avisa que se borra a los 7 días |
 | `/recuperar` | P-G05: correo, código de 6 dígitos que llega por correo y contraseña nueva, en la misma pantalla y sin salir de la app. Responde igual exista o no la cuenta. En local, los correos se ven en Mailpit (`http://127.0.0.1:54324`) |
 

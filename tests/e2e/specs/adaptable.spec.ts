@@ -5,7 +5,7 @@ import { expect, test, type Page } from '@playwright/test';
 // tableta y escritorio (playwright.config.ts). Sin Supabase: las pantallas públicas.
 
 const WIDTHS = [320, 768, 1024, 1440] as const;
-const PUBLIC_PATHS = ['/entrar', '/recuperar', '/no-existe'] as const;
+const PUBLIC_PATHS = ['/', '/privacidad', '/entrar', '/recuperar', '/no-existe'] as const;
 
 async function horizontalOverflow(page: Page): Promise<number> {
   return page.evaluate(

@@ -118,6 +118,8 @@ flowchart TD
 | P-G03 | Navegador no compatible | Versión mínima (Safari 16.4 [F15]) y cómo actualizar |
 | P-G04 | Sin conexión | Qué se puede ver y qué no |
 | P-G05 | Recuperar contraseña | Tres pasos: correo, código de 6 dígitos recibido por correo y nueva contraseña. Todo dentro de la app. El mensaje es el mismo exista o no la cuenta, para no revelar qué correos están registrados (ADR 0009) |
+| P-G06 | Landing (`/` sin sesión, ADR 0026) | Página pública para quien llega por recomendación: cabecera con la marca y Entrar; presentación con el título, los dos botones de contacto (Escríbeme por WhatsApp y Pedir una primera conversación, cada uno con su mensaje) y la línea de confianza; cómo funciona con las tres etapas; tres capturas de la app con un caso inventado; cómo trabajo; sobre mí; tus datos y los límites con el enlace al aviso; cinco preguntas plegables; cierre con el botón de WhatsApp; pie con el alcance, el aviso de privacidad, Entrar, el correo del responsable y el idioma. En el escritorio, el título de cada sección a la izquierda y el contenido a la derecha. Sin formularios ni analítica, y sin hablar de precio. Con sesión, `/` sigue al inicio de cada rol |
+| P-G07 | Privacidad pública (`/privacidad`, ADR 0026) | Los avisos vigentes de cada país habilitado (tratamiento de datos y datos de salud), con versión y fecha, como en P-C02; el correo del responsable para consultar, corregir o borrar. Abre con o sin sesión; los avisos existen solo en español y en inglés se avisa |
 
 ### 5.2 Cliente
 

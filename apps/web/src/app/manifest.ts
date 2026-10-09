@@ -8,7 +8,9 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: 'MiLuca',
     description: 'Planificación financiera personal',
     lang: 'es',
-    start_url: '/',
+    // La app instalada abre en Entrar, que con sesión sigue al inicio de cada rol: nunca muestra
+    // el landing público de la raíz (ADR 0026).
+    start_url: '/entrar',
     scope: '/',
     display: 'standalone',
     // Cualquier orientación: en tableta y escritorio la app instalada también gira (ADR 0023).

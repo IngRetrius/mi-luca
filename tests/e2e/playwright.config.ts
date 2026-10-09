@@ -1,5 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
+import { TEST_WHATSAPP } from './contact-env';
+
 const port = 3100;
 const isCI = Boolean(process.env.CI);
 
@@ -22,12 +24,12 @@ export default defineConfig({
     {
       name: 'tablet',
       use: { ...devices['iPad (gen 7)'] },
-      testMatch: /(adaptable|idioma)\.spec\.ts/,
+      testMatch: /(adaptable|idioma|landing)\.spec\.ts/,
     },
     {
       name: 'desktop',
       use: { ...devices['Desktop Chrome'] },
-      testMatch: /(adaptable|idioma)\.spec\.ts/,
+      testMatch: /(adaptable|idioma|landing)\.spec\.ts/,
     },
   ],
   webServer: {
@@ -36,6 +38,8 @@ export default defineConfig({
     command: `node node_modules/next/dist/bin/next start --port ${port}`,
     cwd: '../../apps/web',
     url: `http://localhost:${port}`,
+    // Número de prueba para los botones del landing (contact-env.ts).
+    env: { CONTACT_WHATSAPP: TEST_WHATSAPP },
     gracefulShutdown: { signal: 'SIGTERM', timeout: 5_000 },
     reuseExistingServer: !isCI,
     timeout: 120_000,

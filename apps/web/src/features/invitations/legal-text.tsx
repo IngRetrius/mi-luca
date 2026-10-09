@@ -30,25 +30,31 @@ export function toBlocks(body: string): Block[] {
   return blocks.filter((block) => block.type === 'list' || block.text);
 }
 
-/** Un texto legal tal como se acepta: título, versión, fecha y cuerpo. */
+/**
+ * Un texto legal tal como se acepta: título, versión, fecha y cuerpo. El título es un `h2`, o un
+ * `h3` cuando va dentro de una sección con su propio título (la privacidad pública, por país).
+ */
 export async function LegalText({
   text,
   headingId,
+  headingLevel = 2,
   locale,
   timeZone,
 }: {
   text: LegalTextData;
   headingId: string;
+  headingLevel?: 2 | 3;
   locale: string;
   timeZone: string;
 }) {
   const [t, language] = await Promise.all([getMessages(), getLanguage()]);
   const blocks = toBlocks(text.body);
+  const Heading = headingLevel === 3 ? 'h3' : 'h2';
   return (
     <div className="flex flex-col gap-2">
-      <h2 id={headingId} lang="es" className="text-lg font-semibold text-balance">
+      <Heading id={headingId} lang="es" className="text-lg font-semibold text-balance">
         {text.title}
-      </h2>
+      </Heading>
       <p className="text-sm text-text-muted">
         {t.invitation.consent.version
           .replace('{version}', text.version)

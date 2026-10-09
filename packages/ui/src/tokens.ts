@@ -6,6 +6,9 @@ export const palette = {
   brand400: '#5FB0C9', // solo decorativo en modo claro (contraste 2,46 sobre blanco)
   brand600: '#3E6D9C',
   brand900: '#2A2F63',
+  // Colores del logo (tokens.md, sección 5): solo en las páginas públicas de la marca (ADR 0026).
+  brandNavy: '#01255D',
+  brandOrange: '#F0702C', // solo acento: 2,97 sobre blanco, nunca texto sobre fondos claros
   white: '#FFFFFF',
   night: '#11142B',
 } as const;
@@ -22,6 +25,14 @@ export interface Theme {
   readonly statusOk: string;
   readonly statusWarning: string;
   readonly statusAlert: string;
+  /** Títulos y botón principal de las páginas públicas de la marca (ADR 0026). */
+  readonly brand: string;
+  /** Texto sobre `brand`. */
+  readonly onBrand: string;
+  /** Acento de la marca (la moneda del logo): círculos y trazos decorativos, nunca texto. */
+  readonly accent: string;
+  /** Texto sobre `accent` (los números de las etapas). */
+  readonly onAccent: string;
 }
 
 export const lightTheme: Theme = {
@@ -36,6 +47,10 @@ export const lightTheme: Theme = {
   statusOk: '#1B7A4A',
   statusWarning: '#B45309',
   statusAlert: '#B42318',
+  brand: palette.brandNavy,
+  onBrand: palette.white,
+  accent: palette.brandOrange,
+  onAccent: palette.brandNavy,
 };
 
 export const darkTheme: Theme = {
@@ -50,6 +65,10 @@ export const darkTheme: Theme = {
   statusOk: '#4ADE80',
   statusWarning: '#FBBF24',
   statusAlert: '#F87171',
+  brand: palette.brand400,
+  onBrand: palette.night,
+  accent: palette.brandOrange,
+  onAccent: palette.brandNavy,
 };
 
 const toKebab = (name: string) => name.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);

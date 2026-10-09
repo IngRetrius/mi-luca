@@ -1,0 +1,139 @@
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { isOverdue } from '@miluca/engine';
+import { formatDate } from '@miluca/i18n';
+
+import { StatusLabel } from '@/components/status';
+import {
+  focusRing,
+  linkButton,
+  primaryButton,
+  secondaryButton,
+  textButton,
+} from '@/components/ui-classes';
+import { loadActionItems, type ActionItemRow } from '@/features/action-plan';
+import { SignOutButton } from '@/features/auth';
+import { listDeliveries } from '@/features/deliveries';
+import { loadDocuments } from '@/features/documents';
+import { LanguageSwitcher } from '@/features/language';
+import { withAddress, type FormOfAddress } from '@/lib/address';
+import { todayIn } from '@/lib/dates';
+import { getLocale, getMessages } from '@/server/i18n';
+import type { Viewer } from '@/server/viewer';
+
+// Cuántas tareas pendientes se ven en el inicio (P-C04).
+const NEXT_TASKS = 3;
+
+/**
+ * P-C04 Inicio del cliente. Hasta la entrega dice que el asesor prepara el plan; después lleva a Mi
+ * plan. Siempre puede registrar el gasto del mes y, si el asesor agregó tareas, ve las próximas.
+ */
+export async function ClientHome({ viewer }: { viewer: Extract<Viewer, { role: 'client' }> }) {
+  const t = await getMessages();
+  // El nombre va aparte para marcarlo como no traducible.
+  const [greetingBefore, greetingAfter] = t.clientHome.greeting.split('{name}');
+  const [deliveries, actionItems, documents] = await Promise.all([
+    listDeliveries(viewer.clientId),
+    loadActionItems(viewer.clientId),
+    loadDocuments(viewer.clientId),
+  ]);
+  const delivered = (deliveries?.length ?? 0) > 0;
+  // RLS: el cliente solo recibe las notas publicadas.
+  const notesPublished = documents?.notas !== undefined;
+  const nextTasks = (actionItems ?? [])
+    .filter((item) => item.status !== 'hecho')
+    .slice(0, NEXT_TASKS);
+
+  return (
+    <main className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-6 px-4 py-10 text-center">
+      <Image src="/icons/icon-192.png" alt="" width={96} height={96} priority unoptimized />
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-semibold text-balance wrap-anywhere">
+          {greetingBefore}
+          <span translate="no">{viewer.displayName}</span>
+          {greetingAfter}
+        </h1>
+        <p className="text-lg text-text-muted">
+          {delivered
+            ? t.myPlan.ready[viewer.formOfAddress]
+            : t.clientHome.preparing[viewer.formOfAddress]}
+        </p>
+      </div>
+      {delivered ? (
+        <Link href="/mi-plan" className={`w-full ${primaryButton} ${linkButton}`}>
+          {t.myPlan.link[viewer.formOfAddress]}
+        </Link>
+      ) : notesPublished ? (
+        <Link href="/mi-plan" className={`w-full ${primaryButton} ${linkButton}`}>
+          {t.documents.view.notesTitle[viewer.formOfAddress]}
+        </Link>
+      ) : null}
+      <Link href="/control-mensual" className={`w-full ${secondaryButton} ${linkButton}`}>
+        {t.clientHome.spendingLink}
+      </Link>
+      {nextTasks.length > 0 ? (
+        <NextTasks
+          tasks={nextTasks}
+          formOfAddress={viewer.formOfAddress}
+          countryCode={viewer.countryCode}
+        />
+      ) : null}
+      <Link href="/mis-datos" className={`inline-flex items-center ${textButton}`}>
+        {t.myData.link}
+      </Link>
+      <Link href="/privacidad-y-datos" className={`inline-flex items-center ${textButton}`}>
+        {t.clientHome.privacyLink}
+      </Link>
+      <SignOutButton />
+      <LanguageSwitcher className="justify-center" />
+      <p className="text-sm text-text-muted">{t.scope.notInvestmentAdvice}</p>
+    </main>
+  );
+}
+
+/** Las próximas tareas pendientes del plan de acción, con su fecha límite y si está vencida. */
+async function NextTasks({
+  tasks,
+  formOfAddress,
+  countryCode,
+}: {
+  tasks: readonly ActionItemRow[];
+  formOfAddress: FormOfAddress;
+  countryCode: string;
+}) {
+  const t = await getMessages();
+  const text = withAddress(t.clientHome, formOfAddress);
+  const locale = await getLocale(countryCode);
+  const today = todayIn(countryCode);
+  return (
+    <section aria-labelledby="next-tasks-title" className="flex w-full flex-col gap-2 text-left">
+      <h2 id="next-tasks-title" className="font-semibold">
+        {text.tasksTitle}
+      </h2>
+      <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
+        {tasks.map((task) => (
+          <li key={task.id}>
+            <Link
+              href={`/tareas/${task.id}`}
+              className={`flex min-h-12 flex-col gap-1 rounded-xl p-4 hover:bg-surface ${focusRing}`}
+            >
+              <span className="font-medium wrap-anywhere">{task.title}</span>
+              {task.due_date ? (
+                <span className="text-sm text-text-muted">
+                  {text.dueOn.replace('{date}', formatDate(task.due_date, locale, 'UTC'))}
+                </span>
+              ) : null}
+              {isOverdue({ dueDate: task.due_date, status: 'pendiente' }, today) ? (
+                <StatusLabel status="alert" label={text.overdue} />
+              ) : null}
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <Link href="/tareas" className={`self-start ${textButton} ${linkButton}`}>
+        {text.tasksLink}
+      </Link>
+    </section>
+  );
+}

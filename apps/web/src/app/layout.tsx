@@ -4,6 +4,7 @@ import { Livvic } from 'next/font/google';
 import { darkTheme, lightTheme, themeToCssVariables } from '@miluca/ui';
 
 import { ErrorTextProvider } from '@/components/error-text';
+import { siteUrl } from '@/lib/site-url';
 import { getBaseMessages, getLanguage } from '@/server/i18n';
 
 import './globals.css';
@@ -11,6 +12,8 @@ import './globals.css';
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getBaseMessages();
   return {
+    // Base de las direcciones absolutas: la imagen para compartir y la URL canónica del landing.
+    metadataBase: siteUrl(),
     title: t.app.name,
     description: t.app.tagline,
     applicationName: t.app.name,

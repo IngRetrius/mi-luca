@@ -2,6 +2,7 @@ packages:
   - apps/*
   - packages/*
   - tests/*
+  - tools/landing-screenshots
 
 # pnpm 12: dependencias a las que se permite (true) o no (false) ejecutar scripts de instalación
 allowBuilds:

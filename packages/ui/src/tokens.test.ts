@@ -15,6 +15,10 @@ const textPairs = (theme: Theme): Array<[string, string, string]> => [
   ['estado bien sobre fondo', theme.statusOk, theme.bg],
   ['estado atención sobre fondo', theme.statusWarning, theme.bg],
   ['estado alerta sobre fondo', theme.statusAlert, theme.bg],
+  ['título de marca sobre fondo', theme.brand, theme.bg],
+  ['título de marca sobre superficie', theme.brand, theme.surface],
+  ['botón de marca', theme.onBrand, theme.brand],
+  ['número sobre el acento', theme.onAccent, theme.accent],
 ];
 
 describe.each([
@@ -26,10 +30,22 @@ describe.each([
   });
 });
 
+describe('acento de la marca', () => {
+  it('nunca es texto sobre fondos claros: no llega a 3:1 sobre blanco', () => {
+    expect(contrastRatio(lightTheme.accent, lightTheme.bg)).toBeLessThan(3);
+  });
+
+  it('en modo oscuro se distingue del fondo como elemento gráfico (3:1)', () => {
+    expect(contrastRatio(darkTheme.accent, darkTheme.bg)).toBeGreaterThanOrEqual(3);
+  });
+});
+
 describe('contrastRatio', () => {
   it('reproduce los valores documentados', () => {
     expect(contrastRatio(palette.brand900, palette.white)).toBeCloseTo(12.46, 2);
     expect(contrastRatio(palette.brand400, palette.white)).toBeCloseTo(2.46, 2);
+    expect(contrastRatio(palette.brandNavy, palette.white)).toBeCloseTo(14.75, 2);
+    expect(contrastRatio(palette.brandNavy, palette.brandOrange)).toBeCloseTo(4.96, 2);
   });
 });
 

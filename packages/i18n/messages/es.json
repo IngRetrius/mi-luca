@@ -12,6 +12,7 @@
     "invitation": "Invitación",
     "install": "Agregar a inicio",
     "privacy": "Privacidad y datos",
+    "publicPrivacy": "Aviso de privacidad",
     "clients": "Clientes",
     "newClient": "Nuevo cliente",
     "client": "Cliente",
@@ -3305,5 +3306,139 @@
     "expensiveDebtFirst": "Tiene deuda cara: conviene la etapa de deudas primero. El control de calidad no deja entregar inversión mientras exista.",
     "documentsTitle": "Carta y entrega",
     "documentsIntro": "Sirven para cualquier etapa: la carta y las notas van con cada entrega."
+  },
+  "landing": {
+    "metaTitle": "MiLuca | Planificación financiera personal",
+    "metaDescription": "Entiende tu dinero: organízalo, sal de deudas y planea tus metas, con un acompañamiento paso a paso y un reporte claro de cada etapa.",
+    "skipToContent": "Ir al contenido",
+    "header": {
+      "homeLabel": "MiLuca, inicio",
+      "signIn": "Entrar"
+    },
+    "hero": {
+      "tagline": "Planificación financiera personal",
+      "title": "Entiende tu dinero: organízalo, sal de deudas y planea tus metas.",
+      "lead": "Te acompaño paso a paso, con un método claro y sin juicios, para que los intereses jueguen a tu favor y no en tu contra. Cada etapa termina en un reporte que consultas desde tu teléfono.",
+      "trust": "Sin compromiso. Nunca te pido claves ni números de tus cuentas."
+    },
+    "contact": {
+      "whatsapp": "Escríbeme por WhatsApp",
+      "email": "Escríbeme por correo",
+      "firstSession": "Pedir una primera conversación",
+      "moreInfoMessage": "Hola, vi la página de MiLuca y quiero saber más.",
+      "firstSessionMessage": "Hola, vi la página de MiLuca y quiero pedir una primera conversación."
+    },
+    "stages": {
+      "title": "Cómo funciona",
+      "intro": "Empiezas por lo que más te preocupa. Cada etapa es independiente y termina con un reporte claro.",
+      "solves": "Qué resuelve",
+      "receives": "Qué recibes",
+      "items": [
+        {
+          "name": "Presupuesto y bolsillos",
+          "solves": "A dónde va tu dinero, cuánto te sobra y cómo repartirlo, con un fondo de emergencia primero.",
+          "receives": "Tu presupuesto, tu fondo de emergencia y el aporte a cada bolsillo."
+        },
+        {
+          "name": "Deudas",
+          "solves": "Cuánto te cuestan, en qué orden pagarlas y en qué mes quedas libre.",
+          "receives": "Tu plan de pago, deuda por deuda, y lo que ahorras en intereses."
+        },
+        {
+          "name": "Patrimonio, protección y metas",
+          "solves": "Lo que tienes, cómo protegerlo y cuánto apartar para cada meta.",
+          "receives": "Tu patrimonio, una referencia de seguro de vida y el aporte mensual a cada meta."
+        }
+      ]
+    },
+    "preview": {
+      "title": "Así se ve tu plan",
+      "note": "Ejemplo con datos inventados.",
+      "screens": {
+        "budget": {
+          "caption": "Tu reporte de presupuesto",
+          "alt": "Reporte de presupuesto en un teléfono: ingreso y gasto del año, lo que sobra, la meta del fondo de emergencia y el aporte de cada mes a cada bolsillo."
+        },
+        "debts": {
+          "caption": "Tu plan de pago de deudas",
+          "alt": "Plan de pago de deudas en un teléfono: el orden de pago, el mes en que sale cada deuda, los intereses y lo que se ahorra frente a pagar solo la cuota."
+        },
+        "myData": {
+          "caption": "Tus datos, siempre al día",
+          "alt": "Pantalla Mis datos en un teléfono: ingresos, monedas, gastos y bolsillos, agrupados por los temas que se trabajan con el asesor."
+        }
+      }
+    },
+    "principles": {
+      "title": "Cómo trabajo",
+      "items": [
+        "Primero la tranquilidad: que te sobre cada mes, deudas caras bajo control y un fondo de emergencia.",
+        "Respeto tu estilo de vida: te muestro costos y alternativas, no te impongo recortes.",
+        "Todo tu dinero tiene un destino: gastos, bolsillos, ahorro o inversión.",
+        "Revisamos con datos reales a los 30 y a los 90 días."
+      ]
+    },
+    "about": {
+      "title": "Sobre mí",
+      "intro": "Soy {name} y estoy detrás de MiLuca.",
+      "story": [
+        "Quiero ayudarte a entender tus propias finanzas y compartir contigo lo que he aprendido. Lo primero es organizarte: saber a dónde va tu dinero y darle un destino a todo.",
+        "Después, que veas que a los bancos se les puede ganar en su propio juego. No son el enemigo, pero hay que saber tenerlos de aliados: entender cómo los intereses pueden jugar en tu contra o a tu favor, y usar el crédito con criterio.",
+        "Estudio el último año de Ingeniería de Sistemas, con énfasis en datos aplicados a las finanzas, y trabajo con bases de datos todos los días. Esa forma de mirar los números es la que traigo a tu plan."
+      ],
+      "website": "Conoce mi trabajo en {site}."
+    },
+    "privacy": {
+      "title": "Tus datos y los límites",
+      "items": [
+        "Nunca te pido números de cuenta, de tarjeta ni contraseñas de tus bancos.",
+        "Solo tú y yo vemos tu información, y puedes pedir que la borre cuando quieras.",
+        "No recomiendo productos ni entidades financieras. Las proyecciones son ilustrativas, no garantizadas.",
+        "Impuestos, pensión y temas legales los confirmas con el profesional correspondiente."
+      ],
+      "link": "Lee el aviso de privacidad"
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "items": [
+        {
+          "question": "¿Qué necesito para empezar?",
+          "answer": "Una conversación y una idea de tus ingresos y gastos. Si tienes tus extractos de los últimos meses, mejor, pero no hace falta."
+        },
+        {
+          "question": "¿Es en persona o en línea?",
+          "answer": "En línea, por videollamada. Tus datos y tus reportes quedan en la app para que los consultes cuando quieras."
+        },
+        {
+          "question": "¿Tengo que conectar mis cuentas bancarias?",
+          "answer": "No. Los datos los registramos juntos, con valores aproximados; nunca se conecta ningún banco."
+        },
+        {
+          "question": "¿Me vas a vender algún producto?",
+          "answer": "No. No recomiendo productos ni entidades financieras."
+        },
+        {
+          "question": "¿Puedo hacer solo una etapa?",
+          "answer": "Sí. Cada etapa es independiente; empiezas por la que más te importe."
+        }
+      ]
+    },
+    "closing": {
+      "title": "¿Hablamos?",
+      "body": "Cuéntame qué te gustaría ordenar primero."
+    },
+    "footer": {
+      "linksLabel": "Enlaces",
+      "privacy": "Aviso de privacidad",
+      "signIn": "Entrar",
+      "contact": "Contacto: {email}"
+    }
+  },
+  "publicPrivacy": {
+    "title": "Aviso de privacidad",
+    "intro": "Al empezar, cada persona acepta dentro de la app el aviso de su país. Estos son los avisos vigentes.",
+    "notPublished": "Todavía no hay un aviso publicado para este país.",
+    "unavailable": "No se pudieron cargar los avisos. Intenta de nuevo en unos minutos.",
+    "contact": "Para consultar, corregir o borrar tus datos, escribe a {email}."
   }
 }

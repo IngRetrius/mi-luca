@@ -334,3 +334,18 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Idioma de respuesta del agente | `<idioma_de_respuesta>` | Etiqueta de cada mensaje al agente de captura |
 | Pantalla de resumen | `WideScreen` | ADR 0023; formularios y lectura con `Screen` |
 | Lista en rejilla | `gridList`, `gridListItem` | Recuadro con divisores en el celular, tarjetas desde la tableta |
+| Landing | `LandingPage`, `features/landing`, grupo de textos `landing` | P-G06; la raíz sin sesión (ADR 0026) |
+| Inicio del cliente | `ClientHome`, `features/client-home` | P-C04; la raíz con sesión de cliente |
+| Privacidad pública | `/privacidad`, `PublicPrivacyPage`, grupo de textos `publicPrivacy` | P-G07; los avisos vigentes sin sesión. La de la app es `/privacidad-y-datos` |
+| Cabecera y pie públicos | `PublicHeader`, `PublicFooter`, `SkipLink` | Compartidos por el landing y la privacidad pública |
+| Sección pública | `LandingSection` (`tone`: `plain`, `tinted`; `layout`: `split`, `stacked`), `SectionTitle`, `SectionIntro` | En el escritorio, título a la izquierda y contenido a la derecha |
+| Columna de las páginas públicas | `pageColumn`, `readingWidth` | Mismo borde izquierdo en cabecera, secciones y pie |
+| Número de WhatsApp del landing | `CONTACT_WHATSAPP`, `whatsappNumber`, `configuredWhatsappNumber` | Variable de entorno, no va en el repositorio |
+| Enlace de contacto | `contactLink`, `ContactLink` (`whatsapp`, `email`), `CONTACT_EMAIL` | WhatsApp con el mensaje escrito o, sin número, el correo del responsable |
+| Botones de contacto | `WriteMeButton`, `FirstSessionButton` | Escríbeme por WhatsApp y Pedir una primera conversación |
+| Perfil del asesor | `ADVISOR`, `AdvisorProfile` | Nombre y foto de "Sobre mí" |
+| Capturas del landing | `PREVIEW_SCREENS`, `screenshotSrc`, `SCREENSHOT_SIZE`, `PhoneFrame` | WebP de `tools/landing-screenshots` en `public/landing/` |
+| URL pública | `siteUrl` | Dominio de producción de Vercel; base de los metadatos, `robots.txt` y `sitemap.xml` |
+| Colores de la marca | `brand`, `on-brand`, `accent`, `on-accent`; `palette.brandNavy`, `palette.brandOrange` | Solo en las páginas públicas (`tokens.md`, sección 5) |
+| Botones de la marca | `brandButton`, `brandSecondaryButton` | `ui-classes.ts`; solo en las páginas públicas |
+| Caso inventado de las capturas | `prepareCase`, `fictitious-case.ts` | Solo en Supabase local; nunca datos de clientes |

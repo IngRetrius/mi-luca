@@ -15,7 +15,7 @@ miluca/
 │       ├── public/               Manifiesto, iconos, pantallas de inicio
 │       └── src/
 │           ├── app/              Solo rutas, layouts y páginas
-│           ├── features/         Un módulo por área del dominio (29 módulos; `assistant` es la IA del asesor, ADR 0012)
+│           ├── features/         Un módulo por área del dominio (35 módulos; `assistant` es la IA del asesor, ADR 0012; `landing`, las páginas públicas, ADR 0026)
 │           ├── components/       Componentes de la app compartidos entre módulos
 │           ├── lib/              Clientes de Supabase, service worker, utilidades técnicas
 │           ├── server/           Código solo de servidor: guardas, impacto de cambios, correo
@@ -37,6 +37,7 @@ miluca/
 │   └── tests/                    pgTAP: políticas y disparadores
 ├── tests/e2e/                    Playwright en viewport de celular
 ├── tools/excel-extractor/        Extractor de fórmulas e inventario (Python)
+├── tools/landing-screenshots/    Capturas del landing con un caso inventado en Supabase local (ADR 0026)
 ├── referencia/                   Protocolo y plantillas; casos/ fuera de git
 └── docs/                         Este plan, ADR, anexos, diseño, legal
 ```

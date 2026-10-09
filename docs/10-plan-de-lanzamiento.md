@@ -81,6 +81,7 @@ Criterios de aceptación:
   | 2. Deudas | D (deudas) | Saldo, tasa, cuota y cuotas pendientes de cada deuda |
   | 3. Patrimonio, protección y metas | 17 a 20 (patrimonio), F (protección) y 25 a 27 (metas y perfil de inversión) | Valor de inmuebles, vehículos e inversiones; seguros que tiene; metas con valor y fecha |
 
+- [ ] **Landing informativo** en `mi-luca.vercel.app`, según [11-plan-del-landing.md](11-plan-del-landing.md), antes del primer amigo. Construido y verificado en local el 09/10/2026 (ADR 0026), con la foto, la historia y los textos aprobados por el asesor (G13); falta `CONTACT_WHATSAPP` en Vercel y publicar.
 - [ ] **Mensaje de invitación** fuera de la app: qué es (planificación y educación financiera, gratis por ahora), qué no es (no recomienda productos ni entidades, las cifras son ilustrativas) y qué datos nunca se piden. P-C01 dice lo mismo dentro de la app.
 
 ## 6. L3. Piloto

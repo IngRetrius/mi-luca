@@ -3,9 +3,8 @@ import { expect, test } from '@playwright/test';
 // Estas pruebas no necesitan Supabase: CI corre sin claves. El inicio de sesión con contraseña y el
 // aviso entre ventanas se verificaron contra Supabase local (ver apps/web/README.md).
 
-test('sin sesión, el inicio lleva a Entrar', async ({ page }) => {
-  await page.goto('/');
-  await expect(page).toHaveURL(/\/entrar$/);
+test('Entrar muestra Google, el correo y la contraseña', async ({ page }) => {
+  await page.goto('/entrar');
   await expect(page.getByRole('link', { name: 'Continuar con Google' })).toBeVisible();
   await expect(page.getByLabel('Correo', { exact: true })).toBeVisible();
   await expect(page.getByLabel('Contraseña', { exact: true })).toBeVisible();
