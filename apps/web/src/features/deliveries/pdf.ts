@@ -5,11 +5,30 @@ import { lightTheme } from '@miluca/ui';
 
 import { getClientDetail } from '@/features/clients';
 import { withAddress } from '@/lib/address';
+import { createClient } from '@/lib/supabase/server';
 import { getCaseMessages, getLanguage, getLocale } from '@/server/i18n';
 
-import { planDetailFigures } from './plan-details';
+import { planPdfTables } from './pdf-tables';
 import { formatFigure, planFigures } from './plan-figures';
 import { listDeliveries, loadDelivery } from './queries';
+
+/** La sección de la carta que va arriba del PDF, como en Mi plan (ADR 0028). */
+const SUMMARY_SECTION = 'executive_summary';
+
+/**
+ * El nombre con que firma el asesor que entregó el plan (su marca, si la tiene). El cliente lo lee
+ * mientras su asesor tenga acceso (RLS); si no, el PDF sale sin firma.
+ */
+async function advisorName(userId: string | null): Promise<string | null> {
+  if (!userId) return null;
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('advisors')
+    .select('display_name, brand_name')
+    .eq('user_id', userId)
+    .maybeSingle();
+  return data?.brand_name || data?.display_name || null;
+}
 
 /** Nombre del archivo: el que se ve al descargar y uno solo con ASCII para navegadores viejos. */
 function contentDisposition(t: Messages, label: string): string {
@@ -22,8 +41,9 @@ function contentDisposition(t: Messages, label: string): string {
 }
 
 /**
- * El PDF de un plan entregado (P-A14, P-C05): la carta y las notas con las cifras del día de la
- * entrega, en el trato del cliente, y las cifras del plan. Se arma al pedirlo con lo que quedó fijo
+ * El PDF de un plan entregado (P-A14, P-C05): el resumen de la carta, cómo va el plan, los bolsillos,
+ * las deudas y las metas (ADR 0028); después el resto de la carta y las notas con las cifras del día
+ * de la entrega, en el trato del cliente, y las cifras del plan. Se arma al pedirlo con lo que quedó fijo
  * en la entrega, así que siempre es el mismo contenido (ADR 0020). `deliveryId` null es el más
  * reciente. 404 si no existe o no hay acceso (RLS).
  */
@@ -42,24 +62,30 @@ export async function deliveryPdfResponse(
   }
 
   // El PDF es del cliente: su vocabulario y su trato, aunque lo descargue el asesor.
-  const [t, language, locale] = await Promise.all([
+  const [t, language, locale, advisor] = await Promise.all([
     getCaseMessages({ address: client.formOfAddress, country: client.countryCode }),
     getLanguage(),
     getLocale(client.countryCode),
+    advisorName(delivery.deliveredBy),
   ]);
   const view = withAddress(t.documents.view, client.formOfAddress);
+  const summary = delivery.documents.letter.find((section) => section.key === SUMMARY_SECTION);
   const date = (value: string) => formatDate(value, locale, 'UTC');
   const figures = delivery.keyFigures;
   // La librería de PDF se carga solo al pedir un PDF, no en cada pantalla que usa este módulo.
   const { renderLetterPdf } = await import('@miluca/exporters/pdf');
   const pdf = await renderLetterPdf({
-    title: view.letterTitle,
+    title: withAddress(t.myPlan, client.formOfAddress).title,
     clientName: client.displayName,
     planLabel: delivery.label,
     meta: t.plan.deliveredOn
       .replace('{date}', date(delivery.deliveredOn))
       .replace('{cutoff}', date(delivery.cutoffDate)),
-    letter: delivery.documents.letter,
+    advisor: advisor ? t.plan.pdf.preparedBy.replace('{name}', advisor) : null,
+    summary: summary ? { title: null, text: summary.text } : null,
+    tables: planPdfTables(delivery, t, locale),
+    letter: delivery.documents.letter.filter((section) => section.key !== SUMMARY_SECTION),
+    letterTitle: view.letterTitle,
     notesTitle: view.notesDeliveredTitle,
     notes: delivery.documents.notes,
     figuresTitle: t.plan.figuresTitle,
@@ -74,8 +100,7 @@ export async function deliveryPdfResponse(
           delivery.baseCurrency,
           t.keyFigureMonths,
         ),
-      }))
-      .concat(planDetailFigures(delivery, t, locale)),
+      })),
     footer: t.plan.currencyNote.replace('{currency}', delivery.baseCurrency),
     pageLabel: t.plan.pdf.pageLabel,
     scope: t.plan.scope,

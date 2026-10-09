@@ -398,6 +398,7 @@ const debt = recordEntity({
       frechUntil: rn(row, 'frech_until_installment')
         ? String(rn(row, 'frech_until_installment'))
         : '',
+      inArrears: checkbox(rb(row, 'in_arrears')),
     };
   },
   defaults: (ctx) => ({ currency: ctx.baseCurrency, acceptsExtra: 'si' }),
@@ -430,6 +431,10 @@ const debt = recordEntity({
             : 'no',
       ],
       ['extraFrom', str(input, 'extra_from_date')],
+      [
+        'inArrears',
+        bool(input, 'in_arrears') === undefined ? undefined : checkbox(bool(input, 'in_arrears')!),
+      ],
       ['note', str(input, 'note')],
     ]),
   // Como el cliente: el lugar en el orden manual es criterio aparte y queda como esté.

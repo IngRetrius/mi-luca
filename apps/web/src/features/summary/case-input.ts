@@ -25,6 +25,7 @@ import {
   type DebtInput,
   type EngineMode,
   type FiscalThreshold,
+  type ThresholdBasis,
   type FxContext,
   type GoalInput,
   type GrowthRangeBand,
@@ -127,6 +128,7 @@ export interface CaseRows {
     | 'min_payment'
     | 'accepts_extra'
     | 'extra_from_date'
+    | 'in_arrears'
     | 'manual_order'
     | 'first_installment_date'
     | 'first_installment_number'
@@ -285,13 +287,27 @@ function monthFlags(values: readonly number[] | undefined): MonthFlags {
  * Un umbral en la moneda del parámetro pasa a la moneda base del cliente con su tasa. Sin tasa no
  * se compara (sale null); el país publica el valor y la tasa la pone el cliente.
  */
+/**
+ * Con qué se compara cada umbral publicado (ADR 0027): los topes para declarar renta de Colombia
+ * miran el ingreso, las compras o el patrimonio bruto. Los demás, como el de España, se comparan con
+ * el ingreso y el gasto, como la plantilla.
+ */
+const THRESHOLD_BASIS: Readonly<Record<string, ThresholdBasis>> = {
+  'tax.filing_gross_income': 'income',
+  'tax.filing_purchases': 'spending',
+  'tax.filing_gross_assets': 'assets',
+};
+
 function threshold(row: CaseRows['thresholds'][number], fx: FxContext): FiscalThreshold | null {
   if (typeof row.value !== 'number') return null;
+  const basis = THRESHOLD_BASIS[row.key];
+  const withBasis = (annualLimit: number): FiscalThreshold =>
+    basis ? { code: row.key, annualLimit, basis } : { code: row.key, annualLimit };
   if (!row.unit || !CURRENCY.test(row.unit) || row.unit === fx.baseCurrency) {
-    return { code: row.key, annualLimit: row.value };
+    return withBasis(row.value);
   }
   const rate = fx.ratesToBase[row.unit];
-  return rate === undefined ? null : { code: row.key, annualLimit: row.value * rate };
+  return rate === undefined ? null : withBasis(row.value * rate);
 }
 
 /** Un ingreso guardado (o el del formulario, en la vista previa) como lo recibe el motor. */
@@ -345,6 +361,7 @@ function toDebtInput(
     acceptsExtra: row.accepts_extra,
     extraFrom: row.extra_from_date,
     manualOrder: row.manual_order,
+    inArrears: row.in_arrears,
   };
   if (row.first_installment_date === null) return debt;
   return {

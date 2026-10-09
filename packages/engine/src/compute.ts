@@ -74,6 +74,7 @@ import {
   projection,
   PROJECTION_YEARS,
   riskProfile,
+  suggestedVariableIncome,
   type CurrentInvestments,
   type GrowthAllocation,
   type GrowthRangeBand,
@@ -393,10 +394,6 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
   const budget = computeBudget(budgetItems, ssPayments, fx);
 
   const personal = native ? personalIndicators(incomes, budget) : null;
-  const costOfLiving = computeCostOfLiving(budgetItems, budget, fx, {
-    thresholds: input.fiscalThresholds,
-    ownIncome: incomes.annual,
-  });
   const implied = native ? impliedThirdPartyIncome(budget) : null;
 
   const receivables = computeReceivables(input.receivables, input.cutoffDate, flowYear, fx);
@@ -447,6 +444,7 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
         pctInvestConfirmed: parameters.pctInvestConfirmed,
         pctInvestPending: parameters.pctInvestPending,
       },
+      { twoSided: native },
     );
 
     const pockets = computePockets(
@@ -536,6 +534,12 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
     },
     fx,
   );
+  // Después del patrimonio: los umbrales de patrimonio se comparan con los activos (ADR 0027).
+  const costOfLiving = computeCostOfLiving(budgetItems, budget, fx, {
+    thresholds: input.fiscalThresholds,
+    ownIncome: incomes.annual,
+    grossAssets: netWorth.totalAssets,
+  });
   const dependents = input.profile.dependents > 0;
   const lifeSettings = native ? input.lifeInsurance : { supportYears: null, annualToCover: null };
   const lifeInsurance = lifeInsuranceSum({
@@ -555,7 +559,8 @@ export function compute(input: CaseInput, options: ComputeOptions): CaseResult {
     input.riskProfile.answers,
     {
       variableIncome:
-        input.riskProfile.variableIncome ?? input.profile.clientType === 'independiente_variable',
+        input.riskProfile.variableIncome ??
+        suggestedVariableIncome(input.profile.clientType, input.incomes, native),
       dependentsWithoutLifeInsurance:
         input.riskProfile.dependentsWithoutLifeInsurance ??
         (dependents && insurance.lifeStatus !== 'si'),

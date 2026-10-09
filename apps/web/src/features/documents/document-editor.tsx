@@ -38,6 +38,10 @@ export interface DocumentEditorText {
   readonly formatHint: string;
   readonly preview: string;
   readonly edit: string;
+  readonly draft: string;
+  readonly draftHint: string;
+  readonly draftDone: { readonly one: string; readonly other: string };
+  readonly draftNone: string;
   readonly previewEmpty: string;
   readonly save: string;
   readonly saving: string;
@@ -54,13 +58,15 @@ export interface DocumentEditorText {
 
 /**
  * P-A13 Notas y carta: un campo por sección, "Insertar cifra" donde quedó el cursor y "Ver como el
- * cliente" con las cifras de hoy. Las notas además se publican o se dejan de mostrar.
+ * cliente" con las cifras de hoy. Las notas además se publican o se dejan de mostrar. La carta
+ * ofrece un borrador de las etapas activas que solo llena las secciones vacías (ADR 0028).
  */
 export function DocumentEditor({
   text,
   sections,
   initial,
   figures,
+  drafts,
   publishable,
   published,
   action,
@@ -69,6 +75,8 @@ export function DocumentEditor({
   sections: readonly EditorSection[];
   initial: Readonly<Record<string, string>>;
   figures: readonly InsertableFigure[];
+  /** Texto inicial sugerido por sección; null en las notas. */
+  drafts: Readonly<Record<string, string>> | null;
   /** Las notas se publican aparte; la carta va con el plan entregado. */
   publishable: boolean;
   published: boolean;
@@ -85,6 +93,7 @@ export function DocumentEditor({
   // Dónde quedó el cursor en cada sección al salir de ella, para insertar ahí la cifra.
   const cursor = useRef<Record<string, { start: number; end: number }>>({});
   const [preview, setPreview] = useState<readonly ReadySection[] | null>(null);
+  const [draftStatus, setDraftStatus] = useState('');
   // El resultado vigente cuando se editó por última vez (como en el control mensual).
   const [editedAt, setEditedAt] = useState<DocumentState | null | undefined>(undefined);
   const dirty = editedAt !== undefined && (editedAt === state || !state?.saved);
@@ -114,6 +123,27 @@ export function DocumentEditor({
     cursor.current[key] = { start: area.selectionStart, end: area.selectionEnd };
     area.focus();
     setEditedAt(state);
+  };
+  // Pone el borrador solo donde no hay nada escrito: nunca reemplaza lo del asesor.
+  const fillDraft = () => {
+    if (!drafts) return;
+    let filled = 0;
+    for (const section of sections) {
+      const draft = drafts[section.key];
+      const area = document.getElementById(areaId(section.key));
+      if (!draft || !(area instanceof HTMLTextAreaElement) || area.value.trim() !== '') continue;
+      area.value = draft;
+      filled += 1;
+    }
+    if (filled > 0) setEditedAt(state);
+    setDraftStatus(
+      filled === 0
+        ? text.draftNone
+        : (filled === 1 ? text.draftDone.one : text.draftDone.other).replace(
+            '{count}',
+            String(filled),
+          ),
+    );
   };
   const togglePreview = () => {
     if (preview) {
@@ -156,14 +186,36 @@ export function DocumentEditor({
           </p>
         ) : null}
 
-        <button
-          type="button"
-          onClick={togglePreview}
-          aria-pressed={preview !== null}
-          className={`self-start ${secondaryButton}`}
-        >
-          {preview ? text.edit : text.preview}
-        </button>
+        <div className="flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={togglePreview}
+            aria-pressed={preview !== null}
+            className={secondaryButton}
+          >
+            {preview ? text.edit : text.preview}
+          </button>
+          {drafts && !preview ? (
+            <button
+              type="button"
+              onClick={fillDraft}
+              aria-describedby={`${formId}-draft-hint`}
+              className={secondaryButton}
+            >
+              {text.draft}
+            </button>
+          ) : null}
+        </div>
+        {drafts && !preview ? (
+          <div className="-mt-3 flex flex-col gap-1 text-sm">
+            <p id={`${formId}-draft-hint`} className="text-text-muted">
+              {text.draftHint}
+            </p>
+            <p role="status" className="font-medium empty:hidden">
+              {draftStatus}
+            </p>
+          </div>
+        ) : null}
 
         {preview ? (
           <section className="rounded-xl border border-border p-4">

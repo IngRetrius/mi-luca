@@ -70,6 +70,11 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Supuestos del plan, pantalla | `/clientes/[id]/supuestos`, `PlanSettingsScreen` | Criterio del asesor (`case_settings`) |
 | Flujo, fondo, bolsillos, cobros, patrimonio, prueba de realidad (rutas) | `/flujo`, `/fondo`, `/bolsillos`, `/cobros`, `/patrimonio`, `/prueba-de-realidad` | Dentro de `/clientes/[id]` |
 | Semáforo | `StatusLabel` (`ok`, `warning`, `alert`) | Icono, color y texto: Bien, Atención, Alerta |
+| Cómo va el plan | `planIndicators`, `PlanIndicators`, `IndicatorSummary` | Indicadores del plan entregado con semáforo y referencia del protocolo (ADR 0028) |
+| Tabla de bolsillos | `pocketTable`, `PlanPockets` | Lo que se pasa a cada bolsillo al mes, en Mi plan y en el PDF |
+| Estado del fondo con el plan secuencial | `fundPlanState`, `fundPlanText` | Completo, se completa en un mes o no se completa con el sobrante de hoy |
+| Borrador de la carta | `letterDrafts` | Texto inicial de las etapas activas para las secciones vacías (ADR 0028) |
+| Cuentas y saldos (paso de la etapa 1) | paso `accounts` | Activos líquidos: el saldo que reparte la etapa 1 |
 | Lista de cifras | `FigureList` | Etiqueta y valor alineado a la derecha |
 | Parece un número de cuenta | `looksLikeAccountNumber` | Ocho cifras seguidas o más; no se guardan (regla 9) |
 | Porcentaje escrito | `parsePercent`, `percentToText` | De 0 a 100 en el campo; razón de 0 a 1 en la base |
@@ -110,6 +115,9 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Nivel esencial, básico, actual | `CostLevel`: `essential`, `basic`, `current` | Niveles del costo de vida |
 | Valor del nivel básico | `basicAmount` / `basic_amount` | Valor por pago, con la frecuencia y la moneda de la partida; lo propone el asesor |
 | Umbral fiscal | `FiscalThreshold` | Parámetro del país; cuáles aplican se decide por cliente |
+| Base del umbral | `ThresholdBasis` (`income`, `spending`, `assets`) | Con qué se compara: ingreso propio, gasto de cada nivel o patrimonio bruto (ADR 0027) |
+| Topes para declarar renta (Colombia) | `tax.filing_gross_income`, `tax.filing_purchases`, `tax.filing_gross_assets` | 1.400 y 4.500 UVT del año gravable, en pesos |
+| Patrimonio bruto | `netWorth.totalAssets` / `grossAssetsExceeds` | Todos los activos, inversiones y cobros, sin restar deudas |
 | Flujo anual | `cashflow` / `monthlyFlow` | Entradas y salidas de cada mes del año del flujo (`Flujo anual!E7:Q19`) |
 | Valores por mes, fila del flujo | `MonthValues`, `FlowRow` | Doce valores de enero a diciembre; la fila lleva además el total del año |
 | Balance del mes | `balance` | Entradas menos salidas (`Flujo anual!E19:P19`) |
@@ -123,7 +131,8 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Destino del sobrante | `surplusDestination` | A deudas, a inversión y margen; también los abonos de cobros |
 | Ahorro programado | `programmedSavings` | Cooperativas, fondos, pensión voluntaria |
 | Prueba de realidad | `realityCheck` / `reality_check` | |
-| Estado de la prueba de realidad | `RealityCheckStatus` | pendiente, confirmada, revisar_gastos |
+| Estado de la prueba de realidad | `RealityCheckStatus` | pendiente, confirmada, revisar_gastos y, en modo nativo, revisar_presupuesto (ADR 0027) |
+| Ahorro registrado hoy | `liquidAssets` + `investment.current.total` | Lo que la prueba de realidad ofrece como ahorro de hoy (ADR 0028) |
 | Cuenta por cobrar | `receivable` | |
 | Saldo pendiente en la fecha de corte | `pendingAtCutoff` | `Supuestos!I46:I48` |
 | Abonos recibidos | `receivablesReceived` | Abonos de cobros en cada mes del flujo |
@@ -162,6 +171,9 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Meses hasta completar el fondo | `monthsToComplete`, `completionMonth` | |
 | Deuda | `debt` | |
 | Deuda cara | `expensiveDebt` | Con saldo y tasa en el umbral o más (RN-090) |
+| Cuotas atrasadas o reporte negativo | `in_arrears` / `inArrears`, control `debt_in_arrears` | Marca de la deuda; pide explicar el acuerdo de pago (ADR 0027) |
+| Cuota que no cubre los intereses | `paymentCoversInterest`, control `debt_payment_covers_interest` | Con esa cuota el saldo no baja |
+| Tasa de usura de referencia | `debt.usury_rate` / `UsuryRate`, `usuryStatus` | Parámetro mensual de Colombia; marca deudas cerca o por encima (ADR 0028) |
 | Umbral de deuda cara | `expensiveDebtThreshold` / `expensive_debt_threshold` | |
 | Tasa efectiva anual | `annualRate` | |
 | Cuota mínima | `minPayment` | |

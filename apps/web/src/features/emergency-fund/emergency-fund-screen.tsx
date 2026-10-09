@@ -7,7 +7,7 @@ import { StatusLabel, type Status } from '@/components/status';
 import { loadComputedCase } from '@/features/summary';
 import { getLocale, getMessages } from '@/server/i18n';
 
-const SCENARIOS = ['a', 'b', 'c'] as const;
+import { relevantScenarios } from './scenarios';
 
 /** Semáforo del avance, como `Resumen!D22`: completo, desde la mitad o menos. */
 function progressStatus(progress: number): Status {
@@ -127,31 +127,39 @@ export async function EmergencyFundScreen({ clientId }: { clientId: string }) {
             <h2 id="scenarios-title" className="font-semibold">
               {text.scenariosTitle}
             </h2>
+            <p className="text-sm text-text-muted">{text.scenariosNote}</p>
             <ul className="flex flex-col gap-2">
-              {SCENARIOS.map((id) => {
-                const scenario = fund.scenarios[id];
-                return (
-                  <li key={id} className="flex flex-col gap-2 rounded-xl border border-border p-4">
-                    <h3 className="font-medium">{text.scenarios[id]}</h3>
-                    <FigureList
-                      figures={[
-                        { label: text.keptIncome, value: money(scenario.keptIncome) },
-                        { label: text.monthlyShortfall, value: money(scenario.monthlyShortfall) },
-                      ]}
-                    />
-                    <p className="text-sm">
-                      {scenario.monthsCovered === null
-                        ? text.covered
-                        : text.monthsCovered.replace(
-                            '{months}',
-                            new Intl.NumberFormat(numberLocale(locale), {
-                              maximumFractionDigits: 1,
-                            }).format(scenario.monthsCovered),
-                          )}
-                    </p>
-                  </li>
-                );
-              })}
+              {relevantScenarios(fund.scenarios, computed.result.summary.annualIncome / 12).map(
+                (id) => {
+                  const scenario = fund.scenarios[id];
+                  return (
+                    <li
+                      key={id}
+                      className="flex flex-col gap-2 rounded-xl border border-border p-4"
+                    >
+                      <h3 className="font-medium">{text.scenarios[id]}</h3>
+                      <FigureList
+                        figures={[
+                          { label: text.keptIncome, value: money(scenario.keptIncome) },
+                          { label: text.monthlyShortfall, value: money(scenario.monthlyShortfall) },
+                        ]}
+                      />
+                      <p className="text-sm">
+                        {scenario.monthsCovered === null
+                          ? text.covered
+                          : text.monthsCovered[
+                              scenario.monthsCovered === 1 ? 'one' : 'other'
+                            ].replace(
+                              '{months}',
+                              new Intl.NumberFormat(numberLocale(locale), {
+                                maximumFractionDigits: 1,
+                              }).format(scenario.monthsCovered),
+                            )}
+                      </p>
+                    </li>
+                  );
+                },
+              )}
             </ul>
             <FigureList
               figures={[

@@ -82,6 +82,8 @@ export interface DebtValues {
   /** "si" o "no". */
   readonly acceptsExtra: string;
   readonly extraFrom: string;
+  /** Cuotas atrasadas o reportes negativos (ADR 0027). */
+  readonly inArrears: boolean;
   /** Solo lo escribe el asesor. */
   readonly manualOrder: string;
   readonly note: string;
@@ -107,6 +109,7 @@ export interface DebtRecord {
   readonly min_payment: number;
   readonly accepts_extra: boolean;
   readonly extra_from_date: string | null;
+  readonly in_arrears: boolean;
   readonly manual_order?: number | null;
   readonly note: string | null;
   readonly first_installment_date: string | null;
@@ -154,6 +157,7 @@ export function parseDebt(
     minPayment: text(formData, 'minPayment'),
     acceptsExtra: text(formData, 'acceptsExtra') === 'no' ? 'no' : 'si',
     extraFrom: text(formData, 'extraFrom'),
+    inArrears: formData.get('inArrears') === 'on',
     manualOrder: options.advisor ? text(formData, 'manualOrder') : '',
     note: typeof formData.get('note') === 'string' ? String(formData.get('note')).trim() : '',
     firstInstallmentDate: text(formData, 'firstInstallmentDate'),
@@ -212,6 +216,7 @@ export function parseDebt(
       min_payment: minPayment,
       accepts_extra: acceptsExtra,
       extra_from_date: values.extraFrom || null,
+      in_arrears: values.inArrears,
       ...(options.advisor ? { manual_order: manualOrder } : {}),
       note: values.note || null,
       ...tracking,

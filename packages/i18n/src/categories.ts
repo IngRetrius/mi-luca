@@ -57,3 +57,16 @@ export function categoryLabel(value: string, language: Language): string {
   const index = categoryIndex(value);
   return index === -1 ? value : (KNOWN[language][index] ?? value);
 }
+
+/**
+ * Orden de las categorías al mostrarlas: las conocidas en el orden de la plantilla (Vivienda primero)
+ * y las propias después, por nombre.
+ */
+export function compareCategories(a: string, b: string): number {
+  const ia = categoryIndex(a);
+  const ib = categoryIndex(b);
+  if (ia !== -1 && ib !== -1) return ia - ib;
+  if (ia !== -1) return -1;
+  if (ib !== -1) return 1;
+  return a.localeCompare(b, 'es');
+}

@@ -11,6 +11,9 @@ import { isUuid, requireCaseEditor } from '@/server/case-access';
 import { goalPaths } from './paths';
 import { parseGoal, type GoalErrors, type GoalValues } from './validation';
 
+/** Largo máximo del nombre de un bolsillo (`pockets.name`). */
+const POCKET_NAME_MAX = 60;
+
 export type SaveFormError = 'missingRate' | 'notAllowed' | 'notFound' | 'unavailable';
 
 export interface GoalState {
@@ -65,15 +68,42 @@ export async function saveGoal(
     return { values: parsed.values, errors: {}, formError: 'notFound' };
   }
 
+  // La moneda base va primero (`allowedCurrencies`): el bolsillo nuevo guarda en ella.
+  const baseCurrency = currencies[0]!;
   const supabase = await createClient();
   const { value: result } = await withImpact(
     clientId,
     async () => {
+      let record = parsed.record;
+      if (parsed.createPocket) {
+        // Un bolsillo general con el nombre de la meta; si ya hay uno con ese nombre, se usa.
+        const name = record.name.slice(0, POCKET_NAME_MAX);
+        const existing = await supabase
+          .from('pockets')
+          .select('id, name')
+          .eq('client_id', clientId)
+          .eq('kind', 'general');
+        if (existing.error) return writeError(existing.error, true);
+        const same = existing.data.find(
+          (pocket) => pocket.name.toLocaleLowerCase('es') === name.toLocaleLowerCase('es'),
+        );
+        if (same) {
+          record = { ...record, pocket_id: same.id };
+        } else {
+          const created = await supabase
+            .from('pockets')
+            .insert({ client_id: clientId, kind: 'general', name, currency: baseCurrency })
+            .select('id')
+            .single();
+          if (created.error) return writeError(created.error, true);
+          record = { ...record, pocket_id: created.data.id };
+        }
+      }
       let id = goalId;
       if (id === null) {
         const { data, error } = await supabase
           .from('goals')
-          .insert({ ...parsed.record, client_id: clientId })
+          .insert({ ...record, client_id: clientId })
           .select('id')
           .single();
         if (error) return writeError(error, true);
@@ -81,7 +111,7 @@ export async function saveGoal(
       } else {
         const { data, error } = await supabase
           .from('goals')
-          .update(parsed.record)
+          .update(record)
           .eq('id', id)
           .eq('client_id', clientId)
           .select('id');

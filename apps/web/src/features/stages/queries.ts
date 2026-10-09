@@ -34,6 +34,7 @@ export function progressInput(
     incomes: rows.incomes,
     budgetItemCount: rows.budgetItems.length,
     pocketCount: rows.pockets.length,
+    liquidAssetCount: rows.assets.filter((asset) => asset.asset_type === 'liquido').length,
     realityCheckDone: result.realityCheck.status !== 'pendiente',
     debts: rows.debts,
     assetCount: rows.assets.length,

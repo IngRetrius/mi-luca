@@ -5,6 +5,7 @@ import {
   type Frequency,
   type Payer,
 } from '@miluca/domain';
+import { compareCategories } from '@miluca/i18n';
 
 /** Lo que la lista necesita de cada partida guardada. */
 export interface BudgetRowData {
@@ -106,9 +107,12 @@ export function budgetView(
     if (group) group.push(item);
     else groups.set(row.category, [item]);
   }
-  return [...groups].map(([category, items]) => ({
-    category,
-    items,
-    monthly: items.reduce((total, item) => total + (item.monthly ?? 0), 0),
-  }));
+  // En el orden de la plantilla (Vivienda primero), no alfabético (ADR 0028).
+  return [...groups]
+    .toSorted(([a], [b]) => compareCategories(a, b))
+    .map(([category, items]) => ({
+      category,
+      items,
+      monthly: items.reduce((total, item) => total + (item.monthly ?? 0), 0),
+    }));
 }

@@ -10,7 +10,14 @@ import { textField } from '@/components/ui-classes';
 import { useUnsavedWarning } from '@/components/use-unsaved-warning';
 
 import type { GoalState } from './actions';
-import { NAME_MAX, NOTE_MAX, TRIP_CONCEPTS, type GoalField, type GoalValues } from './validation';
+import {
+  NAME_MAX,
+  NEW_POCKET,
+  NOTE_MAX,
+  TRIP_CONCEPTS,
+  type GoalField,
+  type GoalValues,
+} from './validation';
 
 const FIELD_ORDER: readonly GoalField[] = [
   'name',
@@ -138,6 +145,7 @@ export function GoalForm({
           className={textField}
         >
           <option value="">{text.pocketNone}</option>
+          <option value={NEW_POCKET}>{text.pocketNew}</option>
           {pockets.map((pocket) => (
             <option key={pocket.id} value={pocket.id}>
               {pocket.name}

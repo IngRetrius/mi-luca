@@ -16,7 +16,7 @@ import { getLocale, getMessages } from '@/server/i18n';
 import { deleteGoal, saveGoal } from './actions';
 import { GoalForm } from './goal-form';
 import { goalPaths } from './paths';
-import { TRIP_CONCEPTS, type TripConcept, type TripItemValues } from './validation';
+import { NEW_POCKET, TRIP_CONCEPTS, type TripConcept, type TripItemValues } from './validation';
 
 /** Textos según quién mira: el asesor habla del cliente; el cliente, en su trato. */
 function localText(t: Messages, viewer: CaseEditor) {
@@ -182,7 +182,8 @@ export async function GoalFormScreen({
         baseCurrency={client.base_currency}
         initial={{
           name: row?.name ?? '',
-          pocketId: row?.pocket_id ?? '',
+          // Una meta nueva crea su bolsillo salvo que se elija otro (ADR 0028).
+          pocketId: row ? (row.pocket_id ?? '') : NEW_POCKET,
           amount: amountToText(row?.amount ?? null, locale),
           currency: row?.currency ?? client.base_currency,
           alreadySaved: row?.already_saved ? amountToText(row.already_saved, locale) : '',

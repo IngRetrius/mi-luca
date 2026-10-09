@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import {
   DIAGNOSIS_HORIZON_MONTHS,
   frechClientRate,
+  paymentCoversInterest,
   type CreditInput,
   type CreditSchedule,
 } from '@miluca/engine';
@@ -17,6 +18,7 @@ import { focusRing, linkButton, primaryButton } from '@/components/ui-classes';
 import { loadComputedCase, type ComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
 import { amountToText } from '@/lib/amount';
+import { todayIn } from '@/lib/dates';
 import type { CaseEditor } from '@/server/case-access';
 import { getLocale, getMessages } from '@/server/i18n';
 
@@ -26,6 +28,8 @@ import { DebtMethodForm } from './debt-method-form';
 import { DebtWhatIf } from './debt-what-if';
 import { debtPaths } from './paths';
 import { expensivePayoffText, formatMonth, payoffText } from './payoff-text';
+import { loadUsuryRate } from './queries';
+import { usuryIsCurrent, usuryStatus } from './usury';
 import type { DebtType } from './validation';
 
 /** Textos según quién mira: el asesor habla del cliente; el cliente, en su trato. */
@@ -140,6 +144,31 @@ async function DebtPlan({
   );
 }
 
+type Flag = { readonly status: 'alert' | 'warning'; readonly label: string } | null;
+
+/** La marca de usura de una deuda: por encima es alerta; cerca, atención. */
+function usuryFlag(
+  status: ReturnType<typeof usuryStatus>,
+  text: Messages['debts']['usury'],
+): Flag[] {
+  if (status === 'above') return [{ status: 'alert', label: text.above }];
+  if (status === 'near') return [{ status: 'warning', label: text.near }];
+  return [];
+}
+
+/** Las marcas de una deuda (cara, atrasada, cuota sin intereses, usura), con icono y texto. */
+function DebtFlags({ labels }: { labels: readonly Flag[] }) {
+  const shown = labels.filter((flag): flag is NonNullable<Flag> => flag !== null);
+  if (shown.length === 0) return null;
+  return (
+    <span className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+      {shown.map((flag) => (
+        <StatusLabel key={flag.label} status={flag.status} label={flag.label} />
+      ))}
+    </span>
+  );
+}
+
 /** "Con FRECH: 6,3 % EA hasta la cuota 84" para un crédito en seguimiento con FRECH (H-18). */
 function frechText(t: Messages, credit: CreditInput | null, locale: string): string | null {
   const text = t.debts;
@@ -221,12 +250,23 @@ export async function DebtsScreen({ viewer, clientId }: { viewer: CaseEditor; cl
     );
   }
   const { client, debts } = computed.rows;
-  const locale = await getLocale(client.country_code);
+  const [locale, usury] = await Promise.all([
+    getLocale(client.country_code),
+    debts.length > 0 ? loadUsuryRate(client.country_code) : Promise.resolve(null),
+  ]);
   const money = (amount: number, currency = client.base_currency) =>
     formatMoney(amount, currency, locale);
   const { result } = computed;
   const types: Readonly<Record<string, string>> = text.types;
   const trackedCount = result.creditSchedules.filter(Boolean).length;
+  // La usura solo marca deudas mientras está vigente y en la moneda del país (ADR 0028).
+  const usuryCurrent = usury && usuryIsCurrent(usury, todayIn(client.country_code)) ? usury : null;
+  const usuryNote = usury
+    ? text.usury[usuryCurrent ? 'current' : 'expired']
+        .replace('{rate}', formatPercent(usury.rate, locale, 2))
+        .replace('{month}', formatMonth(usury.validFrom, locale))
+        .replace('{source}', usury.source)
+    : null;
 
   return (
     <Screen>
@@ -248,6 +288,7 @@ export async function DebtsScreen({ viewer, clientId }: { viewer: CaseEditor; cl
               },
             ]}
           />
+          {usuryNote ? <p className="text-sm text-text-muted">{usuryNote}</p> : null}
           <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
             {debts.map((row, index) => (
               <li key={row.id}>
@@ -290,11 +331,24 @@ export async function DebtsScreen({ viewer, clientId }: { viewer: CaseEditor; cl
                       .filter(Boolean)
                       .join(' · ')}
                   </span>
-                  {result.expensiveDebt.rows[index] ? (
-                    <span className="text-sm">
-                      <StatusLabel status="alert" label={text.expensive} />
-                    </span>
-                  ) : null}
+                  <DebtFlags
+                    labels={[
+                      result.expensiveDebt.rows[index]
+                        ? { status: 'alert' as const, label: text.expensive }
+                        : null,
+                      row.in_arrears ? { status: 'alert' as const, label: text.inArrears } : null,
+                      result.debtPlan.debts[index] &&
+                      !paymentCoversInterest(result.debtPlan.debts[index])
+                        ? { status: 'alert' as const, label: text.belowInterest }
+                        : null,
+                      ...usuryFlag(
+                        row.currency === client.base_currency
+                          ? usuryStatus(row.annual_rate, usuryCurrent)
+                          : null,
+                        text.usury,
+                      ),
+                    ]}
+                  />
                 </Link>
                 <TrackingLine
                   schedule={result.creditSchedules[index] ?? null}
@@ -397,6 +451,7 @@ export async function DebtFormScreen({
           rate: ratePercent,
           minPayment: amountToText(row?.min_payment ?? null, locale),
           acceptsExtra: row && !row.accepts_extra ? 'no' : 'si',
+          inArrears: row?.in_arrears ?? false,
           extraFrom: row?.extra_from_date ?? '',
           manualOrder: row?.manual_order === null || !row ? '' : String(row.manual_order),
           note: row?.note ?? '',

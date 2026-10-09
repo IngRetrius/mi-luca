@@ -207,6 +207,8 @@ function stepHref(base: string, stage: CaseStage | null, id: CoreStepId | StageS
       return `${base}/ingresos`;
     case 'expenses':
       return `${base}/presupuesto`;
+    case 'accounts':
+      return `${base}/patrimonio`;
     case 'pockets':
       return `${base}/bolsillos`;
     case 'realityCheck':
@@ -331,6 +333,14 @@ async function CaseData({
         href: `${base}/presupuesto`,
         title: text.budget,
         summary: text.budgetSummary.replace('{amount}', format('monthlyExpenses')),
+      },
+      {
+        // El saldo de hoy que se reparte en el fondo y los bolsillos (ADR 0028).
+        href: `${base}/patrimonio`,
+        title: text.accounts,
+        summary: computed.rows.assets.some((asset) => asset.asset_type === 'liquido')
+          ? text.accountsSummary.replace('{amount}', money(computed.result.liquidAssets))
+          : text.accountsNone,
       },
       {
         href: `${base}/bolsillos`,

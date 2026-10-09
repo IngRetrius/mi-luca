@@ -111,3 +111,50 @@ describe('qualityChecks, controles que no dependen de la plantilla', () => {
     expect(report.warnings.map((entry) => entry.code)).toContain('third_party_counted_once');
   });
 });
+
+describe('qualityChecks del ADR 0027', () => {
+  const golden = goldenCases.find((entry) => entry.case === 'c1-colombia')!;
+  const input = caseInput(golden);
+  const debt = {
+    balance: { amount: 8_000_000, currency: 'COP' },
+    minPayment: { amount: 600_000, currency: 'COP' },
+    annualRate: 0.28,
+    acceptsExtra: true,
+    extraFrom: null,
+    manualOrder: null,
+  };
+  const notes = (changed: typeof input) =>
+    qualityChecks(changed, compute(changed, { mode: 'native' })).needNote.map(
+      (entry) => entry.code,
+    );
+
+  it('una cuota que no alcanza para los intereses del mes pide nota', () => {
+    expect(notes({ ...input, debts: [debt] })).not.toContain('debt_payment_covers_interest');
+    // 8 millones al 28 % EA: unos 165.700 de intereses al mes.
+    const short = { ...debt, minPayment: { amount: 150_000, currency: 'COP' } };
+    const report = qualityChecks(
+      { ...input, debts: [short] },
+      compute({ ...input, debts: [short] }, { mode: 'native' }),
+    );
+    const check = report.needNote.find((entry) => entry.code === 'debt_payment_covers_interest');
+    expect(check?.detail.count).toBe(1);
+  });
+
+  it('una deuda con cuotas atrasadas pide nota', () => {
+    expect(notes({ ...input, debts: [{ ...debt, inArrears: true }] })).toContain('debt_in_arrears');
+    expect(notes({ ...input, debts: [debt] })).not.toContain('debt_in_arrears');
+  });
+
+  it('un ahorro real muy por encima del plan pide nota solo en modo nativo', () => {
+    const { expectedMonthly } = compute(input, { mode: 'native' }).realityCheck;
+    const saved = {
+      ...input,
+      realityCheck: { savingsMonthsAgo: 0, months: 6, savingsToday: 6 * expectedMonthly * 1.5 },
+    };
+    expect(notes(saved)).toContain('reality_check_not_overstated');
+    const compatible = qualityChecks(saved, compute(saved, { mode: 'compatible' }));
+    expect(compatible.needNote.map((entry) => entry.code)).not.toContain(
+      'reality_check_not_overstated',
+    );
+  });
+});

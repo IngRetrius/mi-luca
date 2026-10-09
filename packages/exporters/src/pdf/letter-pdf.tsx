@@ -8,6 +8,18 @@ export interface PdfSection {
   readonly text: string;
 }
 
+/**
+ * Una tabla del plan (cómo va, bolsillos, deudas, metas): columnas opcionales, filas con sus celdas
+ * (la primera es el nombre) y, debajo de cada fila, un detalle opcional; total y nota opcionales.
+ */
+export interface PdfTable {
+  readonly title: string;
+  readonly columns?: readonly string[];
+  readonly rows: readonly { readonly cells: readonly string[]; readonly detail?: string }[];
+  readonly footer?: readonly string[];
+  readonly note?: string;
+}
+
 /** Colores de los tokens del modo claro (`packages/ui`): el PDF se imprime en papel blanco. */
 export interface PdfColors {
   readonly text: string;
@@ -27,7 +39,16 @@ export interface LetterPdfInput {
   readonly planLabel: string;
   /** "Entregado el … · cifras con corte al …". */
   readonly meta: string;
+  /** "Preparado por …": el asesor que entregó el plan; null si no se conoce. */
+  readonly advisor?: string | null;
+  /** El resumen de la carta, arriba, antes de las tablas; null sin resumen. */
+  readonly summary?: PdfSection | null;
+  /** Lo que el cliente usa: cómo va, bolsillos, deudas y metas, ya escrito (ADR 0028). */
+  readonly tables?: readonly PdfTable[];
+  /** El resto de la carta, después de las tablas. */
   readonly letter: readonly PdfSection[];
+  /** "Carta de tu asesor": título del resto de la carta cuando va después de las tablas. */
+  readonly letterTitle?: string;
   readonly notesTitle: string;
   readonly notes: readonly PdfSection[];
   readonly figuresTitle: string;
@@ -73,6 +94,7 @@ function styles(colors: PdfColors) {
     title: { fontFamily: 'Helvetica-Bold', fontSize: 18, lineHeight: 1.2, marginBottom: 6 },
     meta: { fontSize: 9, color: colors.textMuted, marginBottom: 20 },
     sectionTitle: { fontFamily: 'Helvetica-Bold', fontSize: 12, marginTop: 14, marginBottom: 6 },
+    letterTitle: { fontFamily: 'Helvetica-Bold', fontSize: 14, marginTop: 22, marginBottom: 6 },
     paragraph: { marginBottom: 6 },
     listItem: { flexDirection: 'row', marginBottom: 3 },
     bullet: { width: 12 },
@@ -88,6 +110,26 @@ function styles(colors: PdfColors) {
     },
     figureRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 2 },
     figureValue: { fontFamily: 'Helvetica-Bold' },
+    table: { marginTop: 4, borderWidth: 1, borderColor: colors.border, borderRadius: 4 },
+    tableRow: {
+      flexDirection: 'row',
+      paddingVertical: 4,
+      paddingHorizontal: 8,
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
+    },
+    tableHead: {
+      flexDirection: 'row',
+      paddingVertical: 4,
+      paddingHorizontal: 8,
+      backgroundColor: colors.surface,
+      fontFamily: 'Helvetica-Bold',
+    },
+    tableFirst: { flex: 1, paddingRight: 8 },
+    tableCell: { width: 120, textAlign: 'right' },
+    tableDetail: { fontSize: 9, color: colors.textMuted, marginTop: 1 },
+    tableNote: { fontSize: 9, color: colors.textMuted, marginTop: 4 },
+    bold: { fontFamily: 'Helvetica-Bold' },
     scope: { marginTop: 18, fontSize: 9, color: colors.textMuted },
     footer: {
       position: 'absolute',
@@ -146,7 +188,54 @@ function Sections({ sections, s }: { sections: readonly PdfSection[]; s: Styles 
   );
 }
 
-/** El plan entregado en PDF: la carta, las notas y las cifras, con la estructura de la sección 11. */
+function Table({ table, s }: { table: PdfTable; s: Styles }) {
+  // Con dos columnas, la de la derecha lleva frases ("Sale en febrero de 2028 · 16 meses"): más ancha.
+  const columns = table.columns?.length ?? table.rows[0]?.cells.length ?? 2;
+  const cellStyle = [s.tableCell, { width: columns > 2 ? 110 : 200 }];
+  const cells = (values: readonly string[], bold = false) =>
+    values.map((value, index) => (
+      <Text
+        key={index}
+        style={[...(index === 0 ? [s.tableFirst] : cellStyle), ...(bold ? [s.bold] : [])]}
+      >
+        {pdfSafe(value)}
+      </Text>
+    ));
+  return (
+    <View>
+      <Text style={s.sectionTitle} minPresenceAhead={60}>
+        {pdfSafe(table.title)}
+      </Text>
+      <View style={s.table}>
+        {table.columns ? <View style={s.tableHead}>{cells(table.columns)}</View> : null}
+        {table.rows.map((row, index) => (
+          <View
+            key={index}
+            style={index === 0 && !table.columns ? [s.tableRow, { borderTopWidth: 0 }] : s.tableRow}
+            wrap={false}
+          >
+            <View style={s.tableFirst}>
+              <Text style={s.bold}>{pdfSafe(row.cells[0] ?? '')}</Text>
+              {row.detail ? <Text style={s.tableDetail}>{pdfSafe(row.detail)}</Text> : null}
+            </View>
+            {row.cells.slice(1).map((value, cell) => (
+              <Text key={cell} style={cellStyle}>
+                {pdfSafe(value)}
+              </Text>
+            ))}
+          </View>
+        ))}
+        {table.footer ? <View style={s.tableRow}>{cells(table.footer, true)}</View> : null}
+      </View>
+      {table.note ? <Text style={s.tableNote}>{pdfSafe(table.note)}</Text> : null}
+    </View>
+  );
+}
+
+/**
+ * El plan entregado en PDF (ADR 0020 y 0028): el resumen de la carta; lo que el cliente usa (cómo
+ * va, bolsillos, deudas, metas); el resto de la carta y las notas; las cifras y el alcance.
+ */
 export function LetterDocument({ input }: { input: LetterPdfInput }) {
   const s = styles(input.colors);
   return (
@@ -160,8 +249,21 @@ export function LetterDocument({ input }: { input: LetterPdfInput }) {
       <Page size="A4" style={s.page}>
         <Text style={s.eyebrow}>{pdfSafe(input.planLabel)}</Text>
         <Text style={s.title}>{pdfSafe(input.title)}</Text>
-        <Text style={s.meta}>{pdfSafe(`${input.clientName} · ${input.meta}`)}</Text>
+        <Text style={s.meta}>
+          {pdfSafe([input.clientName, input.meta, input.advisor].filter(Boolean).join(' · '))}
+        </Text>
 
+        {input.summary ? <Sections sections={[input.summary]} s={s} /> : null}
+
+        {(input.tables ?? []).map((table) => (
+          <Table key={table.title} table={table} s={s} />
+        ))}
+
+        {input.letterTitle && input.letter.length > 0 ? (
+          <Text style={s.letterTitle} minPresenceAhead={60}>
+            {pdfSafe(input.letterTitle)}
+          </Text>
+        ) : null}
         <Sections sections={input.letter} s={s} />
 
         {input.notes.length > 0 ? (

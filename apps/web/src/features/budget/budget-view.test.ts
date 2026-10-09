@@ -32,16 +32,16 @@ const monthly = new Map([
 const none = { type: null, payer: null, essential: false };
 
 describe('budgetView', () => {
-  it('agrupa por categoría con el total mensual de lo que suma', () => {
+  it('agrupa por categoría, en el orden de la plantilla, con el total mensual de lo que suma', () => {
     const groups = budgetView(rows, monthly, none);
     expect(groups.map((group) => [group.category, group.monthly])).toEqual([
-      ['Alimentación', 150],
       ['Vivienda', 0],
+      ['Alimentación', 150],
     ]);
   });
 
   it('marca la referencia familiar (no suma) y la partida incompleta', () => {
-    const vivienda = budgetView(rows, monthly, none)[1]!;
+    const vivienda = budgetView(rows, monthly, none)[0]!;
     expect(vivienda.items[0]).toMatchObject({
       familyReference: true,
       monthly: null,
@@ -69,9 +69,9 @@ describe('budgetView', () => {
     ).toEqual(['b']);
     const essential = budgetView(rows, monthly, { ...none, essential: true });
     expect(essential.flatMap((group) => group.items.map((item) => item.id))).toEqual([
-      'a',
       'c',
       'd',
+      'a',
     ]);
   });
 });

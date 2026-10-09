@@ -240,6 +240,19 @@ export function DebtForm({
         {decimalInput('minPayment', true)}
       </Field>
 
+      <label className="flex min-h-12 cursor-pointer items-start gap-3 py-2">
+        <input
+          type="checkbox"
+          name="inArrears"
+          defaultChecked={values.inArrears}
+          className="mt-0.5 size-5 shrink-0 accent-primary"
+        />
+        <span className="flex flex-col">
+          {text.inArrears}
+          <span className="text-sm text-text-muted">{text.inArrearsHint}</span>
+        </span>
+      </label>
+
       <fieldset className="flex flex-col gap-2" aria-describedby={`${formId}-accepts-hint`}>
         <legend className="mb-2 font-medium">{text.acceptsExtra}</legend>
         <p id={`${formId}-accepts-hint`} className="-mt-2 text-sm text-text-muted">

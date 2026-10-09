@@ -43,6 +43,8 @@ export interface Delivery extends DeliverySummary {
   readonly parameters: PlanParameters | null;
   /** La carta y las notas con las cifras del día de la entrega; vacías en entregas anteriores. */
   readonly documents: DeliveredDocuments;
+  /** Usuario del asesor que entregó el plan, para firmar el PDF; null si no se conoce. */
+  readonly deliveredBy: string | null;
 }
 
 const PARAMETER_NUMBERS = [
@@ -95,13 +97,14 @@ export async function listDeliveries(clientId: string): Promise<DeliverySummary[
 }
 
 const DELIVERY_COLUMNS =
-  'id, label, delivered_at, cutoff_date, stage, engine_version, base_currency:inputs->fx->>baseCurrency, debt_method:inputs->>debtMethod, parameters:inputs->parameters, results, key_figures, labels, documents, client:clients(country_code)';
+  'id, label, delivered_at, delivered_by, cutoff_date, stage, engine_version, base_currency:inputs->fx->>baseCurrency, debt_method:inputs->>debtMethod, parameters:inputs->parameters, results, key_figures, labels, documents, client:clients(country_code)';
 
 /** Lo que devuelve `DELIVERY_COLUMNS`; las fotos en JSON se leen como las escribió la entrega. */
 interface DeliveryRow {
   readonly id: string;
   readonly label: string;
   readonly delivered_at: string;
+  readonly delivered_by: string | null;
   readonly cutoff_date: string;
   readonly stage: string;
   readonly engine_version: string;
@@ -135,6 +138,7 @@ function toDelivery(data: DeliveryRow): Delivery {
     debtMethod: debtMethodSchema.catch('avalancha').parse(data.debt_method),
     parameters: planParameters(data.parameters),
     documents: deliveredDocuments(data.documents),
+    deliveredBy: data.delivered_by,
   };
 }
 

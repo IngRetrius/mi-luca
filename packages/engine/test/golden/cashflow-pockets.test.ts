@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { FlowRow } from '../../src/cashflow';
 import { compute } from '../../src/compute';
+import type { RealityCheckStatus } from '../../src/reality-check';
 import { caseInput, POCKET_ROWS, RECEIVABLE_ROWS } from './adapters';
 import { cell, goldenCases, type GoldenCase } from './cases';
 import { expectCell } from './expect-cell';
@@ -36,11 +37,13 @@ function expectText(golden: GoldenCase, ref: string, actual: string | null): voi
 }
 
 const YES_NO = (value: boolean) => (value ? 'Sí' : 'No');
-const REALITY_STATUS = {
+// La plantilla no tiene "Revisar presupuesto": es del modo nativo (ADR 0027).
+const REALITY_STATUS: Readonly<Record<RealityCheckStatus, string>> = {
   pendiente: 'Pendiente',
   confirmada: 'Confirmada',
   revisar_gastos: 'Revisar gastos',
-} as const;
+  revisar_presupuesto: 'No existe en la plantilla',
+};
 const NO_INCOME_METHOD = {
   no_aplica: 'No aplica',
   aporte_igual: 'Aporte igual',

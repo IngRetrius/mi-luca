@@ -9,8 +9,11 @@ import { FigureList } from '@/components/figure-list';
 import { Screen, ScreenActions } from '@/components/screen';
 import { StatusLabel } from '@/components/status';
 import { focusRing, linkButton, primaryButton } from '@/components/ui-classes';
+import { formatMonth } from '@/features/debts';
+import { fundPlanState, fundPlanText } from '@/features/emergency-fund';
 import { loadComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
+import { plural } from '@/lib/plural';
 import type { CaseEditor } from '@/server/case-access';
 import { getLocale, getMessages } from '@/server/i18n';
 
@@ -62,6 +65,11 @@ export async function PocketsScreen({
   const locale = await getLocale(client.country_code);
   const money = (amount: number) => formatMoney(amount, client.base_currency, locale);
   const { pockets } = computed.result;
+  // Con el plan secuencial el fondo se llena con el sobrante, sin aporte fijo (ADR 0008 y 0028).
+  const fundState = fundPlanState(computed.result.savingsPlan);
+  const fundPlan = fundState
+    ? fundPlanText(fundState, text.fundPlanValue, (month) => formatMonth(month, locale))
+    : null;
   const general = computed.rows.pockets.filter((pocket) => pocket.kind === 'general');
   const bankName = new Map(computed.rows.banks.map((bank) => [bank.id, bank.name]));
   const bankDetail = (bankId: string | null | undefined) => {
@@ -130,7 +138,9 @@ export async function PocketsScreen({
               <FigureList
                 figures={[
                   { label: text.annualGoal, value: money(row.annualGoal) },
-                  { label: text.monthly, value: money(row.monthlyContribution) },
+                  key === 'emergencia' && fundPlan
+                    ? { label: text.fundPlanLabel, value: fundPlan }
+                    : { label: text.monthly, value: money(row.monthlyContribution) },
                   {
                     label: suggested ? `${text.balance} (${text.suggested})` : text.balance,
                     value: money(row.balance),
@@ -144,9 +154,16 @@ export async function PocketsScreen({
         <FigureList
           figures={[
             { label: text.totalGoal, value: money(pockets.total.annualGoal) },
-            { label: text.totalMonthly, value: money(pockets.total.monthlyContribution) },
+            {
+              label: text.totalMonthly,
+              value: money(
+                pockets.total.monthlyContribution -
+                  (fundPlan ? pockets.emergency.monthlyContribution : 0),
+              ),
+            },
           ]}
         />
+        {fundPlan ? <p className="text-sm text-text-muted">{text.totalWithoutFund}</p> : null}
         <p className="text-sm text-text-muted">
           {text.withContribution.replace('{count}', String(pockets.withContribution))}
         </p>
@@ -187,7 +204,7 @@ export async function PocketsScreen({
           <ModuleLink
             href={paths.banks}
             title={text.manageBanks}
-            summary={text.banksSummary.replace('{count}', String(computed.rows.banks.length))}
+            summary={plural(text.banksSummary, computed.rows.banks.length)}
           />
         </li>
       </ul>

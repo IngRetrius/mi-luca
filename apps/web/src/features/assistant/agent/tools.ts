@@ -159,6 +159,7 @@ export const AGENT_TOOLS: readonly Tool[] = [
       min_payment: number('Cuota mínima mensual.'),
       accepts_extra: boolean('false si no acepta abonos extra a capital.'),
       extra_from_date: date('Desde qué fecha acepta abonos extra, si tiene restricción.'),
+      in_arrears: boolean('true si tiene cuotas atrasadas o un reporte negativo en centrales.'),
       note: NOTE,
     },
   ),

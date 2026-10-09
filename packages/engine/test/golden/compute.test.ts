@@ -93,3 +93,13 @@ describe('escenarios del fondo por ingreso (H-07)', () => {
     expect(after.fullGoal).toBeLessThan(before.fullGoal);
   });
 });
+
+describe('cifras clave sin meta del fondo (ADR 0027)', () => {
+  it('con la plantilla vacía el avance del fondo no aplica, en vez de 100 %', () => {
+    const empty = goldenCases.find((entry) => entry.case === 'c3-plantilla-vacia')!;
+    const result = compute(caseInput(empty), { mode: 'native' });
+    expect(result.emergencyFund.fullGoal).toBe(0);
+    expect(result.summary.emergencyProgress).toBe(1);
+    expect(keyFigures(result).emergencyProgress).toBeNull();
+  });
+});

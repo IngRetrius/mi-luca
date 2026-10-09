@@ -12,6 +12,8 @@ export interface ProgressInput {
   readonly incomes: readonly { readonly kind: string | null }[];
   readonly budgetItemCount: number;
   readonly pocketCount: number;
+  /** Cuentas, bolsillos y efectivo registrados (activos líquidos): el saldo que reparte la etapa 1. */
+  readonly liquidAssetCount: number;
   readonly realityCheckDone: boolean;
   readonly debts: readonly {
     readonly annual_rate: number | null;
@@ -30,6 +32,7 @@ export interface ProgressInput {
 export type CoreStepId = 'profile' | 'incomes';
 export type StageStepId =
   | 'expenses'
+  | 'accounts'
   | 'pockets'
   | 'realityCheck'
   | 'debts'
@@ -63,6 +66,8 @@ function dataSteps(stage: CaseStage, input: ProgressInput): Step<StageStepId>[] 
     case 'presupuesto':
       return [
         { id: 'expenses', done: input.budgetItemCount > 0 },
+        // El saldo de hoy llena el fondo y los bolsillos (ADR 0028): sin cuentas, el fondo queda en 0.
+        { id: 'accounts', done: input.liquidAssetCount > 0 },
         { id: 'pockets', done: input.pocketCount > 0 },
         { id: 'realityCheck', done: input.realityCheckDone },
       ];
@@ -114,7 +119,7 @@ export function nextStep<Id extends string>(steps: readonly Step<Id>[]): Step<Id
 export function stageHasData(stage: CaseStage, input: ProgressInput): boolean {
   switch (stage) {
     case 'presupuesto':
-      return input.budgetItemCount > 0 || input.pocketCount > 0;
+      return input.budgetItemCount > 0 || input.pocketCount > 0 || input.liquidAssetCount > 0;
     case 'deudas':
       return input.debts.length > 0;
     case 'patrimonio':

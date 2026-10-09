@@ -18,6 +18,22 @@ export function monthlyRate(annualRate: number): number {
 }
 
 /**
+ * ¿La cuota alcanza para los intereses del mes y los seguros que trae? Si no, con esa cuota el saldo
+ * no baja (ADR 0027). Sin saldo, sin tasa o a 0 % siempre alcanza. Importes en la moneda de la deuda.
+ */
+export function paymentCoversInterest(debt: {
+  readonly balance: { readonly amount: number };
+  readonly annualRate: number | null;
+  readonly minPayment: { readonly amount: number } | null;
+  readonly insurance?: { readonly amount: number } | null;
+}): boolean {
+  if (debt.balance.amount <= 0 || debt.annualRate === null || debt.annualRate <= 0) return true;
+  const interest =
+    debt.balance.amount * monthlyRate(debt.annualRate) + (debt.insurance?.amount ?? 0);
+  return (debt.minPayment?.amount ?? 0) > interest;
+}
+
+/**
  * Orden de pago de las deudas con saldo (RN-091). Avalancha: mayor tasa primero; bola de nieve:
  * menor saldo primero; en un empate va primero la que está antes en la lista, como la fila en la
  * plantilla. Una tasa sin escribir vale 0. El orden manual usa el lugar que fijó el asesor (las

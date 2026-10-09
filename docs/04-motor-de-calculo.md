@@ -118,7 +118,8 @@ Tiempo objetivo: menos de 50 ms por cálculo completo en un teléfono de gama me
 | Seguro de vida | 10 años fijos y el gasto anual | Años y gasto que fija el asesor; vacíos, los de la plantilla. Hecho | H-10 |
 | Avance del fondo | Frente a la meta completa | Frente a la completa y a la vigente | H-11 |
 | Monedas | Base más USD; sin tasa, el importe vale 0 | Cualquier moneda en cualquier importe; sin tasa, pendiente y bloqueo de entrega | H-15, RN-017 |
-| Condición de ingresos variables | Solo por tipo de cliente | Sugerida por tipo, editable | H-16 |
+| Condición de ingresos variables | Solo por tipo de cliente | Sugerida para el independiente variable, el contratista y quien tiene un ingreso laboral con algún mes sin pago; editable (ADR 0027). Hecho | H-16 |
+| Prueba de realidad | Solo revisa si el ahorro real cae bajo el 85 % del esperado | También si pasa del esperado en más de 15 %: "Revisar presupuesto" (ADR 0027). Hecho | R1 |
 | Tareas sugeridas del plan de acción | Las 14 de la plantilla | Sin las que no aplican: deudas, seguros nuevos y prueba de realidad ya confirmada (ADR 0018). Hecho | H-20 |
 
 Qué correcciones entran al modo nativo lo decide el asesor (ver [07-preguntas-abiertas.md](07-preguntas-abiertas.md)). Cada corrección aprobada lleva un ADR. Las pruebas de oro corren siempre en modo compatible; el modo nativo tiene sus propias pruebas con valores esperados revisados por el asesor.
@@ -132,6 +133,8 @@ Los indicadores del Resumen se calculan igual que la plantilla en los dos modos 
 Antes de entregar un plan, `qualityChecks` evalúa los puntos verificables de la sección 10 del protocolo. Los bloqueantes impiden entregar; las advertencias se muestran y se pueden justificar con una nota.
 
 Hay tres niveles: **bloqueante** (impide entregar), **pide nota** (se entrega solo si el asesor lo explica; así queda "meses sin ingreso con alerta de déficit con nota") y **advertencia** (se muestra; la nota es opcional). En F3 están los controles del sobrante, los aportes a bolsillos, el reparto del saldo, los meses sin ingreso, las partidas incompletas y sin bolsillo, los ingresos sin tipo, las monedas sin tasa, la inversión con deuda cara, la prueba de realidad (pendiente: advertencia; "revisar gastos": pide nota) y el aporte de terceros contado dos veces. En F5 se suman el perfil de riesgo sin responder (advertencia), el dinero a menos de 3 años en crecimiento y el % en crecimiento fuera del rango de su edad y perfil o sin la edad para saberlo (bloqueantes). Pruebas en `test/golden/quality-checks.test.ts`.
+
+Desde el ADR 0027 (versión 0.17.0) se suman: en modo nativo, la prueba de realidad que muestra un ahorro real más de 15 % por encima del esperado (`reality_check_not_overstated`, pide nota: el presupuesto tiene gastos de más o le falta un ingreso; el estado es `revisar_presupuesto` y se invierte el porcentaje de prueba pendiente); en los dos modos, la deuda cuya cuota no alcanza para los intereses del mes (`debt_payment_covers_interest`) y la deuda con cuotas atrasadas o reportes negativos (`debt_in_arrears`), las dos piden nota. Qué controles mira cada entrega lo decide la app por etapa (ADR 0025 y 0028); el déficit del año (`no_income_covered`) pide nota en todas.
 
 | Control | Tipo |
 |---|---|
@@ -235,3 +238,4 @@ Las pruebas de oro corren en cada pull request. Si un cambio altera un valor esp
 
 - `ENGINE_VERSION` sigue semver: mayor si cambia un resultado en modo compatible; menor si agrega salidas o cambia el modo nativo; parche si no cambia ningún resultado.
 - Cada plan entregado guarda la versión del motor y los ids de los parámetros, para poder reproducir sus cifras.
+- 0.17.0 (ADR 0027): prueba de realidad de dos lados y contrato inestable sugerido en modo nativo; controles de deudas; umbrales fiscales con base (ingreso, gasto o patrimonio bruto); el avance del fondo es vacío sin meta. Las pruebas de oro no cambian.

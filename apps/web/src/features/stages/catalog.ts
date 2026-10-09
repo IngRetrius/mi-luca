@@ -4,28 +4,41 @@ import type { Messages } from '@miluca/i18n';
 
 export type AssumptionKey = keyof Messages['assumptions']['labels'];
 
-/** Controles que aplican a cualquier entrega: sin ellos ninguna cifra es confiable (ADR 0025). */
-export const COMMON_CHECKS: readonly QcCode[] = ['incomes_classified', 'missing_rates'];
+/**
+ * Controles que aplican a cualquier entrega: sin ellos ninguna cifra es confiable (ADR 0025). Un año
+ * que cierra en déficit pide nota en todas: el plan de pago y los aportes a metas suponen que el
+ * dinero alcanza (ADR 0028).
+ */
+export const COMMON_CHECKS: readonly QcCode[] = [
+  'incomes_classified',
+  'missing_rates',
+  'no_income_covered',
+];
 
-/** Controles de calidad de cada etapa, además de los comunes (ADR 0025). */
+/**
+ * Controles de calidad de cada etapa, además de los comunes (ADR 0025 y 0028). Los de bolsillos van
+ * también en patrimonio: el aporte a cada meta es un gasto tipo bolsillo.
+ */
 export const STAGE_CHECKS: Readonly<Record<CaseStage, readonly QcCode[]>> = {
   presupuesto: [
     'surplus_balances',
     'pocket_contributions_match',
     'allocation_within_available',
-    'no_income_covered',
     'complete_items',
     'items_have_pocket',
     'reality_check_done',
     'reality_check_confirms',
+    'reality_check_not_overstated',
     'third_party_counted_once',
   ],
-  deudas: [],
+  deudas: ['debt_payment_covers_interest', 'debt_in_arrears'],
   patrimonio: [
     'no_investment_with_expensive_debt',
     'risk_profile_answered',
     'short_horizon_in_stability',
     'growth_within_range',
+    'pocket_contributions_match',
+    'items_have_pocket',
   ],
 };
 

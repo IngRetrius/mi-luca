@@ -10,7 +10,7 @@ import { getMessages } from '@/server/i18n';
 type AssumptionKey = keyof Messages['assumptions']['labels'];
 
 /**
- * Los supuestos con que se calculó un plan entregado, cada uno con su explicación (decisión del
+ * Los supuestos con que se calculó un plan entregado (dentro de "Todas las cifras y supuestos"), cada uno con su explicación (decisión del
  * 02/10/2026: el asesor y el cliente los ven): solo los de su etapa (ADR 0025). Solo lectura: se
  * cambian en Supuestos del plan.
  */
@@ -65,9 +65,9 @@ export async function PlanAssumptions({
 
   return (
     <section aria-labelledby="plan-assumptions" className="flex flex-col gap-2">
-      <h2 id="plan-assumptions" className="font-semibold">
+      <h3 id="plan-assumptions" className="font-medium">
         {text.title}
-      </h2>
+      </h3>
       <p className="text-sm text-text-muted">{text.intro}</p>
       <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
         {rows.map(([key, value]) => (

@@ -6,12 +6,14 @@ import { formatDate } from '@miluca/i18n';
 import { BackLink, LoadError } from '@/components/back-link';
 import { Screen } from '@/components/screen';
 import { getClientDetail } from '@/features/clients';
+import { loadActiveStages } from '@/features/stages';
 import { loadComputedCase } from '@/features/summary';
 import { todayIn } from '@/lib/dates';
 import { getCaseMessages, getLocale, getMessages } from '@/server/i18n';
 
 import { saveDocument } from './actions';
 import { DocumentEditor, type EditorSection } from './document-editor';
+import { letterDrafts } from './drafts';
 import { figureValues, insertableFigures } from './figures';
 import { documentPaths } from './paths';
 import { loadDocuments } from './queries';
@@ -30,10 +32,11 @@ export async function DocumentEditorScreen({
   const paths = documentPaths(clientId);
   const local = kind === 'carta' ? text.letter : text.notes;
   const retry = kind === 'carta' ? paths.letter : paths.notes;
-  const [client, computed, documents] = await Promise.all([
+  const [client, computed, documents, stages] = await Promise.all([
     getClientDetail(clientId),
     loadComputedCase(clientId),
     loadDocuments(clientId),
+    kind === 'carta' ? loadActiveStages(clientId) : Promise.resolve(null),
   ]);
   if (client === 'not-found') notFound();
   const header = (
@@ -71,6 +74,17 @@ export async function DocumentEditorScreen({
   // Una carta nueva trae escrito el alcance (sección 7 del protocolo), en el trato del cliente y
   // con el vocabulario de su país.
   const defaults = (await getCaseMessages({ country: client.countryCode })).documents.defaults;
+  // El borrador de la carta, de las etapas activas, en el trato del cliente (ADR 0028).
+  const drafts =
+    kind === 'carta' && stages
+      ? letterDrafts(
+          defaults.drafts,
+          stages,
+          address,
+          client.displayName,
+          computed.result.summary.annualSurplus < 0,
+        )
+      : null;
   const initial = document?.content ?? (kind === 'carta' ? { scope: defaults.scope[address] } : {});
   const published = document?.status === 'publicado';
   const status =
@@ -94,6 +108,7 @@ export async function DocumentEditorScreen({
         sections={sections}
         initial={initial}
         figures={insertableFigures(values, t.keyFigures)}
+        drafts={drafts}
         publishable={kind === 'notas'}
         published={published}
         action={saveDocument.bind(null, clientId, kind)}

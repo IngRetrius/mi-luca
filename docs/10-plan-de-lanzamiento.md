@@ -16,6 +16,7 @@ Fecha: 08/10/2026. Desde hoy, este plan fija el orden del trabajo que queda hast
 |---|---|---|---|---|
 | L0. Higiene y seguridad | Cerrar los riesgos de la auditoría que no dependen de las etapas | 8 | Hecha en el código; quedan tareas del asesor | `pnpm audit --prod` sin avisos, borrado probado, primera copia guardada |
 | L1. Asesoría por etapas | Construir ADR 0025 con las pantallas que ya existen | 40 | Hecha en el código y verificada contra Supabase local; falta `db push` del asesor | Criterios de la sección 4 |
+| L1b. Mejoras de la revisión del asesor | Arreglar los 13 hallazgos de la revisión del 09/10/2026 y mejorar lo que recibe el cliente ([12-plan-de-mejoras-del-asesor.md](12-plan-de-mejoras-del-asesor.md), ADR 0027 y 0028) | — | Hecha en el código y verificada contra Supabase local; falta `db push` del asesor | Pasos del plan 12 marcados |
 | L2. Preparar el piloto | Probar todo en producción con datos inventados y dejar listo el guion de cada etapa | 8 | Sin empezar | Caso inventado entregado y borrado en producción |
 | L3. Piloto | Atender a 3 a 5 personas cercanas, empezando por la etapa 1 | 6 a 8 semanas de calendario | Sin empezar | Lista de ajustes del piloto aplicada |
 | L4. Antes de cobrar | Planes pagados, dominio, términos y obligaciones al cobrar | 16 más trámites | Sin empezar | Todo lo de la sección 7 |
@@ -31,7 +32,8 @@ Fecha: 08/10/2026. Desde hoy, este plan fija el orden del trabajo que queda hast
 - [x] Procedimiento de copia semanal en `supabase/README.md`, comprobado contra la base local (H1).
 - [x] Documentación desactualizada: `README.md` y P-C04 en `05-pantallas-y-flujos.md` (H11).
 - [x] **Asesor:** subir `proposals` (H13) y `client_data_deletion` al remoto. El ensayo de `db push` del 08/10/2026 ya no las lista.
-- [ ] **Asesor:** subir `case_stages` (L1) con `pnpm supabase db push --dry-run` y después `pnpm supabase db push`. Hasta entonces, la ficha, la entrega y Mi plan publicados fallan, porque el código de L1 ya está desplegado.
+- [x] **Asesor:** subir `case_stages` (L1). El ensayo de `db push` del 09/10/2026 ya no la lista.
+- [ ] **Asesor:** subir `debt_arrears_co_parameters` (L1b, ADR 0027 y 0028) con `pnpm supabase db push --dry-run` y después `pnpm supabase db push`, antes de publicar el código: la pantalla de deudas y la entrega leen `debts.in_arrears`.
 - [ ] **Asesor:** sacar la primera copia del remoto y guardarla cifrada.
 - [ ] **Asesor:** mover `client_secret_*.json` fuera de la carpeta del repositorio (H10).
 - [ ] **Asesor:** autorizar el MCP de Supabase (`claude mcp login`) para revisar el asesor de seguridad del remoto después del despliegue.

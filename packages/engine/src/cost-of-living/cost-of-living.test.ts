@@ -71,4 +71,17 @@ describe('computeCostOfLiving', () => {
     expect(threshold?.levelExceeds).toEqual({ essential: false, basic: false, current: true });
     expect(costOfLiving(items).thresholds).toEqual([]);
   });
+
+  it('un umbral de patrimonio se compara con el patrimonio bruto (ADR 0027)', () => {
+    const [assets] = costOfLiving([item({})], {
+      thresholds: [{ code: 'tax.filing_gross_assets', annualLimit: 1_000, basis: 'assets' }],
+      grossAssets: 1_500,
+    }).thresholds;
+    expect(assets?.basis).toBe('assets');
+    expect(assets?.grossAssetsExceeds).toBe(true);
+    const [none] = costOfLiving([item({})], {
+      thresholds: [{ code: 'tax.filing_gross_assets', annualLimit: 1_000, basis: 'assets' }],
+    }).thresholds;
+    expect(none?.grossAssetsExceeds).toBe(false);
+  });
 });

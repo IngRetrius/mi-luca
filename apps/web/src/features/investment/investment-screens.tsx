@@ -126,6 +126,8 @@ export async function InvestmentScreen({
   const answered = profile.willingness !== null;
   const ageMissing = investment.age === null && (profile.final ?? 0) > 0;
   const { parameters } = computed.input;
+  // Sin nada invertido ni por invertir, la distribución y la proyección serían filas en 0 (ADR 0028).
+  const nothingToInvest = current.total === 0 && plan.target.total === 0 && plan.annual.total === 0;
 
   return (
     <Screen>
@@ -223,60 +225,71 @@ export async function InvestmentScreen({
         {ageMissing ? <p className="text-sm">{text.allocation.ageMissing}</p> : null}
       </Section>
 
-      <Section id="investment-plan" title={text.plan.title}>
-        <p className="text-sm text-text-muted">{text.plan.intro}</p>
-        <dl className="flex flex-col divide-y divide-border rounded-xl border border-border text-sm">
-          {(
-            [
-              [text.plan.monthly, plan.monthly],
-              [text.plan.annual, plan.annual],
-              [text.plan.lumpSum, plan.lumpSum],
-              [text.plan.current, plan.current],
-              [text.plan.target, plan.target],
-            ] as const
-          ).map(([label, row]) => (
-            <div key={label} className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-1 p-4">
-              <dt className="font-medium">{label}</dt>
-              <dd className="text-right font-medium tabular-nums">{money(row.total)}</dd>
-              <dd className="col-span-2 text-text-muted tabular-nums">{split(row)}</dd>
-            </div>
-          ))}
-          <div className="flex flex-col gap-1 p-4">
-            <dt className="font-medium">{text.plan.movement}</dt>
-            <dd className="tabular-nums">{split(plan.movement)}</dd>
-            <dd className="text-text-muted">{text.plan.movementHint}</dd>
-          </div>
-        </dl>
-      </Section>
-
-      <Section id="investment-projection" title={text.projection.title}>
-        <p className="text-sm font-medium">{text.illustrative}</p>
-        <p className="text-sm text-text-muted">{text.projection.intro}</p>
-        <ol className="flex flex-col divide-y divide-border rounded-xl border border-border text-sm">
-          {investment.projection.map((year) => (
-            <li key={year.year} className="flex flex-col gap-1 p-4">
-              <div className="flex flex-wrap justify-between gap-x-3">
-                <span className="font-medium">
-                  {year.ageAtClose === null
-                    ? text.projection.year.replace('{year}', String(year.year))
-                    : text.projection.yearAge
-                        .replace('{year}', String(year.year))
-                        .replace('{age}', String(year.ageAtClose))}
-                </span>
-                <span className="text-right font-medium tabular-nums">
-                  {money(year.endBalance)}
-                </span>
+      {nothingToInvest ? (
+        <Section id="investment-plan" title={text.plan.title}>
+          <p className="text-sm">{text.plan.nothingYet}</p>
+        </Section>
+      ) : (
+        <>
+          <Section id="investment-plan" title={text.plan.title}>
+            <p className="text-sm text-text-muted">{text.plan.intro}</p>
+            <dl className="flex flex-col divide-y divide-border rounded-xl border border-border text-sm">
+              {(
+                [
+                  [text.plan.monthly, plan.monthly],
+                  [text.plan.annual, plan.annual],
+                  [text.plan.lumpSum, plan.lumpSum],
+                  [text.plan.current, plan.current],
+                  [text.plan.target, plan.target],
+                ] as const
+              ).map(([label, row]) => (
+                <div
+                  key={label}
+                  className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-1 p-4"
+                >
+                  <dt className="font-medium">{label}</dt>
+                  <dd className="text-right font-medium tabular-nums">{money(row.total)}</dd>
+                  <dd className="col-span-2 text-text-muted tabular-nums">{split(row)}</dd>
+                </div>
+              ))}
+              <div className="flex flex-col gap-1 p-4">
+                <dt className="font-medium">{text.plan.movement}</dt>
+                <dd className="tabular-nums">{split(plan.movement)}</dd>
+                <dd className="text-text-muted">{text.plan.movementHint}</dd>
               </div>
-              <span className="text-text-muted tabular-nums">
-                {text.projection.detail
-                  .replace('{growth}', percent(year.growthShare))
-                  .replace('{contributions}', money(year.contribution + year.receivables))
-                  .replace('{returns}', money(year.returnAmount))}
-              </span>
-            </li>
-          ))}
-        </ol>
-      </Section>
+            </dl>
+          </Section>
+
+          <Section id="investment-projection" title={text.projection.title}>
+            <p className="text-sm font-medium">{text.illustrative}</p>
+            <p className="text-sm text-text-muted">{text.projection.intro}</p>
+            <ol className="flex flex-col divide-y divide-border rounded-xl border border-border text-sm">
+              {investment.projection.map((year) => (
+                <li key={year.year} className="flex flex-col gap-1 p-4">
+                  <div className="flex flex-wrap justify-between gap-x-3">
+                    <span className="font-medium">
+                      {year.ageAtClose === null
+                        ? text.projection.year.replace('{year}', String(year.year))
+                        : text.projection.yearAge
+                            .replace('{year}', String(year.year))
+                            .replace('{age}', String(year.ageAtClose))}
+                    </span>
+                    <span className="text-right font-medium tabular-nums">
+                      {money(year.endBalance)}
+                    </span>
+                  </div>
+                  <span className="text-text-muted tabular-nums">
+                    {text.projection.detail
+                      .replace('{growth}', percent(year.growthShare))
+                      .replace('{contributions}', money(year.contribution + year.receivables))
+                      .replace('{returns}', money(year.returnAmount))}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </Section>
+        </>
+      )}
 
       {viewer.role === 'advisor' ? (
         <ul className="rounded-xl border border-border">

@@ -41,11 +41,11 @@ El asesor no pide todo de una vez. Primero llena el núcleo (perfil, ingresos, m
 | Etapa | Qué se registra | Qué recibe el cliente |
 |---|---|---|
 | Datos básicos (núcleo, siempre activo) | Perfil y tipo de cliente; ingresos con su tipo | Nada aparte: lo usan las tres etapas |
-| 1. Presupuesto y bolsillos | Gastos (desde el catálogo), bancos y bolsillos, prueba de realidad; si aplican, meses sin ingreso y cobros | Reporte con ingreso, gasto, sobrante, tasa de ahorro, fondo de emergencia, aporte de cada bolsillo y el año del flujo |
-| 2. Deudas | Saldo, tasa y cuota de cada deuda | Reporte con deuda total, carga de deuda, orden de pago, salida de cada deuda e intereses |
+| 1. Presupuesto y bolsillos | Gastos (desde el catálogo), cuentas y saldos (activos líquidos, ADR 0028), bancos y bolsillos, prueba de realidad; si aplican, meses sin ingreso y cobros | Reporte con cómo va el plan (sobrante, tasa de ahorro y fondo, con semáforo), la tabla de bolsillos con lo que se pasa cada mes y el año del flujo |
+| 2. Deudas | Saldo, tasa y cuota de cada deuda; si tiene cuotas atrasadas o reportes negativos | Reporte con cómo va el plan (sobrante y carga de deuda), orden de pago, salida de cada deuda e intereses |
 | 3. Patrimonio, protección y metas | Patrimonio, seguros, metas y perfil de riesgo | Reporte con patrimonio neto, suma asegurada, aporte a cada meta e inversión ilustrativa |
 
-En la ficha (P-A03), cada etapa activa muestra sus pasos, que se marcan solos con los datos, y el primero pendiente como acción principal. El orden sugerido es 1, 2, 3; un cliente que llega por sus deudas puede empezar por la 2. Con deuda cara, la etapa 3 avisa que la inversión espera. Ocultar una etapa no borra sus datos ni los saca del cálculo. Para cada etapa se sigue el mismo ciclo del protocolo: registrar, analizar, proponer, controlar, entregar y hacer seguimiento.
+El déficit del año pide nota en cualquier entrega; deudas pide además explicar una cuota que no cubre intereses o cuotas atrasadas, y patrimonio exige que el aporte de cada meta tenga bolsillo (ADR 0028). En la ficha (P-A03), cada etapa activa muestra sus pasos, que se marcan solos con los datos, y el primero pendiente como acción principal. El orden sugerido es 1, 2, 3; un cliente que llega por sus deudas puede empezar por la 2. Con deuda cara, la etapa 3 avisa que la inversión espera. Ocultar una etapa no borra sus datos ni los saca del cálculo. Para cada etapa se sigue el mismo ciclo del protocolo: registrar, analizar, proponer, controlar, entregar y hacer seguimiento.
 
 ### 3.2 Fases del protocolo
 
@@ -128,9 +128,9 @@ flowchart TD
 | P-C01 | Invitación | Nombre del asesor, qué es la plataforma (planificación y educación financiera), qué no es (no recomienda productos), qué datos se piden y cuáles nunca, botón continuar |
 | P-C02 | Consentimiento | Texto de tratamiento de datos del país (versión y fecha), casilla obligatoria; casilla aparte para datos de salud si el presupuesto los incluye; enlace a la política completa |
 | P-C03 | Agregar a inicio | Instrucciones según el sistema: en iPhone, Compartir y luego "Agregar a inicio"; en Android, botón "Instalar" (evento `beforeinstallprompt`). Opción "Ahora no" |
-| P-C04 | Inicio | Saludo con el tratamiento elegido; si el plan está listo o en preparación, con el enlace a Mi plan (o a las notas publicadas antes de la entrega); botón "Registrar el gasto de este mes"; próximas 3 tareas; enlaces a Mis datos y a Privacidad y datos; idioma; cerrar sesión. Las 4 cifras clave con semáforo del boceto de abajo no están construidas (08/10/2026) y no entran antes del piloto |
-| P-C05 | Mi plan | Con reportes de varias etapas, arriba el último de cada una (ADR 0025); el reporte elegido muestra solo las secciones de su etapa. Plan entregado vigente por secciones plegables (estructura de la carta, sección 11 del protocolo); selector de versión; botón "Comparar con hoy"; descargar PDF. Incluye los supuestos con que se calculó, en solo lectura, cada uno con su ayuda (la misma vista la ve el asesor) |
-| P-C06 | Mis datos | Módulos editables con su total, agrupados en datos básicos (Ingresos, Monedas) y las etapas que el asesor activó: presupuesto (Gastos, Bancos y bolsillos, Lo que le deben, Prueba de realidad), deudas y patrimonio (Lo que tiene, Seguros, Metas, Inversión) (ADR 0025) |
+| P-C04 | Inicio | Saludo con el tratamiento elegido; si el plan está listo o en preparación, con el enlace a Mi plan (o a las notas publicadas antes de la entrega); botón "Registrar el gasto de este mes"; "Cómo va tu plan" con los indicadores del último reporte y su semáforo (ADR 0028); próximas 3 tareas; enlaces a Mis datos y a Privacidad y datos; idioma; cerrar sesión |
+| P-C05 | Mi plan | Con reportes de varias etapas, arriba se elige el último de cada una (ADR 0025). El reporte, en el orden en que se usa (ADR 0028): el mensaje del asesor (resumen de la carta) abierto; las próximas tareas; "Cómo va el plan" con indicadores, semáforo, una frase sin jerga y la referencia del protocolo; la tabla de bolsillos con lo que se pasa cada mes y el total; el plan de deudas; patrimonio, metas e inversión; el resto de la carta en secciones plegables y las notas; "Comparar con hoy"; y, plegado, "Todas las cifras y supuestos". Descargar PDF y versiones anteriores. La misma vista la ve el asesor, sin las tareas |
+| P-C06 | Mis datos | Módulos editables con su total, agrupados en datos básicos (Ingresos, Monedas) y las etapas que el asesor activó: presupuesto (Gastos, Tus cuentas y saldos, Bancos y bolsillos, Lo que le deben, Prueba de realidad), deudas y patrimonio (Lo que tiene, Seguros, Metas, Inversión) (ADR 0025 y 0028) |
 | P-C07 | Editar un dato | Hoja inferior con el formulario; debajo, "Así cambia tu plan" con las cifras clave antes y después, calculadas en el teléfono |
 | P-C08 | Control mensual | Selector de mes; por categoría: presupuesto, campo del gasto real, barra de desviación; total del mes |
 | P-C09 | Tareas | Lista del plan de acción; tocar para marcar hecha; filtro pendientes y hechas |
@@ -174,27 +174,25 @@ Ancho de referencia: 390 px (iPhone de 6,1 pulgadas). `[ ]` son botones; `( )` c
 
 ```
 ┌──────────────────────────────────────┐
-│ Hola, Ana                         ⋯  │
-│ Cifras en pesos de hoy               │
-├──────────────────────────────────────┤
-│ Sobrante al año                      │
-│ 19.300.000              ● Bien       │
-├──────────────────────────────────────┤
-│ Fondo de emergencia                  │
-│ 8.640.000 de 8.640.000  ● Bien       │
-│ ████████████████████ 100 %           │
-├──────────────────────────────────────┤
-│ Tasa de ahorro     30 %   ● Bien     │
-│ Carga de deuda      0 %   ● Bien     │
-├──────────────────────────────────────┤
-│ Próximas tareas                      │
-│ ○ Crear los bolsillos     2 oct      │
-│ ○ Automatizar transferencias 2 oct   │
-│ [ Ver todas ]                        │
-├──────────────────────────────────────┤
+│ Hola, Ana                            │
+│ Tu plan está listo.                  │
+│ [          Ver tu plan          ]    │
 │ [ Registrar el gasto de este mes ]   │
 ├──────────────────────────────────────┤
-│ Inicio  Mi plan  Mis datos  Control  Más │
+│ Cómo va tu plan                      │
+│ Lo que queda al año   19.300.000     │
+│ ✓ Bien                               │
+│ Tasa de ahorro             30 %      │
+│ ✓ Bien                               │
+│ Fondo de emergencia        100 %     │
+│ ✓ Bien                               │
+├──────────────────────────────────────┤
+│ Tus próximas tareas                  │
+│ Crear los bolsillos                  │
+│ Antes del 8 nov. 2026                │
+│ Ver todas las tareas                 │
+├──────────────────────────────────────┤
+│ Mis datos · Privacidad y datos       │
 └──────────────────────────────────────┘
 ```
 
@@ -425,7 +423,7 @@ En el celular, una columna; desde el escritorio, la comparación a la derecha y 
 └──────────────────────────────────────┘
 ```
 
-Las cifras son marcadores enlazados al motor: si un dato cambia, la cifra cambia. Al entregar el plan, se congelan.
+Las cifras son marcadores enlazados al motor: si un dato cambia, la cifra cambia. Al entregar el plan, se congelan. "Proponer un borrador" llena solo las secciones vacías de la carta con un texto inicial de las etapas activas, con sus marcadores y en el trato del cliente; fortalezas y puntos de atención quedan al criterio del asesor (ADR 0028).
 
 ### P-A14 Entregar un reporte
 
@@ -440,8 +438,11 @@ Las cifras son marcadores enlazados al motor: si un dato cambia, la cifra cambia
 │ ( ) Plan completo                    │
 ├──────────────────────────────────────┤
 │ Control de calidad                   │
+│ ✓ Los meses sin ingreso, cubiertos   │
 │ ✓ Todos los ingresos tienen tipo     │
 │ ✓ Todas las monedas tienen su tasa   │
+│ ✓ Cada cuota cubre sus intereses     │
+│ ✓ Sin cuotas atrasadas               │
 ├──────────────────────────────────────┤
 │ Reportes entregados                  │
 │ Presupuesto y bolsillos, 8 oct 2026  │

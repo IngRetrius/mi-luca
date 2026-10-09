@@ -15,6 +15,7 @@ import type { CaseEditor } from '@/server/case-access';
 import { getLocale, getMessages } from '@/server/i18n';
 
 import { deleteInsurance, saveInsurance, saveLifeSettings } from './actions';
+import { budgetedInsurance } from './budgeted';
 import { InsuranceForm } from './insurance-form';
 import { LifeSettingsForm } from './life-settings-form';
 import { insurancePaths } from './paths';
@@ -79,6 +80,11 @@ export async function InsuranceScreen({
   const { insurances, settings } = computed.rows;
   const { insurance, lifeInsurance } = computed.result;
   const byType = new Map(insurances.map((row) => [row.insurance_type, row]));
+  // Seguros que ya se pagan y están en el presupuesto desde el catálogo (ADR 0028).
+  const inBudget = budgetedInsurance(
+    computed.rows.client.country_code,
+    computed.rows.budgetItems.map((item) => item.concept),
+  );
   const others = insurances.filter((row) => row.insurance_type === 'otro');
   const unanswered =
     CATALOG.some((type) => !byType.get(type)?.status) || others.some((row) => !row.status);
@@ -132,7 +138,13 @@ export async function InsuranceScreen({
             : rowLink(
                 paths.add(type),
                 text.types[type],
-                `${text.unanswered} · ${text.answer}`,
+                [
+                  text.unanswered,
+                  inBudget[type] ? text.inBudget.replace('{concept}', inBudget[type]) : null,
+                  text.answer,
+                ]
+                  .filter(Boolean)
+                  .join(' · '),
                 type,
               );
         })}

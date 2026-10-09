@@ -319,6 +319,7 @@ export async function AdvisorDeliveredPlanScreen({
         locale={locale}
         currency={delivery.baseCurrency}
         documentTitles={{
+          summary: t.documents.view.summaryTitleAdvisor,
           letter: t.documents.view.letterTitleAdvisor,
           notes: t.documents.view.notesTitleAdvisor,
         }}

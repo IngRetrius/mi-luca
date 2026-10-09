@@ -1,4 +1,4 @@
-export { classifyDebts, monthlyRate } from './classify';
+export { classifyDebts, monthlyRate, paymentCoversInterest } from './classify';
 export type { DebtClassification } from './classify';
 export { debtTotals } from './debt-totals';
 export type { DebtInput, DebtTotals } from './debt-totals';

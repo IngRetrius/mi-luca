@@ -1,29 +1,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { isOverdue } from '@miluca/engine';
-import { formatDate } from '@miluca/i18n';
-
-import { StatusLabel } from '@/components/status';
-import {
-  focusRing,
-  linkButton,
-  primaryButton,
-  secondaryButton,
-  textButton,
-} from '@/components/ui-classes';
-import { loadActionItems, type ActionItemRow } from '@/features/action-plan';
+import { linkButton, primaryButton, secondaryButton, textButton } from '@/components/ui-classes';
+import { loadActionItems, NextTasks, pendingTasks } from '@/features/action-plan';
 import { SignOutButton } from '@/features/auth';
-import { listDeliveries } from '@/features/deliveries';
+import { IndicatorSummary, loadLatestDelivery } from '@/features/deliveries';
 import { loadDocuments } from '@/features/documents';
 import { LanguageSwitcher } from '@/features/language';
-import { withAddress, type FormOfAddress } from '@/lib/address';
-import { todayIn } from '@/lib/dates';
+import { withAddress } from '@/lib/address';
 import { getLocale, getMessages } from '@/server/i18n';
 import type { Viewer } from '@/server/viewer';
-
-// Cuántas tareas pendientes se ven en el inicio (P-C04).
-const NEXT_TASKS = 3;
 
 /**
  * P-C04 Inicio del cliente. Hasta la entrega dice que el asesor prepara el plan; después lleva a Mi
@@ -33,17 +19,16 @@ export async function ClientHome({ viewer }: { viewer: Extract<Viewer, { role: '
   const t = await getMessages();
   // El nombre va aparte para marcarlo como no traducible.
   const [greetingBefore, greetingAfter] = t.clientHome.greeting.split('{name}');
-  const [deliveries, actionItems, documents] = await Promise.all([
-    listDeliveries(viewer.clientId),
+  const [latest, actionItems, documents, locale] = await Promise.all([
+    loadLatestDelivery(viewer.clientId),
     loadActionItems(viewer.clientId),
     loadDocuments(viewer.clientId),
+    getLocale(viewer.countryCode),
   ]);
-  const delivered = (deliveries?.length ?? 0) > 0;
+  const delivered = Boolean(latest);
   // RLS: el cliente solo recibe las notas publicadas.
   const notesPublished = documents?.notas !== undefined;
-  const nextTasks = (actionItems ?? [])
-    .filter((item) => item.status !== 'hecho')
-    .slice(0, NEXT_TASKS);
+  const nextTasks = pendingTasks(actionItems);
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-6 px-4 py-10 text-center">
@@ -72,6 +57,13 @@ export async function ClientHome({ viewer }: { viewer: Extract<Viewer, { role: '
       <Link href="/control-mensual" className={`w-full ${secondaryButton} ${linkButton}`}>
         {t.clientHome.spendingLink}
       </Link>
+      {latest ? (
+        <IndicatorSummary
+          delivery={latest}
+          locale={locale}
+          title={withAddress(t.clientHome, viewer.formOfAddress).indicatorsTitle}
+        />
+      ) : null}
       {nextTasks.length > 0 ? (
         <NextTasks
           tasks={nextTasks}
@@ -89,51 +81,5 @@ export async function ClientHome({ viewer }: { viewer: Extract<Viewer, { role: '
       <LanguageSwitcher className="justify-center" />
       <p className="text-sm text-text-muted">{t.scope.notInvestmentAdvice}</p>
     </main>
-  );
-}
-
-/** Las próximas tareas pendientes del plan de acción, con su fecha límite y si está vencida. */
-async function NextTasks({
-  tasks,
-  formOfAddress,
-  countryCode,
-}: {
-  tasks: readonly ActionItemRow[];
-  formOfAddress: FormOfAddress;
-  countryCode: string;
-}) {
-  const t = await getMessages();
-  const text = withAddress(t.clientHome, formOfAddress);
-  const locale = await getLocale(countryCode);
-  const today = todayIn(countryCode);
-  return (
-    <section aria-labelledby="next-tasks-title" className="flex w-full flex-col gap-2 text-left">
-      <h2 id="next-tasks-title" className="font-semibold">
-        {text.tasksTitle}
-      </h2>
-      <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <Link
-              href={`/tareas/${task.id}`}
-              className={`flex min-h-12 flex-col gap-1 rounded-xl p-4 hover:bg-surface ${focusRing}`}
-            >
-              <span className="font-medium wrap-anywhere">{task.title}</span>
-              {task.due_date ? (
-                <span className="text-sm text-text-muted">
-                  {text.dueOn.replace('{date}', formatDate(task.due_date, locale, 'UTC'))}
-                </span>
-              ) : null}
-              {isOverdue({ dueDate: task.due_date, status: 'pendiente' }, today) ? (
-                <StatusLabel status="alert" label={text.overdue} />
-              ) : null}
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <Link href="/tareas" className={`self-start ${textButton} ${linkButton}`}>
-        {text.tasksLink}
-      </Link>
-    </section>
   );
 }

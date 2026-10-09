@@ -918,6 +918,7 @@ export type Database = {
           frech_points: number | null;
           frech_until_installment: number | null;
           id: string;
+          in_arrears: boolean;
           insurance_in_payment: number;
           lender_name: string | null;
           manual_order: number | null;
@@ -944,6 +945,7 @@ export type Database = {
           frech_points?: number | null;
           frech_until_installment?: number | null;
           id?: string;
+          in_arrears?: boolean;
           insurance_in_payment?: number;
           lender_name?: string | null;
           manual_order?: number | null;
@@ -970,6 +972,7 @@ export type Database = {
           frech_points?: number | null;
           frech_until_installment?: number | null;
           id?: string;
+          in_arrears?: boolean;
           insurance_in_payment?: number;
           lender_name?: string | null;
           manual_order?: number | null;

@@ -5,6 +5,7 @@ import { formatDate } from '@miluca/i18n';
 import { BackLink, LoadError } from '@/components/back-link';
 import { Screen } from '@/components/screen';
 import { focusRing } from '@/components/ui-classes';
+import { loadActionItems, NextTasks, pendingTasks } from '@/features/action-plan';
 import {
   DocumentSections,
   figureValues,
@@ -23,10 +24,10 @@ import { listDeliveries, loadDelivery } from './queries';
 import { labelNamesStage } from './stage-label';
 
 /**
- * P-C05 Mi plan: las notas que el asesor publicó (con las cifras de hoy) y el reporte elegido (el más
- * reciente si no se elige), con su carta por secciones plegables, la comparación con hoy y su PDF.
- * Con reportes de varias etapas (ADR 0025), arriba va el último de cada una; abajo, todas las
- * versiones.
+ * P-C05 Mi plan, ordenado por lo que el cliente hace con él (ADR 0028): el reporte elegido (el más
+ * reciente si no se elige) con el mensaje de su asesor arriba, sus próximas tareas, cómo va su plan
+ * y lo que tiene que hacer; después la carta, las notas que el asesor publicó y las versiones. Con
+ * reportes de varias etapas (ADR 0025), arriba se elige el último de cada una.
  */
 export async function MyPlanScreen({
   clientId,
@@ -41,10 +42,11 @@ export async function MyPlanScreen({
   const t = await getMessages();
   const text = withAddress(t.myPlan, formOfAddress);
   const view = withAddress(t.documents.view, formOfAddress);
-  const [deliveries, computed, documents] = await Promise.all([
+  const [deliveries, computed, documents, actionItems] = await Promise.all([
     listDeliveries(clientId),
     loadComputedCase(clientId),
     loadDocuments(clientId),
+    loadActionItems(clientId),
   ]);
   const header = (
     <>
@@ -80,6 +82,11 @@ export async function MyPlanScreen({
         })}
       />
     ) : null;
+  const tasks = pendingTasks(actionItems);
+  const tasksSection =
+    tasks.length > 0 && country ? (
+      <NextTasks tasks={tasks} formOfAddress={formOfAddress} countryCode={country} />
+    ) : null;
   const chosen = deliveries.find((delivery) => delivery.id === version) ?? deliveries[0];
   // El último de cada etapa: la lista viene de la más reciente a la más antigua.
   const latestByStage = deliveries.filter(
@@ -90,6 +97,7 @@ export async function MyPlanScreen({
       <Screen>
         {header}
         {notesSection}
+        {tasksSection}
         <p className="text-text-muted">{text.none}</p>
       </Screen>
     );
@@ -99,24 +107,20 @@ export async function MyPlanScreen({
   return (
     <Screen>
       {header}
-      {notesSection}
       {latestByStage.length > 1 ? (
-        <nav aria-labelledby="reports-title" className="flex flex-col gap-2">
-          <h2 id="reports-title" className="font-semibold">
+        <nav aria-labelledby="reports-title" className="-mt-2 flex flex-col gap-2">
+          <h2 id="reports-title" className="text-sm text-text-muted">
             {t.plan.reportsTitle}
           </h2>
-          <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
+          <ul className="flex flex-wrap gap-2">
             {latestByStage.map((entry) => (
               <li key={entry.id}>
                 <Link
                   href={`/mi-plan?version=${entry.id}`}
                   aria-current={entry.id === chosen.id ? 'page' : undefined}
-                  className={`flex min-h-12 flex-col gap-1 rounded-xl p-4 hover:bg-surface aria-[current=page]:bg-surface ${focusRing}`}
+                  className={`inline-flex min-h-12 items-center rounded-full border border-border px-4 text-sm font-medium hover:border-text-muted aria-[current=page]:border-primary aria-[current=page]:bg-surface ${focusRing}`}
                 >
-                  <span className="font-medium">{t.stages.names[entry.stage]}</span>
-                  <span className="text-sm text-text-muted">
-                    {formatDate(entry.deliveredOn, locale, 'UTC')}
-                  </span>
+                  {t.stages.names[entry.stage]}
                 </Link>
               </li>
             ))}
@@ -125,21 +129,28 @@ export async function MyPlanScreen({
       ) : null}
       {delivery ? (
         <>
-          <p className={`font-medium wrap-anywhere ${notesSection ? '' : '-mt-4'}`}>
-            {delivery.label}
-          </p>
-          <PdfLink href={`/mi-plan/pdf?version=${delivery.id}`} />
+          <div className="flex flex-col gap-3">
+            <p className="font-medium wrap-anywhere">{delivery.label}</p>
+            <PdfLink href={`/mi-plan/pdf?version=${delivery.id}`} />
+          </div>
           <PlanView
             delivery={delivery}
             today={computed?.figures ?? null}
             locale={locale}
             currency={delivery.baseCurrency}
-            documentTitles={{ letter: view.letterTitle, notes: view.notesDeliveredTitle }}
-          />
+            documentTitles={{
+              summary: view.summaryTitle,
+              letter: view.letterTitle,
+              notes: view.notesDeliveredTitle,
+            }}
+          >
+            {tasksSection}
+          </PlanView>
         </>
       ) : (
         <LoadError message={t.common.loadError} retryLabel={t.common.retry} retryHref="/mi-plan" />
       )}
+      {notesSection}
       {deliveries.length > 1 ? (
         <nav aria-labelledby="versions-title" className="flex flex-col gap-2">
           <h2 id="versions-title" className="font-semibold">

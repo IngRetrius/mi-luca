@@ -2,6 +2,7 @@ import type { CurrencyCode, Money } from '@miluca/domain';
 
 import type { CaseInput, CaseResult } from '../compute';
 import { missingRates } from '../currency';
+import { paymentCoversInterest } from '../debts';
 
 /**
  * Qué pasa si un control falla: `blocking` impide entregar; `note` deja entregar solo con una nota
@@ -10,7 +11,10 @@ import { missingRates } from '../currency';
  */
 export type QcSeverity = 'blocking' | 'note' | 'warning';
 
-/** Controles que ya se pueden evaluar (hasta F5). Los de la carta llegan con ella (F7). */
+/**
+ * Controles que ya se pueden evaluar (hasta F5). Los de la carta llegan con ella (F7). Los de la
+ * prueba de realidad hacia arriba y los de deudas son del ADR 0027.
+ */
 export type QcCode =
   | 'surplus_balances'
   | 'pocket_contributions_match'
@@ -26,7 +30,10 @@ export type QcCode =
   | 'growth_within_range'
   | 'reality_check_done'
   | 'reality_check_confirms'
-  | 'third_party_counted_once';
+  | 'reality_check_not_overstated'
+  | 'third_party_counted_once'
+  | 'debt_payment_covers_interest'
+  | 'debt_in_arrears';
 
 export interface QcItem {
   readonly code: QcCode;
@@ -143,6 +150,15 @@ export function qualityChecks(input: CaseInput, result: CaseResult): QcReport {
       : growth >= allocation.rangeMin - RATIO_TOLERANCE &&
         growth <= allocation.rangeMax + RATIO_TOLERANCE;
 
+  const realityDetail = {
+    difference: realityCheck.difference ?? 0,
+    expectedMonthly: realityCheck.expectedMonthly,
+    gapMonthly: (realityCheck.actualMonthly ?? 0) - realityCheck.expectedMonthly,
+  };
+  // Con el saldo y la cuota de hoy (los de seguimiento ya vienen del puente).
+  const belowInterest = result.debtPlan.debts.filter((debt) => !paymentCoversInterest(debt)).length;
+  const inArrears = input.debts.filter((debt) => debt.inArrears === true).length;
+
   const items: QcItem[] = [
     item('surplus_balances', 'blocking', Math.abs(surplusGap) <= TOLERANCE, {
       difference: surplusGap,
@@ -178,12 +194,17 @@ export function qualityChecks(input: CaseInput, result: CaseResult): QcReport {
       missingAge: needsRange && allocation.band === null ? 1 : 0,
     }),
     item('reality_check_done', 'warning', realityCheck.status !== 'pendiente'),
-    item('reality_check_confirms', 'note', realityCheck.status !== 'revisar_gastos', {
-      difference: realityCheck.difference ?? 0,
-      expectedMonthly: realityCheck.expectedMonthly,
-      gapMonthly: (realityCheck.actualMonthly ?? 0) - realityCheck.expectedMonthly,
-    }),
+    item('reality_check_confirms', 'note', realityCheck.status !== 'revisar_gastos', realityDetail),
+    // Solo en modo nativo: el cliente ahorra bastante más de lo que dice el plan (ADR 0027).
+    item(
+      'reality_check_not_overstated',
+      'note',
+      realityCheck.status !== 'revisar_presupuesto',
+      realityDetail,
+    ),
     item('third_party_counted_once', 'warning', !(paidByOthers && otherIncome)),
+    item('debt_payment_covers_interest', 'note', belowInterest === 0, { count: belowInterest }),
+    item('debt_in_arrears', 'note', inArrears === 0, { count: inArrears }),
   ];
 
   const failed = (severity: QcSeverity) =>

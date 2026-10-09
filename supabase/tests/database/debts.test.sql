@@ -70,6 +70,11 @@ select throws_ok(
 select lives_ok(
   $$update public.debts set balance = 3500000, extra_from_date = '2027-01-01' where name = 'Tarjeta'$$,
   'El cliente actualiza el saldo y desde cuándo acepta abonos');
+select lives_ok(
+  $$update public.debts set in_arrears = true where name = 'Tarjeta'$$,
+  'El cliente marca que la tarjeta tiene cuotas atrasadas (ADR 0027)');
+select is((select in_arrears from public.debts where name = 'Préstamo familiar'), false,
+  'Una deuda nueva no tiene cuotas atrasadas');
 select throws_ok(
   $$insert into public.case_settings (client_id, debt_method) values
     ('c1c1c1c1-0000-4000-8000-000000000001', 'bola_de_nieve')$$,
@@ -105,7 +110,7 @@ select is(
   (select count(*)::int from public.audit_log
    where client_id = 'c1c1c1c1-0000-4000-8000-000000000001' and actor_role = 'cliente'
      and table_name in ('debts', 'debt_installments')),
-  6, 'Cada cambio del cliente en sus deudas y cuotas queda en el historial a su nombre');
+  7, 'Cada cambio del cliente en sus deudas y cuotas queda en el historial a su nombre');
 
 -- Asesora A ------------------------------------------------------------------------------------
 
@@ -121,6 +126,9 @@ select throws_ok(
 select lives_ok(
   $$update public.debts set manual_order = 1 where name = 'Préstamo familiar'$$,
   'Y fija el lugar de cada deuda');
+select lives_ok(
+  $$update public.debts set in_arrears = false where name = 'Tarjeta'$$,
+  'Y quita la marca de cuotas atrasadas cuando el cliente se pone al día');
 select is(
   (select debt_method from public.case_settings where client_id = 'c1c1c1c1-0000-4000-8000-000000000001'),
   'manual', 'El método queda guardado');
@@ -154,6 +162,23 @@ select throws_ok(
   $$insert into public.debts (client_id, name, debt_type, currency, balance, annual_rate, min_payment) values
     ('c1c1c1c1-0000-4000-8000-000000000001', 'Intrusa', 'otro', 'COP', 1, 0.1, 1)$$,
   '42501', null, 'Ni las escribe');
+update public.debts set in_arrears = true;
+select set_config('request.jwt.claims', '{"sub":"11111111-1111-4111-8111-111111111111"}', true);
+select is((select count(*)::int from public.debts where in_arrears), 0,
+  'Ni marca cuotas atrasadas en deudas ajenas');
+select set_config('request.jwt.claims', '{"sub":"22222222-2222-4222-8222-222222222222"}', true);
+
+-- Parámetros de Colombia de la revisión del asesor (F75 a F77) --------------------------------
+
+select is(
+  (select value::numeric from public.parameter_at('CO', 'debt.usury_rate', '2026-10-15')),
+  0.2859, 'La tasa de usura de octubre de 2026 está publicada con su vigencia');
+select is(public.parameter_at('CO', 'debt.usury_rate', '2026-11-01'), null,
+  'Y vence al terminar el mes');
+select is(
+  (select count(*)::int from public.country_parameters
+   where country_code = 'CO' and key like 'tax.filing_%' and source_url like 'https://normograma.dian.gov.co/%'),
+  3, 'Los topes para declarar renta de 2026 tienen su fuente');
 
 -- Revocación -----------------------------------------------------------------------------------
 

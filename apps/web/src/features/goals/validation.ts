@@ -2,6 +2,11 @@ import { looksLikeAccountNumber } from '@/lib/account-number';
 import { parseAmount, parseDecimal, parsePercent } from '@/lib/amount';
 
 export const NAME_MAX = 80;
+/**
+ * Valor del selector de bolsillo que crea uno con el nombre de la meta al guardar (ADR 0028): así
+ * el aporte no queda sin bolsillo, que bloquea la entrega.
+ */
+export const NEW_POCKET = 'nuevo';
 export const NOTE_MAX = 500;
 /** Una meta que se repite lo hace cada 1 a 50 años. */
 const REPEAT_MAX = 50;
@@ -108,6 +113,8 @@ export type GoalParse =
       readonly values: GoalValues;
       readonly record: GoalRecord;
       readonly tripItems: readonly TripItemRecord[];
+      /** Crear (o reutilizar, si ya existe con ese nombre) un bolsillo con el nombre de la meta. */
+      readonly createPocket: boolean;
     }
   | { readonly ok: false; readonly values: GoalValues; readonly errors: GoalErrors };
 
@@ -140,7 +147,7 @@ export function parseGoal(
   const pocketId = text(formData, 'pocketId');
   const values: GoalValues = {
     name: text(formData, 'name'),
-    pocketId: pocketIds.includes(pocketId) ? pocketId : '',
+    pocketId: pocketIds.includes(pocketId) || pocketId === NEW_POCKET ? pocketId : '',
     amount: text(formData, 'amount'),
     currency: text(formData, 'currency'),
     alreadySaved: text(formData, 'alreadySaved'),
@@ -217,7 +224,7 @@ export function parseGoal(
     values,
     record: {
       name: values.name,
-      pocket_id: values.pocketId || null,
+      pocket_id: values.pocketId && values.pocketId !== NEW_POCKET ? values.pocketId : null,
       currency: values.currency,
       amount: amount ?? null,
       already_saved: saved ?? 0,
@@ -231,5 +238,6 @@ export function parseGoal(
       note: values.note || null,
     },
     tripItems: items,
+    createPocket: values.pocketId === NEW_POCKET,
   };
 }

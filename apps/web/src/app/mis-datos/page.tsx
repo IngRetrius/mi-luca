@@ -16,6 +16,7 @@ import { investmentSummary } from '@/features/investment';
 import { loadActiveStages } from '@/features/stages';
 import { loadComputedCase } from '@/features/summary';
 import { withAddress } from '@/lib/address';
+import { plural } from '@/lib/plural';
 import { getLocale, getMessages, pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
 
@@ -63,9 +64,10 @@ export default async function MyDataPage() {
   const incomes =
     incomeRows.length === 0
       ? text.noIncomes
-      : text.incomesSummary
-          .replace('{count}', String(incomeRows.length))
-          .replace('{amount}', money(computed.result.incomes.annual));
+      : plural(text.incomesSummary, incomeRows.length).replace(
+          '{amount}',
+          money(computed.result.incomes.annual),
+        );
   const currencies =
     fxRates.length === 0
       ? text.currenciesNone.replace('{base}', client.base_currency)
@@ -75,9 +77,10 @@ export default async function MyDataPage() {
   const expenses =
     budgetItems.length === 0
       ? text.noExpenses
-      : text.expensesSummary
-          .replace('{count}', String(budgetItems.length))
-          .replace('{amount}', formatMoney(monthly, client.base_currency, locale));
+      : plural(text.expensesSummary, budgetItems.length).replace(
+          '{amount}',
+          formatMoney(monthly, client.base_currency, locale),
+        );
 
   const { result } = computed;
   const core: DataModule[] = [
@@ -88,9 +91,17 @@ export default async function MyDataPage() {
     presupuesto: [
       { href: '/mis-datos/gastos', title: text.expenses, summary: expenses },
       {
+        // El saldo de hoy que se reparte en el fondo y los bolsillos (ADR 0028).
+        href: '/mis-datos/patrimonio',
+        title: text.accounts,
+        summary: computed.rows.assets.some((asset) => asset.asset_type === 'liquido')
+          ? text.accountsSummary.replace('{amount}', money(result.liquidAssets))
+          : text.accountsNone,
+      },
+      {
         href: '/mis-datos/bolsillos',
         title: text.pockets,
-        summary: text.pocketsSummary.replace('{count}', String(result.pockets.withContribution)),
+        summary: plural(text.pocketsSummary, result.pockets.withContribution),
       },
       {
         href: '/mis-datos/cobros',

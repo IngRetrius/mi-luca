@@ -17,10 +17,17 @@ export interface CostOfLivingLevel extends AnnualAndMonthly {
   readonly withoutTemporary: AnnualAndMonthly;
 }
 
+/**
+ * Con qué se compara un umbral: el ingreso propio, el gasto de cada nivel o el patrimonio bruto. Sin
+ * base, con el ingreso y el gasto, como la plantilla (ADR 0027).
+ */
+export type ThresholdBasis = 'income' | 'spending' | 'assets';
+
 /** Umbral fiscal anual que aplica a este cliente, en moneda base (parámetro del país). */
 export interface FiscalThreshold {
   readonly code: string;
   readonly annualLimit: number;
+  readonly basis?: ThresholdBasis;
 }
 
 export interface ThresholdComparison extends FiscalThreshold {
@@ -28,6 +35,8 @@ export interface ThresholdComparison extends FiscalThreshold {
   readonly ownIncomeExceeds: boolean;
   /** ¿El costo anual de cada nivel lo supera? @excel Costo de vida!D37:F37 */
   readonly levelExceeds: Readonly<Record<CostLevel, boolean>>;
+  /** ¿El patrimonio bruto (todos los activos) lo supera? Para los umbrales de patrimonio. */
+  readonly grossAssetsExceeds: boolean;
 }
 
 export interface CostOfLivingResult {
@@ -42,6 +51,8 @@ export interface CostOfLivingOptions {
   readonly thresholds?: readonly FiscalThreshold[];
   /** Ingreso anual propio, para compararlo con los umbrales. */
   readonly ownIncome?: number;
+  /** Patrimonio bruto (activos, inversiones y cobros), para los umbrales de patrimonio. */
+  readonly grossAssets?: number;
 }
 
 /**
@@ -94,9 +105,11 @@ export function computeCostOfLiving(
   >;
 
   const ownIncome = options.ownIncome ?? 0;
+  const grossAssets = options.grossAssets ?? 0;
   const thresholds = (options.thresholds ?? []).map((threshold): ThresholdComparison => ({
     ...threshold,
     ownIncomeExceeds: ownIncome > threshold.annualLimit,
+    grossAssetsExceeds: grossAssets > threshold.annualLimit,
     levelExceeds: Object.fromEntries(
       LEVELS.map((which) => [which, levels[which].annual > threshold.annualLimit]),
     ) as Record<CostLevel, boolean>,

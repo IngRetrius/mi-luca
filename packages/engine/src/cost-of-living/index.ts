@@ -6,5 +6,6 @@ export type {
   CostOfLivingResult,
   CostOfLivingRow,
   FiscalThreshold,
+  ThresholdBasis,
   ThresholdComparison,
 } from './compute-cost-of-living';

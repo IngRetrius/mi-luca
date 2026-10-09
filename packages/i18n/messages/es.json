@@ -163,6 +163,10 @@
     },
     "privacyLink": "Privacidad y datos",
     "spendingLink": "Registrar el gasto de este mes",
+    "indicatorsTitle": {
+      "tu": "Cómo va tu plan",
+      "usted": "Cómo va su plan"
+    },
     "tasksTitle": {
       "tu": "Tus próximas tareas",
       "usted": "Sus próximas tareas"
@@ -270,6 +274,9 @@
       "emergencyFundSummary": "Meta de {amount}",
       "pockets": "Bolsillos",
       "pocketsSummary": "{count} con aporte al mes",
+      "accounts": "Cuentas y saldos",
+      "accountsSummary": "Saldo líquido de {amount}",
+      "accountsNone": "Sin cuentas registradas",
       "receivables": "Cuentas por cobrar",
       "receivablesSummary": "{amount} pendientes",
       "receivablesNone": "Ninguna",
@@ -624,8 +631,8 @@
     "debtLoad": "Carga de deuda",
     "totalDebt": "Deuda total",
     "expensiveDebtMonths": "Meses para salir de la deuda cara",
-    "emergencyGoal": "Meta del fondo de emergencia",
-    "emergencyProgress": "Avance del fondo de emergencia",
+    "emergencyGoal": "Meta vigente del fondo de emergencia",
+    "emergencyProgress": "Avance del fondo frente a su meta completa",
     "noIncomeShortfall": "Faltante de los meses sin ingreso",
     "annualInvestment": "Inversión al año",
     "growthShare": "% en crecimiento",
@@ -859,17 +866,32 @@
     },
     "back": "Inicio",
     "expenses": "Gastos",
-    "expensesSummary": "{count} partidas · {amount} al mes",
+    "expensesSummary": {
+      "one": "1 partida · {amount} al mes",
+      "other": "{count} partidas · {amount} al mes"
+    },
     "noExpenses": "Sin gastos registrados",
     "incomes": "Ingresos",
-    "incomesSummary": "{count} ingresos · {amount} al año",
+    "incomesSummary": {
+      "one": "1 ingreso · {amount} al año",
+      "other": "{count} ingresos · {amount} al año"
+    },
     "noIncomes": "Sin ingresos registrados",
     "link": "Mis datos",
     "currencies": "Monedas",
     "currenciesSummary": "{count} además de {base}",
     "currenciesNone": "Solo {base}",
     "pockets": "Bancos y bolsillos",
-    "pocketsSummary": "{count} bolsillos con aporte al mes",
+    "pocketsSummary": {
+      "one": "1 bolsillo con aporte al mes",
+      "other": "{count} bolsillos con aporte al mes"
+    },
+    "accounts": {
+      "tu": "Tus cuentas y saldos",
+      "usted": "Sus cuentas y saldos"
+    },
+    "accountsSummary": "Saldo de {amount}",
+    "accountsNone": "Sin cuentas registradas",
     "receivables": {
       "tu": "Lo que te deben",
       "usted": "Lo que le deben"
@@ -1140,7 +1162,10 @@
     "thresholdOption": "{label}: {amount}",
     "noThresholds": "No hay umbrales publicados para {country}.",
     "thresholdLabels": {
-      "tax.dependent_income_limit": "Límite de rentas del descendiente (mínimo por descendientes)"
+      "tax.dependent_income_limit": "Límite de rentas del descendiente (mínimo por descendientes)",
+      "tax.filing_gross_income": "Ingresos brutos para declarar renta (1.400 UVT)",
+      "tax.filing_purchases": "Compras y consumos para declarar renta (1.400 UVT)",
+      "tax.filing_gross_assets": "Patrimonio bruto para declarar renta (4.500 UVT)"
     },
     "submit": "Guardar",
     "submitting": "Guardando…",
@@ -1183,6 +1208,8 @@
     "thresholdsTitle": "Umbrales fiscales",
     "thresholdsNote": "Referencia, no asesoría tributaria: se confirma con el contador o gestor.",
     "ownIncome": "Ingreso propio al año",
+    "grossAssets": "Patrimonio bruto (activos, inversiones y cobros)",
+    "ownIncomeNet": "El ingreso registrado es neto: si lo supera, el bruto también; si no, confírmalo con el contador.",
     "limit": "Límite: {amount} al año",
     "exceeds": "Supera",
     "notExceeds": "No supera",
@@ -1229,7 +1256,8 @@
     "realityNote": {
       "pendiente": "La prueba de realidad está pendiente: se invierte un porcentaje menor.",
       "confirmada": "La prueba de realidad está confirmada.",
-      "revisar_gastos": "La prueba de realidad muestra gastos no registrados: conviene revisar el presupuesto antes de invertir más."
+      "revisar_gastos": "La prueba de realidad muestra gastos no registrados: conviene revisar el presupuesto antes de invertir más.",
+      "revisar_presupuesto": "La prueba de realidad muestra un ahorro mayor que el del plan: conviene revisar el presupuesto antes de invertir más."
     },
     "fundPlan": "El sobrante completa primero el fondo de emergencia: queda completo en {month}.",
     "fundPlanNever": "Con este sobrante el fondo de emergencia no se completa: revisa gastos o ingresos.",
@@ -1257,6 +1285,7 @@
     "months": "Meses de cobertura",
     "essential": "Gasto esencial al mes",
     "scenariosTitle": "Escenarios",
+    "scenariosNote": "Solo se muestran los escenarios que cambian algo con los ingresos de este caso.",
     "scenarios": {
       "a": "Pierde el ingreso laboral",
       "b": "Pierde las rentas",
@@ -1265,7 +1294,10 @@
     "keptIncome": "Ingreso que se mantiene",
     "monthlyShortfall": "Le falta al mes",
     "covered": "El ingreso que se mantiene cubre lo esencial.",
-    "monthsCovered": "La meta vigente cubre {months} meses",
+    "monthsCovered": {
+      "one": "La meta vigente cubre {months} mes",
+      "other": "La meta vigente cubre {months} meses"
+    },
     "worstCase": "Meta por el peor caso",
     "minimum": "Mínimo: un mes de lo esencial",
     "ruleTitle": "Frente a la regla de 6 meses de gasto",
@@ -1284,6 +1316,12 @@
     "unnamed": "Bolsillo sin nombre",
     "annualGoal": "Meta del año",
     "monthly": "Aporte al mes",
+    "fundPlanLabel": "Con el sobrante",
+    "fundPlanValue": {
+      "completes": "completo en {month}",
+      "never": "no se completa",
+      "done": "ya está completo"
+    },
     "balance": "Saldo de hoy",
     "suggested": "sugerido",
     "allocationTitle": "Reparto del saldo de hoy",
@@ -1301,6 +1339,7 @@
     "empty": "Todavía no hay bolsillos generales. Las partidas tipo bolsillo del presupuesto se asignan a uno.",
     "totalGoal": "Total de metas del año",
     "totalMonthly": "Total de aportes al mes",
+    "totalWithoutFund": "El fondo de emergencia no suma en el total: se llena con lo que sobra cada mes.",
     "add": "Agregar bolsillo",
     "manageBanks": "Bancos",
     "edit": "Editar",
@@ -1340,7 +1379,10 @@
         "notFound": "Este bolsillo ya no existe."
       }
     },
-    "banksSummary": "{count} registrados",
+    "banksSummary": {
+      "one": "1 registrado",
+      "other": "{count} registrados"
+    },
     "client": {
       "back": "Mis datos",
       "intro": {
@@ -1491,6 +1533,14 @@
     "noExtra": "No acepta abonos",
     "extraFrom": "Abonos desde el {date}",
     "expensive": "Deuda cara",
+    "inArrears": "Cuotas atrasadas o reporte negativo",
+    "belowInterest": "La cuota no cubre los intereses del mes",
+    "usury": {
+      "current": "Tasa de usura de referencia: {rate} EA en {month}, según la {source}.",
+      "expired": "La última tasa de usura registrada es {rate} EA, de {month}. La vigente se consulta en la Superintendencia Financiera.",
+      "near": "Cerca de la tasa de usura",
+      "above": "Por encima de la tasa de usura"
+    },
     "balanceTotal": "Deuda total",
     "minPaymentTotal": "Cuotas mínimas al mes",
     "debtLoad": "Carga de deuda (cuotas / ingreso)",
@@ -1550,6 +1600,8 @@
       "rateHint": "La que aparece en el extracto como EA. Un préstamo sin intereses es 0.",
       "minPayment": "Cuota mínima mensual",
       "minPaymentHint": "Si la cuota incluye seguros, por ahora escríbela completa.",
+      "inArrears": "Tiene cuotas atrasadas o un reporte negativo",
+      "inArrearsHint": "Si es así, lo primero es ponerse al día con un acuerdo de pago con la entidad.",
       "acceptsExtra": "¿Acepta abonos extra?",
       "acceptsExtraYes": "Sí",
       "acceptsExtraNo": "No",
@@ -1752,7 +1804,8 @@
     "status": {
       "pendiente": "Pendiente",
       "confirmada": "Confirmada",
-      "revisar_gastos": "Revisar gastos"
+      "revisar_gastos": "Revisar gastos",
+      "revisar_presupuesto": "Revisar presupuesto"
     },
     "resultTitle": "Resultado",
     "actual": "Ahorro real al mes",
@@ -1762,11 +1815,12 @@
     "differenceInMoney": "Como el plan no deja ahorro, la diferencia va en dinero al mes.",
     "noExpected": "El plan no deja ahorro esperado: no hay con qué comparar.",
     "pctToInvestment": "Del sobrante a inversión",
-    "rule": "Se confirma si el ahorro real llega al 85 % del esperado.",
+    "rule": "Se confirma si el ahorro real queda dentro de un 15 % del esperado, por debajo o por encima.",
     "statusHints": {
       "pendiente": "Falta algún dato.",
       "confirmada": "El presupuesto refleja lo que de verdad pasa.",
-      "revisar_gastos": "Hay gastos que no están en el presupuesto: conviene revisarlo con el cliente."
+      "revisar_gastos": "Hay gastos que no están en el presupuesto: conviene revisarlo con el cliente.",
+      "revisar_presupuesto": "El cliente ahorra bastante más de lo que dice el plan: puede haber gastos de más o faltar un ingreso. Conviene revisarlo con el cliente."
     },
     "form": {
       "savingsAgo": "Ahorro total hace N meses",
@@ -1774,6 +1828,8 @@
       "months": "N (meses)",
       "savingsToday": "Ahorro total hoy",
       "savingsTodayHint": "Sin contar ingresos extraordinarios, como herencias o ventas.",
+      "registeredToday": "Registrado hoy en cuentas e inversiones: {amount}.",
+      "useRegistered": "Usar esta cifra",
       "currency": "Moneda",
       "currencyHint": "Los dos saldos en la misma moneda.",
       "submit": "Guardar",
@@ -1797,6 +1853,10 @@
       "revisar_gastos": {
         "tu": "Hay gastos que no están en tu presupuesto: revísalo con tu asesor.",
         "usted": "Hay gastos que no están en su presupuesto: revíselo con su asesor."
+      },
+      "revisar_presupuesto": {
+        "tu": "Ahorras bastante más de lo que dice tu plan: revisa tu presupuesto con tu asesor.",
+        "usted": "Ahorra bastante más de lo que dice su plan: revise su presupuesto con su asesor."
       }
     }
   },
@@ -2027,9 +2087,21 @@
         "ok": "La prueba de realidad no muestra gastos sin registrar.",
         "failed": "La prueba de realidad muestra gastos sin registrar ({difference} frente a lo esperado). Explica qué se revisó con el cliente."
       },
+      "reality_check_not_overstated": {
+        "ok": "La prueba de realidad no muestra un ahorro mayor que el del plan.",
+        "failed": "El cliente ahorra más de lo que dice el plan ({difference} frente a lo esperado): puede haber gastos de más o faltar un ingreso. Explica qué se revisó con el cliente."
+      },
       "third_party_counted_once": {
         "ok": "Lo que pagan otros no se cuenta dos veces.",
         "failed": "Hay gastos que pagan otros y además un ingreso tipo otro. Revisa que el aporte no esté contado dos veces."
+      },
+      "debt_payment_covers_interest": {
+        "ok": "La cuota de cada deuda alcanza para sus intereses del mes.",
+        "failed": "Deudas cuya cuota no alcanza para los intereses del mes: {count}. Con esa cuota el saldo no baja; explica qué se acordó con el cliente."
+      },
+      "debt_in_arrears": {
+        "ok": "Ninguna deuda tiene cuotas atrasadas ni reportes negativos.",
+        "failed": "Deudas con cuotas atrasadas o reportes negativos: {count}. Primero ponerse al día: explica el acuerdo de pago con la entidad."
       }
     }
   },
@@ -2071,14 +2143,52 @@
     "deliveredOn": "Entregado el {date} · cifras con corte al {cutoff}",
     "currencyNote": "Cifras en {currency} de hoy. Ilustrativas, no garantizadas.",
     "figuresTitle": "Cifras del plan",
-    "fundTitle": "Fondo de emergencia",
-    "fundGoal": "Meta",
-    "fundBalance": "Saldo asignado",
-    "fundMonthly": "Aporte al mes para completarlo",
+    "detailsTitle": "Todas las cifras y supuestos",
+    "indicators": {
+      "title": "Cómo va el plan",
+      "note": "Referencias orientativas del protocolo, no reglas: se revisan con el asesor.",
+      "surplus": {
+        "label": "Lo que queda al año",
+        "ok": "Después de gastos y ahorro quedan {amount} al año.",
+        "alert": "Los gastos superan los ingresos: faltan {amount} al año.",
+        "reference": "Referencia: que quede algo cada año."
+      },
+      "savingsRate": {
+        "label": "Tasa de ahorro",
+        "text": "De cada 100 que entran se ahorran {count}.",
+        "negative": "Se gasta más de lo que entra.",
+        "reference": "Referencia: 20 % o más es bueno; 30 % o más, muy bueno."
+      },
+      "debtLoad": {
+        "label": "Carga de deuda",
+        "text": "De cada 100 que entran, {count} van a cuotas.",
+        "reference": "Referencia: hasta 30 % es manejable; más de 40 % es alerta."
+      },
+      "emergencyFund": {
+        "label": "Fondo de emergencia",
+        "text": "Hay {balance} de una meta de {goal}.",
+        "interim": "Mientras haya deuda cara, la meta es un mes de lo esencial; después sube a {full}.",
+        "reference": "Para imprevistos, en una cuenta disponible y sin riesgo."
+      },
+      "concentration": {
+        "label": "En inmuebles y vehículos",
+        "text": "{share} de lo que se tiene está en inmuebles y vehículos.",
+        "reference": "Referencia: más de 80 % es poco líquido."
+      }
+    },
     "fundComplete": "Queda completo en {month}.",
-    "pocketsTitle": "Bolsillos",
-    "pocketMonthly": "{amount} al mes",
-    "pocketBalance": "Saldo: {amount}",
+    "fundDone": "Ya está completo.",
+    "fundNever": "Con el sobrante de hoy no se completa.",
+    "pocketsTable": {
+      "title": "Bolsillos: lo que se pasa cada mes",
+      "pocket": "Bolsillo",
+      "monthly": "Al mes",
+      "balance": "Hoy tiene",
+      "total": "Total al mes",
+      "fundFill": "Lo que sobre",
+      "automate": "Lo práctico es programar estas transferencias el día que llega el ingreso.",
+      "fundNote": "El fondo de emergencia se llena con lo que sobra cada mes, antes de invertir."
+    },
     "emergency": "Fondo de emergencia",
     "noIncome": "Meses sin ingreso",
     "flowTitle": "El año {year}",
@@ -2095,7 +2205,8 @@
     "scope": "Esta plataforma no recomienda productos ni entidades. Los temas de impuestos, pensión y sucesión se confirman con el profesional correspondiente.",
     "pdf": {
       "download": "Descargar en PDF",
-      "downloadHint": "La carta, las notas y las cifras de este plan, tal como se entregaron.",
+      "downloadHint": "El plan como se entregó: el resumen, cómo va, los bolsillos, las deudas, las metas y la carta.",
+      "preparedBy": "Preparado por {name}",
       "pageLabel": "Página {page} de {total}",
       "fileName": "MiLuca - {label}"
     },
@@ -2322,6 +2433,7 @@
     "plan": {
       "title": "Distribución",
       "intro": "La inversión del año sale del sobrante y de los abonos de lo que le deben; el aporte único, del excedente del saldo de hoy.",
+      "nothingYet": "Hoy el plan no lleva dinero a inversión, así que no hay distribución ni proyección que mostrar. Aparecen aquí cuando haya sobrante para invertir.",
       "monthly": "Inversión al mes",
       "annual": "Inversión al año",
       "lumpSum": "Aporte único",
@@ -2503,8 +2615,9 @@
       "name": "Meta",
       "nameHint": "Por ejemplo, Viaje, Computador o Cuota inicial.",
       "pocket": "Bolsillo",
-      "pocketHint": "Donde se guarda el aporte. Los bolsillos se crean en Bolsillos.",
+      "pocketHint": "Donde se guarda el aporte. Si eliges crear uno, queda en Bolsillos con el nombre de la meta.",
       "pocketNone": "Sin bolsillo",
+      "pocketNew": "Crear un bolsillo con el nombre de la meta",
       "amount": "Valor",
       "amountHint": "Lo que cuesta la meta. Con la calculadora de viaje puede quedar vacío.",
       "currency": "Moneda",
@@ -2573,6 +2686,7 @@
     "add": "Agregar otro seguro",
     "unanswered": "Sin responder",
     "answer": "Responder",
+    "inBudget": "Aparece en el presupuesto como «{concept}»",
     "statuses": {
       "si": "Lo tiene",
       "no": "No lo tiene",
@@ -3038,6 +3152,74 @@
       "scope": {
         "tu": "Este plan se basa en la información que me compartiste. Las cifras son estimaciones en valores de hoy, ilustrativas y no garantizadas. No incluye recomendaciones de productos ni de entidades financieras. Los temas de impuestos, pensión y asuntos legales debes validarlos con un contador, con tu entidad de pensiones y con un abogado.",
         "usted": "Este plan se basa en la información que me compartió. Las cifras son estimaciones en valores de hoy, ilustrativas y no garantizadas. No incluye recomendaciones de productos ni de entidades financieras. Los temas de impuestos, pensión y asuntos legales debe validarlos con un contador, con su entidad de pensiones y con un abogado."
+      },
+      "drafts": {
+        "common": {
+          "opening": {
+            "tu": "Hola, {name}. Te escribo para resumir lo que trabajamos y lo que sigue.",
+            "usted": "Hola, {name}. Le escribo para resumir lo que trabajamos y lo que sigue."
+          },
+          "calendar": {
+            "tu": "- En 30 días: revisamos juntos cómo vas con las primeras acciones.\n- En 90 días: comparamos tu gasto real con el plan.\n- En 12 meses: revisión anual del plan.",
+            "usted": "- En 30 días: revisamos juntos cómo va con las primeras acciones.\n- En 90 días: comparamos su gasto real con el plan.\n- En 12 meses: revisión anual del plan."
+          },
+          "closing": {
+            "tu": "Gracias por tu confianza. Nos vemos en la revisión de 30 días para ver cómo vas.",
+            "usted": "Gracias por su confianza. Nos vemos en la revisión de 30 días para ver cómo va."
+          }
+        },
+        "presupuesto": {
+          "executive_summary": {
+            "tu": "Ordenamos tu presupuesto. Hoy te queda un sobrante de {{sobrante_anual}} al año y tu tasa de ahorro es {{tasa_de_ahorro}}. Lo primero es crear tus bolsillos y programar las transferencias el día que te llega el ingreso; después, completar tu fondo de emergencia.",
+            "usted": "Ordenamos su presupuesto. Hoy le queda un sobrante de {{sobrante_anual}} al año y su tasa de ahorro es {{tasa_de_ahorro}}. Lo primero es crear sus bolsillos y programar las transferencias el día que le llega el ingreso; después, completar su fondo de emergencia."
+          },
+          "today": {
+            "tu": "Tu ingreso al año es de {{ingreso_anual}} y tu gasto al mes, de {{gasto_mensual}}; de ese gasto, {{gasto_esencial_mensual}} es lo esencial.",
+            "usted": "Su ingreso al año es de {{ingreso_anual}} y su gasto al mes, de {{gasto_mensual}}; de ese gasto, {{gasto_esencial_mensual}} es lo esencial."
+          },
+          "action_plan": {
+            "tu": "- Crea los bolsillos de tu plan y programa sus transferencias.\n- Lleva tu fondo de emergencia a {{meta_del_fondo}}.\n- Registra tu gasto real cada mes en la app.",
+            "usted": "- Cree los bolsillos de su plan y programe sus transferencias.\n- Lleve su fondo de emergencia a {{meta_del_fondo}}.\n- Registre su gasto real cada mes en la app."
+          },
+          "tracking": {
+            "tu": "- Sobrante al año: {{sobrante_anual}} o más.\n- Tasa de ahorro: {{tasa_de_ahorro}} o más.\n- Fondo de emergencia: llegar a {{meta_del_fondo}}.",
+            "usted": "- Sobrante al año: {{sobrante_anual}} o más.\n- Tasa de ahorro: {{tasa_de_ahorro}} o más.\n- Fondo de emergencia: llegar a {{meta_del_fondo}}."
+          }
+        },
+        "deudas": {
+          "executive_summary": {
+            "tu": "Tus deudas suman {{deuda_total}} y sus cuotas se llevan el {{carga_de_deuda}} de tu ingreso. Con el orden de pago del plan, sales de la deuda cara en {{meses_para_salir_de_deuda_cara}}.",
+            "usted": "Sus deudas suman {{deuda_total}} y sus cuotas se llevan el {{carga_de_deuda}} de su ingreso. Con el orden de pago del plan, sale de la deuda cara en {{meses_para_salir_de_deuda_cara}}."
+          },
+          "action_plan": {
+            "tu": "- Paga todas las cuotas a tiempo y lleva cualquier abono extra a la primera deuda del orden.\n- Mientras pagas una tarjeta, no la uses para compras nuevas.",
+            "usted": "- Pague todas las cuotas a tiempo y lleve cualquier abono extra a la primera deuda del orden.\n- Mientras paga una tarjeta, no la use para compras nuevas."
+          },
+          "tracking": {
+            "tu": "- Carga de deuda: {{carga_de_deuda}} hoy; baja con cada deuda que termina.",
+            "usted": "- Carga de deuda: {{carga_de_deuda}} hoy; baja con cada deuda que termina."
+          }
+        },
+        "patrimonio": {
+          "executive_summary": {
+            "tu": "Tu patrimonio neto es de {{patrimonio_neto}}. Revisamos cómo protegerlo con seguros y cuánto aportar a tus metas; la inversión llega cuando la base esté firme.",
+            "usted": "Su patrimonio neto es de {{patrimonio_neto}}. Revisamos cómo protegerlo con seguros y cuánto aportar a sus metas; la inversión llega cuando la base esté firme."
+          },
+          "action_plan": {
+            "tu": "- Cotiza los seguros pendientes con 2 o 3 aseguradoras y compara coberturas y exclusiones.\n- Revisa los beneficiarios de tus seguros y tus cuentas.\n- Aparta cada mes el aporte de tus metas en su bolsillo.",
+            "usted": "- Cotice los seguros pendientes con 2 o 3 aseguradoras y compare coberturas y exclusiones.\n- Revise los beneficiarios de sus seguros y sus cuentas.\n- Aparte cada mes el aporte de sus metas en su bolsillo."
+          }
+        },
+        "deficit": {
+          "executive_summary": {
+            "tu": "Ordenamos tu presupuesto. Hoy tus gastos superan tus ingresos: el año cierra en {{sobrante_anual}}. Lo primero es cerrar esa diferencia ajustando gastos o ingresos; después, crear tus bolsillos y completar tu fondo de emergencia.",
+            "usted": "Ordenamos su presupuesto. Hoy sus gastos superan sus ingresos: el año cierra en {{sobrante_anual}}. Lo primero es cerrar esa diferencia ajustando gastos o ingresos; después, crear sus bolsillos y completar su fondo de emergencia."
+          },
+          "tracking": {
+            "tu": "- Sobrante al año: pasar de {{sobrante_anual}} a 0 o más.\n- Fondo de emergencia: llegar a {{meta_del_fondo}}.",
+            "usted": "- Sobrante al año: pasar de {{sobrante_anual}} a 0 o más.\n- Fondo de emergencia: llegar a {{meta_del_fondo}}."
+          }
+        }
       }
     },
     "editor": {
@@ -3049,6 +3231,13 @@
       "formatHint": "Una línea vacía separa párrafos; una línea que empieza con “- ” es una viñeta.",
       "preview": "Ver como el cliente",
       "edit": "Volver a editar",
+      "draft": "Proponer un borrador",
+      "draftHint": "Llena solo las secciones vacías con un texto inicial de las etapas activas y sus cifras. Revísalo y ajústalo al cliente antes de entregar.",
+      "draftDone": {
+        "one": "Se llenó 1 sección vacía.",
+        "other": "Se llenaron {count} secciones vacías."
+      },
+      "draftNone": "No hay secciones vacías para llenar.",
       "previewEmpty": "Todavía no hay nada escrito.",
       "save": "Guardar borrador",
       "saving": "Guardando…",
@@ -3086,8 +3275,13 @@
         "tu": "Notas de tu asesor",
         "usted": "Notas de su asesor"
       },
+      "summaryTitle": {
+        "tu": "Lo que te dice tu asesor",
+        "usted": "Lo que le dice su asesor"
+      },
       "letterTitleAdvisor": "Carta de cierre",
       "notesTitleAdvisor": "Notas entregadas",
+      "summaryTitleAdvisor": "Resumen de la carta",
       "notesPublished": "Publicadas el {date}",
       "notesDeliveredTitle": "Notas con este plan"
     }
@@ -3188,7 +3382,8 @@
         "realityCheck": {
           "pendiente": "pendiente",
           "confirmada": "hecha",
-          "revisar_gastos": "hecha, con gastos por revisar"
+          "revisar_gastos": "hecha, con gastos por revisar",
+          "revisar_presupuesto": "hecha, con un presupuesto por revisar"
         },
         "noDebts": "Sin deudas",
         "debts": "saldo total {total} · deuda cara {expensive} · {payoff}",
@@ -3278,6 +3473,7 @@
       "profile": "Completar el perfil y el tipo de cliente",
       "incomes": "Registrar y clasificar los ingresos",
       "expenses": "Registrar los gastos",
+      "accounts": "Registrar cuentas y saldos",
       "pockets": "Organizar bancos y bolsillos",
       "realityCheck": "Hacer la prueba de realidad",
       "debts": "Registrar las deudas",

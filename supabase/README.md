@@ -134,6 +134,31 @@ Restaurar no está probado (queda para F8, en staging). La idea: crear un proyec
 
 Con Supabase Pro hay copias diarias y esto deja de hacer falta.
 
+### Tasa de usura de cada mes
+
+La pantalla de deudas muestra la tasa de usura de referencia de Colombia con su mes y marca las deudas cerca o por encima de ella mientras está vigente (ADR 0028). La Superintendencia Financiera publica la del mes siguiente al final de cada mes. Para cargarla, el primer día hábil del mes:
+
+1. Copiar de la página de la Superfinanciera el número de la resolución y la tasa de usura de crédito de consumo y ordinario.
+2. Crear una migración con la fila nueva (la anterior ya vence sola con su `valid_to`):
+
+```sh
+pnpm supabase migration new usury_rate_AAAA_MM
+```
+
+```sql
+insert into public.country_parameters
+  (country_code, key, value, unit, valid_from, valid_to, source_name, source_url, consulted_at, notes)
+values
+  ('CO', 'debt.usury_rate', '0.XXXX', 'EA', 'AAAA-MM-01', 'AAAA-MM-01 del mes siguiente',
+   'Superintendencia Financiera de Colombia, Resolución NNNN de AAAA',
+   'https://www.superfinanciera.gov.co/...', 'AAAA-MM-DD',
+   'Tasa de usura de crédito de consumo y ordinario del mes. Fuente F75.');
+```
+
+3. Actualizar F75 en `docs/fuentes.md` con la resolución y la fecha, y subir con `pnpm supabase db push`.
+
+Si no se carga, la app sigue funcionando: dice de qué mes es la última tasa y deja de marcar deudas (G18).
+
 ### Borrar los datos de un cliente
 
 Cuando un cliente pide que se borren sus datos (al correo de contacto de los avisos), el asesor lo ejecuta en el editor SQL del panel con el id del perfil (está en la URL de su ficha, `/clientes/<id>`):

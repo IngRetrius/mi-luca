@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { parseGoal } from './validation';
+import { NEW_POCKET, parseGoal } from './validation';
 
 const form = (entries: Record<string, string>) => {
   const data = new FormData();
@@ -73,5 +73,23 @@ describe('parseGoal', () => {
       { concept: 'tiquete', unit_value: 900, quantity: 1, is_lodging: false, sort_order: 0 },
       { concept: 'alojamiento', unit_value: 120, quantity: 5, is_lodging: true, sort_order: 1 },
     ]);
+  });
+
+  it('el bolsillo nuevo se pide con su valor y se guarda sin id hasta crearlo (ADR 0028)', () => {
+    const parsed = parseGoal(
+      form({
+        name: 'Cuota inicial',
+        pocketId: NEW_POCKET,
+        amount: '1000',
+        currency: 'COP',
+        targetDate: '2030-12-01',
+      }),
+      options,
+    );
+    expect(parsed.values.pocketId).toBe(NEW_POCKET);
+    expect(parsed.ok).toBe(true);
+    if (!parsed.ok) return;
+    expect(parsed.createPocket).toBe(true);
+    expect(parsed.record.pocket_id).toBeNull();
   });
 });

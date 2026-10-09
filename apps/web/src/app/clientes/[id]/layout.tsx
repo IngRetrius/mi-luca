@@ -19,12 +19,13 @@ export default async function ClientCaseLayout({
 }: LayoutProps<'/clientes/[id]'>) {
   const t = await getBaseMessages();
   const [{ id }, viewer] = await Promise.all([params, getViewer()]);
+  if (viewer?.role !== 'advisor' || !isUuid(id)) return children;
+  // Espacio al final para que el último contenido pueda subir por encima del botón flotante del
+  // asistente y no quede tapado (ADR 0028).
   return (
     <>
-      {children}
-      {viewer?.role === 'advisor' && isUuid(id) ? (
-        <AgentChat clientId={id} text={t.assistant.agent} />
-      ) : null}
+      <div className="flex flex-1 flex-col pb-24">{children}</div>
+      <AgentChat clientId={id} text={t.assistant.agent} />
     </>
   );
 }

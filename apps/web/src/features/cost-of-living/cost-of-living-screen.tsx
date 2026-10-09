@@ -134,18 +134,34 @@ export async function CostOfLivingScreen({ clientId }: { clientId: string }) {
                   <p className="text-sm text-text-muted">
                     {text.limit.replace('{amount}', money(threshold.annualLimit))}
                   </p>
+                  {/* Cada umbral muestra solo lo que compara (ADR 0027); sin base, ingreso y gasto. */}
                   <dl className="flex flex-col gap-1 text-sm">
-                    <div className="flex flex-wrap justify-between gap-x-3">
-                      <dt>{text.ownIncome}</dt>
-                      <dd>{threshold.ownIncomeExceeds ? text.exceeds : text.notExceeds}</dd>
-                    </div>
-                    {LEVELS.map((level) => (
-                      <div key={level} className="flex flex-wrap justify-between gap-x-3">
-                        <dt>{text.levels[level]}</dt>
-                        <dd>{threshold.levelExceeds[level] ? text.exceeds : text.notExceeds}</dd>
+                    {threshold.basis === undefined || threshold.basis === 'income' ? (
+                      <div className="flex flex-wrap justify-between gap-x-3">
+                        <dt>{text.ownIncome}</dt>
+                        <dd>{threshold.ownIncomeExceeds ? text.exceeds : text.notExceeds}</dd>
                       </div>
-                    ))}
+                    ) : null}
+                    {threshold.basis === undefined || threshold.basis === 'spending'
+                      ? LEVELS.map((level) => (
+                          <div key={level} className="flex flex-wrap justify-between gap-x-3">
+                            <dt>{text.levels[level]}</dt>
+                            <dd>
+                              {threshold.levelExceeds[level] ? text.exceeds : text.notExceeds}
+                            </dd>
+                          </div>
+                        ))
+                      : null}
+                    {threshold.basis === 'assets' ? (
+                      <div className="flex flex-wrap justify-between gap-x-3">
+                        <dt>{text.grossAssets}</dt>
+                        <dd>{threshold.grossAssetsExceeds ? text.exceeds : text.notExceeds}</dd>
+                      </div>
+                    ) : null}
                   </dl>
+                  {threshold.basis === 'income' ? (
+                    <p className="text-sm text-text-muted">{text.ownIncomeNet}</p>
+                  ) : null}
                 </div>
               ))
             )}

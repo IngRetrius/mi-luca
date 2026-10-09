@@ -84,7 +84,8 @@ export function keyFigures(result: CaseResult): KeyFigures {
     totalDebt: summary.totalDebt,
     expensiveDebtMonths: expensiveDebtMonths(result),
     emergencyGoal: summary.emergencyCurrentGoal,
-    emergencyProgress: summary.emergencyProgress,
+    // Sin meta (caso vacío) no hay avance que mostrar: la plantilla diría 100 % (ADR 0027).
+    emergencyProgress: result.emergencyFund.fullGoal === 0 ? null : summary.emergencyProgress,
     noIncomeShortfall: summary.noIncomeShortfall,
     annualInvestment: summary.annualInvestment,
     growthShare: summary.growthShare,

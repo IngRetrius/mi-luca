@@ -17,6 +17,7 @@ export {
   AUTOMATIC_CATEGORIES,
   BUDGET_CATEGORIES,
   canonicalCategory,
+  compareCategories,
   categoryLabel,
 } from './categories';
 export {

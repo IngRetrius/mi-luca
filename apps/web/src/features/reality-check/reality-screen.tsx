@@ -15,11 +15,12 @@ import { saveRealityCheck } from './actions';
 import { realityCheckPath } from './paths';
 import { RealityForm } from './reality-form';
 
-/** Semáforo del estado, como `Resumen!D35`. */
+/** Semáforo del estado, como `Resumen!D35`; revisar el presupuesto es del modo nativo (ADR 0027). */
 const STATUS: Readonly<Record<RealityCheckStatus, Status>> = {
   confirmada: 'ok',
   pendiente: 'warning',
   revisar_gastos: 'alert',
+  revisar_presupuesto: 'alert',
 };
 
 /** P-A08 Prueba de realidad: los saldos, el resultado y su efecto en el % a inversión (RN-050 a RN-053). */
@@ -40,7 +41,11 @@ export async function RealityCheckScreen({
     back: forClient?.back ?? text.back,
     intro: forClient?.intro ?? text.intro,
     statusHints: forClient
-      ? { ...text.statusHints, revisar_gastos: forClient.revisar_gastos }
+      ? {
+          ...text.statusHints,
+          revisar_gastos: forClient.revisar_gastos,
+          revisar_presupuesto: forClient.revisar_presupuesto,
+        }
       : text.statusHints,
   };
   const computed = await loadComputedCase(clientId);
@@ -65,6 +70,8 @@ export async function RealityCheckScreen({
   const locale = await getLocale(client.country_code);
   const money = (amount: number) => formatMoney(amount, client.base_currency, locale);
   const result = computed.result.realityCheck;
+  // Lo que ya se registró en cuentas, bolsillos, efectivo e inversiones, en moneda base.
+  const registered = computed.result.liquidAssets + computed.result.investment.current.total;
   const status = STATUS[result.status];
   // Con un plan sin ahorro esperado, el porcentaje de la plantilla (`Supuestos!C40`) no dice nada
   // ("969 %"): la diferencia va en dinero al mes (G10). El estado no cambia.
@@ -122,6 +129,14 @@ export async function RealityCheckScreen({
           currency: row?.currency ?? client.base_currency,
         }}
         currencies={[client.base_currency, ...fxRates.map((rate) => rate.currency)]}
+        registeredToday={
+          registered > 0
+            ? {
+                label: text.form.registeredToday.replace('{amount}', money(registered)),
+                value: amountToText(Math.round(registered), locale),
+              }
+            : null
+        }
         action={saveRealityCheck.bind(null, clientId)}
         cancelHref={back}
       />

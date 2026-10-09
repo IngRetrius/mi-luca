@@ -17,6 +17,7 @@ Plan, diseño y decisiones del proyecto. La investigación inicial tiene fecha d
 | [09-auditoria-de-lanzamiento.md](09-auditoria-de-lanzamiento.md) | Auditoría del 08/10/2026 antes de los primeros clientes: asesoría en tres etapas con reporte propio, riesgos y lista de salida |
 | [10-plan-de-lanzamiento.md](10-plan-de-lanzamiento.md) | Orden del trabajo desde el 08/10/2026: higiene, etapas, piloto, antes de cobrar y lo que queda de F7 y F8 |
 | [11-plan-del-landing.md](11-plan-del-landing.md) | Página pública informativa: decisiones, estructura, textos propuestos, diseño, implementación y lo que falta del asesor |
+| [12-plan-de-mejoras-del-asesor.md](12-plan-de-mejoras-del-asesor.md) | Revisión de extremo a extremo con criterio de asesor del 09/10/2026: 13 hallazgos y su plan (motor, etapas, lo que recibe el cliente, carta) |
 
 ## Documentos de apoyo
 

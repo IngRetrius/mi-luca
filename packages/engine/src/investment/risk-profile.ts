@@ -1,4 +1,12 @@
-import type { DropReaction, InvestingExperience, MoneyHorizon, RiskLevel } from '@miluca/domain';
+import type {
+  ClientType,
+  DropReaction,
+  IncomeKind,
+  InvestingExperience,
+  MoneyHorizon,
+  MonthFlags,
+  RiskLevel,
+} from '@miluca/domain';
 
 /** Niveles de riesgo en el orden de la plantilla: el número es su lugar (0 a 3). */
 export const RISK_LEVELS: readonly RiskLevel[] = [
@@ -104,4 +112,33 @@ export function riskProfile(
     capacityLevel: RISK_LEVELS[capacity]!,
     finalLevel: level(final),
   };
+}
+
+/** Lo que mira la sugerencia de ingresos inestables de cada ingreso. */
+export interface IncomeStability {
+  readonly kind: IncomeKind | null;
+  readonly monthlyAmount: { readonly amount: number };
+  readonly paymentsByMonth: MonthFlags;
+}
+
+/**
+ * Valor sugerido de la condición "ingresos variables o contrato inestable" (protocolo 8.7.1) cuando
+ * el asesor no la fija. La plantilla la sugiere solo para el independiente con ingresos variables
+ * (H-16). En modo nativo también para el contratista y para quien tiene un ingreso laboral con algún
+ * mes sin pago, como un contrato que no cubre el año (ADR 0027).
+ */
+export function suggestedVariableIncome(
+  clientType: ClientType | null,
+  incomes: readonly IncomeStability[],
+  native: boolean,
+): boolean {
+  if (clientType === 'independiente_variable') return true;
+  if (!native) return false;
+  if (clientType === 'contratista') return true;
+  return incomes.some(
+    (income) =>
+      income.kind === 'laboral' &&
+      income.monthlyAmount.amount > 0 &&
+      income.paymentsByMonth.some((payments) => payments === 0),
+  );
 }

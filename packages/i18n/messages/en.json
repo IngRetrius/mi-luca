@@ -163,6 +163,10 @@
     },
     "privacyLink": "Privacy and data",
     "spendingLink": "Record this month's spending",
+    "indicatorsTitle": {
+      "tu": "How your plan is doing",
+      "usted": "How your plan is doing"
+    },
     "tasksTitle": {
       "tu": "Your next tasks",
       "usted": "Your next tasks"
@@ -270,6 +274,9 @@
       "emergencyFundSummary": "Goal of {amount}",
       "pockets": "Pockets",
       "pocketsSummary": "{count} with a monthly contribution",
+      "accounts": "Accounts and balances",
+      "accountsSummary": "Liquid balance of {amount}",
+      "accountsNone": "No accounts recorded",
       "receivables": "Receivables",
       "receivablesSummary": "{amount} pending",
       "receivablesNone": "None",
@@ -624,8 +631,8 @@
     "debtLoad": "Debt load",
     "totalDebt": "Total debt",
     "expensiveDebtMonths": "Months to get out of expensive debt",
-    "emergencyGoal": "Emergency fund goal",
-    "emergencyProgress": "Emergency fund progress",
+    "emergencyGoal": "Current emergency fund goal",
+    "emergencyProgress": "Emergency fund progress toward its full goal",
     "noIncomeShortfall": "Shortfall in months without income",
     "annualInvestment": "Investment per year",
     "growthShare": "% in growth",
@@ -859,17 +866,32 @@
     },
     "back": "Home",
     "expenses": "Expenses",
-    "expensesSummary": "{count} items · {amount} per month",
+    "expensesSummary": {
+      "one": "1 item · {amount} per month",
+      "other": "{count} items · {amount} per month"
+    },
     "noExpenses": "No expenses recorded",
     "incomes": "Income",
-    "incomesSummary": "{count} incomes · {amount} per year",
+    "incomesSummary": {
+      "one": "1 income · {amount} per year",
+      "other": "{count} incomes · {amount} per year"
+    },
     "noIncomes": "No income recorded",
     "link": "My data",
     "currencies": "Currencies",
     "currenciesSummary": "{count} besides {base}",
     "currenciesNone": "Only {base}",
     "pockets": "Banks and pockets",
-    "pocketsSummary": "{count} pockets with a monthly contribution",
+    "pocketsSummary": {
+      "one": "1 pocket with a monthly contribution",
+      "other": "{count} pockets with a monthly contribution"
+    },
+    "accounts": {
+      "tu": "Your accounts and balances",
+      "usted": "Your accounts and balances"
+    },
+    "accountsSummary": "Balance of {amount}",
+    "accountsNone": "No accounts recorded",
     "receivables": {
       "tu": "What you are owed",
       "usted": "What you are owed"
@@ -1140,7 +1162,10 @@
     "thresholdOption": "{label}: {amount}",
     "noThresholds": "There are no published thresholds for {country}.",
     "thresholdLabels": {
-      "tax.dependent_income_limit": "Dependent's income limit (allowance for descendants)"
+      "tax.dependent_income_limit": "Dependent's income limit (allowance for descendants)",
+      "tax.filing_gross_income": "Gross income for filing an income tax return (1,400 UVT)",
+      "tax.filing_purchases": "Purchases and spending for filing an income tax return (1,400 UVT)",
+      "tax.filing_gross_assets": "Gross assets for filing an income tax return (4,500 UVT)"
     },
     "submit": "Save",
     "submitting": "Saving…",
@@ -1183,6 +1208,8 @@
     "thresholdsTitle": "Tax thresholds",
     "thresholdsNote": "A reference, not tax advice: confirm it with the accountant or tax advisor.",
     "ownIncome": "Own income per year",
+    "grossAssets": "Gross assets (assets, investments and receivables)",
+    "ownIncomeNet": "The recorded income is net: if it exceeds the limit, gross income does too; if not, confirm with the accountant.",
     "limit": "Limit: {amount} per year",
     "exceeds": "Exceeds",
     "notExceeds": "Does not exceed",
@@ -1229,7 +1256,8 @@
     "realityNote": {
       "pendiente": "The reality check is pending: a smaller percentage is invested.",
       "confirmada": "The reality check is confirmed.",
-      "revisar_gastos": "The reality check shows unrecorded expenses: review the budget before investing more."
+      "revisar_gastos": "The reality check shows unrecorded expenses: review the budget before investing more.",
+      "revisar_presupuesto": "The reality check shows more savings than the plan: review the budget before investing more."
     },
     "fundPlan": "The surplus fills the emergency fund first: it is complete in {month}.",
     "fundPlanNever": "With this surplus the emergency fund is never completed: review expenses or income.",
@@ -1257,6 +1285,7 @@
     "months": "Months of coverage",
     "essential": "Essential spending per month",
     "scenariosTitle": "Scenarios",
+    "scenariosNote": "Only the scenarios that change something with this case's incomes are shown.",
     "scenarios": {
       "a": "Loses employment income",
       "b": "Loses rental or investment income",
@@ -1265,7 +1294,10 @@
     "keptIncome": "Income that is kept",
     "monthlyShortfall": "Monthly shortfall",
     "covered": "The income that is kept covers the essentials.",
-    "monthsCovered": "The current goal covers {months} months",
+    "monthsCovered": {
+      "one": "The current goal covers {months} month",
+      "other": "The current goal covers {months} months"
+    },
     "worstCase": "Goal for the worst case",
     "minimum": "Minimum: one month of essentials",
     "ruleTitle": "Compared with the 6-months-of-spending rule",
@@ -1284,6 +1316,12 @@
     "unnamed": "Unnamed pocket",
     "annualGoal": "Goal for the year",
     "monthly": "Monthly contribution",
+    "fundPlanLabel": "With the surplus",
+    "fundPlanValue": {
+      "completes": "complete in {month}",
+      "never": "does not complete",
+      "done": "already complete"
+    },
     "balance": "Today's balance",
     "suggested": "suggested",
     "allocationTitle": "Allocation of today's balance",
@@ -1301,6 +1339,7 @@
     "empty": "There are no general pockets yet. Pocket-type budget items are assigned to one.",
     "totalGoal": "Total goals for the year",
     "totalMonthly": "Total monthly contributions",
+    "totalWithoutFund": "The emergency fund is not in the total: it fills up with what is left each month.",
     "add": "Add pocket",
     "manageBanks": "Banks",
     "edit": "Edit",
@@ -1340,7 +1379,10 @@
         "notFound": "This pocket no longer exists."
       }
     },
-    "banksSummary": "{count} recorded",
+    "banksSummary": {
+      "one": "1 recorded",
+      "other": "{count} recorded"
+    },
     "client": {
       "back": "My data",
       "intro": {
@@ -1491,6 +1533,14 @@
     "noExtra": "Does not accept extra payments",
     "extraFrom": "Extra payments from {date}",
     "expensive": "Expensive debt",
+    "inArrears": "Late payments or negative report",
+    "belowInterest": "The payment does not cover the monthly interest",
+    "usury": {
+      "current": "Reference usury rate: {rate} effective annual in {month}, per the {source}.",
+      "expired": "The latest usury rate recorded is {rate} effective annual, from {month}. Check the current one with the Financial Superintendence.",
+      "near": "Close to the usury rate",
+      "above": "Above the usury rate"
+    },
     "balanceTotal": "Total debt",
     "minPaymentTotal": "Minimum installments per month",
     "debtLoad": "Debt load (installments / income)",
@@ -1550,6 +1600,8 @@
       "rateHint": "The one shown on the statement as the effective annual rate. An interest-free loan is 0.",
       "minPayment": "Minimum monthly installment",
       "minPaymentHint": "If the installment includes insurance, enter it in full for now.",
+      "inArrears": "Has late payments or a negative credit report",
+      "inArrearsHint": "If so, catching up comes first, with a payment agreement with the lender.",
       "acceptsExtra": "Does it accept extra payments?",
       "acceptsExtraYes": "Yes",
       "acceptsExtraNo": "No",
@@ -1752,7 +1804,8 @@
     "status": {
       "pendiente": "Pending",
       "confirmada": "Confirmed",
-      "revisar_gastos": "Review expenses"
+      "revisar_gastos": "Review expenses",
+      "revisar_presupuesto": "Review budget"
     },
     "resultTitle": "Result",
     "actual": "Actual savings per month",
@@ -1762,11 +1815,12 @@
     "differenceInMoney": "Because the plan leaves no savings, the difference is shown in money per month.",
     "noExpected": "The plan leaves no expected savings, so there is nothing to compare against.",
     "pctToInvestment": "Of the surplus to investment",
-    "rule": "It is confirmed if actual savings reach 85 % of the expected amount.",
+    "rule": "It is confirmed when actual savings are within 15% of expected, below or above.",
     "statusHints": {
       "pendiente": "Some data is missing.",
       "confirmada": "The budget reflects what really happens.",
-      "revisar_gastos": "There are expenses that are not in the budget: review it with the client."
+      "revisar_gastos": "There are expenses that are not in the budget: review it with the client.",
+      "revisar_presupuesto": "The client saves much more than the plan says: there may be overstated expenses or a missing income. Review it with the client."
     },
     "form": {
       "savingsAgo": "Total savings N months ago",
@@ -1774,6 +1828,8 @@
       "months": "N (months)",
       "savingsToday": "Total savings today",
       "savingsTodayHint": "Not counting extraordinary income, such as inheritances or sales.",
+      "registeredToday": "Recorded today in accounts and investments: {amount}.",
+      "useRegistered": "Use this amount",
       "currency": "Currency",
       "currencyHint": "Both balances in the same currency.",
       "submit": "Save",
@@ -1797,6 +1853,10 @@
       "revisar_gastos": {
         "tu": "There are expenses that are not in your budget: review it with your advisor.",
         "usted": "There are expenses that are not in your budget: review it with your advisor."
+      },
+      "revisar_presupuesto": {
+        "tu": "You save much more than your plan says: review your budget with your advisor.",
+        "usted": "You save much more than your plan says: review your budget with your advisor."
       }
     }
   },
@@ -2027,9 +2087,21 @@
         "ok": "The reality check shows no unrecorded expenses.",
         "failed": "The reality check shows unrecorded expenses ({difference} compared with the expected amount). Explain what was reviewed with the client."
       },
+      "reality_check_not_overstated": {
+        "ok": "The reality check does not show more savings than the plan.",
+        "failed": "The client saves more than the plan says ({difference} versus expected): there may be overstated expenses or a missing income. Explain what was reviewed with the client."
+      },
       "third_party_counted_once": {
         "ok": "What others pay is not counted twice.",
         "failed": "There are expenses paid by others and also an income of type other. Check that the contribution is not counted twice."
+      },
+      "debt_payment_covers_interest": {
+        "ok": "Each debt's payment covers its monthly interest.",
+        "failed": "Debts whose payment does not cover the monthly interest: {count}. With that payment the balance does not go down; explain what was agreed with the client."
+      },
+      "debt_in_arrears": {
+        "ok": "No debt has late payments or negative reports.",
+        "failed": "Debts with late payments or negative reports: {count}. Catching up comes first: explain the payment agreement with the lender."
       }
     }
   },
@@ -2071,14 +2143,52 @@
     "deliveredOn": "Delivered on {date} · figures as of {cutoff}",
     "currencyNote": "Figures in today's {currency}. Illustrative, not guaranteed.",
     "figuresTitle": "Plan figures",
-    "fundTitle": "Emergency fund",
-    "fundGoal": "Goal",
-    "fundBalance": "Assigned balance",
-    "fundMonthly": "Monthly contribution to complete it",
+    "detailsTitle": "All figures and assumptions",
+    "indicators": {
+      "title": "How the plan is doing",
+      "note": "Guideline references from the method, not rules: review them with the advisor.",
+      "surplus": {
+        "label": "What is left each year",
+        "ok": "After spending and savings, {amount} is left each year.",
+        "alert": "Spending is higher than income: {amount} short each year.",
+        "reference": "Reference: something left over every year."
+      },
+      "savingsRate": {
+        "label": "Savings rate",
+        "text": "Out of every 100 that come in, {count} are saved.",
+        "negative": "More is spent than comes in.",
+        "reference": "Reference: 20% or more is good; 30% or more, very good."
+      },
+      "debtLoad": {
+        "label": "Debt load",
+        "text": "Out of every 100 that come in, {count} go to debt payments.",
+        "reference": "Reference: up to 30% is manageable; over 40% is an alert."
+      },
+      "emergencyFund": {
+        "label": "Emergency fund",
+        "text": "There is {balance} of a {goal} goal.",
+        "interim": "While there is expensive debt, the goal is one month of essentials; then it rises to {full}.",
+        "reference": "For the unexpected, in an available account with no risk."
+      },
+      "concentration": {
+        "label": "In property and vehicles",
+        "text": "{share} of what is owned is in property and vehicles.",
+        "reference": "Reference: over 80% is hard to turn into cash."
+      }
+    },
     "fundComplete": "It is complete in {month}.",
-    "pocketsTitle": "Pockets",
-    "pocketMonthly": "{amount} per month",
-    "pocketBalance": "Balance: {amount}",
+    "fundDone": "Already complete.",
+    "fundNever": "Today's surplus does not complete it.",
+    "pocketsTable": {
+      "title": "Pockets: what goes in each month",
+      "pocket": "Pocket",
+      "monthly": "Per month",
+      "balance": "Has today",
+      "total": "Total per month",
+      "fundFill": "What is left",
+      "automate": "It helps to schedule these transfers for the day income arrives.",
+      "fundNote": "The emergency fund fills up with what is left each month, before investing."
+    },
     "emergency": "Emergency fund",
     "noIncome": "Months without income",
     "flowTitle": "The year {year}",
@@ -2095,7 +2205,8 @@
     "scope": "This platform does not recommend products or institutions. Tax, pension and succession matters are confirmed with the corresponding professional.",
     "pdf": {
       "download": "Download as PDF",
-      "downloadHint": "The letter, the notes and the figures of this plan, as they were delivered.",
+      "downloadHint": "The plan as delivered: the summary, how it is doing, pockets, debts, goals and the letter.",
+      "preparedBy": "Prepared by {name}",
       "pageLabel": "Page {page} of {total}",
       "fileName": "MiLuca - {label}"
     },
@@ -2322,6 +2433,7 @@
     "plan": {
       "title": "Allocation",
       "intro": "The year's investment comes from the surplus and from the payments on what they are owed; the one-off contribution, from the excess in today's balance.",
+      "nothingYet": "Today the plan sends no money to investment, so there is no distribution or projection to show. They appear here once there is surplus to invest.",
       "monthly": "Investment per month",
       "annual": "Investment per year",
       "lumpSum": "One-off contribution",
@@ -2503,8 +2615,9 @@
       "name": "Goal",
       "nameHint": "For example, Trip, Computer or Down payment.",
       "pocket": "Pocket",
-      "pocketHint": "Where the contribution is kept. Pockets are created in Pockets.",
+      "pocketHint": "Where the contribution is saved. If you choose to create one, it appears in Pockets with the goal's name.",
       "pocketNone": "No pocket",
+      "pocketNew": "Create a pocket with the goal's name",
       "amount": "Value",
       "amountHint": "What the goal costs. With the trip calculator it can be left empty.",
       "currency": "Currency",
@@ -2573,6 +2686,7 @@
     "add": "Add another insurance",
     "unanswered": "Not answered",
     "answer": "Answer",
+    "inBudget": "Shows up in the budget as “{concept}”",
     "statuses": {
       "si": "Has it",
       "no": "Does not have it",
@@ -3038,6 +3152,74 @@
       "scope": {
         "tu": "This plan is based on the information you shared with me. The figures are estimates in today's values, illustrative and not guaranteed. It does not include recommendations of financial products or institutions. You should confirm tax, pension and legal matters with an accountant, your pension fund and a lawyer.",
         "usted": "This plan is based on the information you shared with me. The figures are estimates in today's values, illustrative and not guaranteed. It does not include recommendations of financial products or institutions. You should confirm tax, pension and legal matters with an accountant, your pension fund and a lawyer."
+      },
+      "drafts": {
+        "common": {
+          "opening": {
+            "tu": "Hi, {name}. I am writing to sum up what we worked on and what comes next.",
+            "usted": "Hello, {name}. I am writing to sum up what we worked on and what comes next."
+          },
+          "calendar": {
+            "tu": "- In 30 days: we review together how the first actions are going.\n- In 90 days: we compare your actual spending with the plan.\n- In 12 months: annual review of the plan.",
+            "usted": "- In 30 days: we review together how the first actions are going.\n- In 90 days: we compare your actual spending with the plan.\n- In 12 months: annual review of the plan."
+          },
+          "closing": {
+            "tu": "Thank you for your trust. See you at the 30-day review to see how it is going.",
+            "usted": "Thank you for your trust. See you at the 30-day review to see how it is going."
+          }
+        },
+        "presupuesto": {
+          "executive_summary": {
+            "tu": "We organized your budget. Today you have a surplus of {{sobrante_anual}} per year and your savings rate is {{tasa_de_ahorro}}. First, create your pockets and schedule the transfers for the day your income arrives; then, complete your emergency fund.",
+            "usted": "We organized your budget. Today you have a surplus of {{sobrante_anual}} per year and your savings rate is {{tasa_de_ahorro}}. First, create your pockets and schedule the transfers for the day your income arrives; then, complete your emergency fund."
+          },
+          "today": {
+            "tu": "Your income is {{ingreso_anual}} per year and your spending is {{gasto_mensual}} per month; of that, {{gasto_esencial_mensual}} is essential.",
+            "usted": "Your income is {{ingreso_anual}} per year and your spending is {{gasto_mensual}} per month; of that, {{gasto_esencial_mensual}} is essential."
+          },
+          "action_plan": {
+            "tu": "- Create your plan's pockets and schedule their transfers.\n- Bring your emergency fund to {{meta_del_fondo}}.\n- Record your actual spending every month in the app.",
+            "usted": "- Create your plan's pockets and schedule their transfers.\n- Bring your emergency fund to {{meta_del_fondo}}.\n- Record your actual spending every month in the app."
+          },
+          "tracking": {
+            "tu": "- Surplus per year: {{sobrante_anual}} or more.\n- Savings rate: {{tasa_de_ahorro}} or more.\n- Emergency fund: reach {{meta_del_fondo}}.",
+            "usted": "- Surplus per year: {{sobrante_anual}} or more.\n- Savings rate: {{tasa_de_ahorro}} or more.\n- Emergency fund: reach {{meta_del_fondo}}."
+          }
+        },
+        "deudas": {
+          "executive_summary": {
+            "tu": "Your debts add up to {{deuda_total}} and their payments take {{carga_de_deuda}} of your income. With the plan's payment order, you are out of expensive debt in {{meses_para_salir_de_deuda_cara}}.",
+            "usted": "Your debts add up to {{deuda_total}} and their payments take {{carga_de_deuda}} of your income. With the plan's payment order, you are out of expensive debt in {{meses_para_salir_de_deuda_cara}}."
+          },
+          "action_plan": {
+            "tu": "- Pay every installment on time and send any extra payment to the first debt in the order.\n- While you pay off a card, do not use it for new purchases.",
+            "usted": "- Pay every installment on time and send any extra payment to the first debt in the order.\n- While you pay off a card, do not use it for new purchases."
+          },
+          "tracking": {
+            "tu": "- Debt load: {{carga_de_deuda}} today; it goes down with each debt that ends.",
+            "usted": "- Debt load: {{carga_de_deuda}} today; it goes down with each debt that ends."
+          }
+        },
+        "patrimonio": {
+          "executive_summary": {
+            "tu": "Your net worth is {{patrimonio_neto}}. We reviewed how to protect it with insurance and how much to put toward your goals; investing comes once the base is solid.",
+            "usted": "Your net worth is {{patrimonio_neto}}. We reviewed how to protect it with insurance and how much to put toward your goals; investing comes once the base is solid."
+          },
+          "action_plan": {
+            "tu": "- Get quotes for the pending insurance from 2 or 3 insurers and compare coverage and exclusions.\n- Review the beneficiaries of your insurance and accounts.\n- Set aside your goals' contribution in their pocket every month.",
+            "usted": "- Get quotes for the pending insurance from 2 or 3 insurers and compare coverage and exclusions.\n- Review the beneficiaries of your insurance and accounts.\n- Set aside your goals' contribution in their pocket every month."
+          }
+        },
+        "deficit": {
+          "executive_summary": {
+            "tu": "We organized your budget. Today your spending is higher than your income: the year closes at {{sobrante_anual}}. First, close that gap by adjusting spending or income; then, create your pockets and complete your emergency fund.",
+            "usted": "We organized your budget. Today your spending is higher than your income: the year closes at {{sobrante_anual}}. First, close that gap by adjusting spending or income; then, create your pockets and complete your emergency fund."
+          },
+          "tracking": {
+            "tu": "- Surplus per year: go from {{sobrante_anual}} to 0 or more.\n- Emergency fund: reach {{meta_del_fondo}}.",
+            "usted": "- Surplus per year: go from {{sobrante_anual}} to 0 or more.\n- Emergency fund: reach {{meta_del_fondo}}."
+          }
+        }
       }
     },
     "editor": {
@@ -3049,6 +3231,13 @@
       "formatHint": "An empty line separates paragraphs; a line that starts with “- ” is a bullet.",
       "preview": "View as the client",
       "edit": "Back to editing",
+      "draft": "Suggest a draft",
+      "draftHint": "Fills only the empty sections with a starting text for the active stages and their figures. Review it and tailor it to the client before delivering.",
+      "draftDone": {
+        "one": "1 empty section was filled.",
+        "other": "{count} empty sections were filled."
+      },
+      "draftNone": "There are no empty sections to fill.",
       "previewEmpty": "Nothing written yet.",
       "save": "Save draft",
       "saving": "Saving…",
@@ -3086,8 +3275,13 @@
         "tu": "Notes from your advisor",
         "usted": "Notes from your advisor"
       },
+      "summaryTitle": {
+        "tu": "What your advisor says",
+        "usted": "What your advisor says"
+      },
       "letterTitleAdvisor": "Closing letter",
       "notesTitleAdvisor": "Delivered notes",
+      "summaryTitleAdvisor": "Letter summary",
       "notesPublished": "Published on {date}",
       "notesDeliveredTitle": "Notes with this plan"
     }
@@ -3188,7 +3382,8 @@
         "realityCheck": {
           "pendiente": "pending",
           "confirmada": "done",
-          "revisar_gastos": "done, with expenses to review"
+          "revisar_gastos": "done, with expenses to review",
+          "revisar_presupuesto": "done, with a budget to review"
         },
         "noDebts": "No debts",
         "debts": "total balance {total} · expensive debt {expensive} · {payoff}",
@@ -3278,6 +3473,7 @@
       "profile": "Complete the profile and client type",
       "incomes": "Record and classify income",
       "expenses": "Record expenses",
+      "accounts": "Record accounts and balances",
       "pockets": "Set up banks and pockets",
       "realityCheck": "Do the reality check",
       "debts": "Record debts",

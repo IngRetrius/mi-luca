@@ -30,7 +30,10 @@ const ALL_CODES = [
   'growth_within_range',
   'reality_check_done',
   'reality_check_confirms',
+  'reality_check_not_overstated',
   'third_party_counted_once',
+  'debt_payment_covers_interest',
+  'debt_in_arrears',
 ] as const satisfies readonly QcCode[];
 const exhaustive: Exclude<QcCode, (typeof ALL_CODES)[number]> extends never ? true : false = true;
 
@@ -56,6 +59,7 @@ const EMPTY: ProgressInput = {
   incomes: [],
   budgetItemCount: 0,
   pocketCount: 0,
+  liquidAssetCount: 0,
   realityCheckDone: false,
   debts: [],
   assetCount: 0,
@@ -72,14 +76,29 @@ const BUDGET_READY: ProgressInput = {
   incomes: [{ kind: 'laboral' }],
   budgetItemCount: 12,
   pocketCount: 4,
+  liquidAssetCount: 1,
   realityCheckDone: true,
 };
 
 describe('controles por etapa', () => {
-  it('cada control del motor es común o de una sola etapa', () => {
+  it('cada control del motor es común o de alguna etapa, y los comunes no se repiten', () => {
     expect(exhaustive).toBe(true);
-    const assigned = [...COMMON_CHECKS, ...Object.values(STAGE_CHECKS).flat()];
-    expect(assigned.toSorted()).toEqual([...ALL_CODES].toSorted());
+    const assigned = new Set([...COMMON_CHECKS, ...Object.values(STAGE_CHECKS).flat()]);
+    expect([...assigned].toSorted()).toEqual([...ALL_CODES].toSorted());
+    const inStages = new Set(Object.values(STAGE_CHECKS).flat());
+    expect(COMMON_CHECKS.filter((code) => inStages.has(code))).toEqual([]);
+  });
+
+  it('el déficit del año pide nota en cualquier entrega', () => {
+    for (const stage of ['presupuesto', 'deudas', 'patrimonio'] as const) {
+      const filtered = reportForStage(report({ no_income_covered: 'note' }), stage);
+      expect(filtered.needNote.map((item) => item.code)).toEqual(['no_income_covered']);
+    }
+  });
+
+  it('los aportes a metas sin bolsillo también bloquean el reporte de patrimonio', () => {
+    const filtered = reportForStage(report({ items_have_pocket: 'blocking' }), 'patrimonio');
+    expect(filtered.blocking.map((item) => item.code)).toEqual(['items_have_pocket']);
   });
 
   it('el reporte de presupuesto no exige el perfil de riesgo ni bloquea por inversión', () => {
@@ -92,14 +111,17 @@ describe('controles por etapa', () => {
     expect(filtered.items.map((item) => item.code)).toContain('surplus_balances');
   });
 
-  it('el reporte de deudas solo mira los controles comunes', () => {
+  it('el reporte de deudas mira los comunes y los de deudas', () => {
     const filtered = reportForStage(
       report({ surplus_balances: 'blocking', missing_rates: 'blocking' }),
       'deudas',
     );
     expect(filtered.items.map((item) => item.code)).toEqual([
+      'no_income_covered',
       'incomes_classified',
       'missing_rates',
+      'debt_payment_covers_interest',
+      'debt_in_arrears',
     ]);
     expect(filtered.blocking.map((item) => item.code)).toEqual(['missing_rates']);
   });
@@ -142,6 +164,7 @@ describe('pasos de cada etapa', () => {
     const steps = stageSteps('presupuesto', BUDGET_READY);
     expect(steps.map((step) => [step.id, step.done])).toEqual([
       ['expenses', true],
+      ['accounts', true],
       ['pockets', true],
       ['realityCheck', true],
       ['checks', true],
@@ -167,8 +190,14 @@ describe('pasos de cada etapa', () => {
     expect(nextStep(stageSteps('presupuesto', delivered))).toBeNull();
   });
 
+  it('sin cuentas registradas, el paso de cuentas queda pendiente', () => {
+    const steps = stageSteps('presupuesto', { ...BUDGET_READY, liquidAssetCount: 0 });
+    expect(nextStep(steps)?.id).toBe('accounts');
+  });
+
   it('una etapa tiene datos si hay algo registrado en ella', () => {
     expect(stageHasData('deudas', EMPTY)).toBe(false);
+    expect(stageHasData('presupuesto', { ...EMPTY, liquidAssetCount: 1 })).toBe(true);
     expect(stageHasData('patrimonio', { ...EMPTY, goalCount: 1 })).toBe(true);
   });
 });

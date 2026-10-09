@@ -117,6 +117,7 @@ export function caseSnapshot(rows: SnapshotRows, today: string): string {
           `tasa ${Math.round(debt.annual_rate * 1_000_000) / 10_000} % EA`,
           `cuota ${value(debt.min_payment, debt.currency)}`,
           debt.accepts_extra ? null : 'no acepta abonos',
+          debt.in_arrears ? 'con cuotas atrasadas' : null,
         ),
       ),
     ),

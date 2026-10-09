@@ -28,6 +28,11 @@ export interface DebtInput {
    * moneda de la deuda.
    */
   readonly tracking?: { readonly credit: CreditInput; readonly marks: readonly InstallmentMark[] };
+  /**
+   * Tiene cuotas atrasadas o un reporte negativo (protocolo 8.3, paso 10; pregunta 15). No cambia
+   * el cálculo: pide al asesor explicar el acuerdo de pago antes de entregar (ADR 0027).
+   */
+  readonly inArrears?: boolean;
 }
 
 export interface DebtTotals {

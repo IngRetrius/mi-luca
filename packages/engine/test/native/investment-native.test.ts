@@ -1,6 +1,8 @@
+import type { MonthFlags } from '@miluca/domain';
 import { describe, expect, it } from 'vitest';
 
 import { compute } from '../../src/compute';
+import { suggestedVariableIncome } from '../../src/investment';
 import { caseInput } from '../golden/adapters';
 import { goldenCases } from '../golden/cases';
 
@@ -50,5 +52,48 @@ describe('condiciones de capacidad que fija el asesor', () => {
     const result = compute(insured, { mode: 'native' });
     expect(result.investment.profile.conditions.dependentsWithoutLifeInsurance).toBe(false);
     expect(result.investment.profile.finalLevel).toBe('tolerante');
+  });
+});
+
+describe('ingresos variables o contrato inestable sugeridos (ADR 0027)', () => {
+  const laboral = (payments: number[]) => ({
+    kind: 'laboral' as const,
+    monthlyAmount: { amount: 6_500_000 },
+    paymentsByMonth: payments as unknown as MonthFlags,
+  });
+  const allYear = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+  const noJanuary = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+
+  it('la plantilla solo la sugiere al independiente con ingresos variables', () => {
+    expect(suggestedVariableIncome('independiente_variable', [], false)).toBe(true);
+    expect(suggestedVariableIncome('contratista', [laboral(noJanuary)], false)).toBe(false);
+  });
+
+  it('en modo nativo también al contratista y a quien tiene un mes sin pago laboral', () => {
+    expect(suggestedVariableIncome('contratista', [laboral(allYear)], true)).toBe(true);
+    expect(suggestedVariableIncome('empleado', [laboral(noJanuary)], true)).toBe(true);
+    expect(suggestedVariableIncome('empleado', [laboral(allYear)], true)).toBe(false);
+    expect(suggestedVariableIncome(null, [{ ...laboral(noJanuary), kind: 'renta' }], true)).toBe(
+      false,
+    );
+  });
+
+  it('el criterio del asesor manda sobre la sugerencia', () => {
+    const input = caseInput(c10);
+    const contractor = {
+      ...input,
+      profile: { ...input.profile, clientType: 'contratista' as const },
+      riskProfile: { ...input.riskProfile, variableIncome: null },
+    };
+    expect(
+      compute(contractor, { mode: 'native' }).investment.profile.conditions.variableIncome,
+    ).toBe(true);
+    const fixed = {
+      ...contractor,
+      riskProfile: { ...contractor.riskProfile, variableIncome: false },
+    };
+    expect(compute(fixed, { mode: 'native' }).investment.profile.conditions.variableIncome).toBe(
+      false,
+    );
   });
 });

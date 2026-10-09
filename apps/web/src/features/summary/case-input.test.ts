@@ -128,6 +128,7 @@ describe('toCaseInput', () => {
             accepts_extra: true,
             extra_from_date: null,
             manual_order: null,
+            in_arrears: false,
             ...noTracking,
             first_installment_date: '2026-08-28',
             total_installments: 12,
@@ -174,6 +175,7 @@ describe('toCaseInput', () => {
             accepts_extra: false,
             extra_from_date: null,
             manual_order: 2,
+            in_arrears: false,
             ...noTracking,
           },
         ],
@@ -189,6 +191,7 @@ describe('toCaseInput', () => {
         acceptsExtra: false,
         extraFrom: null,
         manualOrder: 2,
+        inArrears: false,
       },
     ]);
     expect(toCaseInput(rows, '2026-10-01').input.debtMethod).toBe('avalancha');
@@ -241,6 +244,27 @@ describe('toCaseInput', () => {
       '2026-10-01',
     );
     expect(withoutRate.input.fiscalThresholds).toEqual([]);
+  });
+
+  it('los topes para declarar renta de Colombia llevan su base de comparación (ADR 0027)', () => {
+    const marked = settings({
+      fiscal_threshold_keys: ['tax.filing_gross_income', 'tax.filing_gross_assets'],
+    });
+    const { input } = toCaseInput(
+      {
+        ...rows,
+        settings: marked,
+        thresholds: [
+          { key: 'tax.filing_gross_income', value: 73_323_600, unit: 'EUR' },
+          { key: 'tax.filing_gross_assets', value: 235_683_000, unit: 'EUR' },
+        ],
+      },
+      '2026-10-01',
+    );
+    expect(input.fiscalThresholds).toEqual([
+      { code: 'tax.filing_gross_income', annualLimit: 73_323_600, basis: 'income' },
+      { code: 'tax.filing_gross_assets', annualLimit: 235_683_000, basis: 'assets' },
+    ]);
   });
 
   it('el motor calcula el caso: lo que paga la familia suma al ingreso en modo nativo', () => {

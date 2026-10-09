@@ -61,6 +61,35 @@ describe('renderLetterPdf', () => {
   });
 });
 
+describe('renderLetterPdf con tablas (ADR 0028)', () => {
+  it('pone el resumen, las tablas del plan y el asesor antes de la carta', async () => {
+    const pdf = await renderLetterPdf({
+      ...input(1),
+      advisor: 'Preparado por Asesora de prueba',
+      summary: { title: 'Resumen', text: 'Tu presupuesto deja 1.000 al mes.' },
+      tables: [
+        {
+          title: 'Bolsillos: lo que se pasa cada mes',
+          columns: ['Bolsillo', 'Al mes', 'Hoy tiene'],
+          rows: [
+            {
+              cells: ['Fondo de emergencia', 'Lo que sobre', '$ 4.000.000'],
+              detail: 'Queda completo en marzo de 2027.',
+            },
+            { cells: ['Viajes', '$ 250.000', '$ 0'] },
+          ],
+          footer: ['Total al mes', '$ 250.000', ''],
+          note: 'Lo práctico es programar estas transferencias el día que llega el ingreso.',
+        },
+        { title: 'Cómo va el plan', rows: [{ cells: ['Tasa de ahorro', '14 % · Atención'] }] },
+      ],
+    });
+    expect(latin1(pdf.subarray(0, 5))).toBe('%PDF-');
+    // Las tablas se suman a la carta, las notas y las cifras: ya no cabe en una página.
+    expect(pages(pdf)).toBeGreaterThan(pages(await renderLetterPdf(input(1))));
+  });
+});
+
 describe('pdfSafe', () => {
   it('cambia los espacios finos y el signo menos que Helvetica no tiene', () => {
     expect(pdfSafe('1\u202F000\u2009€ y \u22125 %')).toBe('1\u00A0000\u00A0€ y -5 %');
