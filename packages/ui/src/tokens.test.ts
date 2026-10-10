@@ -40,6 +40,15 @@ describe('acento de la marca', () => {
   });
 });
 
+describe('logo', () => {
+  it.each([
+    ['claro', lightTheme],
+    ['oscuro', darkTheme],
+  ])('en modo %s se distingue del fondo como elemento gráfico (3:1)', (_name, theme) => {
+    expect(contrastRatio(theme.logo, theme.bg)).toBeGreaterThanOrEqual(3);
+  });
+});
+
 describe('contrastRatio', () => {
   it('reproduce los valores documentados', () => {
     expect(contrastRatio(palette.brand900, palette.white)).toBeCloseTo(12.46, 2);

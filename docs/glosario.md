@@ -56,6 +56,7 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Ya los revisé | `markFilesReviewed` | El asesor borra los documentos activos; motivo `revisado` |
 | Transición de pantalla | `PageTransition`, `NAV_FORWARD`, `NAV_BACK` | Adelante, atrás o fundido entre pantallas (ADR 0031) |
 | Moneda que cae | `CoinSlot` | El momento de marca: en el landing y en el inicio del cliente |
+| Logo | `BrandMark`, token `logo` | El cerdito en SVG que cambia con el tema; los iconos del sistema siguen siendo PNG |
 | Borrado diario | `purgeClientFiles`, `/api/cron/documentos`, `client_files_orphans`, `CRON_SECRET` | Cron de Vercel: vence los documentos de 30 días y borra los archivos sin fila activa |
 | Controles de la etapa | `reportForStage`, `STAGE_CHECKS`, `COMMON_CHECKS` | Filtran la salida de `qualityChecks` sin tocar el motor |
 | Buscar clientes | `?q=`, `parseSearch` | P-A01 |

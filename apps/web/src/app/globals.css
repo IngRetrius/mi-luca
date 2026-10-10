@@ -19,6 +19,8 @@
   --color-on-brand: var(--ml-on-brand);
   --color-accent: var(--ml-accent);
   --color-on-accent: var(--ml-on-accent);
+  /* El cuerpo del logo (BrandMark): marino en claro, casi blanco en oscuro. */
+  --color-logo: var(--ml-logo);
   /* Páginas públicas: título principal de 34 px en el celular y 48 px en el escritorio, y títulos
      de sección de 28 px (escala de docs/diseno/tokens.md, sección 4). */
   --text-display: 2.125rem;

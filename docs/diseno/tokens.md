@@ -83,6 +83,9 @@ El logo (`docs/diseno/marca/logo.png`, 1254 x 1254 px, fondo transparente) usa d
 | `on-brand` | Blanco | #11142B | Texto del botón principal | 14,75 y 7,37 |
 | `accent` | #F0702C | #F0702C | Solo decorativo: la ranura bajo el título, las monedas de las etapas y el círculo detrás de la foto. Nunca texto ni fondo de un botón con texto blanco | 2,97 sobre blanco (no llega a 3:1); 6,09 sobre #11142B |
 | `on-accent` | #01255D | #01255D | El número dentro de cada moneda | 4,96 |
+| `logo` | #01255D | `brand-50` | El cuerpo del cerdito del logo en la app (`BrandMark`) | 14,75 sobre blanco; 16,20 sobre #11142B |
+
+**El logo en la app (09/10/2026):** dentro de la app el logo es un SVG (`BrandMark`, vectorizado de `logo.png` con el mismo recorte que los iconos) y no el PNG con fondo blanco, que en modo oscuro quedaba como un cuadro blanco pegado. El cuerpo toma `logo`, la moneda `accent`, y la "L", los ojos y la ranura dejan ver el fondo, así que en modo oscuro se ve la versión invertida: cerdito casi blanco, moneda naranja. Los iconos del sistema (favicon, icono de inicio de iPhone y de la app instalada) siguen con fondo blanco, porque el sistema los muestra sobre fondos que la app no controla.
 
 ## 6. Relación con la plantilla de Excel
 

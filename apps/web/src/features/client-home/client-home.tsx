@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { linkButton, primaryButton, secondaryButton, textButton } from '@/components/ui-classes';
@@ -11,6 +10,7 @@ import { InterfacePreferences } from '@/features/preferences';
 import { withAddress } from '@/lib/address';
 import { getLocale, getMessages } from '@/server/i18n';
 import type { Viewer } from '@/server/viewer';
+import { BrandMark } from '@/components/brand-mark';
 import { CoinSlot } from '@/components/coin-slot';
 import { NAV_FORWARD, PageTransition } from '@/components/page-transition';
 
@@ -41,7 +41,7 @@ export async function ClientHome({ viewer }: { viewer: Extract<Viewer, { role: '
   return (
     <PageTransition>
       <main className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-6 px-4 py-10 text-center">
-        <Image src="/icons/icon-192.png" alt="" width={96} height={96} priority unoptimized />
+        <BrandMark className="size-24" />
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-semibold text-balance wrap-anywhere">
             {greetingBefore}

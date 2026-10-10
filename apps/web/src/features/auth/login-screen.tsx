@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
+import { BrandMark } from '@/components/brand-mark';
 import { focusRing } from '@/components/ui-classes';
 import { InterfacePreferences } from '@/features/preferences';
 import { getMessages } from '@/server/i18n';
@@ -31,8 +31,7 @@ export async function LoginScreen({
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 px-4 py-10">
       <header className="flex flex-col items-center gap-3 text-center">
-        {/* El icono ya es pequeño (192 px, 13 KB): se sirve tal cual, sin el optimizador. */}
-        <Image src="/icons/icon-192.png" alt="" width={72} height={72} priority unoptimized />
+        <BrandMark className="size-18" />
         <h1 translate="no" className="text-3xl font-semibold">
           {t.app.name}
         </h1>

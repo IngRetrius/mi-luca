@@ -33,6 +33,11 @@ export interface Theme {
   readonly accent: string;
   /** Texto sobre `accent` (los números de las etapas). */
   readonly onAccent: string;
+  /**
+   * Cuerpo del cerdito del logo (`BrandMark`): marino en modo claro y casi blanco en modo oscuro,
+   * donde el marino no se distingue del fondo. La moneda es `accent`; la "L" y los ojos, el fondo.
+   */
+  readonly logo: string;
 }
 
 export const lightTheme: Theme = {
@@ -51,6 +56,7 @@ export const lightTheme: Theme = {
   onBrand: palette.white,
   accent: palette.brandOrange,
   onAccent: palette.brandNavy,
+  logo: palette.brandNavy,
 };
 
 export const darkTheme: Theme = {
@@ -69,6 +75,7 @@ export const darkTheme: Theme = {
   onBrand: palette.night,
   accent: palette.brandOrange,
   onAccent: palette.brandNavy,
+  logo: palette.brand50,
 };
 
 const toKebab = (name: string) => name.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);

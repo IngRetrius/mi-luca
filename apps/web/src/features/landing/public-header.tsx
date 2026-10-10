@@ -1,8 +1,8 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
 import type { Messages } from '@miluca/i18n';
 
+import { BrandMark } from '@/components/brand-mark';
 import { focusRing, textButton } from '@/components/ui-classes';
 
 import { pageColumn } from './section';
@@ -32,15 +32,7 @@ export function PublicHeader({ text }: { text: Messages['landing']['header'] }) 
           aria-label={text.homeLabel}
           className={`-ml-2 flex min-h-12 items-center gap-2 rounded-xl px-2 transition-opacity hover:opacity-80 ${focusRing}`}
         >
-          {/* El icono ya es pequeño (192 px, 13 KB): se sirve tal cual, sin el optimizador. */}
-          <Image
-            src="/icons/icon-192.png"
-            alt=""
-            width={36}
-            height={36}
-            unoptimized
-            className="rounded-lg"
-          />
+          <BrandMark className="size-9" />
           <span translate="no" className="text-xl font-semibold text-brand">
             MiLuca
           </span>
