@@ -2,7 +2,8 @@
  * Movimiento del landing (ADR 0026): pocas animaciones, cortas (100 a 450 ms, que arrancan rápido
  * y frenan al final) y con propósito [F71].
  *
- * - Al cargar, una sola vez: la ranura de la alcancía se abre y la moneda cae sobre ella.
+ * - Al cargar, una sola vez: la ranura de la alcancía se abre y la moneda cae sobre ella
+ *   (`components/coin-slot.module.css`, compartida con el inicio del cliente, ADR 0031).
  * - Al bajar: la línea de las etapas se dibuja y sus monedas y capturas aparecen. El texto no se
  *   anima, porque animarlo retrasa la lectura; tampoco se cambia el desplazamiento [F72].
  * - En el celular, la barra de contacto entra cuando se deja atrás la presentación.
@@ -10,20 +11,6 @@
  * Con "reducir movimiento" no corre ninguna. Las que siguen al desplazamiento solo corren donde el
  * navegador las soporta [F73]: sin ellas, todo se ve en su lugar desde el principio.
  */
-
-.slot {
-  transform-origin: left center;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .slot {
-    animation: slot-open 300ms ease-out 100ms both;
-  }
-
-  .coin {
-    animation: coin-drop 450ms cubic-bezier(0.3, 1.4, 0.6, 1) 300ms both;
-  }
-}
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
@@ -53,22 +40,6 @@
       animation-timeline: scroll(root block);
       animation-range: 50vh 80vh;
     }
-  }
-}
-
-@keyframes slot-open {
-  from {
-    transform: scaleX(0);
-  }
-}
-
-@keyframes coin-drop {
-  from {
-    opacity: 0;
-    transform: translateY(-2rem);
-  }
-  60% {
-    opacity: 1;
   }
 }
 

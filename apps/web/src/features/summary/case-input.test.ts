@@ -41,7 +41,6 @@ const settings = (overrides: Partial<NonNullable<CaseRows['settings']>>) => ({
   cutoff_date: null,
   flow_year: null,
   compatibility_mode: false,
-  fiscal_threshold_keys: [],
   emergency_months_override: null,
   expensive_debt_threshold: null,
   pct_surplus_invest_confirmed: null,
@@ -99,7 +98,6 @@ const rows: CaseRows = {
   insurances: [],
   investments: [],
   riskProfile: null,
-  thresholds: [{ key: 'tax.dependent_income_limit', value: 8000, unit: 'EUR' }],
 };
 
 const noTracking = {
@@ -197,7 +195,7 @@ describe('toCaseInput', () => {
     expect(toCaseInput(rows, '2026-10-01').input.debtMethod).toBe('avalancha');
   });
 
-  it('sin supuestos: fecha de corte de hoy, modo nativo y ningún umbral aplicado', () => {
+  it('sin supuestos: fecha de corte de hoy, modo nativo y ningún umbral fiscal', () => {
     const { input, mode } = toCaseInput(rows, '2026-10-01');
     expect(mode).toBe('native');
     expect(input.cutoffDate).toBe('2026-10-01');
@@ -213,58 +211,16 @@ describe('toCaseInput', () => {
     expect(input.budgetItems[1]?.basicAmount).toEqual({ amount: 5, currency: 'USD' });
   });
 
-  it('con supuestos: la fecha fija, el modo y solo los umbrales que el asesor marcó', () => {
+  it('con supuestos: la fecha fija y el modo', () => {
     const { input, mode } = toCaseInput(
       {
         ...rows,
-        settings: settings({
-          cutoff_date: '2026-09-28',
-          compatibility_mode: true,
-          fiscal_threshold_keys: ['tax.dependent_income_limit'],
-        }),
+        settings: settings({ cutoff_date: '2026-09-28', compatibility_mode: true }),
       },
       '2026-10-01',
     );
     expect(mode).toBe('compatible');
     expect(input.cutoffDate).toBe('2026-09-28');
-    expect(input.fiscalThresholds).toEqual([
-      { code: 'tax.dependent_income_limit', annualLimit: 8000 },
-    ]);
-  });
-
-  it('un umbral en otra moneda pasa a la base con la tasa del cliente; sin tasa no se compara', () => {
-    const marked = settings({ fiscal_threshold_keys: ['limite'] });
-    const withRate = toCaseInput(
-      { ...rows, settings: marked, thresholds: [{ key: 'limite', value: 1000, unit: 'USD' }] },
-      '2026-10-01',
-    );
-    expect(withRate.input.fiscalThresholds).toEqual([{ code: 'limite', annualLimit: 900 }]);
-    const withoutRate = toCaseInput(
-      { ...rows, settings: marked, thresholds: [{ key: 'limite', value: 1000, unit: 'COP' }] },
-      '2026-10-01',
-    );
-    expect(withoutRate.input.fiscalThresholds).toEqual([]);
-  });
-
-  it('los topes para declarar renta de Colombia llevan su base de comparación (ADR 0027)', () => {
-    const marked = settings({
-      fiscal_threshold_keys: ['tax.filing_gross_income', 'tax.filing_gross_assets'],
-    });
-    const { input } = toCaseInput(
-      {
-        ...rows,
-        settings: marked,
-        thresholds: [
-          { key: 'tax.filing_gross_income', value: 73_323_600, unit: 'EUR' },
-          { key: 'tax.filing_gross_assets', value: 235_683_000, unit: 'EUR' },
-        ],
-      },
-      '2026-10-01',
-    );
-    expect(input.fiscalThresholds).toEqual([
-      { code: 'tax.filing_gross_income', annualLimit: 73_323_600, basis: 'income' },
-      { code: 'tax.filing_gross_assets', annualLimit: 235_683_000, basis: 'assets' },
-    ]);
   });
 
   it('el motor calcula el caso: lo que paga la familia suma al ingreso en modo nativo', () => {

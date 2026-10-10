@@ -1,0 +1,36 @@
+/*
+ * La marca en movimiento (ADR 0026 y 0031): al cargar, una sola vez, la ranura de la alcancía se
+ * abre (300 ms) y la moneda cae sobre ella (450 ms) [F71]. Es el único movimiento que no responde a
+ * algo que hace la persona: en el landing, bajo el título; en la app, en el inicio del cliente.
+ * Con "reducir movimiento", las dos quedan quietas en su lugar.
+ */
+
+.slot {
+  transform-origin: left center;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .slot {
+    animation: slot-open 300ms ease-out 100ms both;
+  }
+
+  .coin {
+    animation: coin-drop 450ms cubic-bezier(0.3, 1.4, 0.6, 1) 300ms both;
+  }
+}
+
+@keyframes slot-open {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes coin-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-2rem);
+  }
+  60% {
+    opacity: 1;
+  }
+}

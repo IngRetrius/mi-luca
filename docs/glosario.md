@@ -40,7 +40,15 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Datos básicos (núcleo) | `core` | Perfil, ingresos, monedas y supuestos: siempre activos, no son una etapa |
 | Etapas activas | `case_settings.active_stages` / `loadActiveStages` | Las activa el asesor; sin fila de supuestos, solo presupuesto |
 | Etapa de la entrega | `plan_deliveries.stage` / `DeliveryStage` | Una etapa o `completo` (las entregas anteriores al ADR 0025) |
-| Pasos de la etapa | `coreSteps`, `stageSteps`, `nextStep` | Se marcan solos con los datos del caso (`features/stages/progress.ts`) |
+| Pasos de la etapa | `coreSteps`, `stageSteps`, `nextStep` | Se marcan solos con los datos del caso (`features/stages/progress.ts`) o los omite el asesor |
+| Paso omitido | `case_settings.skipped_steps` / `SKIPPABLE_STEPS`, `setStepSkipped`, `StepSkip` | Paso opcional que el asesor salta; cuenta como hecho (ADR 0029) |
+| Etapa terminada | `stageComplete` | Todos sus pasos hechos u omitidos, con el reporte entregado |
+| Documentos del cliente | `client_files` / `ClientFile`, `features/client-files` | Extractos y soportes que sube el cliente para la videollamada; temporales (ADR 0030). No confundir con la carta y las notas (`client_documents`) |
+| Tipo de documento | `ClientFileKind` (`tarjeta`, `cuenta`, `credito`, `ingresos`, `otro`) | Extracto de tarjeta, de cuenta, de crédito, soporte de ingreso u otro |
+| Ya los revisé | `markFilesReviewed` | El asesor borra los documentos activos; motivo `revisado` |
+| Transición de pantalla | `PageTransition`, `NAV_FORWARD`, `NAV_BACK` | Adelante, atrás o fundido entre pantallas (ADR 0031) |
+| Moneda que cae | `CoinSlot` | El momento de marca: en el landing y en el inicio del cliente |
+| Borrado diario | `purgeClientFiles`, `/api/cron/documentos`, `client_files_orphans`, `CRON_SECRET` | Cron de Vercel: vence los documentos de 30 días y borra los archivos sin fila activa |
 | Controles de la etapa | `reportForStage`, `STAGE_CHECKS`, `COMMON_CHECKS` | Filtran la salida de `qualityChecks` sin tocar el motor |
 | Buscar clientes | `?q=`, `parseSearch` | P-A01 |
 | Recuperar contraseña | `/recuperar`, `recoverPassword` | P-G05; pasos `email`, `code`, `password` |
@@ -320,7 +328,7 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Avisar al salir sin guardar | `useUnsavedWarning` | |
 | Importe con más decimales | `parseDecimal` | Tasas de cambio, hasta 8 decimales |
 | Quien edita los datos del cliente | `requireCaseEditor` / `CaseEditor` | Asesor (RLS decide) o dueño del perfil |
-| Umbrales fiscales que aplican | `fiscal_threshold_keys` | Columna de `case_settings` |
+| Umbrales fiscales que aplican | `fiscal_threshold_keys` | Columna de `case_settings`; sin uso en la app desde el 09/10/2026 |
 | Importe escrito | `parseAmount`, `amountToText` | Punto de miles y coma decimal |
 | Historial de cambios | `auditLog` | |
 | Control de calidad | `qualityChecks` | |

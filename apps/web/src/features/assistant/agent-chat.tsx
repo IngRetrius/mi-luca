@@ -313,7 +313,7 @@ export function AgentChat({ clientId, text }: { clientId: string; text: AgentCha
             aria-expanded={false}
             aria-controls={panelId}
             onClick={() => setOpen(true)}
-            className={`fixed right-4 bottom-[var(--agent-lift,max(1rem,env(safe-area-inset-bottom)))] z-40 inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-5 font-medium text-on-primary shadow-md transition-colors hover:bg-primary/90 active:bg-primary/80 md:right-6 ${focusRing}`}
+            className={`fixed right-4 bottom-[var(--agent-lift,max(1rem,env(safe-area-inset-bottom)))] z-40 inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-5 font-medium text-on-primary shadow-md transition-[background-color,scale] hover:bg-primary/90 active:bg-primary/80 motion-safe:active:scale-[0.98] md:right-6 ${focusRing}`}
           >
             {chatIcon}
             {text.open}
@@ -328,7 +328,7 @@ export function AgentChat({ clientId, text }: { clientId: string; text: AgentCha
           role="dialog"
           aria-modal="false"
           aria-labelledby={titleId}
-          className="fixed inset-0 z-50 flex flex-col bg-bg pt-[env(safe-area-inset-top)] md:inset-auto md:right-6 md:bottom-6 md:h-[min(42rem,calc(100dvh-3rem))] md:w-[26rem] md:rounded-xl md:border md:border-border md:pt-0 md:shadow-lg"
+          className="fixed inset-0 z-50 flex flex-col bg-bg pt-[env(safe-area-inset-top)] motion-safe:animate-sheet-in md:inset-auto md:right-6 md:bottom-6 md:h-[min(42rem,calc(100dvh-3rem))] md:w-[26rem] md:rounded-xl md:border md:border-border md:pt-0 md:shadow-lg"
         >
           <header className="flex items-center gap-2 border-b border-border px-4 py-2">
             <h2 id={titleId} className="flex-1 font-semibold">

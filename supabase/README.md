@@ -161,7 +161,7 @@ Si no se carga, la app sigue funcionando: dice de qué mes es la última tasa y 
 
 ### Borrar los datos de un cliente
 
-Cuando un cliente pide que se borren sus datos (al correo de contacto de los avisos), el asesor lo ejecuta en el editor SQL del panel con el id del perfil (está en la URL de su ficha, `/clientes/<id>`):
+Cuando un cliente pide que se borren sus datos (al correo de contacto de los avisos), el asesor lo ejecuta en el editor SQL del panel con el id del perfil (está en la URL de su ficha, `/clientes/<id>`). Si el cliente tiene documentos en Storage (ADR 0030), primero se borra su carpeta `<id-del-cliente>` del bucket `client-files` en Storage del panel: borrar la fila en SQL dejaría el archivo huérfano, y la función se niega mientras quede alguno.
 
 ```sql
 select private.delete_client_data('<id-del-cliente>');
@@ -169,6 +169,10 @@ select private.delete_client_data('<id-del-cliente>');
 
 En una sola transacción borra el perfil y todo lo que cuelga de él (planes entregados, consentimientos, notas, deudas y lo demás, por las claves foráneas en cascada), su historial en `audit_log` y su cuenta de acceso, si la tenía y no es de un asesor. Devuelve cuántas filas de historial borró y si borró la cuenta. No toca a otros clientes ni a los asesores. La app no la puede llamar (migración `client_data_deletion`, prueba `client_data_deletion.test.sql`).
 
-Las copias semanales anteriores siguen teniendo sus datos hasta que se reemplazan.
+Las copias semanales anteriores siguen teniendo sus datos hasta que se reemplazan. Los documentos de Storage no van en la copia: son temporales.
+
+### Documentos del cliente y borrado diario
+
+Los extractos que sube el cliente viven en el bucket privado `client-files` (migración `client_files`, ADR 0030) y se borran cuando el asesor marca "Ya los revisé", cuando el cliente los borra o a los 30 días. El borrado diario es el cron de Vercel `/api/cron/documentos` (`apps/web/vercel.json`, una vez al día) con la variable `CRON_SECRET` del proyecto en Vercel (16 caracteres o más): marca los vencidos y borra con la API de Storage los archivos sin fila activa de más de una hora (`public.client_files_orphans()`, solo para la clave secreta). Se puede correr a mano con `curl -H "Authorization: Bearer $CRON_SECRET" https://<dominio>/api/cron/documentos`; repetirlo no hace nada nuevo.
 
 El servidor MCP de Supabase para agentes está registrado en el alcance local de Claude Code (fuera del repositorio) y se autentica una vez con `claude mcp login`.

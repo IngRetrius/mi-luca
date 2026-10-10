@@ -24,8 +24,6 @@ import {
   type CaseInput,
   type DebtInput,
   type EngineMode,
-  type FiscalThreshold,
-  type ThresholdBasis,
   type FxContext,
   type GoalInput,
   type GrowthRangeBand,
@@ -70,7 +68,6 @@ export interface CaseRows {
     | 'cutoff_date'
     | 'flow_year'
     | 'compatibility_mode'
-    | 'fiscal_threshold_keys'
     | 'emergency_months_override'
     | 'expensive_debt_threshold'
     | 'pct_surplus_invest_confirmed'
@@ -177,8 +174,6 @@ export interface CaseRows {
     | 'dependents_override'
     | 'range_position'
   > | null;
-  /** Los parámetros de `fiscal_threshold_keys`, vigentes en la fecha de corte. */
-  readonly thresholds: readonly Pick<Row<'country_parameters'>, 'key' | 'value' | 'unit'>[];
 }
 
 export interface CaseForEngine {
@@ -275,39 +270,11 @@ const DEFAULT_RANGE_POSITION = 0.5;
 const ALL_MONTHS: MonthFlags = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 /** Sin tipo de cliente, la plantilla usa 3 meses de fondo (`Supuestos!C19`, `IFERROR(...; 3)`). */
 const EMERGENCY_MONTHS_WITHOUT_TYPE = 3;
-const CURRENCY = /^[A-Z]{3}$/;
 
 function monthFlags(values: readonly number[] | undefined): MonthFlags {
   if (!values) return ALL_MONTHS;
   if (values.length !== 12) throw new Error('Los pagos por mes deben ser doce');
   return values as unknown as MonthFlags;
-}
-
-/**
- * Un umbral en la moneda del parámetro pasa a la moneda base del cliente con su tasa. Sin tasa no
- * se compara (sale null); el país publica el valor y la tasa la pone el cliente.
- */
-/**
- * Con qué se compara cada umbral publicado (ADR 0027): los topes para declarar renta de Colombia
- * miran el ingreso, las compras o el patrimonio bruto. Los demás, como el de España, se comparan con
- * el ingreso y el gasto, como la plantilla.
- */
-const THRESHOLD_BASIS: Readonly<Record<string, ThresholdBasis>> = {
-  'tax.filing_gross_income': 'income',
-  'tax.filing_purchases': 'spending',
-  'tax.filing_gross_assets': 'assets',
-};
-
-function threshold(row: CaseRows['thresholds'][number], fx: FxContext): FiscalThreshold | null {
-  if (typeof row.value !== 'number') return null;
-  const basis = THRESHOLD_BASIS[row.key];
-  const withBasis = (annualLimit: number): FiscalThreshold =>
-    basis ? { code: row.key, annualLimit, basis } : { code: row.key, annualLimit };
-  if (!row.unit || !CURRENCY.test(row.unit) || row.unit === fx.baseCurrency) {
-    return withBasis(row.value);
-  }
-  const rate = fx.ratesToBase[row.unit];
-  return rate === undefined ? null : withBasis(row.value * rate);
 }
 
 /** Un ingreso guardado (o el del formulario, en la vista previa) como lo recibe el motor. */
@@ -476,12 +443,6 @@ export function toCaseInput(rows: CaseRows, today: IsoDate): CaseForEngine {
     .filter((item) => item.scope === 'presupuesto')
     .map(toBudgetItemInput);
 
-  const applies = new Set(rows.settings?.fiscal_threshold_keys ?? []);
-  const fiscalThresholds = rows.thresholds
-    .filter((row) => applies.has(row.key))
-    .map((row) => threshold(row, fx))
-    .filter((row): row is FiscalThreshold => row !== null);
-
   const { settings, methodology } = rows;
   const clientType = rows.client.client_type;
   const emergencyMonths =
@@ -567,7 +528,8 @@ export function toCaseInput(rows: CaseRows, today: IsoDate): CaseForEngine {
         rangePosition: risk?.range_position ?? DEFAULT_RANGE_POSITION,
       },
       pockets: toPocketInputs(rows.pockets),
-      fiscalThresholds,
+      // La app no compara con umbrales fiscales (09/10/2026); el motor los sigue aceptando.
+      fiscalThresholds: [],
     },
   };
 }

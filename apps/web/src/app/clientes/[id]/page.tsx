@@ -17,6 +17,7 @@ import {
   secondaryButton,
 } from '@/components/ui-classes';
 import { loadActionItems, type ActionItemRow } from '@/features/action-plan';
+import { loadClientFiles, type ClientFiles } from '@/features/client-files';
 import { ClientStatusBadge, getClientDetail } from '@/features/clients';
 import { listDeliveries } from '@/features/deliveries';
 import { loadDocuments, writtenCount, type ClientDocument } from '@/features/documents';
@@ -34,20 +35,23 @@ import { loadProposals, proposalPaths, type Proposals } from '@/features/proposa
 import {
   coreSteps,
   figuresFor,
-  loadActiveStages,
+  loadCaseStages,
   progressInput,
   stageHasData,
   StageSection,
   stageSteps,
   StepList,
   type CoreStepId,
+  type SkippableStepId,
   type StageModule,
   type StageStepId,
 } from '@/features/stages';
 import { formatKeyFigure, loadComputedCase, type ComputedCase } from '@/features/summary';
 import { todayIn } from '@/lib/dates';
+import { plural } from '@/lib/plural';
 import { getLanguage, getLocale, getMessages, pageMetadata } from '@/server/i18n';
 import { requireAdvisor } from '@/server/viewer';
+import { NAV_BACK, NAV_FORWARD } from '@/components/page-transition';
 
 export const generateMetadata = pageMetadata('client');
 
@@ -84,7 +88,8 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
     controlEntries,
     documents,
     proposals,
-    activeStages,
+    stages,
+    files,
   ] = await Promise.all([
     getClientDetail(id),
     getOpenInvitation(id),
@@ -94,7 +99,8 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
     loadControlEntries(id),
     loadDocuments(id),
     loadProposals(id),
-    loadActiveStages(id),
+    loadCaseStages(id),
+    loadClientFiles(id),
   ]);
   if (client === 'not-found') notFound();
   // Solo se invita a un perfil que nadie ha aceptado (RLS vuelve a exigirlo).
@@ -105,6 +111,7 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
     <WideScreen>
       <Link
         href="/clientes"
+        transitionTypes={NAV_BACK}
         className={`-ml-2 inline-flex min-h-12 items-center gap-1 self-start rounded-xl px-2 text-link hover:underline ${focusRing}`}
       >
         {backIcon}
@@ -128,10 +135,11 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
             clientId={client.id}
             computed={computed}
             deliveries={deliveries}
-            activeStages={activeStages}
+            stages={stages}
             followUp={{ actionItems, controlEntries }}
             documents={documents}
             proposals={proposals}
+            files={files}
           >
             <section
               aria-labelledby="invitation-title"
@@ -201,6 +209,8 @@ function proposalSummary(
 /** La pantalla de cada paso: donde se registra el dato o, al final, la entrega de la etapa. */
 function stepHref(base: string, stage: CaseStage | null, id: CoreStepId | StageStepId): string {
   switch (id) {
+    case 'documents':
+      return `${base}/documentos`;
     case 'profile':
       return `${base}/perfil`;
     case 'incomes':
@@ -240,28 +250,35 @@ async function CaseData({
   clientId,
   computed,
   deliveries,
-  activeStages,
+  stages,
   followUp,
   documents,
   proposals,
+  files,
   children,
 }: {
   clientId: string;
   computed: ComputedCase | null;
   deliveries: Deliveries | null;
-  activeStages: readonly CaseStage[] | null;
+  /** Etapas activas y pasos omitidos (ADR 0025 y 0029). */
+  stages: {
+    readonly active: readonly CaseStage[];
+    readonly skipped: readonly SkippableStepId[];
+  } | null;
   followUp: {
     readonly actionItems: readonly ActionItemRow[] | null;
     readonly controlEntries: readonly { readonly year: number; readonly month: number }[] | null;
   };
   documents: Partial<Record<'carta' | 'notas', ClientDocument>> | null;
   proposals: Proposals | null;
+  /** Documentos que subió el cliente para la videollamada (ADR 0030). */
+  files: ClientFiles | null;
   /** Lo que va en la columna lateral bajo las cifras (la invitación). */
   children: ReactNode;
 }) {
   const t = await getMessages();
   const text = t.clientProfile.caseData;
-  if (!computed || !deliveries || !activeStages) {
+  if (!computed || !deliveries || !stages || !files) {
     return (
       <>
         <p role="alert">{t.common.loadError}</p>
@@ -286,17 +303,27 @@ async function CaseData({
   const base = `/clientes/${clientId}`;
   const { cashflow, emergencyFund, pockets } = computed.result;
 
+  const activeStages = stages.active;
   const progress = progressInput(
     computed,
     new Set<DeliveryStage>(deliveries.map((entry) => entry.stage)),
+    stages.skipped,
+    { uploaded: files.uploadedCount, active: files.active.length },
   );
   const core = coreSteps(progress).map((step) => ({
-    id: step.id,
-    done: step.done,
+    ...step,
     label: t.stages.steps[step.id],
     href: stepHref(base, null, step.id),
   }));
   const coreModules: StageModule[] = [
+    {
+      href: `${base}/documentos`,
+      title: text.documents,
+      summary:
+        files.active.length > 0
+          ? plural(text.documentsActive, files.active.length)
+          : text.documentsNone,
+    },
     {
       href: `${base}/perfil`,
       title: text.profile,
@@ -522,13 +549,13 @@ async function CaseData({
             </h2>
             <p className="text-sm text-text-muted">{t.stages.coreIntro}</p>
           </div>
-          <StepList
-            steps={core}
-            doneLabel={t.stages.stepDone}
-            pendingLabel={t.stages.stepPending}
-          />
+          <StepList clientId={clientId} steps={core} />
           {coreNext ? (
-            <Link href={coreNext.href} className={`${primaryButton} ${linkButton} md:self-start`}>
+            <Link
+              href={coreNext.href}
+              transitionTypes={NAV_FORWARD}
+              className={`${primaryButton} ${linkButton} md:self-start`}
+            >
               {coreNext.label}
             </Link>
           ) : null}
@@ -545,8 +572,7 @@ async function CaseData({
               number={index + 1}
               active={activeStages.includes(stage)}
               steps={stageSteps(stage, progress).map((step) => ({
-                id: step.id,
-                done: step.done,
+                ...step,
                 label: t.stages.steps[step.id],
                 href: stepHref(base, stage, step.id),
               }))}

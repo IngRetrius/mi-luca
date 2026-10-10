@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { KEY_FIGURES, type KeyFigureDelta } from '@miluca/engine';
-import { formatDate } from '@miluca/i18n';
+import { formatDate, type Messages } from '@miluca/i18n';
 
 import { focusRing, textButton } from '@/components/ui-classes';
 import { formatKeyFigure } from '@/features/summary';
@@ -48,20 +48,33 @@ export async function NoticeList({ notices }: { notices: readonly Notice[] }) {
   );
 }
 
+/** El texto de cada tipo de aviso, con y sin el nombre del cliente. */
+function noticeText(t: Messages['notifications'], kind: Notice['kind']) {
+  switch (kind) {
+    case 'invitacion_aceptada':
+      return { named: t.accepted, unknown: t.acceptedUnknown };
+    case 'cambio_del_cliente':
+      return { named: t.changed, unknown: t.changedUnknown };
+    case 'documentos_subidos':
+      return { named: t.filesUploaded, unknown: t.filesUploadedUnknown };
+  }
+}
+
 async function NoticeMessage({ notice }: { notice: Notice }) {
   const t = await getMessages();
-  const accepted = notice.kind === 'invitacion_aceptada';
-  if (!notice.clientName || !notice.clientId) {
-    return <p>{accepted ? t.notifications.acceptedUnknown : t.notifications.changedUnknown}</p>;
-  }
-  const [before, after] = (accepted ? t.notifications.accepted : t.notifications.changed).split(
-    '{name}',
-  );
+  const text = noticeText(t.notifications, notice.kind);
+  if (!notice.clientName || !notice.clientId) return <p>{text.unknown}</p>;
+  const [before, after] = text.named.split('{name}');
+  // Los documentos llevan a su pantalla (ADR 0030); lo demás, a la ficha.
+  const href =
+    notice.kind === 'documentos_subidos'
+      ? `/clientes/${notice.clientId}/documentos`
+      : `/clientes/${notice.clientId}`;
   return (
     <p className="wrap-anywhere">
       {before}
       <Link
-        href={`/clientes/${notice.clientId}`}
+        href={href}
         translate="no"
         className={`rounded font-medium text-link underline hover:no-underline ${focusRing}`}
       >

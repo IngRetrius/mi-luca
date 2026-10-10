@@ -90,7 +90,9 @@
     "proposal": "Propuesta",
     "newAdjustment": "Nuevo ajuste",
     "adjustment": "Ajuste",
-    "applyProposal": "Aplicar la propuesta"
+    "applyProposal": "Aplicar la propuesta",
+    "myFiles": "Tus documentos",
+    "clientFiles": "Documentos del cliente"
   },
   "language": {
     "label": "Idioma",
@@ -325,7 +327,13 @@
       "followUp": "Revisiones y ficha de continuidad",
       "followUpNext": "Próxima revisión el {date}",
       "followUpOverdue": "Revisión vencida desde el {date}",
-      "followUpNone": "Sin revisiones programadas"
+      "followUpNone": "Sin revisiones programadas",
+      "documents": "Documentos del cliente",
+      "documentsActive": {
+        "one": "{count} por revisar",
+        "other": "{count} por revisar"
+      },
+      "documentsNone": "Sin documentos por revisar"
     }
   },
   "invitation": {
@@ -348,16 +356,16 @@
         "usted": "Qué datos le pedimos"
       },
       "asked": {
-        "tu": "Tus ingresos, gastos, ahorros, deudas y metas, y datos básicos como tu fecha de nacimiento y las personas a tu cargo. Si tu presupuesto incluye gastos de salud, te pedimos una autorización aparte.",
-        "usted": "Sus ingresos, gastos, ahorros, deudas y metas, y datos básicos como su fecha de nacimiento y las personas a su cargo. Si su presupuesto incluye gastos de salud, le pedimos una autorización aparte."
+        "tu": "Tus ingresos, gastos, ahorros, deudas y metas, y datos básicos como tu fecha de nacimiento y las personas a tu cargo. Para la videollamada, si quieres, los extractos de los últimos 3 meses: se borran a más tardar a los 30 días. Si tu presupuesto incluye gastos de salud, te pedimos una autorización aparte.",
+        "usted": "Sus ingresos, gastos, ahorros, deudas y metas, y datos básicos como su fecha de nacimiento y las personas a su cargo. Para la videollamada, si quiere, los extractos de los últimos 3 meses: se borran a más tardar a los 30 días. Si su presupuesto incluye gastos de salud, le pedimos una autorización aparte."
       },
       "neverTitle": {
         "tu": "Qué nunca te pedimos",
         "usted": "Qué nunca le pedimos"
       },
       "never": {
-        "tu": "Números de cuenta, de tarjeta ni de documento, ni las contraseñas de tus bancos. Los bancos se identifican solo por su nombre.",
-        "usted": "Números de cuenta, de tarjeta ni de documento, ni las contraseñas de sus bancos. Los bancos se identifican solo por su nombre."
+        "tu": "Números de cuenta, de tarjeta ni de documento (en los extractos los puedes tapar), ni las contraseñas de tus bancos. Los bancos se identifican solo por su nombre.",
+        "usted": "Números de cuenta, de tarjeta ni de documento (en los extractos los puede tapar), ni las contraseñas de sus bancos. Los bancos se identifican solo por su nombre."
       },
       "expires": "La invitación vence el {date}.",
       "continue": "Continuar",
@@ -616,7 +624,9 @@
     "acceptedUnknown": "Un cliente aceptó la invitación.",
     "markRead": "Marcar como visto",
     "changed": "{name} cambió sus datos.",
-    "changedUnknown": "Un cliente cambió sus datos."
+    "changedUnknown": "Un cliente cambió sus datos.",
+    "filesUploaded": "{name} subió documentos para la videollamada.",
+    "filesUploadedUnknown": "Un cliente subió documentos."
   },
   "keyFigures": {
     "annualIncome": "Ingreso al año",
@@ -1157,16 +1167,6 @@
       "native": "Con las correcciones aprobadas, por ejemplo quién paga cada gasto.",
       "compatible": "Reproduce la plantilla 2.2 tal cual."
     },
-    "thresholds": "Umbrales fiscales que aplican",
-    "thresholdsHint": "Marca solo los que aplican a este caso. Son una referencia: se confirman con el contador o gestor.",
-    "thresholdOption": "{label}: {amount}",
-    "noThresholds": "No hay umbrales publicados para {country}.",
-    "thresholdLabels": {
-      "tax.dependent_income_limit": "Límite de rentas del descendiente (mínimo por descendientes)",
-      "tax.filing_gross_income": "Ingresos brutos para declarar renta (1.400 UVT)",
-      "tax.filing_purchases": "Compras y consumos para declarar renta (1.400 UVT)",
-      "tax.filing_gross_assets": "Patrimonio bruto para declarar renta (4.500 UVT)"
-    },
     "submit": "Guardar",
     "submitting": "Guardando…",
     "cancel": "Cancelar",
@@ -1205,15 +1205,6 @@
     "withoutTemporary": "Sin gastos temporales, al mes",
     "itemsTitle": "Por partida, al año",
     "editBasic": "Editar en el presupuesto",
-    "thresholdsTitle": "Umbrales fiscales",
-    "thresholdsNote": "Referencia, no asesoría tributaria: se confirma con el contador o gestor.",
-    "ownIncome": "Ingreso propio al año",
-    "grossAssets": "Patrimonio bruto (activos, inversiones y cobros)",
-    "ownIncomeNet": "El ingreso registrado es neto: si lo supera, el bruto también; si no, confírmalo con el contador.",
-    "limit": "Límite: {amount} al año",
-    "exceeds": "Supera",
-    "notExceeds": "No supera",
-    "noThresholds": "Ningún umbral marcado para este caso. Se marcan en Perfil y supuestos.",
     "empty": "Todavía no hay gastos en el presupuesto.",
     "annualLabel": "Al año"
   },
@@ -3470,6 +3461,7 @@
       "patrimonio": "Qué tiene, cómo lo protege y cuánto aportar a cada meta y a la inversión."
     },
     "steps": {
+      "documents": "Revisar los documentos del cliente",
       "profile": "Completar el perfil y el tipo de cliente",
       "incomes": "Registrar y clasificar los ingresos",
       "expenses": "Registrar los gastos",
@@ -3487,6 +3479,12 @@
     },
     "stepDone": "Hecho",
     "stepPending": "Pendiente",
+    "stepSkipped": "Omitido",
+    "skip": "Omitir",
+    "undoSkip": "Deshacer",
+    "skipping": "Guardando…",
+    "skipError": "No se guardó. Intenta de nuevo.",
+    "stageComplete": "Etapa terminada",
     "progress": "{done} de {total} pasos",
     "deliveredOn": "Reporte entregado el {date}.",
     "viewReport": "Ver el reporte",
@@ -3502,6 +3500,142 @@
     "expensiveDebtFirst": "Tiene deuda cara: conviene la etapa de deudas primero. El control de calidad no deja entregar inversión mientras exista.",
     "documentsTitle": "Carta y entrega",
     "documentsIntro": "Sirven para cualquier etapa: la carta y las notas van con cada entrega."
+  },
+  "clientFiles": {
+    "kinds": {
+      "tarjeta": "Extracto de tarjeta de crédito",
+      "cuenta": "Extracto de cuenta o bolsillo",
+      "credito": "Extracto de un crédito o préstamo",
+      "ingresos": "Desprendible de nómina o cuenta de cobro",
+      "otro": "Otro documento"
+    },
+    "fileSummary": "{format} · {size} · subido el {date}",
+    "expires": "Se borra solo el {date}",
+    "view": "Ver",
+    "viewLabel": "Ver {kind} ({format}, {size}) del {date} (se abre en otra pestaña)",
+    "client": {
+      "title": {
+        "tu": "Tus documentos",
+        "usted": "Sus documentos"
+      },
+      "intro": {
+        "tu": "Sube los extractos de los últimos 3 meses antes de tu videollamada. Así la usamos para hablar de tu plan y no para dictar cifras.",
+        "usted": "Suba los extractos de los últimos 3 meses antes de su videollamada. Así la usamos para hablar de su plan y no para dictar cifras."
+      },
+      "whatTitle": "Qué subir",
+      "what": {
+        "tu": {
+          "cards": "Extractos de tus tarjetas de crédito.",
+          "accounts": "Extractos de tus cuentas, bolsillos o billeteras.",
+          "loans": "Extractos de tus créditos o préstamos.",
+          "income": "Tu desprendible de nómina o tus cuentas de cobro."
+        },
+        "usted": {
+          "cards": "Extractos de sus tarjetas de crédito.",
+          "accounts": "Extractos de sus cuentas, bolsillos o billeteras.",
+          "loans": "Extractos de sus créditos o préstamos.",
+          "income": "Su desprendible de nómina o sus cuentas de cobro."
+        }
+      },
+      "privacyTitle": "Quién los ve y cuándo se borran",
+      "privacy": {
+        "tu": "Solo los vemos tú y tu asesor; no los lee ninguna inteligencia artificial. Se borran cuando tu asesor los revisa o, a más tardar, 30 días después de subirlos.",
+        "usted": "Solo los vemos usted y su asesor; no los lee ninguna inteligencia artificial. Se borran cuando su asesor los revisa o, a más tardar, 30 días después de subirlos."
+      },
+      "numbersTip": {
+        "tu": "Si puedes, tapa los números de tarjeta, de cuenta y de documento: no los necesitamos.",
+        "usted": "Si puede, tape los números de tarjeta, de cuenta y de documento: no los necesitamos."
+      },
+      "uploadTitle": {
+        "tu": "Subir",
+        "usted": "Subir"
+      },
+      "kindLabel": {
+        "tu": "Qué vas a subir",
+        "usted": "Qué va a subir"
+      },
+      "pick": "Elegir archivos",
+      "pickHint": {
+        "tu": "PDF, JPG o PNG de hasta 10 MB. En el celular puedes tomar una foto.",
+        "usted": "PDF, JPG o PNG de hasta 10 MB. En el celular puede tomar una foto."
+      },
+      "passwordTip": {
+        "tu": "¿Tu extracto tiene clave? Si puedes, ábrelo y guárdalo como PDF sin clave. Si no, súbelo así y lo abrimos juntos en la videollamada.",
+        "usted": "¿Su extracto tiene clave? Si puede, ábralo y guárdelo como PDF sin clave. Si no, súbalo así y lo abrimos juntos en la videollamada."
+      },
+      "uploading": "Subiendo {done} de {total}…",
+      "uploaded": {
+        "one": "Listo: {count} documento subido.",
+        "other": "Listo: {count} documentos subidos."
+      },
+      "listTitle": {
+        "tu": "Lo que subiste",
+        "usted": "Lo que subió"
+      },
+      "empty": {
+        "tu": "Todavía no has subido documentos.",
+        "usted": "Todavía no ha subido documentos."
+      },
+      "deleteToggle": "Borrar este documento",
+      "deleteHint": {
+        "tu": "Tu asesor tampoco lo verá. Puedes volver a subirlo.",
+        "usted": "Su asesor tampoco lo verá. Puede volver a subirlo."
+      },
+      "deleteConfirm": "Sí, borrarlo",
+      "reviewedOn": {
+        "tu": "Tu asesor revisó tus documentos y se borraron el {date}.",
+        "usted": "Su asesor revisó sus documentos y se borraron el {date}."
+      },
+      "expiredOn": {
+        "tu": "Tus documentos se borraron solos el {date}.",
+        "usted": "Sus documentos se borraron solos el {date}."
+      },
+      "deletedOn": {
+        "tu": "Borraste tus documentos el {date}.",
+        "usted": "Borró sus documentos el {date}."
+      },
+      "continue": "Continuar",
+      "later": "Lo hago después",
+      "back": "Inicio",
+      "errors": {
+        "unsupportedType": "{name}: sube un PDF, JPG o PNG. En iPhone, elige la foto desde Fotos o toma una nueva.",
+        "tooLarge": "{name}: pesa más de 10 MB. Prueba con una foto o un PDF más liviano.",
+        "empty": "{name} está vacío. Elige otro archivo.",
+        "limit": "Ya tienes 20 documentos sin revisar. Espera a que tu asesor los revise o borra alguno.",
+        "upload": "{name}: no se pudo subir. Revisa tu conexión e intenta de nuevo.",
+        "delete": "No se pudo borrar el documento. Intenta de nuevo."
+      }
+    },
+    "advisor": {
+      "title": "Documentos del cliente",
+      "intro": "Los extractos y soportes que subió el cliente para la videollamada. No van al asistente ni al plan entregado, y se borran cuando los marcas como revisados o a los 30 días.",
+      "back": "Ficha del cliente",
+      "empty": "El cliente no tiene documentos por revisar. Si no los va a subir, omite el paso en la ficha.",
+      "reviewToggle": "Ya los revisé, borrarlos",
+      "reviewHint": "Se borran todos los documentos del cliente y no se pueden recuperar. Lo que anotaste en el plan sigue igual.",
+      "reviewConfirm": "Borrar los documentos",
+      "reviewedOn": "Revisaste los documentos y se borraron el {date}.",
+      "expiredOn": "Los documentos se borraron solos el {date}.",
+      "deletedOn": "El cliente borró sus documentos el {date}.",
+      "errors": {
+        "review": "No se pudieron borrar los documentos. Intenta de nuevo."
+      }
+    },
+    "home": {
+      "title": {
+        "tu": "Antes de tu videollamada",
+        "usted": "Antes de su videollamada"
+      },
+      "body": {
+        "tu": "Sube los extractos de tus tarjetas y cuentas de los últimos 3 meses.",
+        "usted": "Suba los extractos de sus tarjetas y cuentas de los últimos 3 meses."
+      },
+      "link": "Subir mis documentos",
+      "manage": {
+        "tu": "Tus documentos",
+        "usted": "Sus documentos"
+      }
+    }
   },
   "landing": {
     "metaTitle": "MiLuca | Planificación financiera personal",

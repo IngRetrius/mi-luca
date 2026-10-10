@@ -11,7 +11,15 @@ import {
   STAGE_ASSUMPTIONS,
   STAGE_CHECKS,
 } from './catalog';
-import { coreSteps, nextStep, stageHasData, stageSteps, type ProgressInput } from './progress';
+import {
+  coreSteps,
+  nextStep,
+  skippedStepsFrom,
+  stageHasData,
+  stageSteps,
+  type ProgressInput,
+  type SkippableStepId,
+} from './progress';
 
 // Todos los controles del motor. Si el motor agrega uno, este arreglo deja de compilar hasta que se
 // decida a qué etapa va.
@@ -68,7 +76,11 @@ const EMPTY: ProgressInput = {
   riskProfileAnswered: false,
   report: report({}),
   deliveredStages: new Set(),
+  skippedSteps: new Set(),
+  files: { uploaded: 0, active: 0 },
 };
+
+const skipping = (...ids: SkippableStepId[]) => new Set<SkippableStepId>(ids);
 
 const BUDGET_READY: ProgressInput = {
   ...EMPTY,
@@ -145,13 +157,33 @@ describe('cifras por etapa', () => {
 });
 
 describe('pasos de cada etapa', () => {
-  it('el núcleo pide el tipo de cliente e ingresos clasificados', () => {
-    expect(coreSteps(EMPTY).map((step) => step.done)).toEqual([false, false]);
+  it('el núcleo pide los documentos, el tipo de cliente e ingresos clasificados', () => {
+    expect(coreSteps(EMPTY).map((step) => step.done)).toEqual([false, false, false]);
     expect(
       coreSteps({ ...EMPTY, clientType: 'contratista', incomes: [{ kind: null }] }).map(
         (step) => step.done,
       ),
-    ).toEqual([true, false]);
+    ).toEqual([false, true, false]);
+  });
+
+  it('los documentos sin revisar no frenan el control de calidad de una etapa', () => {
+    const steps = stageSteps('presupuesto', { ...BUDGET_READY, files: { uploaded: 2, active: 2 } });
+    expect(nextStep(steps)?.id).toBe('delivered');
+  });
+
+  it('los documentos se marcan cuando ya no queda ninguno por revisar, o al omitirlos', () => {
+    const documents = (input: ProgressInput) => coreSteps(input)[0];
+    expect(documents({ ...EMPTY, files: { uploaded: 3, active: 3 } })?.done).toBe(false);
+    expect(documents({ ...EMPTY, files: { uploaded: 3, active: 0 } })).toMatchObject({
+      id: 'documents',
+      done: true,
+      skipped: false,
+    });
+    expect(documents({ ...EMPTY, skippedSteps: skipping('documents') })).toMatchObject({
+      done: true,
+      skipped: true,
+      skippable: true,
+    });
   });
 
   it('sin datos, el control de calidad no se marca aunque sus controles pasen', () => {
@@ -193,6 +225,82 @@ describe('pasos de cada etapa', () => {
   it('sin cuentas registradas, el paso de cuentas queda pendiente', () => {
     const steps = stageSteps('presupuesto', { ...BUDGET_READY, liquidAssetCount: 0 });
     expect(nextStep(steps)?.id).toBe('accounts');
+  });
+
+  it('un paso omitido cuenta como hecho y el siguiente pasa al que sigue', () => {
+    const input = { ...BUDGET_READY, liquidAssetCount: 0, skippedSteps: skipping('accounts') };
+    const steps = stageSteps('presupuesto', input);
+    expect(steps.find((step) => step.id === 'accounts')).toEqual({
+      id: 'accounts',
+      done: true,
+      skipped: true,
+      skippable: true,
+    });
+    // Con lo demás listo, el control de calidad se marca y queda la entrega.
+    expect(nextStep(steps)?.id).toBe('delivered');
+  });
+
+  it('con datos, el paso está hecho aunque se haya omitido antes', () => {
+    const steps = stageSteps('presupuesto', { ...BUDGET_READY, skippedSteps: skipping('pockets') });
+    expect(steps.find((step) => step.id === 'pockets')).toMatchObject({
+      done: true,
+      skipped: false,
+    });
+  });
+
+  it('un cliente sin deudas termina la etapa omitiendo el paso de deudas', () => {
+    const pending = stageSteps('deudas', BUDGET_READY);
+    expect(nextStep(pending)?.id).toBe('debts');
+    const steps = stageSteps('deudas', { ...BUDGET_READY, skippedSteps: skipping('debts') });
+    expect(steps.map((step) => [step.id, step.done, step.skipped])).toEqual([
+      ['debts', true, true],
+      ['debtTerms', true, true],
+      ['checks', true, false],
+      ['delivered', false, false],
+    ]);
+  });
+
+  it('con deudas registradas, omitir el paso no salta la tasa y la cuota', () => {
+    const steps = stageSteps('deudas', {
+      ...BUDGET_READY,
+      debts: [{ annual_rate: null, min_payment: 100 }],
+      skippedSteps: skipping('debts'),
+    });
+    expect(nextStep(steps)?.id).toBe('debtTerms');
+  });
+
+  it('en patrimonio se omiten los seguros, las metas y el perfil de riesgo', () => {
+    const steps = stageSteps('patrimonio', {
+      ...BUDGET_READY,
+      assetCount: 2,
+      skippedSteps: skipping('insurance', 'goals', 'riskProfile'),
+    });
+    expect(nextStep(steps)?.id).toBe('delivered');
+  });
+
+  it('el perfil, los ingresos, los gastos, el control y la entrega no se omiten', () => {
+    expect(
+      coreSteps(EMPTY)
+        .filter((step) => !step.skippable)
+        .map((step) => step.id),
+    ).toEqual(['profile', 'incomes']);
+    const steps = stageSteps('presupuesto', EMPTY);
+    expect(steps.filter((step) => !step.skippable).map((step) => step.id)).toEqual([
+      'expenses',
+      'checks',
+      'delivered',
+    ]);
+    expect(stageSteps('deudas', EMPTY).find((step) => step.id === 'debtTerms')?.skippable).toBe(
+      false,
+    );
+  });
+
+  it('los pasos guardados que ya no se pueden omitir se ignoran', () => {
+    expect(skippedStepsFrom(['debts', 'delivered', 'expenses', 'goals'])).toEqual([
+      'debts',
+      'goals',
+    ]);
+    expect(skippedStepsFrom(null)).toEqual([]);
   });
 
   it('una etapa tiene datos si hay algo registrado en ella', () => {

@@ -835,7 +835,7 @@ const profile: EntitySpec = {
     ]),
   // Solo el bloque del perfil: los supuestos del caso no se tocan (la fila de `clients`).
   parse: (form, ctx) => {
-    const parsed = parseProfile(form, { today: ctx.today, availableThresholds: [] });
+    const parsed = parseProfile(form, { today: ctx.today });
     return parsed.ok
       ? { ok: true, record: parsed.record.client }
       : { ok: false, errors: errorList(parsed.errors, ctx.t.profile.errors) };

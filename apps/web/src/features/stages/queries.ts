@@ -6,7 +6,7 @@ import { qualityChecks } from '@miluca/engine';
 import type { ComputedCase } from '@/features/summary';
 import { createClient } from '@/lib/supabase/server';
 
-import type { ProgressInput } from './progress';
+import { skippedStepsFrom, type ProgressInput, type SkippableStepId } from './progress';
 
 /**
  * Las etapas activas de un cliente, en el orden sugerido (ADR 0025). Sin fila de supuestos, solo
@@ -23,10 +23,32 @@ export async function loadActiveStages(clientId: string): Promise<CaseStage[] | 
   return normalizeStages(data?.active_stages);
 }
 
+/**
+ * Las etapas activas y los pasos que el asesor omitió (ADR 0025 y 0029), para la ficha. Null si
+ * falla la consulta.
+ */
+export async function loadCaseStages(
+  clientId: string,
+): Promise<{ active: CaseStage[]; skipped: SkippableStepId[] } | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('case_settings')
+    .select('active_stages, skipped_steps')
+    .eq('client_id', clientId)
+    .maybeSingle();
+  if (error) return null;
+  return {
+    active: normalizeStages(data?.active_stages),
+    skipped: skippedStepsFrom(data?.skipped_steps),
+  };
+}
+
 /** Lo que piden los pasos de cada etapa, con las filas y el resultado que ya calculó la ficha. */
 export function progressInput(
   computed: ComputedCase,
   deliveredStages: ReadonlySet<DeliveryStage>,
+  skippedSteps: readonly SkippableStepId[],
+  files: ProgressInput['files'],
 ): ProgressInput {
   const { rows, result } = computed;
   return {
@@ -43,5 +65,7 @@ export function progressInput(
     riskProfileAnswered: result.investment.profile.willingness !== null,
     report: qualityChecks(computed.input, result),
     deliveredStages,
+    skippedSteps: new Set(skippedSteps),
+    files,
   };
 }

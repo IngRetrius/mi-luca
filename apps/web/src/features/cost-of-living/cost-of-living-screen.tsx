@@ -13,9 +13,9 @@ import { getLocale, getMessages } from '@/server/i18n';
 const LEVELS: readonly CostLevel[] = ['essential', 'basic', 'current'];
 
 /**
- * P-A11 Costo de vida: tres niveles (esencial, básico y actual), lo que paga cada pagador, el
- * costo sin gastos temporales y los umbrales fiscales que el asesor marcó para el caso
- * (RN-030 a RN-032). El nivel básico se edita en cada partida del presupuesto.
+ * P-A11 Costo de vida: tres niveles (esencial, básico y actual), lo que paga cada pagador y el
+ * costo sin gastos temporales (RN-030 y RN-032). El nivel básico se edita en cada partida del
+ * presupuesto.
  */
 export async function CostOfLivingScreen({ clientId }: { clientId: string }) {
   const t = await getMessages();
@@ -113,60 +113,6 @@ export async function CostOfLivingScreen({ clientId }: { clientId: string }) {
               );
             })}
           </ul>
-
-          <section aria-labelledby="thresholds-title" className="flex flex-col gap-2">
-            <h2 id="thresholds-title" className="font-semibold">
-              {text.thresholdsTitle}
-            </h2>
-            {costOfLiving.thresholds.length === 0 ? (
-              <p className="text-sm text-text-muted">{text.noThresholds}</p>
-            ) : (
-              costOfLiving.thresholds.map((threshold) => (
-                <div
-                  key={threshold.code}
-                  className="flex flex-col gap-2 rounded-xl border border-border p-4"
-                >
-                  <p className="font-medium">
-                    {(t.profile.thresholdLabels as Readonly<Record<string, string>>)[
-                      threshold.code
-                    ] ?? threshold.code}
-                  </p>
-                  <p className="text-sm text-text-muted">
-                    {text.limit.replace('{amount}', money(threshold.annualLimit))}
-                  </p>
-                  {/* Cada umbral muestra solo lo que compara (ADR 0027); sin base, ingreso y gasto. */}
-                  <dl className="flex flex-col gap-1 text-sm">
-                    {threshold.basis === undefined || threshold.basis === 'income' ? (
-                      <div className="flex flex-wrap justify-between gap-x-3">
-                        <dt>{text.ownIncome}</dt>
-                        <dd>{threshold.ownIncomeExceeds ? text.exceeds : text.notExceeds}</dd>
-                      </div>
-                    ) : null}
-                    {threshold.basis === undefined || threshold.basis === 'spending'
-                      ? LEVELS.map((level) => (
-                          <div key={level} className="flex flex-wrap justify-between gap-x-3">
-                            <dt>{text.levels[level]}</dt>
-                            <dd>
-                              {threshold.levelExceeds[level] ? text.exceeds : text.notExceeds}
-                            </dd>
-                          </div>
-                        ))
-                      : null}
-                    {threshold.basis === 'assets' ? (
-                      <div className="flex flex-wrap justify-between gap-x-3">
-                        <dt>{text.grossAssets}</dt>
-                        <dd>{threshold.grossAssetsExceeds ? text.exceeds : text.notExceeds}</dd>
-                      </div>
-                    ) : null}
-                  </dl>
-                  {threshold.basis === 'income' ? (
-                    <p className="text-sm text-text-muted">{text.ownIncomeNet}</p>
-                  ) : null}
-                </div>
-              ))
-            )}
-            <p className="text-sm text-text-muted">{text.thresholdsNote}</p>
-          </section>
 
           <section aria-labelledby="items-title" className="flex flex-col gap-2">
             <h2 id="items-title" className="font-semibold">

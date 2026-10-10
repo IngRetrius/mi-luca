@@ -30,10 +30,7 @@ export async function saveProfile(
 ): Promise<ProfileState> {
   const viewer = await requireCaseEditor(clientId, `/clientes/${clientId}/perfil`);
   const data = await loadProfile(clientId);
-  const parsed = parseProfile(formData, {
-    today: data?.today ?? '',
-    availableThresholds: data?.thresholds.map((threshold) => threshold.key) ?? [],
-  });
+  const parsed = parseProfile(formData, { today: data?.today ?? '' });
   if (viewer.role !== 'advisor')
     return { values: parsed.values, errors: {}, formError: 'notAllowed' };
   if (!data) return { values: parsed.values, errors: {}, formError: 'unavailable' };

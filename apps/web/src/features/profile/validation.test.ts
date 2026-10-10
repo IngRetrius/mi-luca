@@ -10,10 +10,7 @@ function form(fields: Record<string, string | string[]>): FormData {
   return data;
 }
 
-const options = {
-  today: '2026-10-01',
-  availableThresholds: ['tax.dependent_income_limit'],
-};
+const options = { today: '2026-10-01' };
 
 describe('parseProfile', () => {
   it('perfil y supuestos completos quedan listos para guardar', () => {
@@ -26,7 +23,6 @@ describe('parseProfile', () => {
         cutoffDate: '2026-09-28',
         flowYear: '2027',
         mode: 'compatible',
-        threshold: ['tax.dependent_income_limit', 'inventado'],
       }),
       options,
     );
@@ -41,7 +37,6 @@ describe('parseProfile', () => {
         cutoff_date: '2026-09-28',
         flow_year: 2027,
         compatibility_mode: true,
-        fiscal_threshold_keys: ['tax.dependent_income_limit'],
       },
     });
   });
@@ -50,12 +45,7 @@ describe('parseProfile', () => {
     const parsed = parseProfile(form({}), options);
     expect(parsed.ok && parsed.record).toEqual({
       client: { birth_date: null, sex: null, dependents_count: 0, client_type: null },
-      settings: {
-        cutoff_date: null,
-        flow_year: null,
-        compatibility_mode: false,
-        fiscal_threshold_keys: [],
-      },
+      settings: { cutoff_date: null, flow_year: null, compatibility_mode: false },
     });
   });
 

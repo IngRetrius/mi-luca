@@ -6,6 +6,7 @@ import { focusRing, gridList, gridListItem } from '@/components/ui-classes';
 
 import type { ClientSummary } from './queries';
 import { ClientStatusBadge } from './status-badge';
+import { NAV_FORWARD } from '@/components/page-transition';
 
 /** P-A01: lista de perfiles del asesor, o el estado vacío si aún no hay ninguno. */
 export function ClientList({
@@ -29,6 +30,7 @@ export function ClientList({
         <li key={client.id} className={gridListItem}>
           <Link
             href={`/clientes/${client.id}`}
+            transitionTypes={NAV_FORWARD}
             className={`flex min-h-16 items-center justify-between gap-3 rounded-xl px-4 py-3 transition-colors hover:bg-surface active:bg-surface ${focusRing}`}
           >
             <span className="flex min-w-0 flex-col">

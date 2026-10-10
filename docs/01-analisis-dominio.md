@@ -231,7 +231,7 @@ Numeradas para citarlas desde el código, las pruebas y los ADR. "P" indica secc
 ### 4.4 Escenarios de costo de vida
 
 - **RN-030** Tres niveles por gasto: esencial (el valor actual si es esencial, si no 0), básico (propuesto por el asesor, editable solo por él) y actual.
-- **RN-031** Para cada nivel: costo al mes, cuánto paga cada pagador, costo sin los gastos temporales y comparación con los umbrales fiscales del país que apliquen al cliente.
+- **RN-031** Para cada nivel: costo al mes, cuánto paga cada pagador, costo sin los gastos temporales y comparación con los umbrales fiscales del país que apliquen al cliente. La comparación con los umbrales no se muestra en la app desde el 09/10/2026 (`07-preguntas-abiertas.md`).
 - **RN-032** El total del nivel actual debe coincidir con el gasto total del presupuesto (control de la hoja Costo de vida, fila 39).
 
 ### 4.5 Flujo anual y meses sin ingreso

@@ -34,6 +34,10 @@ Fecha: 08/10/2026. Desde hoy, este plan fija el orden del trabajo que queda hast
 - [x] **Asesor:** subir `proposals` (H13) y `client_data_deletion` al remoto. El ensayo de `db push` del 08/10/2026 ya no las lista.
 - [x] **Asesor:** subir `case_stages` (L1). El ensayo de `db push` del 09/10/2026 ya no la lista.
 - [ ] **Asesor:** subir `debt_arrears_co_parameters` (L1b, ADR 0027 y 0028) con `pnpm supabase db push --dry-run` y después `pnpm supabase db push`, antes de publicar el código: la pantalla de deudas y la entrega leen `debts.in_arrears`.
+- [ ] **Asesor:** subir `skipped_steps` (ADR 0029) de la misma forma, antes de publicar el código: la ficha lee `case_settings.skipped_steps`.
+- [ ] **Asesor:** subir `client_files` (ADR 0030) de la misma forma, antes de publicar el código: la ficha y el inicio del cliente leen `client_files`, y crea el bucket `client-files`.
+- [ ] **Asesor:** crear `CRON_SECRET` en Vercel (16 caracteres o más) para el borrado diario de documentos (`supabase/README.md`).
+- [ ] **Asesor:** aprobar los avisos de tratamiento 1.2 (Colombia y España), que ya dicen qué pasa con los extractos, antes de pedirle documentos a un cliente real.
 - [ ] **Asesor:** sacar la primera copia del remoto y guardarla cifrada.
 - [ ] **Asesor:** mover `client_secret_*.json` fuera de la carpeta del repositorio (H10).
 - [ ] **Asesor:** autorizar el MCP de Supabase (`claude mcp login`) para revisar el asesor de seguridad del remoto después del despliegue.

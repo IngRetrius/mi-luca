@@ -1,11 +1,9 @@
-import { formatMoney } from '@miluca/i18n';
-
 import { BackLink, LoadError } from '@/components/back-link';
 import { Screen } from '@/components/screen';
-import { getLocale, getMessages } from '@/server/i18n';
+import { getMessages } from '@/server/i18n';
 
 import { saveProfile } from './actions';
-import { ProfileForm, type ThresholdChoice } from './profile-form';
+import { ProfileForm } from './profile-form';
 import { loadProfile } from './queries';
 import { CLIENT_TYPES, type ClientType, type ProfileValues } from './validation';
 
@@ -13,7 +11,6 @@ import { CLIENT_TYPES, type ClientType, type ProfileValues } from './validation'
 export async function ProfileScreen({ clientId }: { clientId: string }) {
   const t = await getMessages();
   const text = t.profile;
-  const labels: Readonly<Record<string, string>> = text.thresholdLabels;
   const back = `/clientes/${clientId}`;
   const data = await loadProfile(clientId);
   const header = (
@@ -39,19 +36,6 @@ export async function ProfileScreen({ clientId }: { clientId: string }) {
   }
 
   const { client, settings } = data;
-  const locale = await getLocale(client.country_code);
-  const thresholds: ThresholdChoice[] = data.thresholds.map((threshold) => {
-    const amount =
-      threshold.unit && /^[A-Z]{3}$/.test(threshold.unit)
-        ? formatMoney(threshold.value, threshold.unit, locale)
-        : String(threshold.value);
-    return {
-      key: threshold.key,
-      label: text.thresholdOption
-        .replace('{label}', labels[threshold.key] ?? threshold.key)
-        .replace('{amount}', amount),
-    };
-  });
   const clientType = (CLIENT_TYPES as readonly string[]).includes(client.client_type ?? '')
     ? (client.client_type as ClientType)
     : '';
@@ -63,7 +47,6 @@ export async function ProfileScreen({ clientId }: { clientId: string }) {
     cutoffDate: settings?.cutoff_date ?? '',
     flowYear: settings?.flow_year ? String(settings.flow_year) : '',
     mode: settings?.compatibility_mode ? 'compatible' : 'native',
-    thresholds: settings?.fiscal_threshold_keys ?? [],
   };
 
   return (
@@ -72,8 +55,6 @@ export async function ProfileScreen({ clientId }: { clientId: string }) {
       <ProfileForm
         text={text}
         initial={initial}
-        countryName={data.countryName}
-        thresholds={thresholds}
         emergencyMonths={data.emergencyMonths}
         action={saveProfile.bind(null, clientId)}
         cancelHref={back}

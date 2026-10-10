@@ -75,6 +75,7 @@ for (const path of [
   `/clientes/${CLIENT}/plan-de-accion/${CLIENT}`,
   `/clientes/${CLIENT}/carta`,
   `/clientes/${CLIENT}/notas`,
+  `/clientes/${CLIENT}/documentos`,
   `/clientes/${CLIENT}/seguimiento`,
   `/clientes/${CLIENT}/seguimiento/ficha`,
   `/clientes/${CLIENT}/propuesta`,

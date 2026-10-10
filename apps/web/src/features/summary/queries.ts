@@ -88,7 +88,7 @@ export async function loadCaseRows(clientId: string): Promise<LoadedCaseRows | n
     supabase
       .from('case_settings')
       .select(
-        'cutoff_date, flow_year, compatibility_mode, fiscal_threshold_keys, emergency_months_override, expensive_debt_threshold, pct_surplus_invest_confirmed, pct_surplus_invest_pending, pct_surplus_to_debt, pct_excess_to_invest, operating_cushion, debt_method, real_return_growth, real_return_stability, retirement_age, growth_glide_step, growth_floor, life_support_years, life_annual_to_cover, insurance_pocket_id',
+        'cutoff_date, flow_year, compatibility_mode, emergency_months_override, expensive_debt_threshold, pct_surplus_invest_confirmed, pct_surplus_invest_pending, pct_surplus_to_debt, pct_excess_to_invest, operating_cushion, debt_method, real_return_growth, real_return_stability, retirement_age, growth_glide_step, growth_floor, life_support_years, life_annual_to_cover, insurance_pocket_id',
       )
       .eq('client_id', clientId)
       .maybeSingle(),
@@ -165,22 +165,16 @@ export async function loadCaseRows(clientId: string): Promise<LoadedCaseRows | n
   }
   const profile = client.data;
 
-  // Umbrales que el asesor marcó para este caso y parámetros de la metodología, vigentes en su
-  // fecha de corte.
+  // Parámetros de la metodología, vigentes en la fecha de corte del caso.
   const today = todayIn(profile.country_code);
   const cutoff = settings.data?.cutoff_date ?? today;
-  const keys = settings.data?.fiscal_threshold_keys ?? [];
   const parameterAt = (key: string, on: string = cutoff) =>
     supabase.rpc('parameter_at', { p_country: profile.country_code, p_key: key, p_on: on });
   const methodologyEntries = Object.entries(METHODOLOGY_KEYS) as [
     keyof typeof METHODOLOGY_KEYS,
     string,
   ][];
-  const [thresholds, atCutoff] = await Promise.all([
-    Promise.all(keys.map((key) => parameterAt(key))),
-    Promise.all(methodologyEntries.map(([, key]) => parameterAt(key))),
-  ]);
-  if (thresholds.some((response) => response.error)) return null;
+  const atCutoff = await Promise.all(methodologyEntries.map(([, key]) => parameterAt(key)));
   if (atCutoff.some((response) => response.error)) return null;
   // Un corte anterior a la primera versión de la metodología (por ejemplo, para rehacer un caso
   // viejo) no deja el caso sin calcular: vale la metodología vigente hoy. Sin fila vigente, la
@@ -217,13 +211,7 @@ export async function loadCaseRows(clientId: string): Promise<LoadedCaseRows | n
         methodologyEntries.map(([name], index) => [name, methodology[index]?.data?.value]),
       ),
     ),
-    thresholds: thresholds
-      .map((response) => response.data)
-      // Sin versión vigente, la función devuelve una fila vacía: ese umbral no se compara.
-      .flatMap((row) => (row?.key ? [{ key: row.key, value: row.value, unit: row.unit }] : [])),
-    parameterIds: [...thresholds, ...methodology].flatMap((response) =>
-      response?.data?.id ? [response.data.id] : [],
-    ),
+    parameterIds: methodology.flatMap((response) => (response?.data?.id ? [response.data.id] : [])),
   };
 }
 

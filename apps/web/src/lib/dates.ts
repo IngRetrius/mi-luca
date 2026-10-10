@@ -6,13 +6,18 @@ const TIME_ZONES: Readonly<Record<string, string>> = {
   ES: 'Europe/Madrid',
 };
 
+/** La zona horaria del país del cliente, para mostrar fechas y horas como las vive él. */
+export function timeZoneIn(countryCode: string): string {
+  return TIME_ZONES[countryCode] ?? 'UTC';
+}
+
 /**
  * La fecha de hoy ("AAAA-MM-DD") en el país del cliente. Es la fecha de corte cuando el asesor no
  * fijó otra; el motor la recibe como dato y nunca lee el reloj (CLAUDE.md, regla 5).
  */
 export function todayIn(countryCode: string, now: Date = new Date()): IsoDate {
   return new Intl.DateTimeFormat('en-CA', {
-    timeZone: TIME_ZONES[countryCode] ?? 'UTC',
+    timeZone: timeZoneIn(countryCode),
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',

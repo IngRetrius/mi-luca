@@ -22,7 +22,8 @@ export interface ChangeNotice extends NoticeBase {
   readonly locale: string;
 }
 
-export type Notice = (NoticeBase & { readonly kind: 'invitacion_aceptada' }) | ChangeNotice;
+export type Notice =
+  (NoticeBase & { readonly kind: 'invitacion_aceptada' | 'documentos_subidos' }) | ChangeNotice;
 
 function isDelta(value: unknown): value is KeyFigureDelta {
   if (typeof value !== 'object' || value === null) return false;
@@ -69,6 +70,7 @@ export async function listUnreadNotices(): Promise<readonly Notice[] | null> {
       clientId: row.client_id,
       clientName: row.client?.display_name ?? null,
     };
+    if (row.kind === 'documentos_subidos') return { ...base, kind: 'documentos_subidos' };
     if (row.kind !== 'cambio_del_cliente') return { ...base, kind: 'invitacion_aceptada' };
     const impactId = (row.payload as Record<string, unknown> | null)?.impact_id;
     return {

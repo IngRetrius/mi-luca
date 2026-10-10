@@ -16,7 +16,8 @@ import { getMessages } from '@/server/i18n';
 
 import { setStageActive } from './actions';
 import { StageToggle } from './stage-toggle';
-import { StepList, type StepItem } from './step-list';
+import { doneIcon, StepList, type StepItem } from './step-list';
+import { NAV_FORWARD } from '@/components/page-transition';
 
 export interface StageModule {
   readonly href: string;
@@ -26,7 +27,8 @@ export interface StageModule {
 
 /**
  * Una etapa en la ficha del asesor (P-A03, ADR 0025). Activa: sus pasos con el siguiente como acción
- * principal (o la fecha del reporte entregado), sus pantallas y la opción de ocultarla. Sin activar:
+ * principal (o, terminada, la fecha del reporte entregado), los opcionales con el botón de omitir
+ * (ADR 0029), sus pantallas y la opción de ocultarla. Sin activar:
  * para qué sirve y el botón para activarla, con el aviso de que lo registrado sigue contando.
  */
 export async function StageSection({
@@ -74,12 +76,27 @@ export async function StageSection({
 
       {active ? (
         <>
-          <p className="text-sm font-medium">
-            {text.progress.replace('{done}', String(done)).replace('{total}', String(steps.length))}
+          {/*
+            Con todos los pasos hechos u omitidos, la etapa queda terminada (ADR 0029). Vivo: al
+            omitir un paso, el lector de pantalla anuncia el nuevo conteo.
+          */}
+          <p aria-live="polite" className="flex items-center gap-2 text-sm font-medium">
+            {next ? (
+              text.progress.replace('{done}', String(done)).replace('{total}', String(steps.length))
+            ) : (
+              <>
+                {doneIcon}
+                {text.stageComplete}
+              </>
+            )}
           </p>
-          <StepList steps={steps} doneLabel={text.stepDone} pendingLabel={text.stepPending} />
+          <StepList clientId={clientId} steps={steps} />
           {next ? (
-            <Link href={next.href} className={`${primaryButton} ${linkButton} md:self-start`}>
+            <Link
+              href={next.href}
+              transitionTypes={NAV_FORWARD}
+              className={`${primaryButton} ${linkButton} md:self-start`}
+            >
               {next.label}
             </Link>
           ) : delivered ? (

@@ -8,7 +8,11 @@ import { expect, test } from '@playwright/test';
 // del país (P-A06b en Mis gastos). En F4, las deudas del cliente con su plan de pago y P-C10 (marcar cuotas pagadas). En F5,
 // inversión con el perfil de riesgo, metas con la calculadora de viaje y seguros. En F7, el control
 // mensual (P-C08), las tareas (P-C09), las próximas tareas del inicio, y en Mi plan las notas
-// publicadas y la carta por secciones.
+// publicadas y la carta por secciones. Los documentos del cliente (P-C13, ADR 0030): aceptar la
+// invitación, subir un PDF y una imagen, el rechazo de otro formato, "Ver" con su enlace firmado,
+// "Continuar" y el inicio.
+
+const FILE = '00000000-0000-4000-8000-000000000001';
 
 for (const path of [
   '/instalar',
@@ -56,6 +60,7 @@ for (const path of [
   '/mis-datos/seguros/nuevo',
   '/mis-datos/seguros/00000000-0000-4000-8000-000000000001',
   '/control-mensual',
+  '/documentos',
   '/tareas',
   '/tareas/00000000-0000-4000-8000-000000000001',
 ]) {
@@ -68,4 +73,18 @@ for (const path of [
 test('el PDF del plan sin sesión lleva a Entrar y vuelve a Mi plan', async ({ page }) => {
   await page.goto('/mi-plan/pdf');
   await expect(page).toHaveURL(`/entrar?next=${encodeURIComponent('/mi-plan')}`);
+});
+
+test('ver un documento sin sesión lleva a Entrar y vuelve a Tus documentos', async ({ page }) => {
+  await page.goto(`/documentos/${FILE}`);
+  await expect(page).toHaveURL(`/entrar?next=${encodeURIComponent('/documentos')}`);
+});
+
+test('el borrado diario de documentos no corre sin el secreto del cron', async ({ request }) => {
+  const anonymous = await request.get('/api/cron/documentos');
+  expect(anonymous.status()).toBe(401);
+  const wrong = await request.get('/api/cron/documentos', {
+    headers: { Authorization: 'Bearer un-secreto-que-no-es' },
+  });
+  expect(wrong.status()).toBe(401);
 });

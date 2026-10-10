@@ -33,8 +33,9 @@ export async function acceptFromFlow(
   });
   if (!error) {
     await clearInvitationFlow();
-    // P-C03: primero la guía para agregar la app a la pantalla de inicio.
-    return '/instalar';
+    // P-C13: primero sube sus documentos para la videollamada (ADR 0030); de ahí sigue a la guía
+    // para agregar la app a la pantalla de inicio (P-C03).
+    return '/documentos?inicio=1';
   }
 
   // 23514: el texto aceptado ya no es el vigente; se vuelve a mostrar el consentimiento.

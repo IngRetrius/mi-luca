@@ -388,6 +388,7 @@ export type Database = {
           real_return_growth: number | null;
           real_return_stability: number | null;
           retirement_age: number | null;
+          skipped_steps: string[];
           updated_at: string;
           updated_by: string | null;
         };
@@ -414,6 +415,7 @@ export type Database = {
           real_return_growth?: number | null;
           real_return_stability?: number | null;
           retirement_age?: number | null;
+          skipped_steps?: string[];
           updated_at?: string;
           updated_by?: string | null;
         };
@@ -440,6 +442,7 @@ export type Database = {
           real_return_growth?: number | null;
           real_return_stability?: number | null;
           retirement_age?: number | null;
+          skipped_steps?: string[];
           updated_at?: string;
           updated_by?: string | null;
         };
@@ -547,6 +550,62 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: 'client_documents_client_id_fkey';
+            columns: ['client_id'];
+            isOneToOne: false;
+            referencedRelation: 'clients';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      client_files: {
+        Row: {
+          client_id: string;
+          deleted_at: string | null;
+          deleted_reason: string | null;
+          expires_at: string;
+          id: string;
+          kind: string;
+          mime_type: string;
+          size_bytes: number;
+          storage_path: string;
+          updated_at: string;
+          updated_by: string | null;
+          uploaded_at: string;
+          uploaded_by: string | null;
+        };
+        Insert: {
+          client_id: string;
+          deleted_at?: string | null;
+          deleted_reason?: string | null;
+          expires_at?: string;
+          id: string;
+          kind: string;
+          mime_type: string;
+          size_bytes: number;
+          storage_path: string;
+          updated_at?: string;
+          updated_by?: string | null;
+          uploaded_at?: string;
+          uploaded_by?: string | null;
+        };
+        Update: {
+          client_id?: string;
+          deleted_at?: string | null;
+          deleted_reason?: string | null;
+          expires_at?: string;
+          id?: string;
+          kind?: string;
+          mime_type?: string;
+          size_bytes?: number;
+          storage_path?: string;
+          updated_at?: string;
+          updated_by?: string | null;
+          uploaded_at?: string;
+          uploaded_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'client_files_client_id_fkey';
             columns: ['client_id'];
             isOneToOne: false;
             referencedRelation: 'clients';
@@ -1932,6 +1991,7 @@ export type Database = {
         Args: { p_after: Json; p_before: Json; p_proposal: string; p_tasks: Json };
         Returns: undefined;
       };
+      client_files_orphans: { Args: Record<PropertyKey, never>; Returns: string[] };
       create_client: {
         Args: {
           p_base_currency?: string;

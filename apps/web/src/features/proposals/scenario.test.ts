@@ -82,7 +82,6 @@ const rows: ProposalRows = {
   insurances: [],
   investments: [],
   riskProfile: null,
-  thresholds: [],
 };
 
 const adjustment = (overrides: Partial<ScenarioAdjustment>): ScenarioAdjustment => ({

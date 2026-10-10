@@ -81,5 +81,29 @@
         "usted": "Este plan se basa en la información que me compartió. Las cifras son estimaciones en valores de hoy, ilustrativas y no garantizadas. No incluye recomendaciones de productos ni de entidades financieras. Los temas de impuestos, pensión y asuntos legales debe validarlos con un asesor fiscal, con su entidad de pensiones y con un abogado."
       }
     }
+  },
+  "clientFiles": {
+    "kinds": {
+      "ingresos": "Nómina o factura",
+      "cuenta": "Extracto de cuenta"
+    },
+    "client": {
+      "what": {
+        "tu": {
+          "accounts": "Extractos de tus cuentas.",
+          "loans": "Extractos de tus préstamos.",
+          "income": "Tu nómina o tus facturas."
+        },
+        "usted": {
+          "accounts": "Extractos de sus cuentas.",
+          "loans": "Extractos de sus préstamos.",
+          "income": "Su nómina o sus facturas."
+        }
+      },
+      "pickHint": {
+        "tu": "PDF, JPG o PNG de hasta 10 MB. En el móvil puedes hacer una foto.",
+        "usted": "PDF, JPG o PNG de hasta 10 MB. En el móvil puede hacer una foto."
+      }
+    }
   }
 }

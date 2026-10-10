@@ -25,7 +25,6 @@ export interface ProfileValues {
   readonly cutoffDate: string;
   readonly flowYear: string;
   readonly mode: EngineModeChoice;
-  readonly thresholds: readonly string[];
 }
 
 /** Lo que se guarda: perfil en `clients` y criterio del caso en `case_settings`. */
@@ -40,7 +39,6 @@ export interface ProfileRecord {
     readonly cutoff_date: string | null;
     readonly flow_year: number | null;
     readonly compatibility_mode: boolean;
-    readonly fiscal_threshold_keys: string[];
   };
 }
 
@@ -53,8 +51,6 @@ export type ProfileParse =
 export interface ProfileParseOptions {
   /** Hoy en el país del cliente: la fecha de nacimiento no puede ser futura. */
   readonly today: string;
-  /** Umbrales publicados para el país del cliente: solo se marcan esos. */
-  readonly availableThresholds: readonly string[];
 }
 
 function isRealDate(value: string): boolean {
@@ -81,12 +77,6 @@ export function parseProfile(formData: FormData, options: ProfileParseOptions): 
     cutoffDate: text('cutoffDate'),
     flowYear: text('flowYear'),
     mode: text('mode') === 'compatible' ? 'compatible' : 'native',
-    thresholds: formData
-      .getAll('threshold')
-      .filter(
-        (key): key is string =>
-          typeof key === 'string' && options.availableThresholds.includes(key),
-      ),
   };
 
   const errors: Partial<Record<ProfileField, ProfileFieldError>> = {};
@@ -119,7 +109,6 @@ export function parseProfile(formData: FormData, options: ProfileParseOptions): 
         cutoff_date: values.cutoffDate || null,
         flow_year: flowYear,
         compatibility_mode: values.mode === 'compatible',
-        fiscal_threshold_keys: [...values.thresholds],
       },
     },
   };

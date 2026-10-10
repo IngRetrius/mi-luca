@@ -27,9 +27,13 @@ export interface ProgressInput {
   readonly report: QcReport;
   /** Etapas con al menos una entrega (`completo` cuenta para las tres). */
   readonly deliveredStages: ReadonlySet<DeliveryStage>;
+  /** Pasos opcionales que el asesor omitió para este cliente (ADR 0029). */
+  readonly skippedSteps: ReadonlySet<SkippableStepId>;
+  /** Documentos del cliente (ADR 0030): los que subió alguna vez y los que siguen sin revisar. */
+  readonly files: { readonly uploaded: number; readonly active: number };
 }
 
-export type CoreStepId = 'profile' | 'incomes';
+export type CoreStepId = 'documents' | 'profile' | 'incomes';
 export type StageStepId =
   | 'expenses'
   | 'accounts'
@@ -44,24 +48,91 @@ export type StageStepId =
   | 'checks'
   | 'delivered';
 
-export interface Step<Id extends string> {
-  readonly id: Id;
-  readonly done: boolean;
+/**
+ * Pasos que el asesor puede omitir (ADR 0029): lo que un cliente puede no tener (documentos,
+ * cuentas, bolsillos, deudas, patrimonio, seguros, metas) y lo que el control de calidad solo avisa
+ * (prueba de realidad y perfil de riesgo). El perfil, los ingresos, los gastos, la tasa y la cuota
+ * de cada deuda, el control y la entrega no.
+ */
+export const SKIPPABLE_STEPS = [
+  'documents',
+  'accounts',
+  'pockets',
+  'realityCheck',
+  'debts',
+  'assets',
+  'insurance',
+  'goals',
+  'riskProfile',
+] as const satisfies readonly (CoreStepId | StageStepId)[];
+export type SkippableStepId = (typeof SKIPPABLE_STEPS)[number];
+
+export function isSkippableStep(id: string): id is SkippableStepId {
+  return (SKIPPABLE_STEPS as readonly string[]).includes(id);
 }
 
-/** El núcleo: el tipo de cliente decide las reglas (meses de fondo, ingreso base) y los ingresos, todo. */
+/** Los pasos omitidos guardados, sin los que ya no se pueden omitir. */
+export function skippedStepsFrom(values: readonly string[] | null | undefined): SkippableStepId[] {
+  return (values ?? []).filter(isSkippableStep);
+}
+
+export interface Step<Id extends string> {
+  readonly id: Id;
+  /** Hecho con los datos del caso u omitido por el asesor: el paso ya no queda pendiente. */
+  readonly done: boolean;
+  /** Hecho solo porque el asesor lo omitió; con datos, el paso cuenta como hecho sin más. */
+  readonly skipped: boolean;
+  /** El asesor puede omitirlo o deshacer la omisión. */
+  readonly skippable: boolean;
+}
+
+/** Un paso que no se omite. */
+function required<Id extends string>(id: Id, done: boolean): Step<Id> {
+  return { id, done, skipped: false, skippable: false };
+}
+
+interface DataStep<Id extends string> {
+  readonly id: Id;
+  readonly done: boolean;
+  /** Omitido por otro paso: la tasa y la cuota cuando el asesor omitió las deudas. */
+  readonly skipped?: boolean;
+}
+
+/** Un paso de datos con su omisión: los datos mandan; sin ellos, cuenta la marca del asesor. */
+function withSkip<Id extends CoreStepId | StageStepId>(
+  step: DataStep<Id>,
+  skippedSteps: ReadonlySet<SkippableStepId>,
+): Step<Id> {
+  const skippable = isSkippableStep(step.id);
+  const skipped = !step.done && (step.skipped === true || (skippable && skippedSteps.has(step.id)));
+  return { id: step.id, done: step.done || skipped, skipped, skippable };
+}
+
+/**
+ * El núcleo: los documentos que subió el cliente (ADR 0030), que se marcan cuando ya no queda
+ * ninguno por revisar; el tipo de cliente, que decide las reglas (meses de fondo, ingreso base), y
+ * los ingresos, que usa todo.
+ */
 export function coreSteps(input: ProgressInput): readonly Step<CoreStepId>[] {
   return [
-    { id: 'profile', done: input.clientType !== null },
-    {
-      id: 'incomes',
-      done: input.incomes.length > 0 && input.incomes.every((income) => income.kind !== null),
-    },
+    withSkip<CoreStepId>(
+      { id: 'documents', done: input.files.uploaded > 0 && input.files.active === 0 },
+      input.skippedSteps,
+    ),
+    required<CoreStepId>('profile', input.clientType !== null),
+    required<CoreStepId>(
+      'incomes',
+      input.incomes.length > 0 && input.incomes.every((income) => income.kind !== null),
+    ),
   ];
 }
 
 /** Los datos que pide cada etapa, en el orden en que se trabajan en la sesión. */
 function dataSteps(stage: CaseStage, input: ProgressInput): Step<StageStepId>[] {
+  return rawDataSteps(stage, input).map((step) => withSkip(step, input.skippedSteps));
+}
+
+function rawDataSteps(stage: CaseStage, input: ProgressInput): DataStep<StageStepId>[] {
   switch (stage) {
     case 'presupuesto':
       return [
@@ -79,6 +150,8 @@ function dataSteps(stage: CaseStage, input: ProgressInput): Step<StageStepId>[] 
           done:
             input.debts.length > 0 &&
             input.debts.every((debt) => debt.annual_rate !== null && debt.min_payment !== null),
+          // Sin deudas y con ese paso omitido, no hay tasa ni cuota que completar.
+          skipped: input.debts.length === 0 && input.skippedSteps.has('debts'),
         },
       ];
     case 'patrimonio':
@@ -98,15 +171,17 @@ function dataSteps(stage: CaseStage, input: ProgressInput): Step<StageStepId>[] 
  */
 export function stageSteps(stage: CaseStage, input: ProgressInput): readonly Step<StageStepId>[] {
   const data = dataSteps(stage, input);
-  const ready = coreSteps(input).every((step) => step.done) && data.every((step) => step.done);
+  // Los documentos ayudan a registrar, pero no son datos del cálculo: no frenan el control.
+  const core = coreSteps(input).filter((step) => step.id !== 'documents');
+  const ready = core.every((step) => step.done) && data.every((step) => step.done);
   const blocking = reportForStage(input.report, stage).blocking.length;
   return [
     ...data,
-    { id: 'checks', done: ready && blocking === 0 },
-    {
-      id: 'delivered',
-      done: input.deliveredStages.has(stage) || input.deliveredStages.has('completo'),
-    },
+    required<StageStepId>('checks', ready && blocking === 0),
+    required<StageStepId>(
+      'delivered',
+      input.deliveredStages.has(stage) || input.deliveredStages.has('completo'),
+    ),
   ];
 }
 

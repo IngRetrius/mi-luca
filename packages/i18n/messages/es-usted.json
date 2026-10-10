@@ -284,5 +284,17 @@
         "unavailable": "No pudimos guardar. Revise su conexión e intente de nuevo."
       }
     }
+  },
+  "clientFiles": {
+    "client": {
+      "errors": {
+        "unsupportedType": "{name}: suba un PDF, JPG o PNG. En iPhone, elija la foto desde Fotos o tome una nueva.",
+        "tooLarge": "{name}: pesa más de 10 MB. Pruebe con una foto o un PDF más liviano.",
+        "empty": "{name} está vacío. Elija otro archivo.",
+        "limit": "Ya tiene 20 documentos sin revisar. Espere a que su asesor los revise o borre alguno.",
+        "upload": "{name}: no se pudo subir. Revise su conexión e intente de nuevo.",
+        "delete": "No se pudo borrar el documento. Intente de nuevo."
+      }
+    }
   }
 }

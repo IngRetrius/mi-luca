@@ -64,6 +64,124 @@ html:has([data-screen-actions]) {
   }
 }
 
+/*
+ * Movimiento de la app (ADR 0031, docs/diseno/tokens.md): corto, con ease-out y sobre transform y
+ * opacity [F71]. Responde a lo que hace la persona (cambiar de pantalla, tocar, abrir, recibir un
+ * aviso); el texto no se anima por sí solo. Con "reducir movimiento" no se mueve nada.
+ */
+:root {
+  --ml-motion-exit: 150ms;
+  --ml-motion-enter: 210ms;
+  --ml-motion-move: 320ms;
+  --ml-ease-out: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@theme {
+  --animate-rise-in: rise-in var(--ml-motion-enter) var(--ml-ease-out) both;
+  --animate-sheet-in: sheet-in 240ms var(--ml-ease-out) both;
+  --animate-grow-x: grow-x 600ms var(--ml-ease-out) 120ms both;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+@keyframes grow-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes vt-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-slide {
+  from {
+    translate: var(--vt-offset) 0;
+  }
+}
+
+/* Entre pantallas (PageTransition): adelante, atrás o un fundido. Lo viejo sale rápido para no
+   competir; lo nuevo llega un poco después y más despacio [F80]. 40 px bastan para la dirección. */
+::view-transition {
+  /* Los toques durante la animación llegan a la página, no a la capa de la transición. */
+  pointer-events: none;
+}
+
+/* Lo que no cambia de pantalla (el fondo, el botón del asistente) se queda quieto: solo se mueve
+   el contenido. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+::view-transition-old(.nav-forward) {
+  --vt-offset: -40px;
+  animation:
+    var(--ml-motion-exit) ease-in both vt-fade reverse,
+    var(--ml-motion-move) var(--ml-ease-out) both vt-slide reverse;
+}
+
+::view-transition-new(.nav-forward) {
+  --vt-offset: 40px;
+  animation:
+    var(--ml-motion-enter) var(--ml-ease-out) var(--ml-motion-exit) both vt-fade,
+    var(--ml-motion-move) var(--ml-ease-out) both vt-slide;
+}
+
+::view-transition-old(.nav-back) {
+  --vt-offset: 40px;
+  animation:
+    var(--ml-motion-exit) ease-in both vt-fade reverse,
+    var(--ml-motion-move) var(--ml-ease-out) both vt-slide reverse;
+}
+
+::view-transition-new(.nav-back) {
+  --vt-offset: -40px;
+  animation:
+    var(--ml-motion-enter) var(--ml-ease-out) var(--ml-motion-exit) both vt-fade,
+    var(--ml-motion-move) var(--ml-ease-out) both vt-slide;
+}
+
+::view-transition-old(.page-fade) {
+  animation: var(--ml-motion-exit) ease-in both vt-fade reverse;
+}
+
+::view-transition-new(.page-fade) {
+  animation: var(--ml-motion-enter) var(--ml-ease-out) both vt-fade;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Lo que se abre (Más detalles, borrar con confirmación, todas las cifras) aparece desde su
+     título; un aviso o un error entra para que se note qué cambió. */
+  details[open] > :not(summary),
+  [role='alert']:not(:empty) {
+    animation: rise-in var(--ml-motion-enter) var(--ml-ease-out) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
 /* Campos de 16 px o más: Safari no hace zoom al enfocarlos. */
 input,
 select,

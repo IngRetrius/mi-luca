@@ -1,4 +1,4 @@
-export { setStageActive, type StageToggleState } from './actions';
+export { setStageActive, setStepSkipped, type StageToggleState } from './actions';
 export {
   assumptionsFor,
   COMMON_CHECKS,
@@ -15,10 +15,11 @@ export {
   stageHasData,
   stageSteps,
   type CoreStepId,
+  type SkippableStepId,
   type ProgressInput,
   type StageStepId,
   type Step,
 } from './progress';
-export { loadActiveStages, progressInput } from './queries';
+export { loadActiveStages, loadCaseStages, progressInput } from './queries';
 export { StageSection, type StageModule } from './stage-section';
 export { StepList, type StepItem } from './step-list';

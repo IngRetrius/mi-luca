@@ -12,28 +12,18 @@ import { useUnsavedWarning } from '@/components/use-unsaved-warning';
 import type { ProfileState } from './actions';
 import { CLIENT_TYPES, type ClientType, type ProfileField, type ProfileValues } from './validation';
 
-export interface ThresholdChoice {
-  readonly key: string;
-  /** Etiqueta con el valor ya formateado. */
-  readonly label: string;
-}
-
 const FIELD_ORDER: readonly ProfileField[] = ['birthDate', 'dependents', 'cutoffDate', 'flowYear'];
 
 /** P-A04 bloque A y P-A05: perfil, tipo de cliente con sus reglas y supuestos del caso. */
 export function ProfileForm({
   text,
   initial,
-  countryName,
-  thresholds,
   emergencyMonths,
   action,
   cancelHref,
 }: {
   text: Messages['profile'];
   initial: ProfileValues;
-  countryName: string;
-  thresholds: readonly ThresholdChoice[];
   emergencyMonths: Readonly<Record<string, number>>;
   action: (previous: ProfileState | null, formData: FormData) => Promise<ProfileState>;
   cancelHref: string;
@@ -219,31 +209,6 @@ export function ProfileForm({
             </label>
           ))}
         </ChoiceGroup>
-        <fieldset className="flex flex-col gap-2">
-          <legend className="mb-1 font-medium">{text.thresholds}</legend>
-          <p className="-mt-1 text-sm text-text-muted">{text.thresholdsHint}</p>
-          {thresholds.length === 0 ? (
-            <p className="text-sm text-text-muted">
-              {text.noThresholds.replace('{country}', countryName)}
-            </p>
-          ) : (
-            thresholds.map((threshold) => (
-              <label
-                key={threshold.key}
-                className="flex min-h-12 cursor-pointer items-start gap-3 py-2"
-              >
-                <input
-                  type="checkbox"
-                  name="threshold"
-                  value={threshold.key}
-                  defaultChecked={values.thresholds.includes(threshold.key)}
-                  className="mt-0.5 size-5 shrink-0 accent-primary"
-                />
-                {threshold.label}
-              </label>
-            ))
-          )}
-        </fieldset>
       </section>
 
       <FormSubmitActions

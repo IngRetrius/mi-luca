@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { NAV_BACK, NAV_FORWARD } from './page-transition';
 import { focusRing, linkButton, secondaryButton } from './ui-classes';
 
 const backIcon = (
@@ -20,6 +21,7 @@ export function BackLink({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
+      transitionTypes={NAV_BACK}
       className={`-ml-2 inline-flex min-h-12 items-center gap-1 self-start rounded-xl px-2 text-link hover:underline ${focusRing}`}
     >
       {backIcon}
@@ -74,6 +76,7 @@ export function ModuleLink({
   return (
     <Link
       href={href}
+      transitionTypes={NAV_FORWARD}
       className={`flex min-h-12 items-center justify-between gap-3 rounded-xl p-4 hover:bg-surface ${focusRing}`}
     >
       <span className="flex min-w-0 flex-col">

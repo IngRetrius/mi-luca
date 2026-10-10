@@ -8,7 +8,14 @@
 export const focusRing =
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
 
-const control = `min-h-12 rounded-xl px-4 font-medium transition-colors ${focusRing}`;
+/**
+ * Al tocarlo, el botón se hunde un poco (ADR 0031): responde al toque sin esperar a la acción. Con
+ * "reducir movimiento", solo cambia el color.
+ */
+const press =
+  'transition-[color,background-color,border-color,scale] motion-safe:active:scale-[0.98]';
+
+const control = `min-h-12 rounded-xl px-4 font-medium ${press} ${focusRing}`;
 
 /** Acción principal de la pantalla. */
 export const primaryButton = `${control} bg-primary text-on-primary hover:bg-primary/90 active:bg-primary/80 disabled:opacity-70`;

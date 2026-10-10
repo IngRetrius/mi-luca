@@ -8,8 +8,9 @@ import { supabaseEnv } from '@/lib/supabase/env';
 
 /**
  * Cliente con la clave secreta de Supabase: salta RLS. Solo para lo que el usuario no puede hacer
- * con su propia sesión, hoy crear la cuenta con contraseña desde una invitación (ADR 0009). Nunca
- * se usa para leer o escribir datos de clientes. Null si falta la clave.
+ * con su propia sesión: crear la cuenta con contraseña desde una invitación (ADR 0009) y el borrado
+ * diario de los documentos vencidos (ADR 0030), que no tiene sesión. Nunca se usa para leer datos
+ * de clientes. Null si falta la clave.
  */
 export function createAdminClient() {
   const env = supabaseEnv();

@@ -90,7 +90,9 @@
     "proposal": "Proposal",
     "newAdjustment": "New adjustment",
     "adjustment": "Adjustment",
-    "applyProposal": "Apply the proposal"
+    "applyProposal": "Apply the proposal",
+    "myFiles": "Your documents",
+    "clientFiles": "Client documents"
   },
   "language": {
     "label": "Language",
@@ -325,7 +327,13 @@
       "followUp": "Reviews and continuity sheet",
       "followUpNext": "Next review on {date}",
       "followUpOverdue": "Review overdue since {date}",
-      "followUpNone": "No reviews scheduled"
+      "followUpNone": "No reviews scheduled",
+      "documents": "Client documents",
+      "documentsActive": {
+        "one": "{count} to review",
+        "other": "{count} to review"
+      },
+      "documentsNone": "No documents to review"
     }
   },
   "invitation": {
@@ -348,16 +356,16 @@
         "usted": "What data we ask for"
       },
       "asked": {
-        "tu": "Your income, expenses, savings, debts and goals, plus basic details such as your date of birth and your dependents. If your budget includes health expenses, we ask for a separate authorization.",
-        "usted": "Your income, expenses, savings, debts and goals, plus basic details such as your date of birth and your dependents. If your budget includes health expenses, we ask for a separate authorization."
+        "tu": "Your income, expenses, savings, debts and goals, plus basic details such as your date of birth and your dependents. For the video call, if you wish, your statements from the last 3 months: they are deleted within 30 days at the latest. If your budget includes health expenses, we ask for a separate authorization.",
+        "usted": "Your income, expenses, savings, debts and goals, plus basic details such as your date of birth and your dependents. For the video call, if you wish, your statements from the last 3 months: they are deleted within 30 days at the latest. If your budget includes health expenses, we ask for a separate authorization."
       },
       "neverTitle": {
         "tu": "What we never ask for",
         "usted": "What we never ask for"
       },
       "never": {
-        "tu": "Account, card or ID numbers, or your bank passwords. Banks are identified only by their name.",
-        "usted": "Account, card or ID numbers, or your bank passwords. Banks are identified only by their name."
+        "tu": "Account, card or ID numbers (you can cover them on your statements), or your bank passwords. Banks are identified only by their name.",
+        "usted": "Account, card or ID numbers (you can cover them on your statements), or your bank passwords. Banks are identified only by their name."
       },
       "expires": "The invitation expires on {date}.",
       "continue": "Continue",
@@ -616,7 +624,9 @@
     "acceptedUnknown": "A client accepted the invitation.",
     "markRead": "Mark as seen",
     "changed": "{name} changed their data.",
-    "changedUnknown": "A client changed their data."
+    "changedUnknown": "A client changed their data.",
+    "filesUploaded": "{name} uploaded documents for the video call.",
+    "filesUploadedUnknown": "A client uploaded documents."
   },
   "keyFigures": {
     "annualIncome": "Income per year",
@@ -1157,16 +1167,6 @@
       "native": "With the approved corrections, for example who pays each expense.",
       "compatible": "Reproduces template 2.2 exactly."
     },
-    "thresholds": "Tax thresholds that apply",
-    "thresholdsHint": "Check only the ones that apply to this case. They are a reference: confirm them with the accountant or tax advisor.",
-    "thresholdOption": "{label}: {amount}",
-    "noThresholds": "There are no published thresholds for {country}.",
-    "thresholdLabels": {
-      "tax.dependent_income_limit": "Dependent's income limit (allowance for descendants)",
-      "tax.filing_gross_income": "Gross income for filing an income tax return (1,400 UVT)",
-      "tax.filing_purchases": "Purchases and spending for filing an income tax return (1,400 UVT)",
-      "tax.filing_gross_assets": "Gross assets for filing an income tax return (4,500 UVT)"
-    },
     "submit": "Save",
     "submitting": "Saving…",
     "cancel": "Cancel",
@@ -1205,15 +1205,6 @@
     "withoutTemporary": "Without temporary expenses, per month",
     "itemsTitle": "By item, per year",
     "editBasic": "Edit in the budget",
-    "thresholdsTitle": "Tax thresholds",
-    "thresholdsNote": "A reference, not tax advice: confirm it with the accountant or tax advisor.",
-    "ownIncome": "Own income per year",
-    "grossAssets": "Gross assets (assets, investments and receivables)",
-    "ownIncomeNet": "The recorded income is net: if it exceeds the limit, gross income does too; if not, confirm with the accountant.",
-    "limit": "Limit: {amount} per year",
-    "exceeds": "Exceeds",
-    "notExceeds": "Does not exceed",
-    "noThresholds": "No threshold is checked for this case. They are checked in Profile and settings.",
     "empty": "There are no expenses in the budget yet.",
     "annualLabel": "Per year"
   },
@@ -3470,6 +3461,7 @@
       "patrimonio": "What the client owns, how it is protected and how much goes to each goal and to investing."
     },
     "steps": {
+      "documents": "Review the client's documents",
       "profile": "Complete the profile and client type",
       "incomes": "Record and classify income",
       "expenses": "Record expenses",
@@ -3487,6 +3479,12 @@
     },
     "stepDone": "Done",
     "stepPending": "Pending",
+    "stepSkipped": "Skipped",
+    "skip": "Skip",
+    "undoSkip": "Undo",
+    "skipping": "Saving…",
+    "skipError": "Not saved. Try again.",
+    "stageComplete": "Stage complete",
     "progress": "{done} of {total} steps",
     "deliveredOn": "Report delivered on {date}.",
     "viewReport": "View the report",
@@ -3502,6 +3500,142 @@
     "expensiveDebtFirst": "There is expensive debt: the debts stage should come first. The quality check does not allow delivering investment while it exists.",
     "documentsTitle": "Letter and delivery",
     "documentsIntro": "They work for any stage: the letter and the notes go with each delivery."
+  },
+  "clientFiles": {
+    "kinds": {
+      "tarjeta": "Credit card statement",
+      "cuenta": "Account or savings pocket statement",
+      "credito": "Loan statement",
+      "ingresos": "Payslip or invoice for your services",
+      "otro": "Other document"
+    },
+    "fileSummary": "{format} · {size} · uploaded on {date}",
+    "expires": "Deleted automatically on {date}",
+    "view": "View",
+    "viewLabel": "View {kind} ({format}, {size}) from {date} (opens in a new tab)",
+    "client": {
+      "title": {
+        "tu": "Your documents",
+        "usted": "Your documents"
+      },
+      "intro": {
+        "tu": "Upload your statements from the last 3 months before your video call. That way we spend it talking about your plan, not dictating figures.",
+        "usted": "Upload your statements from the last 3 months before your video call. That way we spend it talking about your plan, not dictating figures."
+      },
+      "whatTitle": "What to upload",
+      "what": {
+        "tu": {
+          "cards": "Your credit card statements.",
+          "accounts": "Statements for your accounts, savings pockets or wallets.",
+          "loans": "Statements for your loans.",
+          "income": "Your payslip or the invoices for your services."
+        },
+        "usted": {
+          "cards": "Your credit card statements.",
+          "accounts": "Statements for your accounts, savings pockets or wallets.",
+          "loans": "Statements for your loans.",
+          "income": "Your payslip or the invoices for your services."
+        }
+      },
+      "privacyTitle": "Who sees them and when they are deleted",
+      "privacy": {
+        "tu": "Only you and your advisor see them; no artificial intelligence reads them. They are deleted when your advisor reviews them or, at the latest, 30 days after you upload them.",
+        "usted": "Only you and your advisor see them; no artificial intelligence reads them. They are deleted when your advisor reviews them or, at the latest, 30 days after you upload them."
+      },
+      "numbersTip": {
+        "tu": "If you can, cover the card, account and ID numbers: we don't need them.",
+        "usted": "If you can, cover the card, account and ID numbers: we don't need them."
+      },
+      "uploadTitle": {
+        "tu": "Upload",
+        "usted": "Upload"
+      },
+      "kindLabel": {
+        "tu": "What are you uploading",
+        "usted": "What are you uploading"
+      },
+      "pick": "Choose files",
+      "pickHint": {
+        "tu": "PDF, JPG or PNG up to 10 MB. On your phone you can take a photo.",
+        "usted": "PDF, JPG or PNG up to 10 MB. On your phone you can take a photo."
+      },
+      "passwordTip": {
+        "tu": "Does your statement have a password? If you can, open it and save it as a PDF without one. If not, upload it as is and we'll open it together on the video call.",
+        "usted": "Does your statement have a password? If you can, open it and save it as a PDF without one. If not, upload it as is and we'll open it together on the video call."
+      },
+      "uploading": "Uploading {done} of {total}…",
+      "uploaded": {
+        "one": "Done: {count} document uploaded.",
+        "other": "Done: {count} documents uploaded."
+      },
+      "listTitle": {
+        "tu": "What you uploaded",
+        "usted": "What you uploaded"
+      },
+      "empty": {
+        "tu": "You haven't uploaded any documents yet.",
+        "usted": "You haven't uploaded any documents yet."
+      },
+      "deleteToggle": "Delete this document",
+      "deleteHint": {
+        "tu": "Your advisor won't see it either. You can upload it again.",
+        "usted": "Your advisor won't see it either. You can upload it again."
+      },
+      "deleteConfirm": "Yes, delete it",
+      "reviewedOn": {
+        "tu": "Your advisor reviewed your documents and they were deleted on {date}.",
+        "usted": "Your advisor reviewed your documents and they were deleted on {date}."
+      },
+      "expiredOn": {
+        "tu": "Your documents were deleted automatically on {date}.",
+        "usted": "Your documents were deleted automatically on {date}."
+      },
+      "deletedOn": {
+        "tu": "You deleted your documents on {date}.",
+        "usted": "You deleted your documents on {date}."
+      },
+      "continue": "Continue",
+      "later": "I'll do it later",
+      "back": "Home",
+      "errors": {
+        "unsupportedType": "{name}: upload a PDF, JPG or PNG. On an iPhone, pick the photo from Photos or take a new one.",
+        "tooLarge": "{name}: it's larger than 10 MB. Try a photo or a lighter PDF.",
+        "empty": "{name} is empty. Choose another file.",
+        "limit": "You already have 20 documents waiting for review. Wait for your advisor to review them or delete one.",
+        "upload": "{name}: it couldn't be uploaded. Check your connection and try again.",
+        "delete": "The document couldn't be deleted. Try again."
+      }
+    },
+    "advisor": {
+      "title": "Client documents",
+      "intro": "The statements and records the client uploaded for the video call. They don't go to the assistant or into the delivered plan, and they are deleted when you mark them as reviewed or after 30 days.",
+      "back": "Client file",
+      "empty": "The client has no documents waiting for review. If they won't upload any, skip the step in the client file.",
+      "reviewToggle": "I've reviewed them, delete them",
+      "reviewHint": "All of the client's documents are deleted and can't be recovered. What you recorded in the plan stays the same.",
+      "reviewConfirm": "Delete the documents",
+      "reviewedOn": "You reviewed the documents and they were deleted on {date}.",
+      "expiredOn": "The documents were deleted automatically on {date}.",
+      "deletedOn": "The client deleted their documents on {date}.",
+      "errors": {
+        "review": "The documents couldn't be deleted. Try again."
+      }
+    },
+    "home": {
+      "title": {
+        "tu": "Before your video call",
+        "usted": "Before your video call"
+      },
+      "body": {
+        "tu": "Upload your card and account statements from the last 3 months.",
+        "usted": "Upload your card and account statements from the last 3 months."
+      },
+      "link": "Upload my documents",
+      "manage": {
+        "tu": "Your documents",
+        "usted": "Your documents"
+      }
+    }
   },
   "landing": {
     "metaTitle": "MiLuca | Personal financial planning",

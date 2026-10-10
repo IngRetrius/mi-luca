@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 
+import { PageTransition } from './page-transition';
+
 const frame = 'mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 pt-8 md:px-8 md:pt-12';
 
 /**
@@ -7,7 +9,11 @@ const frame = 'mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 pt-8 md:p
  * tableta se ensancha hasta un ancho cómodo de lectura; los formularios no pasan de ahí.
  */
 export function Screen({ children }: { children: ReactNode }) {
-  return <main className={`${frame} md:max-w-2xl`}>{children}</main>;
+  return (
+    <PageTransition>
+      <main className={`${frame} md:max-w-2xl`}>{children}</main>
+    </PageTransition>
+  );
 }
 
 /**
@@ -16,7 +22,11 @@ export function Screen({ children }: { children: ReactNode }) {
  * columnas lo que son elementos pares.
  */
 export function WideScreen({ children }: { children: ReactNode }) {
-  return <main className={`${frame} md:max-w-3xl lg:max-w-6xl`}>{children}</main>;
+  return (
+    <PageTransition>
+      <main className={`${frame} md:max-w-3xl lg:max-w-6xl`}>{children}</main>
+    </PageTransition>
+  );
 }
 
 /**

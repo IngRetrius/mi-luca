@@ -98,7 +98,11 @@ export async function EmergencyFundScreen({ clientId }: { clientId: string }) {
                 aria-valuetext={formatPercent(progress.vsFullGoal, locale, 0)}
                 className="h-2 overflow-hidden rounded-full bg-border"
               >
-                <div className="h-full bg-primary" style={{ width: `${percent * 100}%` }} />
+                {/* La barra se llena al abrir la pantalla: es la cifra que importa aquí (ADR 0031). */}
+                <div
+                  className="h-full origin-left bg-primary motion-safe:animate-grow-x"
+                  style={{ width: `${percent * 100}%` }}
+                />
               </div>
             </div>
             <FigureList

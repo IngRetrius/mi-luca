@@ -11,6 +11,7 @@
 | Monedas | Cada campo de dinero tiene un selector de moneda pegado al importe: primero la moneda base, luego las que el cliente ya usa y al final un buscador de todas las monedas ISO 4217. Si la moneda no tiene tasa, el formulario pide la tasa en el mismo paso. Las listas muestran el importe original y los totales en moneda base |
 | Semáforo accesible | Color, icono y texto a la vez ("Bien", "Atención", "Alerta"); el color nunca es el único medio [F31] |
 | Conexión lenta | Primera vista renderizada en servidor, esqueletos de carga, sin imágenes pesadas, JavaScript por ruta |
+| Movimiento | Entrar a algo desliza la pantalla hacia adelante y volver, hacia atrás; los botones, los desplegables, los avisos y el asistente responden con movimiento corto; la moneda cae una vez en el inicio del cliente. Nada se mueve con "reducir movimiento" (ADR 0031) |
 | Sin conexión | Aviso visible; el último plan entregado se puede leer; la edición espera la conexión |
 | Claridad profesional | Cada proyección dice "Ilustrativa, no garantizada"; cada tema de impuestos, pensión o sucesión muestra a qué profesional se remite |
 | Moneda de hoy | Etiqueta fija "Cifras en pesos de hoy" o "Cifras en euros de hoy" en resúmenes y proyecciones |
@@ -45,7 +46,7 @@ El asesor no pide todo de una vez. Primero llena el núcleo (perfil, ingresos, m
 | 2. Deudas | Saldo, tasa y cuota de cada deuda; si tiene cuotas atrasadas o reportes negativos | Reporte con cómo va el plan (sobrante y carga de deuda), orden de pago, salida de cada deuda e intereses |
 | 3. Patrimonio, protección y metas | Patrimonio, seguros, metas y perfil de riesgo | Reporte con patrimonio neto, suma asegurada, aporte a cada meta e inversión ilustrativa |
 
-El déficit del año pide nota en cualquier entrega; deudas pide además explicar una cuota que no cubre intereses o cuotas atrasadas, y patrimonio exige que el aporte de cada meta tenga bolsillo (ADR 0028). En la ficha (P-A03), cada etapa activa muestra sus pasos, que se marcan solos con los datos, y el primero pendiente como acción principal. El orden sugerido es 1, 2, 3; un cliente que llega por sus deudas puede empezar por la 2. Con deuda cara, la etapa 3 avisa que la inversión espera. Ocultar una etapa no borra sus datos ni los saca del cálculo. Para cada etapa se sigue el mismo ciclo del protocolo: registrar, analizar, proponer, controlar, entregar y hacer seguimiento.
+El déficit del año pide nota en cualquier entrega; deudas pide además explicar una cuota que no cubre intereses o cuotas atrasadas, y patrimonio exige que el aporte de cada meta tenga bolsillo (ADR 0028). En la ficha (P-A03), cada etapa activa muestra sus pasos, que se marcan solos con los datos, y el primero pendiente como acción principal. Los opcionales (cuentas, bolsillos, prueba de realidad, deudas, patrimonio, seguros, metas y perfil de riesgo) se pueden omitir y cuentan como hechos; con todos hechos u omitidos, la etapa dice "Etapa terminada" (ADR 0029). El orden sugerido es 1, 2, 3; un cliente que llega por sus deudas puede empezar por la 2. Con deuda cara, la etapa 3 avisa que la inversión espera. Ocultar una etapa no borra sus datos ni los saca del cálculo. Para cada etapa se sigue el mismo ciclo del protocolo: registrar, analizar, proponer, controlar, entregar y hacer seguimiento.
 
 ### 3.2 Fases del protocolo
 
@@ -96,7 +97,8 @@ flowchart TD
   C1[Correo de invitación] --> C2[P-C01 Invitación]
   C2 --> C3[P-C02 Consentimiento]
   C3 --> C4[P-C12 Crear tu acceso: Google o contraseña]
-  C4 --> C5[P-C03 Agregar a inicio]
+  C4 --> C4b[P-C13 Tus documentos: extractos para la videollamada]
+  C4b --> C5[P-C03 Agregar a inicio]
   C5 --> C6[P-C04 Inicio]
   C6 --> C7[P-C05 Mi plan]
   C6 --> C8[P-C06 Mis datos]
@@ -138,6 +140,7 @@ flowchart TD
 | P-C11 | Privacidad y datos | Exportar mis datos, pedir borrado, retirar o restablecer el acceso del asesor, ver consentimientos, cerrar sesión |
 | P-C12 | Crear tu acceso | Después del consentimiento: "Continuar con Google" o "Crear contraseña" con el correo de la invitación fijo, contraseña con indicador de longitud mínima y opción de mostrarla (ADR 0009) |
 | P-C12 | Historial | Cambios por fecha, quién los hizo y su efecto en las cifras |
+| P-C13 | Tus documentos (`/documentos`) | Primer paso después de aceptar la invitación (ADR 0030): qué subir (extractos de tarjetas, cuentas y créditos y soportes de ingreso de los últimos 3 meses), quién los ve y cuándo se borran, tapar los números; tipo de documento y "Elegir archivos" (PDF, JPG o PNG de hasta 10 MB; en el celular, también una foto; un extracto con clave, sin clave si se puede o así, y se abre junto con el asesor en la videollamada: nunca se pide la clave); lo subido con su vencimiento, "Ver" y "Borrar". Abajo, "Continuar" o "Lo hago después" hacia P-C03. Después, desde el inicio |
 
 ### 5.3 Asesor
 
@@ -145,7 +148,7 @@ flowchart TD
 |---|---|---|
 | P-A01 | Clientes | Buscador; tarjetas con nombre, país, estado (borrador, invitado, activo), fase actual, próxima revisión, marca de cambios nuevos |
 | P-A02 | Nuevo cliente | Nombre visible, país (define moneda y módulos), tú o usted, correo para la invitación (opcional) |
-| P-A03 | Ficha del cliente | Datos básicos y las tres etapas con sus pasos, el siguiente paso como acción principal, sus pantallas y activar u ocultar; carta y entrega; seguimiento; cifras de las etapas activas; invitación (ADR 0025) |
+| P-A03 | Ficha del cliente | Datos básicos (con "Revisar los documentos del cliente", ADR 0030) y las tres etapas con sus pasos (los opcionales se omiten, ADR 0029), el siguiente paso como acción principal, sus pantallas y activar u ocultar; carta y entrega; seguimiento; cifras de las etapas activas; invitación (ADR 0025) |
 | P-A04 | Cuestionario por bloques | Pasos A a G; en cada campo, marca "estimado" y "por confirmar" |
 | P-A05 | Tipo de cliente | Selector y reglas que se activan |
 | P-A06 | Presupuesto | Partidas agrupadas por categoría con total mensual; icono en filas incompletas; alta rápida; filtros por tipo, pagador y esencial |
@@ -155,8 +158,9 @@ flowchart TD
 | P-A08 | Prueba de realidad | Tres campos, resultado y efecto en el % a inversión |
 | P-A09 | Diagnóstico | Indicadores con semáforo; campos de fortalezas y puntos de atención |
 | P-A10 | Análisis | Pestañas: Flujo, Bolsillos, Fondo, Deudas, Metas, Seguros, Inversión, Cobros, Profesionales. Sin pensión: la plataforma no la analiza (ADR 0016) |
+| P-A26 | Documentos del cliente | Lo que subió el cliente para la videollamada (ADR 0030): tipo, formato, tamaño, fecha y vencimiento; "Ver" abre el archivo en otra pestaña con un enlace de 60 segundos; "Ya los revisé, borrarlos" con confirmación. No van al asistente ni al plan entregado |
 | P-A25 | Propuesta del asesor | Solo el asesor (ADR 0024). Ajustes a los gastos (cambiar el valor o quitar) con su porqué; "Partir del nivel básico"; cifras clave de hoy frente a la propuesta y, en cada ajuste, lo que cambia ese gasto al mes; decisión del cliente por ajuste; "Aplicar lo aceptado" con su confirmación; propuestas aplicadas |
-| P-A11 | Costo de vida | Tres niveles por partida; el asesor edita el básico; totales por pagador y sin temporales; umbrales fiscales |
+| P-A11 | Costo de vida | Tres niveles por partida; el asesor edita el básico; totales por pagador y sin temporales |
 | P-A12 | Control de calidad | Resultado de `qualityChecks` filtrado por la etapa que se entrega (los comunes y los de la etapa; todos en el plan completo): bloqueantes, advertencias, nota por advertencia |
 | P-A13 | Notas y carta | Editor por secciones; botón "Insertar cifra"; vista como el cliente; publicar notas |
 | P-A14 | Entregar un reporte | Qué se entrega (una etapa activa o el plan completo, en la URL `?etapa=`), control de calidad de esa etapa, nombre de la versión ("Deudas, 8 de octubre de 2026" por defecto), reportes ya entregados |
@@ -318,10 +322,12 @@ El texto "entra de nuevo con tu cuenta" responde a que iOS no comparte la sesió
 │ ✓ Registrar los ingresos      Hecho  │
 ├──────────────────────────────────────┤
 │ Etapa 1. Presupuesto y bolsillos     │
-│ 3 de 5 pasos                         │
+│ 3 de 6 pasos                         │
 │ ✓ Registrar los gastos        Hecho  │
+│ ✓ Registrar cuentas y saldos  Hecho  │
 │ ✓ Organizar bancos y bolsillos Hecho │
-│ ○ Hacer la prueba de realidad  Pend. │
+│ ○ Hacer la prueba de realidad        │
+│                     Pend.   Omitir   │
 │ ○ Resolver el control de calidad     │
 │ ○ Entregar el reporte                │
 │ [ Hacer la prueba de realidad ]      │
