@@ -58,7 +58,7 @@ Colores fuera de la paleta de marca a propósito, para que un estado nunca se co
 | Cifras | `font-variant-numeric: tabular-nums` en tablas y montos |
 | Espaciado | Múltiplos de 4 px |
 | Radio | 8 px en campos, 12 px en tarjetas, 16 px en hojas inferiores |
-| Objetivo táctil | 44 x 44 px mínimo |
+| Objetivo táctil | 44 x 44 px mínimo; los campos y los menús desplegables miden 48 px de alto (`textField`). Los menús se dibujan sin la apariencia del sistema y con su propia flecha (`globals.css`), porque Safari ignora la altura de un `select` nativo |
 | Áreas seguras | `env(safe-area-inset-*)` en barra superior e inferior |
 | Movimiento | De 100 a 600 ms, con ease-out (`--ml-ease-out`), sobre `transform`, `translate`, `scale` y `opacity`; nada con `prefers-reduced-motion: reduce`. **Páginas públicas** (ADR 0026): `features/landing/motion.module.css`; lo ligado al desplazamiento, dentro de `@supports (animation-timeline: view())`. **App** (ADR 0031): entre pantallas con `ViewTransition` (`components/page-transition.tsx`: adelante, atrás o fundido; salida 150 ms, entrada 210 ms, desplazamiento 320 ms de 40 px); respuestas a lo que se hace en `globals.css` (botones que se hunden, desplegables, avisos, panel del asistente, barras que se llenan). La moneda que cae (`components/coin-slot.tsx`) es el único momento de marca, en el landing y en el inicio del cliente |
 

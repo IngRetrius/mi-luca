@@ -190,3 +190,26 @@ select,
 textarea {
   font-size: max(1rem, 16px);
 }
+
+/* Menús desplegables con la altura de los demás campos (48 px): Safari ignora la altura de un
+   select con la apariencia del sistema, así que se dibuja sin ella y con su propia flecha, del color
+   del texto secundario en modo claro y oscuro. Tocarlo abre el selector nativo, como antes. */
+select:not([multiple], [size]) {
+  appearance: none;
+  padding-inline-end: 2.5rem;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--ml-text-muted) 50%),
+    linear-gradient(135deg, var(--ml-text-muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 1.25rem) 50%,
+    calc(100% - 0.9375rem) 50%;
+  background-size: 0.3125rem 0.3125rem;
+  background-repeat: no-repeat;
+}
+
+/* Con colores forzados (alto contraste) se quitan los fondos: vuelve la flecha del sistema. */
+@media (forced-colors: active) {
+  select:not([multiple], [size]) {
+    appearance: auto;
+  }
+}
