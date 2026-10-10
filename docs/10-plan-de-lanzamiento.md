@@ -75,7 +75,8 @@ Criterios de aceptación:
 
 ## 5. L2. Preparar el piloto
 
-- [ ] **Caso inventado en producción**, con una cuenta de prueba: invitación enviada por mensaje, consentimiento, crear acceso, instalar en iPhone y en Android, núcleo y etapa 1, entrega, Mi plan, PDF y un mes de control mensual. Al terminar, borrarlo con `private.delete_client_data`.
+- [ ] **Caso inventado en producción**, con una cuenta de prueba: invitación enviada por mensaje, consentimiento, crear acceso, instalar en iPhone y en Android, núcleo y etapa 1, entrega, Mi plan, PDF y un mes de control mensual. Al terminar, borrar la cuenta de prueba desde Privacidad y datos (P-C14, ADR 0034).
+- [x] **Perfiles inactivos y borrado desde la app** (plan 15, ADR 0034): el asesor desactiva y reactiva perfiles sin perder datos; el cliente borra su cuenta completa desde Privacidad y datos. El 09/10/2026 se vació el remoto para empezar de cero. Falta que el asesor suba `client_inactivity_deletion` al remoto.
 - [ ] **Agente de captura (G4):** publicar los avisos 1.2 (el asesor revisa los borradores de `docs/legal/textos/`, luego `python3 tools/legal-texts/build_migration.py --write` y `db push`) o no usarlo con clientes reales. Recomendación: publicarlos antes del piloto si se va a usar en las sesiones; el asistente de notas ya está cubierto por 1.1.
 - [ ] **Supuestos que se confirman antes de clientes reales:** G2 (gastos de salud del catálogo) y B16 (edad de retiro; solo importa en la etapa 3). G5 se revisa con el primer cliente que lleve el control mensual.
 - [ ] **Qué pedir antes de cada etapa**, con las preguntas del protocolo (sección 3) repartidas por etapa:

@@ -1,6 +1,12 @@
 export { ClientList } from './client-list';
+export { advisorDateFormatter } from './dates';
+export { DeleteClientForm } from './delete-client-form';
+export { deleteClientProfile, type DeleteProblem } from './deletion';
+export { deactivateClient, deleteUnclaimedClient, reactivateClient } from './actions';
 export { NewClientForm } from './new-client-form';
+export { InactiveNotice, ProfileStatusSection } from './profile-status';
 export { getClientDetail, listClients, listCountries } from './queries';
-export { parseSearch, SEARCH_MAX } from './validation';
+export { confirmsAccountDeletion, parseClientView, parseSearch, SEARCH_MAX } from './validation';
+export type { ClientView } from './validation';
 export type { ClientDetail, ClientSummary, CountryOption } from './queries';
-export { ClientStatusBadge } from './status-badge';
+export { badgeStatus, ClientStatusBadge } from './status-badge';

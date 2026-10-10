@@ -233,8 +233,8 @@ select throws_ok(
 select throws_ok(
   $$update public.clients set owner_user_id = null where id = 'c1c1c1c1-0000-4000-8000-000000000001'$$,
   '42501', null, 'Nadie cambia el dueño desde la API');
-delete from public.clients where id = 'c1c1c1c1-0000-4000-8000-000000000001';
-select is((select count(*)::int from public.clients), 1, 'El cliente no borra su perfil desde la API');
+select throws_ok($$delete from public.clients where id = 'c1c1c1c1-0000-4000-8000-000000000001'$$,
+  '42501', null, 'El cliente no borra su perfil con delete directo (solo con delete_client)');
 select throws_ok(
   $$insert into public.audit_log (table_name, row_pk, action) values ('x', '{}', 'insert')$$,
   '42501', null, 'Nadie escribe el historial desde la API');
@@ -323,14 +323,17 @@ select lives_ok(
 
 -- Borrar perfiles ------------------------------------------------------------------------------
 
-delete from public.clients where id = 'c1c1c1c1-0000-4000-8000-000000000001';
-delete from public.clients where display_name = 'Perfil nuevo';
+select throws_ok($$select public.delete_client('c1c1c1c1-0000-4000-8000-000000000001')$$, '42501', null,
+  'La asesora no borra un perfil que ya tiene dueño');
+select lives_ok(
+  $$select public.delete_client(id) from public.clients where display_name = 'Perfil nuevo'$$,
+  'La asesora borra un perfil que nadie aceptó');
 reset role;
 
 select is((select count(*)::int from public.clients where id = 'c1c1c1c1-0000-4000-8000-000000000001'), 1,
-  'La asesora no borra un perfil que ya tiene dueño');
+  'El perfil con dueño sigue');
 select is((select count(*)::int from public.clients where display_name = 'Perfil nuevo'), 0,
-  'La asesora borra un perfil que nadie aceptó');
+  'El perfil que nadie aceptó ya no existe');
 
 select * from finish();
 rollback;

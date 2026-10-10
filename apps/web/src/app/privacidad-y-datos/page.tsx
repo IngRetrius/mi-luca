@@ -35,8 +35,8 @@ const backIcon = (
 );
 
 /**
- * P-C11 Privacidad y datos (primera parte): acceso del asesor y consentimientos. Exportar y pedir
- * el borrado llegan en F7.
+ * P-C11 Privacidad y datos: acceso del asesor, consentimientos y borrar la cuenta (plan 15).
+ * Exportar los datos llega en F7.
  */
 export default async function PrivacyPage() {
   const messages = await getMessages();
@@ -124,6 +124,19 @@ export default async function PrivacyPage() {
             ))}
           </ul>
         )}
+      </section>
+
+      <section aria-labelledby="delete-account-title" className="flex flex-col items-start gap-2">
+        <h2 id="delete-account-title" className="font-semibold">
+          {t.deleteAccount.title}
+        </h2>
+        <p className="text-text-muted">{t.deleteAccount.summary}</p>
+        <Link
+          href="/privacidad-y-datos/borrar"
+          className={`-ml-3 inline-flex min-h-12 items-center rounded-xl px-3 text-status-alert hover:underline ${focusRing}`}
+        >
+          {t.deleteAccount.link}
+        </Link>
       </section>
 
       <div className="flex flex-col items-start gap-4 pb-8">

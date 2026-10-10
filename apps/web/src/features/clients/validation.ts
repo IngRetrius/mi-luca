@@ -60,3 +60,25 @@ export function parseSearch(value: unknown): string {
 export function escapeLike(value: string): string {
   return value.replace(/[\\%_]/g, '\\$&');
 }
+
+/** Pestaña de P-A01: los perfiles activos o los que el asesor desactivó (`?ver=inactivos`). */
+export type ClientView = 'activos' | 'inactivos';
+
+export function parseClientView(value: unknown): ClientView {
+  return value === 'inactivos' ? 'inactivos' : 'activos';
+}
+
+/** Para comparar nombres: sin espacios de más y sin distinguir mayúsculas. */
+function normalizeName(value: string): string {
+  return value.trim().replace(/\s+/g, ' ').toLocaleLowerCase('es');
+}
+
+/** P-A27: el asesor confirma el borrado escribiendo el nombre visible del perfil. */
+export function confirmsDisplayName(typed: unknown, displayName: string): boolean {
+  return typeof typed === 'string' && normalizeName(typed) === normalizeName(displayName);
+}
+
+/** P-C14: el cliente marca la casilla "Entiendo que se borra todo". */
+export function confirmsAccountDeletion(formData: FormData): boolean {
+  return formData.get('confirm') === 'yes';
+}

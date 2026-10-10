@@ -696,6 +696,7 @@ export type Database = {
           display_name: string;
           form_of_address: string;
           id: string;
+          inactive_at: string | null;
           locale: string;
           owner_user_id: string | null;
           sex: string | null;
@@ -714,6 +715,7 @@ export type Database = {
           display_name: string;
           form_of_address?: string;
           id?: string;
+          inactive_at?: string | null;
           locale?: string;
           owner_user_id?: string | null;
           sex?: string | null;
@@ -732,6 +734,7 @@ export type Database = {
           display_name?: string;
           form_of_address?: string;
           id?: string;
+          inactive_at?: string | null;
           locale?: string;
           owner_user_id?: string | null;
           sex?: string | null;
@@ -2021,6 +2024,7 @@ export type Database = {
           isSetofReturn: true;
         };
       };
+      delete_client: { Args: { p_client_id: string }; Returns: Json };
       get_invitation: {
         Args: { p_token: string };
         Returns: {

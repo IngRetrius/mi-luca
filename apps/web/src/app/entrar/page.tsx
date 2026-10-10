@@ -12,5 +12,11 @@ export default async function SignInPage({ searchParams }: PageProps<'/entrar'>)
   const [params, user] = await Promise.all([searchParams, getSessionUser()]);
   const next = safeNextPath(params.next);
   if (user) redirect(next);
-  return <LoginScreen next={next} error={parseLoginError(params.error)} />;
+  return (
+    <LoginScreen
+      next={next}
+      error={parseLoginError(params.error)}
+      accountDeleted={params.aviso === 'cuenta-borrada'}
+    />
+  );
 }

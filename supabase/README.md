@@ -161,13 +161,15 @@ Si no se carga, la app sigue funcionando: dice de qué mes es la última tasa y 
 
 ### Borrar los datos de un cliente
 
-Cuando un cliente pide que se borren sus datos (al correo de contacto de los avisos), el asesor lo ejecuta en el editor SQL del panel con el id del perfil (está en la URL de su ficha, `/clientes/<id>`). Si el cliente tiene documentos en Storage (ADR 0030), primero se borra su carpeta `<id-del-cliente>` del bucket `client-files` en Storage del panel: borrar la fila en SQL dejaría el archivo huérfano, y la función se niega mientras quede alguno.
+El cliente puede borrar su cuenta él mismo desde Privacidad y datos (P-C14, ADR 0034): la app borra sus documentos con la API de Storage y llama a `delete_client`, que hace lo mismo que el procedimiento de abajo. Cuando un cliente deja la asesoría pero no pide borrar nada, el asesor desactiva el perfil desde su ficha: los datos se quedan y se puede reactivar.
+
+Cuando un cliente pide por correo que se borren sus datos (al correo de contacto de los avisos), el asesor lo ejecuta en el editor SQL del panel con el id del perfil (está en la URL de su ficha, `/clientes/<id>`). Si el cliente tiene documentos en Storage (ADR 0030), primero se borra su carpeta `<id-del-cliente>` del bucket `client-files` en Storage del panel: borrar la fila en SQL dejaría el archivo huérfano, y la función se niega mientras quede alguno.
 
 ```sql
 select private.delete_client_data('<id-del-cliente>');
 ```
 
-En una sola transacción borra el perfil y todo lo que cuelga de él (planes entregados, consentimientos, notas, deudas y lo demás, por las claves foráneas en cascada), su historial en `audit_log` y su cuenta de acceso, si la tenía y no es de un asesor. Devuelve cuántas filas de historial borró y si borró la cuenta. No toca a otros clientes ni a los asesores. La app no la puede llamar (migración `client_data_deletion`, prueba `client_data_deletion.test.sql`).
+En una sola transacción borra el perfil y todo lo que cuelga de él (planes entregados, consentimientos, notas, deudas y lo demás, por las claves foráneas en cascada), su historial en `audit_log` y su cuenta de acceso, si la tenía y no es de un asesor. Devuelve cuántas filas de historial borró y si borró la cuenta. No toca a otros clientes ni a los asesores. La app no la llama directamente: pasa por `public.delete_client`, que solo acepta al dueño o al asesor con un perfil sin dueño (migraciones `client_data_deletion` y `client_inactivity_deletion`, pruebas `client_data_deletion.test.sql` y `client_inactivity_deletion.test.sql`).
 
 Las copias semanales anteriores siguen teniendo sus datos hasta que se reemplazan. Los documentos de Storage no van en la copia: son temporales.
 

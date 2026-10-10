@@ -183,7 +183,7 @@ select lives_ok(
   $$insert into public.budget_items (client_id, category, concept, currency, amount, frequency, expense_type) values
     ('c2c2c2c2-0000-4000-8000-000000000002', 'Servicios', 'Suscripción', 'USD', 10, 'mensual', 'directo')$$,
   'Y un gasto en dólares');
-select lives_ok($$delete from public.clients where id = 'c2c2c2c2-0000-4000-8000-000000000002'$$,
+select lives_ok($$select public.delete_client('c2c2c2c2-0000-4000-8000-000000000002')$$,
   'Borrar el perfil se lleva sus importes y sus tasas');
 
 -- Parámetros: la asesora publica versiones sin solapes; el valor no se cambia.

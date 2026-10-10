@@ -5,16 +5,21 @@ import type { Messages } from '@miluca/i18n';
 import { focusRing, gridList, gridListItem } from '@/components/ui-classes';
 
 import type { ClientSummary } from './queries';
-import { ClientStatusBadge } from './status-badge';
+import { badgeStatus, ClientStatusBadge } from './status-badge';
 import { NAV_FORWARD } from '@/components/page-transition';
 
-/** P-A01: lista de perfiles del asesor, o el estado vacío si aún no hay ninguno. */
+/**
+ * P-A01: lista de perfiles del asesor, o el estado vacío si aún no hay ninguno. Los inactivos dicen
+ * desde cuándo (plan 15).
+ */
 export function ClientList({
   clients,
   text,
+  formatDate,
 }: {
   clients: readonly ClientSummary[];
   text: Messages['clients'];
+  formatDate: (value: string) => string;
 }) {
   if (clients.length === 0) {
     return (
@@ -38,8 +43,16 @@ export function ClientList({
                 {client.displayName}
               </span>
               <span className="text-sm text-text-muted">{client.countryName}</span>
+              {client.inactiveAt ? (
+                <span className="text-sm text-text-muted">
+                  {text.inactiveSince.replace('{date}', formatDate(client.inactiveAt))}
+                </span>
+              ) : null}
             </span>
-            <ClientStatusBadge status={client.status} label={text.status[client.status]} />
+            <ClientStatusBadge
+              status={badgeStatus(client)}
+              label={text.status[badgeStatus(client)]}
+            />
           </Link>
         </li>
       ))}

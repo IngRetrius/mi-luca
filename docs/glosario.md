@@ -15,7 +15,7 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Clientes, nuevo cliente, ficha | `/clientes`, `/clientes/nuevo`, `/clientes/[id]` | P-A01, P-A02, P-A03 |
 | Sin invitación | `/sin-invitacion` | P-G02 |
 | Dueño del perfil | `owner_user_id` | Cuenta del cliente vinculada al perfil; vacía hasta aceptar |
-| Perfil sin dueño | `is_unclaimed` | Borrador o invitado; el único que se invita o se borra desde la app |
+| Perfil sin dueño | `is_unclaimed` | Borrador o invitado; el único que se invita o que el asesor puede borrar (ADR 0034) |
 | Acceso del asesor | `advisor_client_access` | Activo o revocado; lo controla el cliente |
 | Revocar, restablecer | `revoked`, `active` | Estados del acceso del asesor |
 | Tratamiento | `form_of_address` | tu, usted |
@@ -35,7 +35,15 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Retirar o devolver el acceso del asesor | `setAdvisorAccess` | Cambia `advisor_client_access.status` a `revoked` o `active` |
 | Retirar el consentimiento de datos de salud | `withdrawSensitiveConsent`, `consents.withdrawn_at` | P-C11 |
 | Borrar cuentas sin perfil | `private.delete_unclaimed_accounts` | Tarea diaria de `pg_cron`, `delete-unclaimed-accounts` |
-| Borrar los datos de un cliente | `private.delete_client_data` | A pedido del cliente; la ejecuta el responsable en el editor SQL (`supabase/README.md`) |
+| Borrar los datos de un cliente | `private.delete_client_data` | A pedido del cliente por correo, la ejecuta el responsable en el editor SQL (`supabase/README.md`); la app la llama con `delete_client` |
+| Perfil inactivo | `clients.inactive_at` / `inactiveAt` | Desde cuándo el asesor lo desactivó; vacía si está activo. Nada se borra (ADR 0034) |
+| Desactivar, reactivar un perfil | `deactivateClient`, `reactivateClient` | P-A03; solo el asesor con acceso, la fecha la pone la base |
+| Activos, inactivos | `ClientView` (`activos`, `inactivos`), `?ver=inactivos` | Pestañas de P-A01 |
+| Etiqueta del perfil | `badgeStatus`, `BadgeStatus` | El estado de la invitación o "inactivo" si el asesor lo desactivó |
+| Borrar un perfil desde la app | `public.delete_client`, `deleteClientProfile` | El dueño borra el suyo; el asesor, solo uno sin dueño. Borra antes los documentos con `discardClientFolder` |
+| Borrar perfil | `deleteUnclaimedClient`, `/clientes/[id]/borrar` | P-A27; el asesor escribe el nombre del perfil (`confirmsDisplayName`) |
+| Borrar mi cuenta | `deleteMyAccount`, `/privacidad-y-datos/borrar` | P-C14; casilla de confirmación (`confirmsAccountDeletion`) |
+| Un cliente borró su cuenta | `cliente_borro_cuenta` | Aviso al asesor sin perfil ni nombre |
 | Etapa de la asesoría | `CaseStage` (`presupuesto`, `deudas`, `patrimonio`) | ADR 0025; catálogo `CASE_STAGES` en `packages/domain` |
 | Datos básicos (núcleo) | `core` | Perfil, ingresos, monedas y supuestos: siempre activos, no son una etapa |
 | Etapas activas | `case_settings.active_stages` / `loadActiveStages` | Las activa el asesor; sin fila de supuestos, solo presupuesto |

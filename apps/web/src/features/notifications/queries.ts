@@ -23,7 +23,10 @@ export interface ChangeNotice extends NoticeBase {
 }
 
 export type Notice =
-  (NoticeBase & { readonly kind: 'invitacion_aceptada' | 'documentos_subidos' }) | ChangeNotice;
+  | (NoticeBase & {
+      readonly kind: 'invitacion_aceptada' | 'documentos_subidos' | 'cliente_borro_cuenta';
+    })
+  | ChangeNotice;
 
 function isDelta(value: unknown): value is KeyFigureDelta {
   if (typeof value !== 'object' || value === null) return false;
@@ -71,6 +74,8 @@ export async function listUnreadNotices(): Promise<readonly Notice[] | null> {
       clientName: row.client?.display_name ?? null,
     };
     if (row.kind === 'documentos_subidos') return { ...base, kind: 'documentos_subidos' };
+    // Sin perfil ni nombre: el cliente borró su cuenta (plan 15).
+    if (row.kind === 'cliente_borro_cuenta') return { ...base, kind: 'cliente_borro_cuenta' };
     if (row.kind !== 'cambio_del_cliente') return { ...base, kind: 'invitacion_aceptada' };
     const impactId = (row.payload as Record<string, unknown> | null)?.impact_id;
     return {

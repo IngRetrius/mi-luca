@@ -92,7 +92,9 @@
     "adjustment": "Adjustment",
     "applyProposal": "Apply the proposal",
     "myFiles": "Your documents",
-    "clientFiles": "Client documents"
+    "clientFiles": "Client documents",
+    "deleteClient": "Delete profile",
+    "deleteAccount": "Delete my account"
   },
   "language": {
     "label": "Language",
@@ -134,7 +136,8 @@
       "unavailable": "The sign-in service is not responding. Try again in a few minutes.",
       "google": "Signing in with Google did not work. Try again."
     },
-    "forgotPassword": "I forgot my password"
+    "forgotPassword": "I forgot my password",
+    "accountDeleted": "The account and all its data were deleted."
   },
   "money": {
     "todayCurrency": "Figures in today's {currency}"
@@ -195,12 +198,20 @@
       "borrador": "Draft",
       "invitado": "Invited",
       "activo": "Active",
-      "borrado_solicitado": "Deletion requested"
+      "borrado_solicitado": "Deletion requested",
+      "inactivo": "Inactive"
     },
     "searchLabel": "Search by name",
     "search": "Search",
     "noMatches": "No profile matches “{query}”.",
-    "showAll": "Show all"
+    "showAll": "Show all",
+    "views": "Profiles by status",
+    "viewActive": "Active ({count})",
+    "viewInactive": "Inactive ({count})",
+    "inactiveSince": "Inactive since {date}",
+    "noActive": "You have no active clients. The ones you deactivated are under Inactive.",
+    "noInactive": "There are no inactive profiles.",
+    "deleted": "The profile was deleted."
   },
   "newClient": {
     "title": "New client",
@@ -342,6 +353,40 @@
         "other": "{count} to review"
       },
       "documentsNone": "No documents to review"
+    },
+    "inactive": {
+      "title": "Inactive profile",
+      "body": "Since {date}. Their data, reports and history are kept; the profile is not in your client list and cannot be invited. The person can still sign in and see their plan.",
+      "reactivate": "Reactivate profile"
+    },
+    "profileStatus": {
+      "title": "Profile status",
+      "activeBody": "Active: shown in your client list.",
+      "deactivateToggle": "Deactivate profile",
+      "deactivateHint": "When they leave the advisory service. The profile leaves your client list and moves to Inactive; nothing is deleted and you can reactivate it at any time. An open invitation stops working.",
+      "deactivateConfirm": "Yes, deactivate",
+      "deleteLink": "Delete profile",
+      "deleteHint": "Only for profiles nobody accepted, such as one created by mistake.",
+      "ownerDeletes": "Only the person can delete their data, from Privacy and data or by asking by email.",
+      "error": "The profile status could not be changed. Try again."
+    },
+    "invitationInactive": "Reactivate the profile to invite this person.",
+    "delete": {
+      "title": "Delete profile",
+      "intro": "Everything in this profile is deleted for good: its data, the change history and the invitation. This cannot be undone.",
+      "owned": "This profile already has an owner: only that person can delete it, from Privacy and data or by asking by email. If they left the advisory service, deactivate it from their profile page.",
+      "back": "Back to the profile",
+      "nameLabel": "Type the profile name to confirm",
+      "nameHint": "Exactly as shown: {name}",
+      "submit": "Delete for good",
+      "submitting": "Deleting…",
+      "cancel": "Cancel",
+      "errors": {
+        "nameMismatch": "The name does not match. Type it exactly as shown above.",
+        "notAllowed": "This profile can no longer be deleted here: someone accepted the invitation or you no longer have access.",
+        "files": "Documents appeared while deleting. Try again.",
+        "unavailable": "It could not be deleted and nothing was deleted. Try again in a few minutes."
+      }
     }
   },
   "invitation": {
@@ -591,7 +636,55 @@
     },
     "withdrawYes": "Yes, withdraw it",
     "withdrawCancel": "No, keep it",
-    "withdrawDone": "Consent withdrawn."
+    "withdrawDone": "Consent withdrawn.",
+    "deleteAccount": {
+      "title": "Delete my account",
+      "summary": {
+        "tu": "Deletes your account and everything you have in MiLuca for good. Your advisor stops seeing it.",
+        "usted": "Deletes your account and everything you have in MiLuca for good. Your advisor stops seeing it."
+      },
+      "link": "Delete my account and my data",
+      "intro": {
+        "tu": "Everything of yours in MiLuca is deleted for good and your advisor stops seeing it. This cannot be undone.",
+        "usted": "Everything of yours in MiLuca is deleted for good and your advisor stops seeing it. This cannot be undone."
+      },
+      "whatTitle": "What is deleted",
+      "itemData": {
+        "tu": "Your data: incomes, expenses, debts, goals, net worth and everything you recorded with your advisor.",
+        "usted": "Your data: incomes, expenses, debts, goals, net worth and everything you recorded with your advisor."
+      },
+      "itemReports": {
+        "tu": "Your delivered reports, the action plan and the monthly control.",
+        "usted": "Your delivered reports, the action plan and the monthly control."
+      },
+      "itemFiles": {
+        "tu": "The documents you uploaded for the video call.",
+        "usted": "The documents you uploaded for the video call."
+      },
+      "itemHistory": "The change history and the consents.",
+      "itemAccount": {
+        "tu": "Your sign-in account: you will no longer be able to sign in to MiLuca.",
+        "usted": "Your sign-in account: you will no longer be able to sign in to MiLuca."
+      },
+      "confirm": "I understand that everything is deleted and that it cannot be undone.",
+      "submit": "Delete my account for good",
+      "submitting": "Deleting…",
+      "cancel": "Back",
+      "errors": {
+        "unconfirmed": {
+          "tu": "Check the box to confirm.",
+          "usted": "Check the box to confirm."
+        },
+        "files": {
+          "tu": "New documents appeared while deleting. Try again.",
+          "usted": "New documents appeared while deleting. Try again."
+        },
+        "unavailable": {
+          "tu": "It could not be deleted and nothing was deleted. Try again in a few minutes.",
+          "usted": "It could not be deleted and nothing was deleted. Try again in a few minutes."
+        }
+      }
+    }
   },
   "recovery": {
     "title": "Reset password",
@@ -634,7 +727,8 @@
     "changed": "{name} changed their data.",
     "changedUnknown": "A client changed their data.",
     "filesUploaded": "{name} uploaded documents for the video call.",
-    "filesUploadedUnknown": "A client uploaded documents."
+    "filesUploadedUnknown": "A client uploaded documents.",
+    "accountDeleted": "A client deleted their account and all their data."
   },
   "keyFigures": {
     "annualIncome": "Income per year",

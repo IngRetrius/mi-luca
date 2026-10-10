@@ -14,13 +14,18 @@ export function parseLoginError(value: unknown): LoginError | undefined {
   return value === 'google' || value === 'unavailable' ? value : undefined;
 }
 
-/** P-G01 Entrar: Google o correo y contraseña. El acceso es solo por invitación. */
+/**
+ * P-G01 Entrar: Google o correo y contraseña. El acceso es solo por invitación. Tras borrar su
+ * cuenta (P-C14), el cliente llega aquí con el aviso de que se borró.
+ */
 export async function LoginScreen({
   next,
   error,
+  accountDeleted = false,
 }: {
   next: string;
   error?: LoginError | undefined;
+  accountDeleted?: boolean;
 }) {
   const t = await getMessages();
   return (
@@ -33,6 +38,11 @@ export async function LoginScreen({
         </h1>
         <p className="text-text-muted">{t.auth.signInIntro}</p>
       </header>
+      {accountDeleted ? (
+        <p role="status" className="rounded-xl border border-border p-3 text-sm">
+          {t.auth.accountDeleted}
+        </p>
+      ) : null}
       {error ? (
         <p role="alert" className="rounded-xl border border-status-alert p-3 text-sm">
           {t.auth.errors[error]}

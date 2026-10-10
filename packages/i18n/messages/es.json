@@ -92,7 +92,9 @@
     "adjustment": "Ajuste",
     "applyProposal": "Aplicar la propuesta",
     "myFiles": "Tus documentos",
-    "clientFiles": "Documentos del cliente"
+    "clientFiles": "Documentos del cliente",
+    "deleteClient": "Borrar perfil",
+    "deleteAccount": "Borrar mi cuenta"
   },
   "language": {
     "label": "Idioma",
@@ -134,7 +136,8 @@
       "unavailable": "El servicio de acceso no responde. Intenta de nuevo en unos minutos.",
       "google": "No se pudo entrar con Google. Intenta de nuevo."
     },
-    "forgotPassword": "Olvidé mi contraseña"
+    "forgotPassword": "Olvidé mi contraseña",
+    "accountDeleted": "Se borraron la cuenta y todos sus datos."
   },
   "money": {
     "todayCurrency": "Cifras en {currency} de hoy"
@@ -195,12 +198,20 @@
       "borrador": "Borrador",
       "invitado": "Invitado",
       "activo": "Activo",
-      "borrado_solicitado": "Borrado solicitado"
+      "borrado_solicitado": "Borrado solicitado",
+      "inactivo": "Inactivo"
     },
     "searchLabel": "Buscar por nombre",
     "search": "Buscar",
     "noMatches": "Ningún perfil coincide con “{query}”.",
-    "showAll": "Ver todos"
+    "showAll": "Ver todos",
+    "views": "Perfiles por estado",
+    "viewActive": "Activos ({count})",
+    "viewInactive": "Inactivos ({count})",
+    "inactiveSince": "Inactivo desde el {date}",
+    "noActive": "No tienes clientes activos. Los que desactivaste están en Inactivos.",
+    "noInactive": "No hay perfiles inactivos.",
+    "deleted": "Se borró el perfil."
   },
   "newClient": {
     "title": "Nuevo cliente",
@@ -342,6 +353,40 @@
         "other": "{count} por revisar"
       },
       "documentsNone": "Sin documentos por revisar"
+    },
+    "inactive": {
+      "title": "Perfil inactivo",
+      "body": "Desde el {date}. Sus datos, reportes e historial se guardan; no aparece en tu lista de clientes ni se puede invitar. La persona sigue entrando a la app y viendo su plan.",
+      "reactivate": "Reactivar perfil"
+    },
+    "profileStatus": {
+      "title": "Estado del perfil",
+      "activeBody": "Activo: aparece en tu lista de clientes.",
+      "deactivateToggle": "Desactivar perfil",
+      "deactivateHint": "Cuando deje la asesoría. Sale de tu lista de clientes y pasa a Inactivos; nada se borra y lo puedes reactivar cuando quieras. Si tiene una invitación abierta, deja de servir.",
+      "deactivateConfirm": "Sí, desactivar",
+      "deleteLink": "Borrar perfil",
+      "deleteHint": "Solo para perfiles que nadie aceptó, como uno creado por error.",
+      "ownerDeletes": "Solo la persona puede borrar sus datos, desde Privacidad y datos o pidiéndolo por correo.",
+      "error": "No se pudo cambiar el estado del perfil. Intenta de nuevo."
+    },
+    "invitationInactive": "Reactiva el perfil para invitar a esta persona.",
+    "delete": {
+      "title": "Borrar perfil",
+      "intro": "Se borra para siempre todo lo de este perfil: sus datos, el historial de cambios y la invitación. No se puede deshacer.",
+      "owned": "Este perfil ya tiene dueño: solo esa persona puede borrarlo, desde Privacidad y datos o pidiéndolo por correo. Si dejó la asesoría, desactívalo desde su ficha.",
+      "back": "Volver a la ficha",
+      "nameLabel": "Escribe el nombre del perfil para confirmar",
+      "nameHint": "Tal como aparece: {name}",
+      "submit": "Borrar para siempre",
+      "submitting": "Borrando…",
+      "cancel": "Cancelar",
+      "errors": {
+        "nameMismatch": "El nombre no coincide. Escríbelo tal como aparece arriba.",
+        "notAllowed": "Este perfil ya no se puede borrar desde aquí: alguien aceptó la invitación o ya no tienes acceso.",
+        "files": "Aparecieron documentos mientras se borraba. Intenta de nuevo.",
+        "unavailable": "No se pudo borrar y no se borró nada. Intenta de nuevo en unos minutos."
+      }
     }
   },
   "invitation": {
@@ -591,7 +636,55 @@
     },
     "withdrawYes": "Sí, retirarlo",
     "withdrawCancel": "No, mantenerlo",
-    "withdrawDone": "Consentimiento retirado."
+    "withdrawDone": "Consentimiento retirado.",
+    "deleteAccount": {
+      "title": "Borrar mi cuenta",
+      "summary": {
+        "tu": "Borra para siempre tu cuenta y todo lo que tienes en MiLuca. Tu asesor deja de verlo.",
+        "usted": "Borra para siempre su cuenta y todo lo que tiene en MiLuca. Su asesor deja de verlo."
+      },
+      "link": "Borrar mi cuenta y mis datos",
+      "intro": {
+        "tu": "Se borra para siempre todo lo tuyo en MiLuca y tu asesor deja de verlo. No se puede deshacer.",
+        "usted": "Se borra para siempre todo lo suyo en MiLuca y su asesor deja de verlo. No se puede deshacer."
+      },
+      "whatTitle": "Qué se borra",
+      "itemData": {
+        "tu": "Tus datos: ingresos, gastos, deudas, metas, patrimonio y todo lo que anotaste con tu asesor.",
+        "usted": "Sus datos: ingresos, gastos, deudas, metas, patrimonio y todo lo que anotó con su asesor."
+      },
+      "itemReports": {
+        "tu": "Tus reportes entregados, el plan de acción y el control mensual.",
+        "usted": "Sus reportes entregados, el plan de acción y el control mensual."
+      },
+      "itemFiles": {
+        "tu": "Los documentos que subiste para la videollamada.",
+        "usted": "Los documentos que subió para la videollamada."
+      },
+      "itemHistory": "El historial de cambios y los consentimientos.",
+      "itemAccount": {
+        "tu": "Tu cuenta de acceso: ya no podrás entrar a MiLuca.",
+        "usted": "Su cuenta de acceso: ya no podrá entrar a MiLuca."
+      },
+      "confirm": "Entiendo que se borra todo y que no se puede deshacer.",
+      "submit": "Borrar mi cuenta para siempre",
+      "submitting": "Borrando…",
+      "cancel": "Volver",
+      "errors": {
+        "unconfirmed": {
+          "tu": "Marca la casilla para confirmar.",
+          "usted": "Marque la casilla para confirmar."
+        },
+        "files": {
+          "tu": "Aparecieron documentos nuevos mientras se borraba. Intenta de nuevo.",
+          "usted": "Aparecieron documentos nuevos mientras se borraba. Intente de nuevo."
+        },
+        "unavailable": {
+          "tu": "No se pudo borrar y no se borró nada. Intenta de nuevo en unos minutos.",
+          "usted": "No se pudo borrar y no se borró nada. Intente de nuevo en unos minutos."
+        }
+      }
+    }
   },
   "recovery": {
     "title": "Recuperar contraseña",
@@ -634,7 +727,8 @@
     "changed": "{name} cambió sus datos.",
     "changedUnknown": "Un cliente cambió sus datos.",
     "filesUploaded": "{name} subió documentos para la videollamada.",
-    "filesUploadedUnknown": "Un cliente subió documentos."
+    "filesUploadedUnknown": "Un cliente subió documentos.",
+    "accountDeleted": "Un cliente borró su cuenta y todos sus datos."
   },
   "keyFigures": {
     "annualIncome": "Ingreso al año",

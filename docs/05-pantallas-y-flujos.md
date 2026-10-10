@@ -116,7 +116,7 @@ flowchart TD
 
 | Id | Pantalla | Contenido |
 |---|---|---|
-| P-G01 | Entrar | Marca, "Continuar con Google", formulario de correo y contraseña (permite pegar y gestores de contraseñas), enlace "Olvidé mi contraseña", texto "El acceso es por invitación de tu asesor", enlaces a privacidad y términos |
+| P-G01 | Entrar | Marca, "Continuar con Google", formulario de correo y contraseña (permite pegar y gestores de contraseñas), enlace "Olvidé mi contraseña", texto "El acceso es por invitación de tu asesor", enlaces a privacidad y términos. Con `?aviso=cuenta-borrada`, "Se borraron la cuenta y todos sus datos" (ADR 0034) |
 | P-G02 | Sin invitación | Explica que la cuenta existe pero no tiene perfil; opción de cerrar sesión; la cuenta se borra en 7 días |
 | P-G03 | Navegador no compatible | Versión mínima (Safari 16.4 [F15]) y cómo actualizar |
 | P-G04 | Sin conexión | Qué se puede ver y qué no |
@@ -138,18 +138,19 @@ flowchart TD
 | P-C08 | Control mensual | Selector de mes; por categoría: presupuesto, campo del gasto real, barra de desviación; total del mes |
 | P-C09 | Tareas | Lista del plan de acción; tocar para marcar hecha; filtro pendientes y hechas |
 | P-C10 | Créditos | Tarjeta por crédito con próxima cuota, fecha y estado; marcar pagada con fecha; panel con deuda total y fecha de libertad |
-| P-C11 | Privacidad y datos | Exportar mis datos, pedir borrado, retirar o restablecer el acceso del asesor, ver consentimientos, cerrar sesión |
+| P-C11 | Privacidad y datos | Retirar o restablecer el acceso del asesor, ver consentimientos, "Borrar mi cuenta" con enlace a P-C14 (ADR 0034), cerrar sesión. Exportar mis datos llega en F7 |
 | P-C12 | Crear tu acceso | Después del consentimiento: "Continuar con Google" o "Crear contraseña" con el correo de la invitación fijo, contraseña con indicador de longitud mínima y opción de mostrarla (ADR 0009) |
 | P-C12 | Historial | Cambios por fecha, quién los hizo y su efecto en las cifras |
 | P-C13 | Tus documentos (`/documentos`) | Primer paso después de aceptar la invitación (ADR 0030): qué subir (extractos de tarjetas, cuentas y créditos y soportes de ingreso de los últimos 3 meses), quién los ve y cuándo se borran, tapar los números; tipo de documento y "Elegir archivos" (PDF, JPG o PNG de hasta 10 MB; en el celular, también una foto; un extracto con clave, sin clave si se puede o así, y se abre junto con el asesor en la videollamada: nunca se pide la clave); lo subido con su vencimiento, "Ver" y "Borrar". Abajo, "Continuar" o "Lo hago después" hacia P-C03. Después, desde el inicio |
+| P-C14 | Borrar mi cuenta (`/privacidad-y-datos/borrar`) | Qué se borra (datos, reportes, documentos, historial y la cuenta de acceso), que el asesor deja de verlo y que no se puede deshacer; casilla "Entiendo que se borra todo" y "Borrar mi cuenta para siempre". Se borra de inmediato y lleva a Entrar con el aviso; el asesor recibe "Un cliente borró su cuenta", sin el nombre (ADR 0034) |
 
 ### 5.3 Asesor
 
 | Id | Pantalla | Contenido |
 |---|---|---|
-| P-A01 | Clientes | Buscador; tarjetas con nombre, país, estado (borrador, invitado, activo), fase actual, próxima revisión, marca de cambios nuevos |
+| P-A01 | Clientes | Buscador; tarjetas con nombre, país, estado (borrador, invitado, activo o inactivo), fase actual, próxima revisión, marca de cambios nuevos. Con perfiles inactivos, pestañas "Activos" e "Inactivos" con su número (`?ver=inactivos`); los inactivos dicen desde cuándo. Tras borrar un perfil, "Se borró el perfil" (ADR 0034) |
 | P-A02 | Nuevo cliente | Nombre visible, país (define moneda y módulos), tú o usted, correo para la invitación (opcional) |
-| P-A03 | Ficha del cliente | Datos básicos (con "Revisar los documentos del cliente", ADR 0030) y las tres etapas con sus pasos (los opcionales se omiten, ADR 0029), el siguiente paso como acción principal, sus pantallas y activar u ocultar; carta y entrega; seguimiento; cifras de las etapas activas; invitación (ADR 0025) |
+| P-A03 | Ficha del cliente | Datos básicos (con "Revisar los documentos del cliente", ADR 0030) y las tres etapas con sus pasos (los opcionales se omiten, ADR 0029), el siguiente paso como acción principal, sus pantallas y activar u ocultar; carta y entrega; seguimiento; cifras de las etapas activas; invitación (ADR 0025); estado del perfil: "Desactivar perfil" con su explicación, "Borrar perfil" solo si nadie lo aceptó. Un perfil inactivo muestra arriba "Perfil inactivo" con la fecha y "Reactivar perfil", y no se puede invitar (ADR 0034) |
 | P-A04 | Cuestionario por bloques | Pasos A a G; en cada campo, marca "estimado" y "por confirmar" |
 | P-A05 | Tipo de cliente | Selector y reglas que se activan |
 | P-A06 | Presupuesto | Partidas agrupadas por categoría con total mensual; icono en filas incompletas; alta rápida; filtros por tipo, pagador y esencial |
@@ -160,6 +161,7 @@ flowchart TD
 | P-A09 | Diagnóstico | Indicadores con semáforo; campos de fortalezas y puntos de atención |
 | P-A10 | Análisis | Pestañas: Flujo, Bolsillos, Fondo, Deudas, Metas, Seguros, Inversión, Cobros, Profesionales. Sin pensión: la plataforma no la analiza (ADR 0016) |
 | P-A26 | Documentos del cliente | Lo que subió el cliente para la videollamada (ADR 0030): tipo, formato, tamaño, fecha y vencimiento; "Ver" abre el archivo en otra pestaña con un enlace de 60 segundos; "Ya los revisé, borrarlos" con confirmación. No van al asistente ni al plan entregado |
+| P-A27 | Borrar perfil (`/clientes/[id]/borrar`) | Solo perfiles que nadie aceptó (ADR 0034): qué se borra, que no se puede deshacer, escribir el nombre del perfil para confirmar (sin distinguir mayúsculas ni espacios de más) y "Borrar para siempre". Un perfil con dueño explica que solo esa persona lo borra y que se puede desactivar |
 | P-A25 | Propuesta del asesor | Solo el asesor (ADR 0024). Ajustes a los gastos (cambiar el valor o quitar) con su porqué; "Partir del nivel básico"; cifras clave de hoy frente a la propuesta y, en cada ajuste, lo que cambia ese gasto al mes; decisión del cliente por ajuste; "Aplicar lo aceptado" con su confirmación; propuestas aplicadas |
 | P-A11 | Costo de vida | Tres niveles por partida; el asesor edita el básico; totales por pagador y sin temporales |
 | P-A12 | Control de calidad | Resultado de `qualityChecks` filtrado por la etapa que se entrega (los comunes y los de la etapa; todos en el plan completo): bloqueantes, advertencias, nota por advertencia |
@@ -283,8 +285,8 @@ El texto "entra de nuevo con tu cuenta" responde a que iOS no comparte la sesió
 │ Tratamiento de datos  v1.0  12/10/26 │
 │ Datos de salud        v1.0  12/10/26 │
 ├──────────────────────────────────────┤
-│ [ Pedir el borrado de mi cuenta ]    │
-│   Tienes 7 días para cancelarlo      │
+│ Borrar mi cuenta                     │
+│ Borrar mi cuenta y mis datos ▸       │
 ├──────────────────────────────────────┤
 │ [ Cerrar sesión ]                    │
 └──────────────────────────────────────┘
@@ -344,6 +346,51 @@ El texto "entra de nuevo con tu cuenta" responde a que iOS no comparte la sesió
 ├──────────────────────────────────────┤
 │ Carta y entrega · Seguimiento        │
 │ Cifras de las etapas activas         │
+│ Invitación                           │
+├──────────────────────────────────────┤
+│ Estado del perfil                    │
+│ Activo: aparece en tu lista.         │
+│ ▸ Desactivar perfil                  │
+│ Borrar perfil (solo si nadie aceptó) │
+└──────────────────────────────────────┘
+```
+
+### P-A27 Borrar perfil (`/clientes/[id]/borrar`, ADR 0034)
+
+Solo para un perfil que nadie aceptó; uno con dueño explica que solo esa persona lo borra y que se puede desactivar. Los botones van en el contenido, no en la barra fija: en una pantalla tan corta, el asistente la taparía.
+
+```
+┌──────────────────────────────────────┐
+│ ◂ Volver a la ficha                  │
+│ Borrar perfil                        │
+│ Se borra para siempre todo lo de     │
+│ este perfil. No se puede deshacer.   │
+│ Escribe el nombre del perfil para    │
+│ confirmar                            │
+│ Tal como aparece: Cliente nuevo      │
+│ (                                  ) │
+│ [ Borrar para siempre ]              │
+│ Cancelar                             │
+└──────────────────────────────────────┘
+```
+
+### P-C14 Borrar mi cuenta (`/privacidad-y-datos/borrar`, ADR 0034)
+
+```
+┌──────────────────────────────────────┐
+│ ◂ Privacidad y datos                 │
+│ Borrar mi cuenta                     │
+│ Se borra para siempre todo lo tuyo y │
+│ tu asesor deja de verlo.             │
+│ Qué se borra                         │
+│ • Tus datos  • Tus reportes          │
+│ • Tus documentos  • El historial     │
+│ • Tu cuenta de acceso                │
+│ [ ] Entiendo que se borra todo y que │
+│     no se puede deshacer.            │
+├──────────────────────────────────────┤
+│ [ Borrar mi cuenta para siempre ]    │
+│ Volver                               │
 └──────────────────────────────────────┘
 ```
 

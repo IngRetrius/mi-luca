@@ -18,6 +18,7 @@ Plan, diseño y decisiones del proyecto. La investigación inicial tiene fecha d
 | [10-plan-de-lanzamiento.md](10-plan-de-lanzamiento.md) | Orden del trabajo desde el 08/10/2026: higiene, etapas, piloto, antes de cobrar y lo que queda de F7 y F8 |
 | [11-plan-del-landing.md](11-plan-del-landing.md) | Página pública informativa: decisiones, estructura, textos propuestos, diseño, implementación y lo que falta del asesor |
 | [12-plan-de-mejoras-del-asesor.md](12-plan-de-mejoras-del-asesor.md) | Revisión de extremo a extremo con criterio de asesor del 09/10/2026: 13 hallazgos y su plan (motor, etapas, lo que recibe el cliente, carta) |
+| [15-plan-de-perfiles-inactivos.md](15-plan-de-perfiles-inactivos.md) | Perfiles inactivos y borrado a pedido del cliente (09/10/2026): el asesor desactiva y reactiva sin perder datos; el cliente borra su cuenta completa desde la app |
 
 ## Documentos de apoyo
 

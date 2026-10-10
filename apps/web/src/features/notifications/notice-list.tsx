@@ -57,6 +57,9 @@ function noticeText(t: Messages['notifications'], kind: Notice['kind']) {
       return { named: t.changed, unknown: t.changedUnknown };
     case 'documentos_subidos':
       return { named: t.filesUploaded, unknown: t.filesUploadedUnknown };
+    case 'cliente_borro_cuenta':
+      // Nunca lleva nombre: el perfil ya no existe.
+      return { named: t.accountDeleted, unknown: t.accountDeleted };
   }
 }
 

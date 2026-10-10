@@ -54,7 +54,7 @@ gantt
 | Fase | Estimado | Estado al 08/10/2026 |
 |---|---|---|
 | F0 | 80 h, hasta mediados de noviembre de 2026 | Terminada salvo tareas del asesor: dominio y verificación de marca en Google (D3, D5) |
-| F1 | 120 h, hasta mediados de enero de 2027 | Terminada salvo el alta con Google en un navegador real, el correo de la invitación (C14) y exportar y borrar en P-C11 (F7) |
+| F1 | 120 h, hasta mediados de enero de 2027 | Terminada salvo el alta con Google en un navegador real, el correo de la invitación (C14) y exportar en P-C11 (F7; borrar la cuenta ya está, ADR 0034) |
 | F2 | 160 h, hasta comienzos de abril de 2027 | Terminada; queda el correo diario de cambios (C6), que espera a que la app envíe correos |
 | F3 | 160 h, hasta finales de junio de 2027 | Terminada en el código; falta el piloto con un caso real (criterio MVP) |
 | F4 | 160 h, hasta comienzos de septiembre de 2027 | Terminada en el código: deudas del diagnóstico (C4 y C9), créditos cuota a cuota, plan de pago y Panel (C5), correcciones del modo nativo y pantallas |

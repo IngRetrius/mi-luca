@@ -37,5 +37,6 @@ Cada decisión que cambia la arquitectura, el modelo de datos o un resultado del
 | [0031](0031-movimiento-en-la-app.md) | Movimiento en la app: pantallas que se deslizan adelante y atrás, respuestas cortas a lo que se hace y la moneda en el inicio del cliente; nada con "reducir movimiento" | Aceptada |
 | [0032](0032-tasa-oficial-sugerida.md) | Tasa oficial sugerida al registrar una moneda: menú con las monedas comunes y la TRM o la tasa del Banco Central Europeo con un botón para usarla; las tasas guardadas no cambian solas | Aceptada |
 | [0033](0033-tema-claro-u-oscuro-elegido-por-la-persona.md) | Tema claro u oscuro elegido por cada persona (automático, claro u oscuro), guardado en una cookie del equipo y pintado desde el servidor, sin destello | Aceptada |
+| [0034](0034-perfiles-inactivos-y-borrado-a-pedido-del-cliente.md) | Perfiles inactivos en lugar de borrar: el asesor desactiva y reactiva; el borrado completo lo pide el cliente desde la app o por correo, con `delete_client` como único camino | Aceptada |
 
 Plantilla: [plantilla.md](plantilla.md).

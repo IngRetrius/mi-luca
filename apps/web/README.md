@@ -62,7 +62,7 @@ El plan Hobby es solo para uso personal no comercial: antes de que un cliente re
 
 | Ruta | Qué hace |
 |---|---|
-| `/entrar` | P-G01: Google o correo y contraseña. Con sesión, sigue a la ruta de retorno (`next`) |
+| `/entrar` | P-G01: Google o correo y contraseña. Con sesión, sigue a la ruta de retorno (`next`). Con `?aviso=cuenta-borrada`, el aviso de que se borró la cuenta (P-C14) |
 | `/auth/start` | Inicia Google con PKCE; guarda la ruta de retorno en una cookie de 10 minutos |
 | `/auth/callback` | Cambia el código por la sesión y sigue a la ruta de retorno |
 | `/auth/listo` | Fin de la ventana de Google abierta por la app instalada: avisa a la principal y se cierra |
@@ -77,9 +77,10 @@ El plan Hobby es solo para uso personal no comercial: antes de que un cliente re
 
 | Ruta | Qué hace |
 |---|---|
-| `/clientes` | P-A01: perfiles con acceso activo, con su estado (texto y símbolo), o el estado vacío. Buscador por nombre con la búsqueda en la URL (`?q=`), que funciona sin JavaScript. Arriba, los avisos sin ver (el cliente aceptó la invitación), con "Marcar como visto". Acción principal fija abajo: "Nuevo cliente" |
+| `/clientes` | P-A01: perfiles con acceso activo, con su estado (texto y símbolo), o el estado vacío. Buscador por nombre con la búsqueda en la URL (`?q=`), que funciona sin JavaScript. Arriba, los avisos sin ver (el cliente aceptó la invitación, cambió sus datos, subió documentos o borró su cuenta), con "Marcar como visto". Con perfiles inactivos, pestañas "Activos" e "Inactivos" en la URL (`?ver=inactivos`); tras borrar uno, "Se borró el perfil" (`?borrado=1`). Acción principal fija abajo: "Nuevo cliente" (ADR 0034) |
 | `/clientes/nuevo` | P-A02: nombre visible, país y trato; llama a `create_client` y abre la ficha |
-| `/clientes/[id]` | P-A03 (esqueleto): datos del perfil, datos del caso (perfil y supuestos, ingresos, presupuesto, costo de vida, supuestos del plan, patrimonio, deudas, cobros, prueba de realidad y monedas, cada uno con su resumen), análisis (flujo, fondo y bolsillos) y cifras del plan que calcula el motor (`compute`) con lo registrado hoy, e invitación. Mientras nadie haya aceptado: crear el enlace (se ve una sola vez, con botón de copiar), crear uno nuevo (anula el anterior) y anular con confirmación. Un id que no existe, o sin acceso, da la página 404 |
+| `/clientes/[id]` | P-A03 (esqueleto): datos del perfil, datos del caso (perfil y supuestos, ingresos, presupuesto, costo de vida, supuestos del plan, patrimonio, deudas, cobros, prueba de realidad y monedas, cada uno con su resumen), análisis (flujo, fondo y bolsillos) y cifras del plan que calcula el motor (`compute`) con lo registrado hoy, e invitación. Mientras nadie haya aceptado: crear el enlace (se ve una sola vez, con botón de copiar), crear uno nuevo (anula el anterior) y anular con confirmación. Estado del perfil: desactivar (con confirmación) y reactivar; un perfil inactivo no se invita. Un id que no existe, o sin acceso, da la página 404 |
+| `/clientes/[id]/borrar` | P-A27: borrar para siempre un perfil que nadie aceptó, escribiendo su nombre; uno con dueño explica que solo esa persona lo borra (ADR 0034) |
 | `/clientes/[id]/presupuesto` | P-A06: partidas por categoría con su promedio mensual, totales (gasto, esencial, ahorro), partidas incompletas y filtros por tipo, pagador y esencial en la URL (`?tipo=`, `?pagador=`, `?esencial=1`), que funcionan sin JavaScript. Acción principal: "Agregar gasto" |
 | `/clientes/[id]/presupuesto/lista` | P-A06b: gastos típicos del país del cliente por categoría. Lo marcado se guarda de una vez con lo que sugiere el catálogo (`features/budget/catalog.ts`); los bolsillos sugeridos que faltan se crean en la moneda base. Con el presupuesto vacío es la acción principal |
 | (en `/presupuesto/lista`) | Asistente con IA, solo para el asesor (ADR 0012): la acción `proposeCapture` manda las notas y la lista del país a Claude Haiku 4.5 (`features/assistant/claude.ts`, `server-only`) y devuelve qué marcar; nada se guarda. Necesita `ANTHROPIC_API_KEY` en el servidor; sin ella avisa que no está configurado |
@@ -141,7 +142,8 @@ En `next dev`, el registro de acciones de servidor imprime sus argumentos y resu
 
 | Ruta | Qué hace |
 |---|---|
-| `/privacidad-y-datos` | P-C11 (primera parte): acceso del asesor con estado en texto y símbolo, retirar (con confirmación) o devolver; consentimientos con versión y fecha, y retirar el de datos de salud (con confirmación); cerrar sesión. Enlace desde el inicio (P-C04) mientras no haya navegación inferior |
+| `/privacidad-y-datos` | P-C11: acceso del asesor con estado en texto y símbolo, retirar (con confirmación) o devolver; consentimientos con versión y fecha, y retirar el de datos de salud (con confirmación); enlace a borrar la cuenta; cerrar sesión. Enlace desde el inicio (P-C04) mientras no haya navegación inferior |
+| `/privacidad-y-datos/borrar` | P-C14: qué se borra, la casilla de confirmación y "Borrar mi cuenta para siempre". Borra los documentos con la API de Storage, llama a `delete_client`, cierra la sesión del equipo y lleva a Entrar con el aviso (ADR 0034) |
 
 ## Convenciones de interfaz
 

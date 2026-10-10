@@ -23,6 +23,9 @@ export const primaryButton = `${control} bg-primary text-on-primary hover:bg-pri
 /** Acción secundaria con borde; al pasar el puntero o tocar, el borde gana contraste. */
 export const secondaryButton = `${control} border border-border hover:border-text-muted active:border-text`;
 
+/** Acción que borra para siempre (plan 15): borde y texto del color de alerta. */
+export const dangerButton = `${control} border border-status-alert text-status-alert hover:bg-status-alert/10 active:bg-status-alert/15 disabled:opacity-70`;
+
 /** Acción principal de las páginas públicas de la marca (ADR 0026): el marino del logo. */
 export const brandButton = `${control} bg-brand text-on-brand hover:bg-brand/90 active:bg-brand/80`;
 

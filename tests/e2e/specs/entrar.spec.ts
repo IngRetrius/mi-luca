@@ -11,6 +11,18 @@ test('Entrar muestra Google, el correo y la contraseña', async ({ page }) => {
   await expect(page.getByText('El acceso es por invitación de tu asesor.')).toBeVisible();
 });
 
+test('tras borrar la cuenta, Entrar dice que se borró (plan 15)', async ({ page }) => {
+  await page.goto('/entrar?aviso=cuenta-borrada');
+  await expect(
+    page.getByRole('status').filter({ hasText: 'Se borraron la cuenta y todos sus datos.' }),
+  ).toBeVisible();
+});
+
+test('sin el aviso, Entrar no lo muestra', async ({ page }) => {
+  await page.goto('/entrar?aviso=otro');
+  await expect(page.getByText('Se borraron la cuenta y todos sus datos.')).toHaveCount(0);
+});
+
 test('Google empieza en /auth/start con la ruta de retorno', async ({ page }) => {
   await page.goto('/entrar?next=%2Fplan');
   await expect(page.getByRole('link', { name: 'Continuar con Google' })).toHaveAttribute(

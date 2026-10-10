@@ -18,7 +18,14 @@ import {
 } from '@/components/ui-classes';
 import { loadActionItems, type ActionItemRow } from '@/features/action-plan';
 import { loadClientFiles, type ClientFiles } from '@/features/client-files';
-import { ClientStatusBadge, getClientDetail } from '@/features/clients';
+import {
+  advisorDateFormatter,
+  badgeStatus,
+  ClientStatusBadge,
+  getClientDetail,
+  InactiveNotice,
+  ProfileStatusSection,
+} from '@/features/clients';
 import { listDeliveries } from '@/features/deliveries';
 import { loadDocuments, writtenCount, type ClientDocument } from '@/features/documents';
 import { nextReview } from '@/features/follow-up';
@@ -72,11 +79,12 @@ type Deliveries = NonNullable<Awaited<ReturnType<typeof listDeliveries>>>;
 
 /**
  * P-A03 Ficha del cliente: los datos básicos, las tres etapas de la asesoría con sus pasos (ADR
- * 0025), la carta y la entrega, el seguimiento, las cifras de las etapas activas y la invitación.
+ * 0025), la carta y la entrega, el seguimiento, las cifras de las etapas activas, la invitación y
+ * el estado del perfil: desactivar, reactivar o borrar uno que nadie aceptó (plan 15).
  */
-export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>) {
+export default async function ClientPage({ params, searchParams }: PageProps<'/clientes/[id]'>) {
   const t = await getMessages();
-  const { id } = await params;
+  const [{ id }, query] = await Promise.all([params, searchParams]);
   await requireAdvisor(`/clientes/${id}`);
   // Independientes: todo lo de la ficha se pide a la vez.
   const [
@@ -90,6 +98,7 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
     proposals,
     stages,
     files,
+    formatDate,
   ] = await Promise.all([
     getClientDetail(id),
     getOpenInvitation(id),
@@ -101,11 +110,14 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
     loadProposals(id),
     loadCaseStages(id),
     loadClientFiles(id),
+    advisorDateFormatter(),
   ]);
   if (client === 'not-found') notFound();
-  // Solo se invita a un perfil que nadie ha aceptado (RLS vuelve a exigirlo).
-  const canInvite =
+  // Solo se invita a un perfil que nadie ha aceptado y que está activo (RLS vuelve a exigirlo).
+  const unclaimed =
     client !== null && (client.status === 'borrador' || client.status === 'invitado');
+  const canInvite = unclaimed && !client?.inactiveAt;
+  const statusError = query.error === 'estado' ? t.clientProfile.profileStatus.error : null;
 
   return (
     <WideScreen>
@@ -129,8 +141,19 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
                 .replace('{currency}', client.baseCurrency)
                 .replace('{address}', t.newClient[client.formOfAddress].toLowerCase())}
             </p>
-            <ClientStatusBadge status={client.status} label={t.clients.status[client.status]} />
+            <ClientStatusBadge
+              status={badgeStatus(client)}
+              label={t.clients.status[badgeStatus(client)]}
+            />
           </div>
+          {client.inactiveAt ? (
+            <InactiveNotice
+              clientId={client.id}
+              since={formatDate(client.inactiveAt)}
+              text={t.clientProfile.inactive}
+              error={statusError}
+            />
+          ) : null}
           <CaseData
             clientId={client.id}
             computed={computed}
@@ -149,6 +172,9 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
                 {t.clientProfile.invitationTitle}
               </h2>
               <p className="text-text-muted">{t.clientProfile.invitation[client.status]}</p>
+              {unclaimed && client.inactiveAt ? (
+                <p className="text-text-muted">{t.clientProfile.invitationInactive}</p>
+              ) : null}
               {canInvite ? (
                 openInvitation === undefined ? (
                   <p role="alert">{t.common.loadError}</p>
@@ -167,6 +193,11 @@ export default async function ClientPage({ params }: PageProps<'/clientes/[id]'>
                 )
               ) : null}
             </section>
+            <ProfileStatusSection
+              client={client}
+              text={t.clientProfile.profileStatus}
+              error={statusError}
+            />
           </CaseData>
         </>
       ) : (
@@ -273,7 +304,7 @@ async function CaseData({
   proposals: Proposals | null;
   /** Documentos que subió el cliente para la videollamada (ADR 0030). */
   files: ClientFiles | null;
-  /** Lo que va en la columna lateral bajo las cifras (la invitación). */
+  /** Lo que va en la columna lateral bajo las cifras (la invitación y el estado del perfil). */
   children: ReactNode;
 }) {
   const t = await getMessages();

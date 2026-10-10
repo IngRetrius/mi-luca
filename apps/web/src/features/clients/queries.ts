@@ -12,12 +12,16 @@ export interface ClientSummary {
   readonly displayName: string;
   readonly countryName: string;
   readonly status: ClientStatus;
+  /** Fecha en que el asesor lo desactivó, o null si está activo (plan 15). */
+  readonly inactiveAt: string | null;
 }
 
 export interface ClientDetail extends ClientSummary {
   readonly countryCode: string;
   readonly baseCurrency: string;
   readonly formOfAddress: 'tu' | 'usted';
+  /** Si alguien aceptó la invitación: entonces solo el dueño borra el perfil. */
+  readonly claimed: boolean;
 }
 
 export interface CountryOption {
@@ -29,14 +33,15 @@ export interface CountryOption {
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
- * P-A01: perfiles a los que el asesor tiene acceso activo (RLS), por nombre; con `search`, solo los
- * que contienen ese texto en el nombre visible, sin distinguir mayúsculas. Null si falla.
+ * P-A01: perfiles a los que el asesor tiene acceso activo (RLS), activos e inactivos, por nombre;
+ * con `search`, solo los que contienen ese texto en el nombre visible, sin distinguir mayúsculas.
+ * La pantalla los separa en pestañas. Null si falla.
  */
 export async function listClients(search = ''): Promise<readonly ClientSummary[] | null> {
   const [supabase, language] = await Promise.all([createClient(), getLanguage()]);
   let query = supabase
     .from('clients')
-    .select('id, display_name, status, country_code, country:countries(name)')
+    .select('id, display_name, status, inactive_at, country_code, country:countries(name)')
     .order('display_name');
   if (search) query = query.ilike('display_name', `%${escapeLike(search)}%`);
   const { data, error } = await query;
@@ -46,6 +51,7 @@ export async function listClients(search = ''): Promise<readonly ClientSummary[]
     displayName: row.display_name,
     countryName: countryLabel(row.country_code, language, row.country.name),
     status: parseClientStatus(row.status),
+    inactiveAt: row.inactive_at,
   }));
 }
 
@@ -56,7 +62,7 @@ export async function getClientDetail(id: string): Promise<ClientDetail | 'not-f
   const { data, error } = await supabase
     .from('clients')
     .select(
-      'id, display_name, status, country_code, base_currency, form_of_address, country:countries(name)',
+      'id, display_name, status, inactive_at, owner_user_id, country_code, base_currency, form_of_address, country:countries(name)',
     )
     .eq('id', id)
     .maybeSingle();
@@ -67,6 +73,8 @@ export async function getClientDetail(id: string): Promise<ClientDetail | 'not-f
     displayName: data.display_name,
     countryName: countryLabel(data.country_code, language, data.country.name),
     status: parseClientStatus(data.status),
+    inactiveAt: data.inactive_at,
+    claimed: data.owner_user_id !== null,
     countryCode: data.country_code,
     baseCurrency: data.base_currency,
     formOfAddress: data.form_of_address === 'usted' ? 'usted' : 'tu',

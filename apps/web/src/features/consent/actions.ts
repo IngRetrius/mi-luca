@@ -1,7 +1,9 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
+import { confirmsAccountDeletion, deleteClientProfile } from '@/features/clients';
 import { createClient } from '@/lib/supabase/server';
 import { requireClient } from '@/server/viewer';
 
@@ -65,4 +67,28 @@ export async function withdrawSensitiveConsent(consentId: string): Promise<Withd
 
   revalidatePath('/privacidad-y-datos');
   return { withdrawn: true, error: null };
+}
+
+export interface DeleteAccountState {
+  readonly error: 'unconfirmed' | 'files' | 'unavailable' | null;
+}
+
+/**
+ * P-C14: el cliente borra su cuenta y todo lo suyo, de inmediato y para siempre (plan 15). Su
+ * asesor recibe un aviso sin su nombre. Después se limpia la sesión de este equipo: la cuenta ya no
+ * existe.
+ */
+export async function deleteMyAccount(
+  _previous: DeleteAccountState | null,
+  formData: FormData,
+): Promise<DeleteAccountState> {
+  const viewer = await requireClient('/privacidad-y-datos/borrar');
+  if (!confirmsAccountDeletion(formData)) return { error: 'unconfirmed' };
+
+  const problem = await deleteClientProfile(viewer.clientId, 'owner');
+  if (problem) return { error: problem === 'files' ? 'files' : 'unavailable' };
+
+  const supabase = await createClient();
+  await supabase.auth.signOut({ scope: 'local' });
+  redirect('/entrar?aviso=cuenta-borrada');
 }

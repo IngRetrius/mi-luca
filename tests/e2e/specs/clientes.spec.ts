@@ -10,8 +10,9 @@ import { expect, test } from '@playwright/test';
 // supuestos y proyección, metas con la calculadora de viaje, seguros con la suma asegurada de vida y el
 // patrimonio completo; en F7, control mensual y plan de acción con las tareas sugeridas, la carta y
 // las notas con sus cifras, publicadas y entregadas con el plan, el seguimiento con las revisiones
-// y la ficha de continuidad, y la propuesta del asesor con sus ajustes aplicados) se verificó contra
-// Supabase local.
+// y la ficha de continuidad, y la propuesta del asesor con sus ajustes aplicados; en el plan 15,
+// desactivar, ver en Inactivos y reactivar un perfil, y borrar un borrador escribiendo su nombre) se
+// verificó contra Supabase local.
 
 const CLIENT = '00000000-0000-4000-8000-000000000001';
 
@@ -84,6 +85,7 @@ for (const path of [
   `/clientes/${CLIENT}/propuesta/${CLIENT}`,
   `/clientes/${CLIENT}/entrega`,
   `/clientes/${CLIENT}/planes/${CLIENT}`,
+  `/clientes/${CLIENT}/borrar`,
 ]) {
   test(`${path} sin sesión lleva a Entrar con la ruta de retorno`, async ({ page }) => {
     await page.goto(path);

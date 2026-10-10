@@ -10,13 +10,15 @@ import { expect, test } from '@playwright/test';
 // mensual (P-C08), las tareas (P-C09), las próximas tareas del inicio, y en Mi plan las notas
 // publicadas y la carta por secciones. Los documentos del cliente (P-C13, ADR 0030): aceptar la
 // invitación, subir un PDF y una imagen, el rechazo de otro formato, "Ver" con su enlace firmado,
-// "Continuar" y el inicio.
+// "Continuar" y el inicio. Borrar la cuenta (P-C14, plan 15): sin la casilla no borra; con ella,
+// borra perfil, documentos, historial y cuenta, y lleva a Entrar con el aviso.
 
 const FILE = '00000000-0000-4000-8000-000000000001';
 
 for (const path of [
   '/instalar',
   '/privacidad-y-datos',
+  '/privacidad-y-datos/borrar',
   '/mis-datos',
   '/mis-datos/gastos',
   '/mis-datos/gastos/nuevo',

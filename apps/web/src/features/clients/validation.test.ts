@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  confirmsAccountDeletion,
+  confirmsDisplayName,
   DISPLAY_NAME_MAX,
   escapeLike,
   parseClientStatus,
+  parseClientView,
   parseNewClient,
   parseSearch,
 } from './validation';
@@ -76,5 +79,35 @@ describe('escapeLike', () => {
   it('escapa los comodines de ilike', () => {
     expect(escapeLike('50%_a\\b')).toBe('50\\%\\_a\\\\b');
     expect(escapeLike('María')).toBe('María');
+  });
+});
+
+describe('parseClientView', () => {
+  it('muestra los inactivos solo si se piden', () => {
+    expect(parseClientView('inactivos')).toBe('inactivos');
+    expect(parseClientView('activos')).toBe('activos');
+    expect(parseClientView(undefined)).toBe('activos');
+    expect(parseClientView(['inactivos'])).toBe('activos');
+  });
+});
+
+describe('confirmsDisplayName', () => {
+  it('acepta el nombre sin distinguir mayúsculas ni espacios de más', () => {
+    expect(confirmsDisplayName('  ana   MARÍA ', 'Ana María')).toBe(true);
+  });
+
+  it('rechaza otro nombre, uno incompleto o un valor que no es texto', () => {
+    expect(confirmsDisplayName('Ana', 'Ana María')).toBe(false);
+    expect(confirmsDisplayName('Ana Maria', 'Ana María')).toBe(false);
+    expect(confirmsDisplayName('', 'Ana María')).toBe(false);
+    expect(confirmsDisplayName(null, 'Ana María')).toBe(false);
+  });
+});
+
+describe('confirmsAccountDeletion', () => {
+  it('exige la casilla marcada', () => {
+    expect(confirmsAccountDeletion(form({ confirm: 'yes' }))).toBe(true);
+    expect(confirmsAccountDeletion(form({}))).toBe(false);
+    expect(confirmsAccountDeletion(form({ confirm: 'on' }))).toBe(false);
   });
 });
