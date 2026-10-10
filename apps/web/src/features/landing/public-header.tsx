@@ -32,7 +32,7 @@ export function PublicHeader({ text }: { text: Messages['landing']['header'] }) 
           aria-label={text.homeLabel}
           className={`-ml-2 flex min-h-12 items-center gap-2 rounded-xl px-2 transition-opacity hover:opacity-80 ${focusRing}`}
         >
-          <BrandMark className="size-9" />
+          <BrandMark className="h-8" />
           <span translate="no" className="text-xl font-semibold text-brand">
             MiLuca
           </span>

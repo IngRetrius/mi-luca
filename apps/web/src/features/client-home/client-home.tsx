@@ -41,7 +41,7 @@ export async function ClientHome({ viewer }: { viewer: Extract<Viewer, { role: '
   return (
     <PageTransition>
       <main className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center gap-6 px-4 py-10 text-center">
-        <BrandMark className="size-24" />
+        <BrandMark className="h-20" />
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl font-semibold text-balance wrap-anywhere">
             {greetingBefore}

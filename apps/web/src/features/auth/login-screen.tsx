@@ -31,7 +31,7 @@ export async function LoginScreen({
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 px-4 py-10">
       <header className="flex flex-col items-center gap-3 text-center">
-        <BrandMark className="size-18" />
+        <BrandMark className="h-16" />
         <h1 translate="no" className="text-3xl font-semibold">
           {t.app.name}
         </h1>
