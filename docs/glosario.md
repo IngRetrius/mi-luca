@@ -92,6 +92,10 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Moneda base | `baseCurrency` | |
 | Tasa de cambio | `fxRate` | Unidades de moneda base por una unidad extranjera |
 | Tasas del cliente | `clientFxRates` | Una por moneda distinta de la base, con fecha |
+| Tasa oficial (sugerida) | `OfficialRate`, `officialRates` | La TRM o la del Banco Central Europeo para una moneda, en unidades de la base; se propone, no se guarda sola (ADR 0032) |
+| Fuentes de la tasa oficial | `OfficialSources`, `loadOfficialSources` | Lo leído de la TRM (`TrmRow`) y del BCE (`EcbRow`); vacío si la fuente no responde |
+| Tasa oficial en pantalla | `OfficialRateView`, `OfficialRateHint` | La tasa, su fuente y su fecha, con el botón "Usar esta tasa" |
+| Menú de monedas | `CurrencyPicker`, `currencyOptions` / `CurrencyOption` | Las monedas comunes con su nombre y "Otra moneda" al registrar una tasa |
 | Selector de moneda | `CurrencySelect` | Componente de `packages/ui` junto a cada campo de dinero |
 | Importe con moneda | `Money` | `{ amount, currency }` |
 | Ingreso | `income` | Tipos (`incomeKind`): laboral, renta, pension, otro |

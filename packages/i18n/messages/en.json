@@ -955,6 +955,18 @@
     "asOf": "Rate as of {date}",
     "add": "Add currency",
     "common": ["USD", "EUR", "COP", "GBP", "MXN", "CAD", "CHF", "BRL", "CLP", "PEN", "ARS"],
+    "official": {
+      "summary": "Official rate: 1 {currency} = {rate} {base}",
+      "dated": "{source} · {date}",
+      "sources": {
+        "trm": "TRM, Colombian Financial Superintendence",
+        "ecb": "European Central Bank"
+      },
+      "crossTrmEcb": "Calculated from the TRM and the European Central Bank",
+      "crossEcb": "Calculated from European Central Bank rates",
+      "note": "{source}, {date}",
+      "use": "Use this rate"
+    },
     "client": {
       "intro": {
         "tu": "The rate you get for each currency other than your base currency. Without a rate, an amount in that currency cannot be saved.",
@@ -972,6 +984,9 @@
       "editTitle": "{currency} rate",
       "currency": "Currency",
       "currencyHint": "Three-letter code, for example USD.",
+      "currencyPlaceholder": "Choose a currency",
+      "otherCurrency": "Other currency",
+      "otherCurrencyCode": "Currency code",
       "rate": "Rate: {base} per 1 unit",
       "rateHint": "The one the client actually gets, not the official one.",
       "asOf": "Rate date",
@@ -984,6 +999,7 @@
       "deleteConfirm": "Yes, delete it",
       "deleteHint": "Only possible if no amount uses this currency.",
       "errors": {
+        "missingCurrency": "Choose a currency from the list.",
         "invalidCurrency": "Enter a three-letter code, for example USD.",
         "isBase": "The base currency does not have a rate.",
         "duplicate": "That currency already has a rate: edit it from the list.",

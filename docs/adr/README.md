@@ -35,5 +35,6 @@ Cada decisión que cambia la arquitectura, el modelo de datos o un resultado del
 | [0029](0029-pasos-opcionales-que-se-omiten.md) | Pasos opcionales que el asesor omite (cuentas, bolsillos, prueba de realidad, deudas, patrimonio, seguros, metas, perfil de riesgo) y etapa terminada | Aceptada; la actualiza 0030 |
 | [0030](0030-documentos-temporales-del-cliente.md) | Documentos temporales del cliente para la videollamada: primer paso tras la invitación, solo cliente y asesor, sin Claude, borrados al revisarlos o a los 30 días | Aceptada |
 | [0031](0031-movimiento-en-la-app.md) | Movimiento en la app: pantallas que se deslizan adelante y atrás, respuestas cortas a lo que se hace y la moneda en el inicio del cliente; nada con "reducir movimiento" | Aceptada |
+| [0032](0032-tasa-oficial-sugerida.md) | Tasa oficial sugerida al registrar una moneda: menú con las monedas comunes y la TRM o la tasa del Banco Central Europeo con un botón para usarla; las tasas guardadas no cambian solas | Aceptada |
 
 Plantilla: [plantilla.md](plantilla.md).

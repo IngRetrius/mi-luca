@@ -29,7 +29,7 @@ describe('parseFxRate', () => {
     });
   });
 
-  it('rechaza la moneda base, una repetida y un código que no es de tres letras', () => {
+  it('rechaza la moneda base, una repetida, un código que no es de tres letras y ninguna', () => {
     const check = (currency: string) => {
       const parsed = parseFxRate(form({ currency, rate: '1', asOf: '2026-09-30' }), options);
       return parsed.ok ? null : parsed.errors.currency;
@@ -37,6 +37,7 @@ describe('parseFxRate', () => {
     expect(check('COP')).toBe('isBase');
     expect(check('EUR')).toBe('duplicate');
     expect(check('US')).toBe('invalidCurrency');
+    expect(check('')).toBe('missingCurrency');
   });
 
   it('al editar, la moneda viene de la ruta y no es un duplicado', () => {

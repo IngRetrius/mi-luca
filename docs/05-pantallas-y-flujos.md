@@ -167,7 +167,7 @@ flowchart TD
 | P-A15 | Cambios | Registros de antes y después, agrupados; filtro por actor |
 | P-A16 | Seguimiento | Comparación con el plan entregado; revisiones a 30, 90 días y anual; ficha de continuidad |
 | P-A17 | Parámetros | Por país: clave, valor vigente, desde, fuente, fecha de consulta; "Nueva versión" |
-| P-A19 | Monedas del cliente | Monedas en uso, tasa que recibe el cliente, fecha, nota, tasa de referencia del país si existe; sensibilidad por moneda |
+| P-A19 | Monedas del cliente | Monedas en uso, tasa que recibe el cliente, fecha, nota; sensibilidad por moneda. Al registrar una, se elige de un menú con las comunes (código y nombre) o "Otra moneda" con su código. Al elegirla, y al editar una ya registrada, aparece la tasa oficial del día con su fuente y su fecha (TRM o Banco Central Europeo); "Usar esta tasa" la copia con su fecha y su nota para ajustarla a la que recibe el cliente (ADR 0032). El cliente ve lo mismo en Mis datos |
 | P-A18 | Exportar | Excel compatible, carta en PDF, ficha de continuidad |
 
 ## 6. Wireframes en texto

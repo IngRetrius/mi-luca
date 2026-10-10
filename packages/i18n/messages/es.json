@@ -955,6 +955,18 @@
     "asOf": "Tasa del {date}",
     "add": "Agregar moneda",
     "common": ["USD", "EUR", "COP", "GBP", "MXN", "CAD", "CHF", "BRL", "CLP", "PEN", "ARS"],
+    "official": {
+      "summary": "Tasa oficial: 1 {currency} = {rate} {base}",
+      "dated": "{source} · {date}",
+      "sources": {
+        "trm": "TRM, Superfinanciera",
+        "ecb": "Banco Central Europeo"
+      },
+      "crossTrmEcb": "Calculada con la TRM y el Banco Central Europeo",
+      "crossEcb": "Calculada con tasas del Banco Central Europeo",
+      "note": "{source}, {date}",
+      "use": "Usar esta tasa"
+    },
     "client": {
       "intro": {
         "tu": "La tasa que recibes por cada moneda distinta de tu moneda base. Sin tasa no se puede guardar un importe en esa moneda.",
@@ -972,6 +984,9 @@
       "editTitle": "Tasa de {currency}",
       "currency": "Moneda",
       "currencyHint": "Código de tres letras, por ejemplo USD.",
+      "currencyPlaceholder": "Elige una moneda",
+      "otherCurrency": "Otra moneda",
+      "otherCurrencyCode": "Código de la moneda",
       "rate": "Tasa: {base} por 1 unidad",
       "rateHint": "La que realmente recibe el cliente, no la oficial.",
       "asOf": "Fecha de la tasa",
@@ -984,6 +999,7 @@
       "deleteConfirm": "Sí, borrarla",
       "deleteHint": "Solo se puede si ningún importe usa esta moneda.",
       "errors": {
+        "missingCurrency": "Elige una moneda de la lista.",
         "invalidCurrency": "Escribe un código de tres letras, por ejemplo USD.",
         "isBase": "La moneda base no lleva tasa.",
         "duplicate": "Esa moneda ya tiene tasa: edítala desde la lista.",

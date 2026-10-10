@@ -198,7 +198,7 @@ Ejemplos de claves iniciales:
 | (común) | `method.emergency_months_by_client_type` | `{"empleado": 3, ...}` | Plantilla `Listas!H:I` |
 | (común) | `method.semaphore_thresholds` | Umbrales del Resumen | Plantilla `Resumen!D` |
 
-La tasa de cambio que recibe cada cliente no es un parámetro de país: es un dato del cliente (tabla `client_fx_rates`), porque el protocolo pide usar la que realmente recibe. Un parámetro de país puede guardar una tasa de referencia con fuente y fecha (`fx.reference.USD`), que la interfaz propone como valor inicial.
+La tasa de cambio que recibe cada cliente no es un parámetro de país: es un dato del cliente (tabla `client_fx_rates`), porque el protocolo pide usar la que realmente recibe. Al registrar o editar una tasa, la interfaz propone la oficial del día (TRM de la Superfinanciera o Banco Central Europeo), con su fuente y su fecha, consultada en el momento y no guardada como parámetro de país; quien llena el formulario la copia con un botón y la ajusta (ADR 0032).
 
 ```sql
 create table public.client_fx_rates (

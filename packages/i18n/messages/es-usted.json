@@ -35,7 +35,9 @@
   },
   "currencies": {
     "form": {
+      "currencyPlaceholder": "Elija una moneda",
       "errors": {
+        "missingCurrency": "Elija una moneda de la lista.",
         "invalidCurrency": "Escriba un código de tres letras, por ejemplo USD.",
         "duplicate": "Esa moneda ya tiene tasa: edítela desde la lista.",
         "invalidRate": "Escriba una tasa mayor que 0, solo con números.",

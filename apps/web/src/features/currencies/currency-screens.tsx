@@ -14,7 +14,10 @@ import type { CaseEditor } from '@/server/case-access';
 import { getLocale, getMessages } from '@/server/i18n';
 
 import { deleteFxRate, saveFxRate, type FxRateFormError } from './actions';
+import { currencyOptions } from './currency-options';
 import { FxRateForm, type FxRateFormText } from './fx-rate-form';
+import { loadOfficialSources } from './official-rate-sources';
+import { officialRateViews } from './official-rate-views';
 import { currencyPaths } from './paths';
 
 function screenText(t: Messages, viewer: CaseEditor) {
@@ -107,7 +110,10 @@ export async function CurrenciesScreen({
 
 const FORM_ERRORS: readonly FxRateFormError[] = ['inUse', 'notAllowed', 'notFound', 'unavailable'];
 
-/** Registrar (`currency` null) o cambiar la tasa de una moneda. */
+/**
+ * Registrar (`currency` null) o cambiar la tasa de una moneda. Las tasas oficiales (ADR 0032) se
+ * piden a la vez que el caso y llegan al formulario como promesa, sin frenarlo.
+ */
 export async function FxRateScreen({
   viewer,
   clientId,
@@ -124,6 +130,7 @@ export async function FxRateScreen({
   const paths = currencyPaths(viewer.role, clientId);
   const local = screenText(t, viewer);
   const title = currency ? text.form.editTitle.replace('{currency}', currency) : text.form.newTitle;
+  const sources = loadOfficialSources();
   const computed = await loadComputedCase(clientId);
   if (!computed) {
     return (
@@ -141,7 +148,19 @@ export async function FxRateScreen({
   const rate = currency ? fxRates.find((row) => row.currency === currency) : null;
   if (currency && !rate) notFound();
   const locale = await getLocale(client.country_code);
-  const formText: FxRateFormText = { form: local.form, commonCurrencies: text.common };
+  const today = todayIn(client.country_code);
+  const formText: FxRateFormText = { form: local.form, useOfficialRate: text.official.use };
+  const options = currencyOptions(text.common, {
+    base: client.base_currency,
+    existing: fxRates.map((row) => row.currency),
+    locale,
+  });
+  const officialRates = officialRateViews(sources, {
+    base: client.base_currency,
+    today,
+    locale,
+    text: text.official,
+  });
   const initialError = FORM_ERRORS.find((error) => error === errorParam) ?? null;
 
   return (
@@ -150,12 +169,14 @@ export async function FxRateScreen({
       <FxRateForm
         text={formText}
         baseCurrency={client.base_currency}
+        currencyOptions={options}
+        officialRates={officialRates}
         isNew={currency === null}
         initialError={initialError}
         initial={{
           currency: rate?.currency ?? '',
           rate: rate ? amountToText(rate.rate_to_base, locale, 8) : '',
-          asOf: rate?.as_of ?? todayIn(client.country_code),
+          asOf: rate?.as_of ?? today,
           note: rate?.note ?? '',
         }}
         action={saveFxRate.bind(null, clientId, currency)}

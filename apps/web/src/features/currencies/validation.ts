@@ -6,7 +6,13 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 export type FxRateField = 'currency' | 'rate' | 'asOf' | 'note';
 export type FxRateFieldError =
-  'invalidCurrency' | 'isBase' | 'duplicate' | 'invalidRate' | 'invalidDate' | 'tooLong';
+  | 'missingCurrency'
+  | 'invalidCurrency'
+  | 'isBase'
+  | 'duplicate'
+  | 'invalidRate'
+  | 'invalidDate'
+  | 'tooLong';
 
 export interface FxRateValues {
   readonly currency: string;
@@ -59,7 +65,8 @@ export function parseFxRate(formData: FormData, options: FxRateParseOptions): Fx
   };
 
   const errors: Partial<Record<FxRateField, FxRateFieldError>> = {};
-  if (!CURRENCY.test(values.currency)) errors.currency = 'invalidCurrency';
+  if (values.currency === '') errors.currency = 'missingCurrency';
+  else if (!CURRENCY.test(values.currency)) errors.currency = 'invalidCurrency';
   else if (values.currency === options.baseCurrency) errors.currency = 'isBase';
   else if (options.fixedCurrency === null && options.existing.includes(values.currency)) {
     errors.currency = 'duplicate';
