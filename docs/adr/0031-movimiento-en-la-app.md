@@ -24,6 +24,7 @@ Next.js 16 trae las transiciones de vista de React (`ViewTransition`) sin config
 - Los enlaces de navegación llevan `transitionTypes` (`NAV_FORWARD` o `NAV_BACK`); un enlace nuevo sin tipo cambia de pantalla con el fundido.
 - Las tarjetas y las listas no tienen entradas propias: el movimiento está en el cambio de pantalla y en las respuestas.
 - El atrás del navegador no tiene tipo y cambia sin deslizar (comportamiento del navegador) [F80].
+- Entrar y salir usan clases distintas (`forward-in` y `forward-out`, `back-in` y `back-out`, `fade-in` y `fade-out`), y cada una anima un solo lado de la transición. Safari conserva la animación de cada capa (`::view-transition-old(nombre)`) entre una transición y la siguiente, y React la cancela al terminar. Con una sola clase para los dos lados, la salida de una pantalla que ya había entrado se quedaba sin fundido y se cortaba de golpe, por ejemplo del esqueleto al contenido. Se midió en WebKit 26.6 con Playwright el 09/10/2026; `page-transition.test.ts` comprueba la regla.
 - `docs/diseno/tokens.md` (Movimiento) describe las duraciones y dónde vive cada animación.
 
 ## Alternativas consideradas

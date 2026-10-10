@@ -115,7 +115,9 @@ html:has([data-screen-actions]) {
 }
 
 /* Entre pantallas (PageTransition): adelante, atrás o un fundido. Lo viejo sale rápido para no
-   competir; lo nuevo llega un poco después y más despacio [F80]. 40 px bastan para la dirección. */
+   competir; lo nuevo llega un poco después y más despacio [F80]. 40 px bastan para la dirección.
+   Cada clase anima solo su lado (-out la capa vieja, -in la nueva): en Safari una capa que ya se
+   animó en una transición anterior no vuelve a animarse (ver page-transition.tsx). */
 ::view-transition {
   /* Los toques durante la animación llegan a la página, no a la capa de la transición. */
   pointer-events: none;
@@ -128,39 +130,39 @@ html:has([data-screen-actions]) {
   animation: none;
 }
 
-::view-transition-old(.nav-forward) {
+::view-transition-old(.forward-out) {
   --vt-offset: -40px;
   animation:
     var(--ml-motion-exit) ease-in both vt-fade reverse,
     var(--ml-motion-move) var(--ml-ease-out) both vt-slide reverse;
 }
 
-::view-transition-new(.nav-forward) {
+::view-transition-new(.forward-in) {
   --vt-offset: 40px;
   animation:
     var(--ml-motion-enter) var(--ml-ease-out) var(--ml-motion-exit) both vt-fade,
     var(--ml-motion-move) var(--ml-ease-out) both vt-slide;
 }
 
-::view-transition-old(.nav-back) {
+::view-transition-old(.back-out) {
   --vt-offset: 40px;
   animation:
     var(--ml-motion-exit) ease-in both vt-fade reverse,
     var(--ml-motion-move) var(--ml-ease-out) both vt-slide reverse;
 }
 
-::view-transition-new(.nav-back) {
+::view-transition-new(.back-in) {
   --vt-offset: -40px;
   animation:
     var(--ml-motion-enter) var(--ml-ease-out) var(--ml-motion-exit) both vt-fade,
     var(--ml-motion-move) var(--ml-ease-out) both vt-slide;
 }
 
-::view-transition-old(.page-fade) {
+::view-transition-old(.fade-out) {
   animation: var(--ml-motion-exit) ease-in both vt-fade reverse;
 }
 
-::view-transition-new(.page-fade) {
+::view-transition-new(.fade-in) {
   animation: var(--ml-motion-enter) var(--ml-ease-out) both vt-fade;
 }
 
