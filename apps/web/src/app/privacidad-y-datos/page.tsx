@@ -14,7 +14,7 @@ import {
   withdrawSensitiveConsent,
 } from '@/features/consent';
 import { countryDateFormat } from '@/features/invitations';
-import { LanguageSwitcher } from '@/features/language';
+import { InterfacePreferences } from '@/features/preferences';
 import { withAddress } from '@/lib/address';
 import { getLanguage, getMessages, pageMetadata } from '@/server/i18n';
 import { requireClient } from '@/server/viewer';
@@ -127,7 +127,7 @@ export default async function PrivacyPage() {
       </section>
 
       <div className="flex flex-col items-start gap-4 pb-8">
-        <LanguageSwitcher />
+        <InterfacePreferences />
         <SignOutButton />
       </div>
     </Screen>

@@ -23,12 +23,15 @@ for (const path of PUBLIC_PATHS) {
   });
 }
 
-test('en Entrar, el formulario y el selector de idioma caben en la pantalla', async ({ page }) => {
+test('en Entrar, el formulario y los selectores de idioma y tema caben en la pantalla', async ({
+  page,
+}) => {
   await page.goto('/entrar');
   const viewport = page.viewportSize();
   for (const control of [
     page.getByRole('button', { name: 'Entrar', exact: true }),
     page.getByRole('button', { name: 'English' }),
+    page.getByRole('button', { name: 'Oscuro' }),
   ]) {
     await control.scrollIntoViewIfNeeded();
     const box = await control.boundingBox();

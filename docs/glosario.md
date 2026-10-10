@@ -338,6 +338,10 @@ Términos del dominio en español (como los ve el usuario) y su identificador en
 | Control de calidad | `qualityChecks` | |
 | Modo compatible, modo nativo | `compatible`, `native` | Opción del motor |
 | Idioma de la interfaz | `Language` (`es`, `en`), `LANGUAGES`, `getLanguage` | ADR 0022; se elige con `LanguageSwitcher` (`setLanguage`, cookie `miluca-lang`) o sale de `Accept-Language` (`negotiateLanguage`) |
+| Tema elegido | `ThemePreference` (`system`, `light`, `dark`), `THEME_PREFERENCES`, `getThemePreference` | ADR 0033; "Automático" es `system`. Se elige con `ThemeSwitcher` (`setTheme`, cookie `miluca-theme`) y se pinta en `<html data-theme>` |
+| Hoja de los temas | `themeStylesheet`, `themeAttribute`, `themeColors` | `packages/ui/src/theme.ts`: variables `--ml-*` y `color-scheme` de cada tema; `theme-color` de la barra del navegador |
+| Cambio del tema al tocar | `applyTheme` | Cambia `data-theme` sin esperar al servidor y sin transiciones |
+| Preferencias de la interfaz | `InterfacePreferences`, `PreferenceForm`, `PreferenceOption` | Idioma y tema juntos en cada pantalla; formulario con acción de servidor y botones con `aria-pressed` |
 | Textos en el idioma de la petición | `getMessages`, `pageMetadata`, `pageTitle` | `src/server/i18n.ts`; títulos de página con `generateMetadata` |
 | Textos para quien lee | `messagesFor`, `MessagesAudience` (`address`, `country`) | Capas `USTED_MESSAGES` (`es-usted.json`) y `COUNTRY_MESSAGES` (`es-ES.json`) sobre `es.json` |
 | Propuesta del asesor | `proposals` / `ProposalRow`, `Proposals` | ADR 0024; una en borrador por cliente, aplicada queda fija |

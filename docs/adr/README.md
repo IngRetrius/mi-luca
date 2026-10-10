@@ -25,16 +25,17 @@ Cada decisión que cambia la arquitectura, el modelo de datos o un resultado del
 | [0019](0019-carta-y-notas-con-cifras-enlazadas.md) | Carta de cierre y notas con cifras enlazadas que se congelan al entregar | Aceptada |
 | [0020](0020-pdf-del-plan-al-pedirlo.md) | El PDF del plan entregado se genera al pedirlo, sin guardarlo en Storage | Aceptada |
 | [0021](0021-seguimiento-y-ficha-de-continuidad.md) | Seguimiento con las revisiones del plan de acción y ficha de continuidad armada con los datos | Aceptada |
-| [0022](0022-interfaz-en-espanol-e-ingles.md) | Interfaz en español e inglés, elegida por cada persona (cookie o idioma del navegador); cifras con el formato del país | Aceptada |
+| [0022](0022-interfaz-en-espanol-e-ingles.md) | Interfaz en español e inglés, elegida por cada persona (cookie o idioma del navegador); cifras con el formato del país | Aceptada; la amplía 0033 |
 | [0023](0023-diseno-adaptable-del-celular-al-escritorio.md) | Diseño adaptable: igual en el celular, columna de lectura en la tableta y rejillas en el escritorio | Aceptada |
 | [0024](0024-propuesta-del-asesor.md) | Propuesta del asesor: ajustes al presupuesto que el cliente decide uno por uno, comparados sin tocar los datos y aplicados con sus tareas | Aceptada |
 | [0025](0025-asesoria-por-etapas.md) | Asesoría en tres etapas (presupuesto y bolsillos, deudas, patrimonio con protección y metas), cada una con su reporte; el motor no cambia | Aceptada; la actualizan 0028 y 0029 |
-| [0026](0026-landing-publico-en-la-raiz.md) | Landing público en la raíz para quien no tiene sesión, privacidad pública en `/privacidad` y contacto por WhatsApp sin datos guardados | Aceptada; la amplía 0031 |
+| [0026](0026-landing-publico-en-la-raiz.md) | Landing público en la raíz para quien no tiene sesión, privacidad pública en `/privacidad` y contacto por WhatsApp sin datos guardados | Aceptada; la amplían 0031 y 0033 |
 | [0027](0027-controles-del-asesor-en-el-motor.md) | Controles del asesor en el motor (modo nativo): prueba de realidad de dos lados, contrato inestable, controles de deudas y umbrales fiscales por base | Aceptada |
 | [0028](0028-reportes-que-el-cliente-usa.md) | Reportes que el cliente usa (resumen, semáforo, bolsillos, deudas; PDF con el asesor) y etapas coherentes (cuentas en la etapa 1, déficit en todas las entregas) | Aceptada |
 | [0029](0029-pasos-opcionales-que-se-omiten.md) | Pasos opcionales que el asesor omite (cuentas, bolsillos, prueba de realidad, deudas, patrimonio, seguros, metas, perfil de riesgo) y etapa terminada | Aceptada; la actualiza 0030 |
 | [0030](0030-documentos-temporales-del-cliente.md) | Documentos temporales del cliente para la videollamada: primer paso tras la invitación, solo cliente y asesor, sin Claude, borrados al revisarlos o a los 30 días | Aceptada |
 | [0031](0031-movimiento-en-la-app.md) | Movimiento en la app: pantallas que se deslizan adelante y atrás, respuestas cortas a lo que se hace y la moneda en el inicio del cliente; nada con "reducir movimiento" | Aceptada |
 | [0032](0032-tasa-oficial-sugerida.md) | Tasa oficial sugerida al registrar una moneda: menú con las monedas comunes y la TRM o la tasa del Banco Central Europeo con un botón para usarla; las tasas guardadas no cambian solas | Aceptada |
+| [0033](0033-tema-claro-u-oscuro-elegido-por-la-persona.md) | Tema claro u oscuro elegido por cada persona (automático, claro u oscuro), guardado en una cookie del equipo y pintado desde el servidor, sin destello | Aceptada |
 
 Plantilla: [plantilla.md](plantilla.md).

@@ -101,6 +101,14 @@
       "en": "English"
     }
   },
+  "theme": {
+    "label": "Theme",
+    "names": {
+      "system": "Automatic",
+      "light": "Light",
+      "dark": "Dark"
+    }
+  },
   "auth": {
     "signInIntro": "Sign in to your financial plan.",
     "continueWithGoogle": "Continue with Google",

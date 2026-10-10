@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { focusRing } from '@/components/ui-classes';
-import { LanguageSwitcher } from '@/features/language';
+import { InterfacePreferences } from '@/features/preferences';
 import { getMessages } from '@/server/i18n';
 
 import { GoogleButton } from './google-button';
@@ -52,7 +52,7 @@ export async function LoginScreen({
         {t.auth.forgotPassword}
       </Link>
       <p className="text-center text-sm text-text-muted">{t.auth.invitationOnly}</p>
-      <LanguageSwitcher className="justify-center" />
+      <InterfacePreferences className="justify-center" />
     </main>
   );
 }

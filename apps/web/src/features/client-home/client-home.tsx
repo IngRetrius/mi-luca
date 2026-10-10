@@ -7,7 +7,7 @@ import { SignOutButton } from '@/features/auth';
 import { loadClientFiles } from '@/features/client-files';
 import { IndicatorSummary, loadLatestDelivery } from '@/features/deliveries';
 import { loadDocuments } from '@/features/documents';
-import { LanguageSwitcher } from '@/features/language';
+import { InterfacePreferences } from '@/features/preferences';
 import { withAddress } from '@/lib/address';
 import { getLocale, getMessages } from '@/server/i18n';
 import type { Viewer } from '@/server/viewer';
@@ -135,7 +135,7 @@ export async function ClientHome({ viewer }: { viewer: Extract<Viewer, { role: '
           {t.clientHome.privacyLink}
         </Link>
         <SignOutButton />
-        <LanguageSwitcher className="justify-center" />
+        <InterfacePreferences className="justify-center" />
         <p className="text-sm text-text-muted">{t.scope.notInvestmentAdvice}</p>
       </main>
     </PageTransition>

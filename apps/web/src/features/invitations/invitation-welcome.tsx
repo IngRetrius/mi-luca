@@ -4,7 +4,7 @@ import { formatDate } from '@miluca/i18n';
 
 import { ScreenActions } from '@/components/screen';
 import { SubmitButton } from '@/components/submit-button';
-import { LanguageSwitcher } from '@/features/language';
+import { InterfacePreferences } from '@/features/preferences';
 import { withAddress } from '@/lib/address';
 import { getLanguage, getMessages } from '@/server/i18n';
 
@@ -70,7 +70,7 @@ export async function InvitationWelcome({
         {t.expires.replace('{date}', formatDate(invitation.expiresAt, locale, timeZone))}
       </p>
 
-      <LanguageSwitcher />
+      <InterfacePreferences />
 
       <ScreenActions>
         <form action={beginInvitation.bind(null, token)}>

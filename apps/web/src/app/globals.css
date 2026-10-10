@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
-/* Las variables --ml-* se generan desde packages/ui (ver layout.tsx); aquí se exponen a Tailwind. */
+/* Las variables --ml-* se generan desde packages/ui (ver layout.tsx), con el tema claro u oscuro
+   que sigue al equipo o a la elección de la persona (`data-theme`); aquí se exponen a Tailwind. */
 @theme inline {
   --color-bg: var(--ml-bg);
   --color-surface: var(--ml-surface);
@@ -33,8 +34,8 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  /* Controles nativos, autocompletado y barras de desplazamiento siguen el tema claro u oscuro. */
-  color-scheme: light dark;
+  /* `color-scheme` (controles nativos, autocompletado y barras de desplazamiento con el tema claro u
+     oscuro) va con los colores en la hoja de los temas: themeStylesheet de packages/ui (ADR 0033). */
   /* Sin la espera del doble toque; el zoom con dos dedos sigue disponible. */
   touch-action: manipulation;
   /* Sin el destello gris de iOS al tocar: cada control tiene su propio estado active:. */

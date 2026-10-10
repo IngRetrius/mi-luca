@@ -47,6 +47,8 @@ Colores fuera de la paleta de marca a propósito, para que un estado nunca se co
 | `primary` | `brand-900` | `brand-400` |
 | `on-primary` | Blanco | #11142B |
 
+**Cuál se usa** (ADR 0033): el del equipo (`prefers-color-scheme`) hasta que la persona elija Claro u Oscuro en el selector de tema; su elección queda en `<html data-theme>`. Las variables `--ml-*` de los dos temas y su `color-scheme` salen de `themeStylesheet` (`packages/ui/src/theme.ts`), y `theme-color` usa el `bg` del tema. Ningún color se ata al equipo por fuera de esa hoja.
+
 ## 4. Tipografía, espacio y tacto
 
 | Token | Valor |

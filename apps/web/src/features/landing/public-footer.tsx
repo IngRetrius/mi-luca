@@ -3,7 +3,7 @@ import Link from 'next/link';
 import type { Messages } from '@miluca/i18n';
 
 import { focusRing, textButton } from '@/components/ui-classes';
-import { LanguageSwitcher } from '@/features/language';
+import { InterfacePreferences } from '@/features/preferences';
 
 import { CONTACT_EMAIL } from './contact';
 import { pageColumn } from './section';
@@ -60,7 +60,7 @@ export function PublicFooter({
             </a>
             {contactAfter}
           </p>
-          <LanguageSwitcher />
+          <InterfacePreferences />
         </div>
       </div>
     </footer>

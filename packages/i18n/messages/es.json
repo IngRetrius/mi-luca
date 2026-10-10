@@ -101,6 +101,14 @@
       "en": "English"
     }
   },
+  "theme": {
+    "label": "Tema",
+    "names": {
+      "system": "Automático",
+      "light": "Claro",
+      "dark": "Oscuro"
+    }
+  },
   "auth": {
     "signInIntro": "Entra a tu planificación financiera.",
     "continueWithGoogle": "Continuar con Google",
